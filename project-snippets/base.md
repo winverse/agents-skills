@@ -9,5 +9,5 @@
 - Prefer this project's local docs, source code, and logs before general web results.
 - Use repo-linked custom skills before default/global skills when the behavior overlaps.
 - When using `skill-creator`, run `skill-to-html` immediately afterward for the same skill folder.
-- When using `web-research` for broad or high-stakes topics, use query fan-out, source ledgers, evidence scoring, and counterexample search.
+- When using `web-research` for broad or high-stakes topics, use the smallest safe research budget, then query fan-out, source ledgers, evidence scoring, counterexample search, and stop rules.
 - Add more project-specific rules here instead of changing the shared skill unless the rule should apply everywhere.

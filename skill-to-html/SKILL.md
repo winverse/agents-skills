@@ -1,6 +1,6 @@
 ---
 name: skill-to-html
-description: Create or revise the human-facing `skill.html` that sits beside a Codex `SKILL.md`. Use when Codex creates, installs, forks, or updates a skill and needs a visual install-time guide with diagrams, charts, matrices, maps, flows, and quick human-readable structure instead of a text-only or card-partitioned summary.
+description: Create or revise the human-facing `skill.html` that sits beside an agent-readable `SKILL.md`. Use when an agent creates, installs, forks, or updates a shared skill and needs a visual install-time guide with diagrams, charts, matrices, maps, flows, and quick human-readable structure instead of a text-only or card-partitioned summary.
 ---
 
 # Skill To HTML
@@ -19,7 +19,7 @@ skill-name/
 └── skill.html
 ```
 
-`SKILL.md` is for Codex. `skill.html` is for the user who wants to understand the skill quickly after installing it.
+`SKILL.md` is the source instruction for agents. `skill.html` is for the user who wants to understand the skill quickly after installing it.
 
 ## Design Contract
 

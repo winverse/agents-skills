@@ -22,13 +22,14 @@
     .flow svg,.bars svg,.map svg{width:100%;height:auto;display:block}.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.sw{width:10px;height:10px;border-radius:2px;background:var(--accent)}
     .rules{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rule{padding:12px;border:1px solid var(--border);border-radius:8px;background:#fbfdff}.rule strong{display:block;font-size:13px}.rule p{font-size:12px;color:var(--muted);margin-top:5px}
     .code{background:#111827;color:#f9fafb;border-radius:8px;padding:14px;overflow-x:auto;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+    .files{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}.file{border:1px solid var(--border);border-radius:8px;background:#fbfdff;padding:12px;min-height:78px}.file strong{display:block;font-size:13px}.file span{display:block;font-size:12px;color:var(--muted);margin-top:5px}
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="top">
       <div class="brand">
-        <div class="mark">HD</div>
+        <div class="mark">S2H</div>
         <div><h1>skill-to-html</h1><p class="sub">SKILL.md를 설치 직후 읽는 도표 중심 skill.html로 바꾸는 스킬</p></div>
       </div>
       <div class="pair"><strong>Required pair</strong><code>SKILL.md + skill.html</code></div>
@@ -36,10 +37,22 @@
 
     <section class="grid">
       <article class="panel">
+        <div class="head"><h2>사용 판단 매트릭스</h2><p class="note">스킬 폴더의 상태로 use, skip, combine, ask를 결정합니다.</p></div>
+        <div class="body">
+          <div class="matrix">
+            <div class="cell" style="background:#eff6ff"><strong>Use now</strong><p>SKILL.md가 생성/수정됐고 skill.html이 없거나 오래된 경우 바로 사용합니다.</p></div>
+            <div class="cell" style="background:#fef3c7"><strong>Revise</strong><p>skill.html은 있지만 카드형 요약이거나 diagram-rich 기준에 못 미치면 고칩니다.</p></div>
+            <div class="cell"><strong>Skip</strong><p>스킬 변경이 없고 기존 skill.html이 최신이며 검증도 통과한 경우 건너뜁니다.</p></div>
+            <div class="cell" style="background:#fee4e2"><strong>Ask / combine</strong><p>스킬 목적이 불명확하거나 skill-creator 구조 작업이 먼저 필요하면 확인하거나 함께 씁니다.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
         <div class="head"><h2>판독 목적별 시각 패턴</h2><p class="note">글 덩어리를 나누는 대신 읽는 목적에 맞는 도표를 선택합니다.</p></div>
         <div class="body">
           <div class="matrix">
-            <div class="cell"><strong>언제 쓰나?</strong><p>2x2 decision matrix로 use, skip, combine, ask를 구분합니다.</p></div>
+            <div class="cell"><strong>언제 쓰나?</strong><p>Decision matrix로 use, skip, combine, ask를 구분합니다.</p></div>
             <div class="cell"><strong>무엇을 먼저 하나?</strong><p>Flowchart나 timeline으로 agent의 실행 순서를 보여줍니다.</p></div>
             <div class="cell"><strong>무엇이 중요한가?</strong><p>Bar chart, funnel, meter로 우선순위와 위험도를 표현합니다.</p></div>
             <div class="cell"><strong>어떤 파일이 있나?</strong><p>Resource map으로 SKILL.md, references, scripts, assets를 연결합니다.</p></div>
@@ -93,6 +106,12 @@
             <g font-size="14" font-weight="700" fill="#111827" text-anchor="middle"><text x="360" y="113">Skill folder</text><text x="120" y="72">skill.html</text><text x="120" y="190">SKILL.md</text><text x="600" y="72">references</text><text x="600" y="190">snippet</text></g>
             <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="360" y="134">human + agent files</text><text x="120" y="86">human first</text><text x="120" y="204">agent first</text><text x="600" y="86">details</text><text x="600" y="204">project link</text></g>
           </svg>
+          <div class="files">
+            <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>agent workflow</span></a>
+            <a class="file" href="skill.html"><strong>skill.html</strong><span>human visual guide</span></a>
+            <a class="file" href="references/visual-guide-standards.md"><strong>standards</strong><span>design rules</span></a>
+            <a class="file" href="../project-snippets/skill-to-html.md"><strong>snippet</strong><span>project link</span></a>
+          </div>
         </div>
       </article>
 

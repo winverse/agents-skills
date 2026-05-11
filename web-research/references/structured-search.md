@@ -4,7 +4,32 @@ Use this reference when a task needs better search quality than a simple keyword
 
 ## Core Idea
 
-Good search is query design, source selection, extraction, and verification. Do not rely on one phrase. Frame the question, fan out subqueries, separate concepts, collect aliases, combine official terms with free text, search the right source surfaces, extract claim-level evidence, score source quality, search for counterexamples, and record the strategy when reproducibility matters.
+Good search is query design, source selection, extraction, verification, and budget control. Do not rely on one phrase. Frame the question, pick the smallest safe research budget, fan out subqueries when useful, separate concepts, collect aliases, combine official terms with free text, search the right source surfaces, extract claim-level evidence, score source quality, search for counterexamples, stop when evidence saturates, and record the strategy when reproducibility matters.
+
+## Research Budget Router
+
+Choose the smallest budget that can answer safely. Escalate only when the evidence requires it.
+
+| Budget | Use When | Search Shape | Stop Target |
+|---|---|---|---|
+| Quick check | One official/current fact settles it | 1-2 direct sources, no ledger | Official or primary source confirms the answer |
+| Verified search | Recommendation, comparison, docs, pricing, policy, or changing facts | 3-5 sources, concept blocks, light ledger | Key claims have direct evidence and dates |
+| Deep research | Broad decision, conflicting claims, market/product scan, high-impact choice | 3-7 subqueries, 5-12 sources, source ledger, counterexample search | Main alternatives and risks are covered |
+| Reproducible search | User asks for method, audit trail, or rerunnable evidence | Exact queries, filters, result counts when available, ledger summary | Another agent could rerun the search |
+
+Escalation triggers:
+
+- Sources disagree on a claim that matters.
+- The only evidence is indirect, old, copied, or region/version ambiguous.
+- The answer affects money, legal decisions, safety, security, or project direction.
+- The user asks for a report, comparison matrix, audit trail, or "best/latest" recommendation.
+
+De-escalation triggers:
+
+- A primary source directly answers the question.
+- The user only needs a quick factual check.
+- Further results repeat the same origin or syndicated article.
+- A deep dive would not change the decision.
 
 ## Search Depth
 
@@ -47,6 +72,23 @@ Use separate query purposes:
 - **Extraction**: open the best pages/PDFs/docs and pull the exact fields needed.
 
 Avoid fan-out when the answer is a simple known fact or a single official page will settle the question.
+
+## Stop Rules
+
+Stop searching when one of these is true:
+
+- **Sufficient direct evidence**: each important claim has a cited source that directly supports it.
+- **Saturation**: new searches return the same primary source, copied summaries, or low-quality duplicates.
+- **Budget ceiling**: the selected research budget is exhausted and added depth is unlikely to change the answer.
+- **Unresolvable conflict**: sources disagree and no accessible authority resolves it; state the conflict instead of continuing indefinitely.
+- **User value reached**: the answer can support the user's decision with clear confidence and limits.
+
+Continue or escalate when:
+
+- A source is undated and recency matters.
+- Source dates, regions, versions, prices, or legal jurisdictions do not match the user's context.
+- The best source is secondary and a primary source should exist.
+- A counterexample query finds credible contrary evidence.
 
 ## Concept Blocks
 
@@ -125,6 +167,8 @@ Capture these fields when relevant:
 
 Use structured pages, official APIs, documentation search, PDFs, tables, changelogs, release notes, filings, or repository history when they are more precise than search snippets.
 
+When a source is very long, extract only the sections needed for the claim. Avoid loading an entire long article or document unless the user asked for full-document analysis or the relevant section cannot be isolated.
+
 ## Source Ledger
 
 For verified or deep research, keep a temporary ledger while working:
@@ -142,6 +186,12 @@ Limits:
 
 The final answer does not need to show the full ledger unless the user asks, but it should reflect it. Every important claim should be traceable to at least one cited source.
 
+Compact ledger format for internal use:
+
+```text
+[claim id] claim :: source title / owner :: date :: support :: confidence :: limit
+```
+
 ## Evidence Score
 
 Score sources mentally or explicitly when evidence is sensitive:
@@ -157,6 +207,13 @@ Score sources mentally or explicitly when evidence is sensitive:
 
 Use lower confidence when evidence is old, indirect, copied, region-limited, version-limited, or not independently confirmed.
 
+Minimum thresholds:
+
+- Quick answer: one direct authoritative source is enough for low-risk facts.
+- Verified answer: each recommendation-critical claim needs a direct source; high-impact claims should have independent confirmation.
+- Deep research: include at least one counterexample/risk query and mention material conflicts.
+- Reproducible answer: include query shape, sources searched, date checked, and ledger summary.
+
 ## Iteration Pattern
 
 1. Start broad enough to discover the vocabulary.
@@ -165,6 +222,17 @@ Use lower confidence when evidence is old, indirect, copied, region-limited, ver
 4. Run a counterexample query using terms like `limitation`, `breaking change`, `errata`, `withdrawn`, `deprecated`, `lawsuit`, `recall`, `security advisory`, or `known issue` when risk matters.
 5. Open and extract from the best sources instead of relying on snippets.
 6. Stop when additional searches repeat the same primary evidence or only add low-quality duplicates.
+
+## Tool Knobs
+
+When the available search tool supports these controls, use them deliberately:
+
+- **Result count**: start small; increase only if recall is poor.
+- **Search depth**: use shallow/fast search for quick checks and deeper search for noisy topics.
+- **Domain include/exclude**: constrain to official, regulatory, standards, vendor, repo, or docs domains when possible.
+- **Topic/date filters**: use news/finance/time filters when recency or category matters.
+- **Content chunks/raw content**: request only enough source text to extract the needed facts.
+- **Structured extraction/schema**: use a schema for product specs, pricing tables, policy requirements, or repeated source fields.
 
 ## Safety Rules
 
@@ -199,6 +267,14 @@ Filters/limits:
 Source ledger summary:
 Result notes:
 Uncertainty:
+```
+
+For compact source notes:
+
+```text
+Sources checked: official docs, changelog, vendor page
+Confidence: high / medium / low
+Limits: date, region, version, unavailable source, conflicting source
 ```
 
 ## Avoid

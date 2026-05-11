@@ -4,7 +4,7 @@ Use this workflow when configuring a project to use skills from `/Users/winverse
 
 ## Goal
 
-Each project should explicitly choose the skills it uses. The skills repo stays as the shared catalog and source of truth.
+Each project should explicitly choose the skills it uses. The skills repo stays as the shared catalog and source of truth for Codex, Claude, and other agents.
 
 This repo does not vendor Codex system skills. For new skill creation, use the installed system `skill-creator` at:
 
@@ -16,7 +16,7 @@ Then apply this repo's `skill-to-html` to create the human-facing `skill.html`.
 
 ## Setup Steps
 
-1. Open the target project's instruction file, usually `AGENTS.md`.
+1. Open the target project's agent instruction file, usually `AGENTS.md` for Codex or `CLAUDE.md` for Claude.
 2. Open each candidate skill's `skill.html` to understand the skill visually before linking it.
 3. Add a `Project Skills` section if it does not exist.
 4. Add links to the selected skill `SKILL.md` files from this repo.
@@ -46,7 +46,7 @@ Recommended fork path:
 <project-root>/skills/<skill-name>/SKILL.md
 ```
 
-If a project forks a skill, link the project-local skill in `AGENTS.md` and mention which repo skill it was forked from.
+If a project forks a skill, link the project-local skill in the target agent instruction file and mention which repo skill it was forked from.
 
 The fork should keep the same pair:
 
@@ -62,4 +62,4 @@ When a shared skill changes:
 - Update `README.md` if the skill's purpose changed.
 - Use `skill-to-html` to update the skill's own `skill.html`.
 - Update the matching file in `project-snippets/`.
-- Revisit project `AGENTS.md` files only when the trigger or path changed.
+- Revisit project instruction files only when the trigger or path changed.

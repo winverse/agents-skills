@@ -1,0 +1,73 @@
+# Skill Inspector
+
+이 문서는 스킬 검사관의 공용 기준이다. 실제 검사 결과와 임시 의견 파일은 `inspector/` 아래에 local-only로 둘 수 있지만, GitHub에는 올리지 않는다.
+
+`inspector/`는 `.gitkeep`만 추적한다. 처리 완료된 검사 결과 파일은 삭제해서 같은 검증 사항을 반복 검토하지 않게 한다.
+
+## 검사관 역할
+
+검사관은 스킬이 단순히 validator만 통과하는 수준이 아니라 Codex, Claude, 다른 에이전트에서도 프로젝트별로 고를 수 있고, 읽기 쉽고, 유지보수 가능한 상태인지 확인한다.
+
+검사관은 다음을 본다.
+
+- `SKILL.md`의 trigger와 description이 명확한가
+- `SKILL.md` 본문이 과하게 길지 않고, 세부 내용은 `references/`로 분리되어 있는가
+- `skill.html`이 단순 카드형 요약이 아니라 decision matrix, workflow, chart, resource map, input/output schema 같은 시각 구조를 제공하는가
+- `agents/openai.yaml`과 `project-snippets/`가 실제 스킬 목적과 맞는가
+- `AGENTS.md`, `CLAUDE.md`, 또는 다른 에이전트 instruction 파일에서 연결 가능한 방식으로 문서화되어 있는가
+- 참조 파일, 스크립트, HTML 링크가 깨지지 않았는가
+- validator와 스킬별 커스텀 검사가 통과하는가
+- 스킬이 기본/global 동작보다 이 repo의 커스텀 기준을 우선하도록 연결되어 있는가
+- 특정 에이전트 전용 표현이나 도구 의존성이 shared skill 본문에 과하게 섞여 있지 않은가
+
+## 검사 절차
+
+1. 대상 스킬의 `SKILL.md`를 읽고 trigger, workflow, failure mode를 확인한다.
+2. `SKILL.md`가 직접 언급하는 `references/` 파일만 필요한 만큼 읽는다.
+3. `skill.html`을 열어 한눈에 사용 판단이 가능한지 확인한다.
+4. `project-snippets/`와 README의 설명이 현재 trigger와 일치하는지 확인한다.
+5. 시스템 validator를 실행한다.
+6. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
+7. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다.
+8. 미해결 이슈만 local-only `inspector/` 파일로 남긴다.
+9. 이슈가 처리되면 해당 검사 파일은 삭제한다.
+
+## 권장 검사 명령
+
+```bash
+PYTHONPATH=/private/tmp/codex-pyyaml python3 /Users/winverse/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/winverse/Desktop/skills/<skill-name>
+```
+
+스킬별 커스텀 validator가 있으면 추가로 실행한다.
+
+```bash
+node <skill-name>/scripts/validate-<skill-name>.mjs <skill-name>
+```
+
+HTML 렌더링 검사는 로컬 서버로 확인한다.
+
+```bash
+python3 -m http.server 8787
+```
+
+## 판정 등급
+
+- `A`: 바로 배포 가능. 구조, trigger, HTML, snippet, validator, 검증 문서가 모두 좋다.
+- `B`: 사용 가능. 작은 중복, HTML 보강, 문서 연결 개선 같은 후속 작업이 있다.
+- `C`: 일부 사용 가능. trigger 불명확, 참조 분리 부족, HTML 품질 부족, 검사 자동화 부족 중 하나 이상이 있다.
+- `D`: 사용 보류. validator 실패, 깨진 링크, 잘못된 trigger, 심각한 유지보수 위험이 있다.
+
+## 스킬 제작 에이전트 체크리스트
+
+새 스킬을 만들거나 기존 스킬을 크게 바꾼 에이전트는 완료 전에 다음을 확인한다.
+
+- `SKILL.md`는 500줄 이하를 목표로 하고, 핵심 trigger와 workflow만 둔다.
+- 긴 취향, 예시, 평가 prompt, source rule은 `references/`로 분리한다.
+- `skill.html`은 최소 4개 이상의 시각 구조를 포함한다.
+- `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다.
+- `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.
+- `project-snippets/`의 문구가 실제 trigger와 맞다.
+- Codex용 `AGENTS.md`뿐 아니라 Claude용 `CLAUDE.md`에도 연결 가능한 trigger와 경로가 문서화되어 있다.
+- validator와 커스텀 validator가 모두 통과한다.
+- 미해결 검사 이슈가 있으면 local-only `inspector/` 파일에 남기고, 해결되면 삭제한다.
+
