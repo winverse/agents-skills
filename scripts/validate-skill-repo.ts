@@ -8,8 +8,10 @@ const errors: string[] = [];
 
 const ignoredDirs = new Set<string>([
   ".git",
+  ".githooks",
   ".playwright-mcp",
   "archive",
+  "hook-test-skill",
   "images",
   "inspector",
   "node_modules",
@@ -20,21 +22,23 @@ const sourceExtensions = new Set<string>([
   ".json",
   ".md",
   ".mjs",
+  ".py",
   ".toml",
   ".ts",
   ".yaml",
   ".yml",
 ]);
 
-const privatePathPattern = new RegExp(
-  [
-    `${"/"}Users${"/"}`,
-    `${"/"}home${"/"}`,
-    `${"/"}private${"/"}tmp`,
-    `Desktop${"/"}skills`,
-  ].join("|"),
-);
 const nodeMajor = Number(process.versions.node.split(".")[0] ?? "0");
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const privatePathPatterns = [
+  process.env.HOME ? new RegExp(escapeRegExp(process.env.HOME)) : null,
+  /\/private\/tmp\/codex-/,
+].filter((pattern): pattern is RegExp => pattern !== null);
 
 function rel(filePath: string): string {
   return path.relative(root, filePath).split(path.sep).join("/");
@@ -50,19 +54,17 @@ function requireFile(relativePath: string): void {
   }
 }
 
-function topLevelDirs(): string[] {
-  return readdirSync(root)
-    .filter((name) => {
-      const fullPath = path.join(root, name);
-      return statSync(fullPath).isDirectory() && !ignoredDirs.has(name);
-    })
-    .sort();
-}
-
 function skillDirs(): string[] {
-  return topLevelDirs().filter((name) =>
-    existsSync(path.join(root, name, "SKILL.md")),
-  );
+  const skillsRoot = path.join(root, "skills");
+  if (!existsSync(skillsRoot)) return [];
+
+  return readdirSync(skillsRoot)
+    .filter((name) => {
+      const fullPath = path.join(skillsRoot, name);
+      return statSync(fullPath).isDirectory() && existsSync(path.join(fullPath, "SKILL.md"));
+    })
+    .map((name) => `skills/${name}`)
+    .sort();
 }
 
 function walkSourceFiles(dir: string = root, output: string[] = []): string[] {
@@ -88,6 +90,8 @@ function walkSourceFiles(dir: string = root, output: string[] = []): string[] {
 requireFile("README.md");
 requireFile("AGENTS.md");
 requireFile(".node-version");
+requireFile("skills");
+requireFile("scripts/validate-skill.ts");
 requireFile("docs/skill-lifecycle.md");
 requireFile("docs/skill-inspector.md");
 requireFile("history/skills.md");
@@ -110,18 +114,24 @@ const history = existsSync(path.join(root, "history/skills.md"))
   ? readText("history/skills.md")
   : "";
 for (const skill of skillDirs()) {
+  const skillName = path.basename(skill);
   requireFile(`${skill}/SKILL.md`);
   requireFile(`${skill}/skill.html`);
+  requireFile(`project-snippets/${skillName}.md`);
 
-  if (!history.includes(`\`${skill}\``)) {
-    errors.push(`history/skills.md is missing registry entry for ${skill}`);
+  if (!history.includes(`\`${skillName}\``)) {
+    errors.push(`history/skills.md is missing registry entry for ${skillName}`);
   }
 }
 
 for (const filePath of walkSourceFiles()) {
+  const relativePath = rel(filePath);
   const text = readFileSync(filePath, "utf8");
-  if (privatePathPattern.test(text)) {
-    errors.push(`Non-portable local path found in ${rel(filePath)}`);
+  if (/(^|\/)scripts\/validate-[^/]+\.py$/.test(relativePath)) {
+    errors.push(`Repo-owned validator must be TypeScript, not Python: ${relativePath}`);
+  }
+  if (privatePathPatterns.some((pattern) => pattern.test(text))) {
+    errors.push(`Non-portable local path found in ${relativePath}`);
   }
 }
 

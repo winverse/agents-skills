@@ -7,7 +7,7 @@ Copied snippets use `<skills-root>` as a placeholder for the actual clone path o
 ## 기본 모델
 
 ```text
-<skills-root>/<skill-name>/SKILL.md
+<skills-root>/skills/<skill-name>/SKILL.md
         |
         +-- Codex project: AGENTS.md
         +-- Claude project: CLAUDE.md
@@ -23,7 +23,7 @@ Codex 프로젝트에서는 보통 `AGENTS.md`에 다음처럼 연결한다.
 ```markdown
 ## Project Skills
 
-- Use $web-research at <skills-root>/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
+- Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 ```
 
 ## Claude 연결
@@ -33,7 +33,7 @@ Claude 프로젝트에서는 보통 `CLAUDE.md`에 같은 스킬 경로와 사�
 ```markdown
 ## Project Skills
 
-- For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/web-research/SKILL.md`.
+- For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
 - Before using a shared skill, read its adjacent `skill.html` if you need a quick human-facing overview.
 
 ## Project Skill Overrides

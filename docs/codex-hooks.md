@@ -54,12 +54,12 @@ Codex에서 `/hooks`를 열고 두 hook의 command를 확인한 뒤 승인하면
 
 ## 동작
 
-hook은 tool 실행 후 git 작업 트리와 hook payload를 확인한다.
+hook은 tool 실행 후 git 작업 트리의 dirty 상태를 확인한다.
 
-- `*/SKILL.md`가 생성되거나 수정된 흔적을 찾는다.
+- `skills/<skill-name>/SKILL.md`가 생성되거나 수정된 흔적을 찾는다.
 - 같은 폴더의 `skill.html`이 dirty 상태면 이미 갱신 중이라고 보고 통과한다.
 - `skill.html`이 없거나 변경되지 않았으면 Codex 대화에 추가 context를 주입한다.
-- 추가 context는 `skill-to-html/SKILL.md`를 사용해서 해당 스킬 폴더의 `skill.html`을 갱신하라고 지시한다.
+- 추가 context는 `skills/skill-to-html/SKILL.md`를 사용해서 해당 스킬 폴더의 `skill.html`을 갱신하라고 지시한다.
 - `PostToolUse`에서 놓친 경우를 줄이기 위해 `UserPromptSubmit`에서도 한 번 더 검사한다.
 
 ## 한계

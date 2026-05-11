@@ -6,6 +6,7 @@ import process from "node:process";
 type NamedContent = [name: string, content: string];
 
 const root = path.resolve(process.argv[2] ?? path.join(import.meta.dirname, ".."));
+const repoRoot = path.resolve(root, "../..");
 const failures: string[] = [];
 
 function read(relativePath: string): string {
@@ -131,7 +132,7 @@ for (const match of html.matchAll(hrefPattern)) {
   const href = match[1];
   if (/^(https?:|mailto:|#|data:)/.test(href)) continue;
   const target = path.resolve(root, href);
-  if (!target.startsWith(path.resolve(root, ".."))) {
+  if (target !== repoRoot && !target.startsWith(`${repoRoot}${path.sep}`)) {
     fail(`Suspicious href outside skills tree: ${href}`);
     continue;
   }

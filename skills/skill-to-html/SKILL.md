@@ -5,7 +5,7 @@ description: Create or revise the human-facing `skill.html` that sits beside an 
 
 # Skill To HTML
 
-Use this skill immediately after `skill-creator` initializes or updates a skill. The output is a static `skill.html` file inside the same skill folder as `SKILL.md`.
+Use this skill immediately after `skill-creator` or another agent initializes, forks, installs, or materially updates a shared skill. The output is a static `skill.html` file inside the same skill folder as `SKILL.md`.
 
 Read `references/visual-guide-standards.md` before designing or revising a `skill.html`.
 
@@ -69,7 +69,9 @@ Choose visuals based on the skill contents:
 4. Pick 3-5 visual patterns from the table above.
 5. Create or replace `skill.html` next to `SKILL.md`.
 6. Verify the HTML in a desktop browser viewport when practical.
-7. If the skill is part of this repo, update `README.md`, `AGENTS.md`, and `project-snippets/` only when paths or trigger wording changed.
+7. If the skill is part of this repo, run `node scripts/validate-skill.ts <skill-path>` from the repo root and then the skill-specific TypeScript validator when one exists.
+8. If paths, trigger wording, workflow, validators, snippets, or lifecycle state changed, update `README.md`, `AGENTS.md`, `project-snippets/`, and `history/skills.md` as applicable.
+9. Review `docs/skill-inspector.md`; keep only unresolved local review notes in ignored `inspector/` and delete resolved review files.
 
 ## Quality Bar
 

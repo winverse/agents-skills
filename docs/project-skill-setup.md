@@ -12,7 +12,7 @@ This repo does not vendor Codex system skills. For new skill creation, use the i
 <codex-home>/skills/.system/skill-creator/SKILL.md
 ```
 
-Then apply this repo's `skill-to-html` to create the human-facing `skill.html`.
+Then run this repo's TypeScript validator and apply this repo's `skill-to-html` to create the human-facing `skill.html`.
 
 ## Setup Steps
 
@@ -29,7 +29,7 @@ Then apply this repo's `skill-to-html` to create the human-facing `skill.html`.
 ```markdown
 ## Project Skills
 
-- Use $web-research at <skills-root>/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, or technical documentation lookup.
+- Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, or technical documentation lookup.
 
 ## Project Skill Overrides
 
@@ -64,4 +64,5 @@ When a shared skill changes:
 - Use `skill-to-html` to update the skill's own `skill.html`.
 - Update the matching file in `project-snippets/`.
 - Update `history/skills.md` if trigger, workflow, validator, snippet, or lifecycle state changed.
+- Keep repo-owned validators in `.ts` and run them with Node 22+.
 - Revisit project instruction files only when the trigger or path changed.

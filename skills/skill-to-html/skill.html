@@ -22,7 +22,7 @@
     .flow svg,.bars svg,.map svg{width:100%;height:auto;display:block}.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.sw{width:10px;height:10px;border-radius:2px;background:var(--accent)}
     .rules{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rule{padding:12px;border:1px solid var(--border);border-radius:8px;background:#fbfdff}.rule strong{display:block;font-size:13px}.rule p{font-size:12px;color:var(--muted);margin-top:5px}
     .code{background:#111827;color:#f9fafb;border-radius:8px;padding:14px;overflow-x:auto;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
-    .files{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}.file{border:1px solid var(--border);border-radius:8px;background:#fbfdff;padding:12px;min-height:78px}.file strong{display:block;font-size:13px}.file span{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+    .files{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:12px}.file{border:1px solid var(--border);border-radius:8px;background:#fbfdff;padding:12px;min-height:78px}.file strong{display:block;font-size:13px}.file span{display:block;font-size:12px;color:var(--muted);margin-top:5px}
   </style>
 </head>
 <body>
@@ -30,7 +30,7 @@
     <header class="top">
       <div class="brand">
         <div class="mark">S2H</div>
-        <div><h1>skill-to-html</h1><p class="sub">SKILL.md를 설치 직후 읽는 도표 중심 skill.html로 바꾸는 스킬</p></div>
+        <div><h1>skill-to-html</h1><p class="sub">SKILL.md를 도표 중심 skill.html로 바꾸고 repo 검증 흐름까지 맞추는 스킬</p></div>
       </div>
       <div class="pair"><strong>Required pair</strong><code>SKILL.md + skill.html</code></div>
     </header>
@@ -61,7 +61,7 @@
       </article>
 
       <article class="panel flow">
-        <div class="head"><h2>skill.html 생성 흐름</h2><p class="note">skill-creator가 끝나면 이 순서로 HTML을 만듭니다.</p></div>
+        <div class="head"><h2>skill.html 생성 흐름</h2><p class="note">스킬 변경 뒤 HTML, TS 검증, history 정리를 함께 처리합니다.</p></div>
         <div class="body">
           <svg viewBox="0 0 720 250" role="img" aria-label="SKILL.md에서 구조를 추출해 visual patterns를 고르고 skill.html을 검증하는 흐름">
             <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
@@ -69,8 +69,8 @@
               <rect x="20" y="72" width="140" height="72" rx="8"/><rect x="200" y="72" width="140" height="72" rx="8"/><rect x="380" y="72" width="140" height="72" rx="8"/><rect x="560" y="72" width="140" height="72" rx="8"/>
             </g>
             <g stroke="#6b7280" stroke-width="2" marker-end="url(#a)"><line x1="160" y1="108" x2="196" y2="108"/><line x1="340" y1="108" x2="376" y2="108"/><line x1="520" y1="108" x2="556" y2="108"/></g>
-            <g font-size="15" font-weight="700" fill="#111827" text-anchor="middle"><text x="90" y="102">Read</text><text x="270" y="102">Extract</text><text x="450" y="102">Visualize</text><text x="630" y="102">Verify</text></g>
-            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="90" y="123">SKILL.md</text><text x="270" y="123">trigger/workflow</text><text x="450" y="123">charts/maps</text><text x="630" y="123">desktop check</text></g>
+            <g font-size="15" font-weight="700" fill="#111827" text-anchor="middle"><text x="90" y="102">Read</text><text x="270" y="102">Extract</text><text x="450" y="102">Visualize</text><text x="630" y="102">Validate</text></g>
+            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="90" y="123">SKILL.md</text><text x="270" y="123">trigger/workflow</text><text x="450" y="123">charts/maps</text><text x="630" y="123">TS + desktop</text></g>
           </svg>
         </div>
       </article>
@@ -110,16 +110,22 @@
             <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>agent workflow</span></a>
             <a class="file" href="skill.html"><strong>skill.html</strong><span>human visual guide</span></a>
             <a class="file" href="references/visual-guide-standards.md"><strong>standards</strong><span>design rules</span></a>
-            <a class="file" href="../project-snippets/skill-to-html.md"><strong>snippet</strong><span>project link</span></a>
+            <a class="file" href="../../scripts/validate-skill.ts"><strong>validate-skill.ts</strong><span>base validator</span></a>
+            <a class="file" href="../../project-snippets/skill-to-html.md"><strong>project-snippets/skill-to-html.md</strong><span>project link</span></a>
           </div>
         </div>
       </article>
 
       <article class="panel">
-        <div class="head"><h2>프로젝트 연결</h2><p class="note">스킬 생성 프로젝트에는 skill-creator와 함께 연결합니다.</p></div>
+        <div class="head"><h2>프로젝트 연결</h2><p class="note">스킬 생성 프로젝트에는 skill-creator, TS validator와 함께 연결합니다.</p></div>
         <div class="body"><div class="code">## Project Skills
 
-- Use $skill-to-html at &lt;skills-root&gt;/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich skill.html beside SKILL.md.</div></div>
+- Use $skill-to-html at &lt;skills-root&gt;/skills/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich skill.html beside SKILL.md.
+
+## Validation
+
+- Run node scripts/validate-skill.ts skills/&lt;skill-name&gt; before calling the skill done.
+- Use repo-owned .ts validators, not Python validators.</div></div>
       </article>
     </section>
   </main>

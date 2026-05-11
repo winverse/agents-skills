@@ -28,7 +28,7 @@
 3. `skill.html`을 열어 한눈에 사용 판단이 가능한지 확인한다.
 4. `project-snippets/`와 README의 설명이 현재 trigger와 일치하는지 확인한다.
 5. `history/skills.md`에서 대상 스킬의 상태와 최근 큰 변경 기록이 맞는지 확인한다.
-6. 시스템 validator를 실행한다.
+6. repo 기본 TypeScript validator를 실행한다.
 7. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
 8. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다.
 9. 미해결 이슈만 local-only `inspector/` 파일로 남긴다.
@@ -37,13 +37,13 @@
 ## 권장 검사 명령
 
 ```bash
-python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" "$PWD/<skill-name>"
+node scripts/validate-skill.ts skills/<skill-name>
 ```
 
 스킬별 커스텀 validator가 있으면 추가로 실행한다.
 
 ```bash
-node <skill-name>/scripts/validate-<skill-name>.ts <skill-name>
+node skills/<skill-name>/scripts/validate-<skill-name>.ts skills/<skill-name>
 ```
 
 repo 전체 lifecycle, history, portable path 기준도 확인한다.
@@ -52,13 +52,9 @@ repo 전체 lifecycle, history, portable path 기준도 확인한다.
 node scripts/validate-skill-repo.ts .
 ```
 
-Node 기반 validator는 특별한 런타임 제약이 없으면 `.ts`를 기본으로 한다. Node 22 이상에서 `node <file>.ts`로 직접 실행하는 것을 기준으로 하고, Codex hook처럼 다른 실행 환경과의 호환성이 중요한 파일은 예외적으로 `.mjs`를 유지할 수 있다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상에서 `node <file>.ts`로 직접 실행하는 것을 기준으로 하고, 새 validator를 `.py`로 추가하지 않는다. Codex hook처럼 다른 실행 환경과의 호환성이 중요한 파일은 예외적으로 `.mjs`를 유지할 수 있다.
 
-HTML 렌더링 검사는 로컬 서버로 확인한다.
-
-```bash
-python3 -m http.server 8787
-```
+HTML 렌더링 검사는 브라우저에서 `skill.html`을 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
 
 ## 판정 등급
 

@@ -51,25 +51,11 @@ function parseGitStatus(root) {
 
 function skillDirFromPath(filePath) {
   const posix = toPosix(filePath);
-  if (posix === "SKILL.md") return ".";
-  if (!posix.endsWith("/SKILL.md")) return null;
-  return posix.slice(0, -"/SKILL.md".length);
-}
-
-function collectPayloadSkillDirs(serializedPayload, root) {
-  const dirs = new Set();
-  const pattern = /(?:^|["'\s])([^"'\s]*SKILL\.md)(?=["'\s]|$)/g;
-
-  for (const match of serializedPayload.matchAll(pattern)) {
-    let filePath = match[1];
-    if (path.isAbsolute(filePath)) {
-      filePath = path.relative(root, filePath);
-    }
-    const dir = skillDirFromPath(filePath);
-    if (dir) dirs.add(dir);
+  const parts = posix.split("/");
+  if (parts.length === 3 && parts[0] === "skills" && parts[2] === "SKILL.md") {
+    return `skills/${parts[1]}`;
   }
-
-  return dirs;
+  return null;
 }
 
 function collectDirtySkillDirs(entries) {
@@ -112,10 +98,7 @@ try {
 const eventName = payload.hook_event_name ?? "PostToolUse";
 const root = gitRoot(payload.cwd ?? process.cwd());
 const entries = parseGitStatus(root);
-const candidateDirs = new Set([
-  ...collectPayloadSkillDirs(input, root),
-  ...collectDirtySkillDirs(entries),
-]);
+const candidateDirs = collectDirtySkillDirs(entries);
 
 const reminders = [];
 
@@ -143,7 +126,7 @@ if (reminders.length === 0) {
 
 const lines = [
   "Codex hook reminder: a shared skill source instruction changed, but the matching human visual guide is not dirty.",
-  "Before finalizing this task, use $skill-to-html at skill-to-html/SKILL.md for each affected skill folder and update the adjacent skill.html.",
+  "Before finalizing this task, use $skill-to-html at skills/skill-to-html/SKILL.md for each affected skill folder and update the adjacent skill.html.",
   "",
 ];
 

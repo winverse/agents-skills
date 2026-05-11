@@ -19,7 +19,7 @@
 - `SKILL.md`가 trigger와 workflow를 간결하게 설명한다.
 - `skill.html`이 decision matrix, flowchart, chart, resource map 같은 시각 구조를 포함한다.
 - 프로젝트 연결 snippet이 있다.
-- system skill validator가 통과한다.
+- repo 기본 TypeScript validator가 통과한다.
 - 스킬별 validator가 필요한 경우 해당 validator가 있다.
 
 다음 중 하나에 해당하면 `critical`로 승격한다.
