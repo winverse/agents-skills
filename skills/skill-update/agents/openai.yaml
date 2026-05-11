@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Update"
+  short_description: "Maintain an existing shared skill end to end"
+  default_prompt: "Use $skill-update to revise an existing shared skill and keep SKILL.md, references, validators, skill.html, snippets, docs, and history in sync."

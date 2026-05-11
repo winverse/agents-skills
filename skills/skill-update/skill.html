@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>skill-update guide</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --strong: #0f172a;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --ok: #1f7a52;
+      --ok-soft: #dcfce7;
+      --warn: #a16207;
+      --warn-soft: #fef3c7;
+      --danger: #b42318;
+      --danger-soft: #fee2e2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      padding: 24px 0 18px;
+      border-bottom: 2px solid var(--strong);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.05;
+    }
+
+    h2 {
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .sub {
+      margin-top: 8px;
+      max-width: 790px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .pair {
+      display: grid;
+      gap: 6px;
+      min-width: 270px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+    }
+
+    .pair span {
+      color: var(--muted);
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+      padding: 20px 0 34px;
+    }
+
+    section {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-muted);
+    }
+
+    .note {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .cell {
+      min-height: 148px;
+      display: grid;
+      align-content: start;
+      gap: 9px;
+      padding: 15px;
+      border-right: 1px solid var(--border);
+    }
+
+    .cell:last-child {
+      border-right: 0;
+    }
+
+    .cell strong {
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .cell p,
+    .cell li {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .cell ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .visual {
+      padding: 18px;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .coverage {
+      display: grid;
+      gap: 11px;
+      padding: 18px;
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 145px 1fr 64px;
+      gap: 10px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .bar span:first-child {
+      color: var(--text);
+      font-weight: 750;
+    }
+
+    .track {
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .bar span:last-child {
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .file {
+      min-height: 88px;
+      display: grid;
+      gap: 6px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .file strong {
+      font-size: 13px;
+    }
+
+    .file span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .io {
+      display: grid;
+      grid-template-columns: 1fr 82px 1fr;
+      gap: 12px;
+      align-items: stretch;
+      padding: 18px;
+    }
+
+    .box {
+      min-height: 176px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .box ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .arrow {
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .snippet {
+      margin: 0;
+      padding: 16px 18px;
+      overflow-x: auto;
+      background: #0f172a;
+      color: #e5eefc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .split > div {
+      padding: 18px;
+    }
+
+    .split > div:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .rules {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 18px 18px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--accent);
+      border: 1px solid rgba(15, 23, 42, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <h1>skill-update</h1>
+        <p class="sub">기존 공유 스킬을 수정할 때 SKILL.md, references, validator, agents metadata, skill.html, snippets, docs, history를 한 번에 맞추는 유지보수 오케스트레이터</p>
+      </div>
+      <div class="pair" aria-label="skill file pair">
+        <strong>skills/skill-update/</strong>
+        <span>SKILL.md - update workflow</span>
+        <span>skill.html - human guide</span>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <div class="head">
+          <h2>Decision Matrix</h2>
+          <p class="note">기존 스킬 수정 요청인지, 다른 스킬을 먼저 써야 하는지 빠르게 구분합니다.</p>
+        </div>
+        <div class="matrix" role="list">
+          <div class="cell" style="background: var(--ok-soft)">
+            <strong>Use</strong>
+            <p>기존 스킬의 trigger, workflow, references, validator, snippet, lifecycle를 바꿀 때.</p>
+          </div>
+          <div class="cell" style="background: var(--accent-soft)">
+            <strong>Combine</strong>
+            <ul>
+              <li>material change → skill-to-html</li>
+              <li>문서 drift 가능 → sync-docs</li>
+              <li>커밋 요청 → atomic-committer</li>
+            </ul>
+          </div>
+          <div class="cell" style="background: var(--warn-soft)">
+            <strong>Ask</strong>
+            <p>트리거 변경, rename, split, merge, deprecate, 제거처럼 의도가 불명확하면 수정 전에 확인합니다.</p>
+          </div>
+          <div class="cell" style="background: var(--danger-soft)">
+            <strong>Skip</strong>
+            <p>새 스킬의 초기 scaffold만 필요하면 먼저 system skill-creator를 사용합니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Workflow</h2>
+          <p class="note">행동 변경을 기준으로 범위를 정하고, package 전체가 같은 상태로 끝나게 합니다.</p>
+        </div>
+        <div class="visual">
+          <svg viewBox="0 0 1040 310" role="img" aria-label="skill-update workflow">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L9,3 L0,6 Z" fill="#2563eb"></path>
+              </marker>
+            </defs>
+            <g>
+              <rect x="10" y="42" width="150" height="82" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+              <rect x="202" y="42" width="150" height="82" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+              <rect x="394" y="42" width="150" height="82" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
+              <rect x="586" y="42" width="150" height="82" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
+              <rect x="778" y="42" width="150" height="82" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+              <path d="M160 83 H196" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+              <path d="M352 83 H388" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+              <path d="M544 83 H580" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+              <path d="M736 83 H772" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+              <g font-size="13" font-weight="800" text-anchor="middle" fill="#111827">
+                <text x="85" y="76">Intent</text>
+                <text x="277" y="76">Inspect</text>
+                <text x="469" y="76">Scope</text>
+                <text x="661" y="76">Patch Package</text>
+                <text x="853" y="76">Validate</text>
+              </g>
+              <g font-size="12" text-anchor="middle" fill="#4b5563">
+                <text x="85" y="100">행동 변화</text>
+                <text x="277" y="100">현재 skill</text>
+                <text x="469" y="100">영향 범위</text>
+                <text x="661" y="100">전체 파일</text>
+                <text x="853" y="100">repo checks</text>
+              </g>
+            </g>
+            <rect x="254" y="184" width="532" height="78" rx="8" fill="#f8fafc" stroke="#94a3b8"></rect>
+            <path d="M469 124 V184" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5"></path>
+            <path d="M661 184 V130" stroke="#1f7a52" stroke-width="2" stroke-dasharray="6 5"></path>
+            <text x="520" y="216" text-anchor="middle" font-size="14" font-weight="800" fill="#111827">coordination</text>
+            <text x="520" y="239" text-anchor="middle" font-size="12" fill="#4b5563">skill-to-html + sync-docs + inspector + history</text>
+          </svg>
+        </div>
+        <div class="legend">
+          <span class="chip"><span class="swatch"></span>필수 흐름</span>
+          <span class="chip"><span class="swatch" style="background:#a16207"></span>범위 판단</span>
+          <span class="chip"><span class="swatch" style="background:#1f7a52"></span>패키지 동기화</span>
+        </div>
+      </section>
+
+      <div class="two">
+        <section>
+          <div class="head">
+            <h2>Package Coverage</h2>
+            <p class="note">행동 변경 시 같이 확인해야 하는 파일군입니다.</p>
+          </div>
+          <div class="coverage" aria-label="package coverage chart">
+            <div class="bar"><span>SKILL.md</span><div class="track"><div class="fill" style="width:100%"></div></div><span>always</span></div>
+            <div class="bar"><span>references</span><div class="track"><div class="fill" style="width:82%"></div></div><span>often</span></div>
+            <div class="bar"><span>validator</span><div class="track"><div class="fill" style="width:78%"></div></div><span>often</span></div>
+            <div class="bar"><span>skill.html</span><div class="track"><div class="fill" style="width:92%"></div></div><span>material</span></div>
+            <div class="bar"><span>snippets/docs</span><div class="track"><div class="fill" style="width:74%"></div></div><span>paths</span></div>
+            <div class="bar"><span>history</span><div class="track"><div class="fill" style="width:66%"></div></div><span>durable</span></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="head">
+            <h2>Input / Output</h2>
+            <p class="note">요청은 행동 변화이고, 결과는 동기화된 스킬 패키지입니다.</p>
+          </div>
+          <div class="io">
+            <div class="box">
+              <h3>Input</h3>
+              <ul>
+                <li>업데이트할 스킬 이름</li>
+                <li>원하는 행동 변화</li>
+                <li>현재 파일과 history</li>
+                <li>검증 실패 또는 사용자 피드백</li>
+              </ul>
+            </div>
+            <div class="arrow">→</div>
+            <div class="box">
+              <h3>Output</h3>
+              <ul>
+                <li>수정된 skill package</li>
+                <li>최신 skill.html</li>
+                <li>맞춰진 snippets/docs/history</li>
+                <li>validator 결과와 남은 질문</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section>
+        <div class="head">
+          <h2>Resource Map</h2>
+          <p class="note">반복되는 체크리스트는 reference와 validator에 두고 본문은 오케스트레이션에 집중합니다.</p>
+        </div>
+        <div class="resources">
+          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, core contract, update workflow</span></a>
+          <a class="file" href="references/update-checklist.md"><strong>update-checklist</strong><span>package matrix, coordination, validation</span></a>
+          <a class="file" href="scripts/validate-skill-update.ts"><strong>validator</strong><span>static checks for this skill</span></a>
+          <a class="file" href="../../project-snippets/skill-update.md"><strong>project-snippets/skill-update.md</strong><span>portable project connection block</span></a>
+          <a class="file" href="../skill-to-html/SKILL.md"><strong>skill-to-html</strong><span>visual guide refresh</span></a>
+          <a class="file" href="../sync-docs/SKILL.md"><strong>sync-docs</strong><span>cross-doc drift cleanup</span></a>
+        </div>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Project Connection</h2>
+          <p class="note">스킬을 운영하는 프로젝트에만 붙입니다.</p>
+        </div>
+        <pre class="snippet">## Project Skills
+
+- Use $skill-update at &lt;skills-root&gt;/skills/skill-update/SKILL.md when asked to update, revise, improve, maintain, rename, split, deprecate, or otherwise change an existing shared skill.
+
+## Project-Specific Overrides
+
+- Keep SKILL.md, references, validator, agents/openai.yaml, skill.html, snippets, docs, and history aligned when behavior changes.
+- Use skill-to-html after material skill changes.
+- Use sync-docs when paths, snippets, README, AGENTS, docs, history, or validation commands may drift.
+- Ask before changing unclear trigger behavior, lifecycle state, rename, split, merge, deprecation, or removal.</pre>
+      </section>
+
+      <section>
+        <div class="split">
+          <div>
+            <h2>Do</h2>
+            <ul class="rules">
+              <li>사용자가 원하는 행동 변화를 먼저 확인합니다.</li>
+              <li>한 파일만 고치지 말고 관련 package 전체를 맞춥니다.</li>
+              <li>validator와 history 기준을 끝에서 확인합니다.</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Do Not</h2>
+            <ul class="rules">
+              <li>애매한 trigger 변경을 임의로 결정하지 않습니다.</li>
+              <li>SKILL.md에 긴 취향과 예시를 계속 쌓지 않습니다.</li>
+              <li>skill.html, snippets, README를 stale 상태로 남기지 않습니다.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

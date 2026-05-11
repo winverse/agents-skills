@@ -49,6 +49,9 @@ skills/skill-name/
 - `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 diagram-rich `skill.html`을 만들거나 고치는 스킬.
   - Source instruction: `skills/skill-to-html/SKILL.md`
   - Human visual guide: `skills/skill-to-html/skill.html`
+- `skill-update`: 기존 공유 스킬을 수정할 때 `SKILL.md`, references, validator, `skill.html`, snippets, docs, history를 함께 맞추는 유지보수 스킬.
+  - Source instruction: `skills/skill-update/SKILL.md`
+  - Human visual guide: `skills/skill-update/skill.html`
 - `atomic-committer`: dirty git tree를 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
   - Source instruction: `skills/atomic-committer/SKILL.md`
   - Human visual guide: `skills/atomic-committer/skill.html`
@@ -125,6 +128,8 @@ export SKILLS_ROOT="$PWD"
 
 프로젝트에 기존 스킬을 연결하는 절차는 `docs/project-skill-setup.md`를 따른다. 새 스킬을 만들거나 기존 스킬을 크게 바꾸는 검증은 이 섹션과 `docs/skill-inspector.md`를 함께 따른다.
 
+기존 스킬을 업데이트할 때는 `skill-update`를 사용해 source instruction, references, validator, visual guide, snippets, docs, history를 하나의 패키지로 맞춘다.
+
 새 스킬을 만들거나 기존 스킬을 크게 바꿀 때의 기본 흐름:
 
 ```text
@@ -155,6 +160,7 @@ node scripts/validate-skill.ts skills/<skill-name>
 ```bash
 node skills/web-research/scripts/validate-web-research.ts skills/web-research
 node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
+node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
@@ -181,6 +187,7 @@ Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skil
 - `SKILL.md`에는 핵심 trigger와 workflow만 간결하게 둔다.
 - 긴 설명, 평가 prompt, source rule, 개인 취향은 `references/`로 분리한다.
 - 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `skill-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
+- 기존 스킬을 업데이트할 때는 `skill-update`로 관련 references, validator, snippet, docs, history까지 함께 맞춘다.
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
 - 문서 최신화, stale 설명, 문서 간 충돌 검토 요청은 `sync-docs`로 처리한다.
 - repo가 소유하는 validator는 TypeScript로 작성하고 `node <path>.ts`로 실행한다.

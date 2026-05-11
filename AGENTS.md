@@ -16,6 +16,7 @@ These repo-local links make the skills usable for this project without installin
 
 - Use $web-research at `skills/web-research/SKILL.md` when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 - Use $skill-to-html at `skills/skill-to-html/SKILL.md` whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
+- Use $skill-update at `skills/skill-update/SKILL.md` when asked to update, revise, improve, maintain, rename, split, deprecate, or otherwise change an existing shared skill.
 - Use $atomic-committer at `skills/atomic-committer/SKILL.md` when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
 - Use $project-structure at `skills/project-structure/SKILL.md` when asked to choose, create, standardize, or refactor frontend, backend, full-stack monorepo, or desktop app folder structures.
 - Use $sync-docs at `skills/sync-docs/SKILL.md` when asked to review, refresh, reconcile, or update documentation by comparing existing docs, snippets, history, skills, and repo instruction files.
@@ -24,6 +25,7 @@ These repo-local links make the skills usable for this project without installin
 
 - Use repo-linked custom skills before default/global agent behavior when the behavior overlaps.
 - When using `atomic-committer`, group dirty files by logical changeset, write commit messages with an English conventional prefix and Korean summary, and push only when a remote exists and push was requested.
+- When using `skill-update`, keep `SKILL.md`, references, validators, `agents/openai.yaml`, `skill.html`, snippets, docs, and history aligned when behavior changes.
 - When using `project-structure`, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL, Drizzle, Panda CSS with headless UI, Tauri, and Zod env validation unless the project says otherwise.
 - When using `sync-docs`, treat current repo files as the first evidence source and ask before changing a documentation rule when the source of truth is unclear.
 - When using `skill-creator`, run `skill-to-html` immediately afterward for the same skill folder.

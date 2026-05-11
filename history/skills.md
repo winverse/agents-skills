@@ -8,6 +8,7 @@
 | --- | --- | --- | --- | --- |
 | `web-research` | `critical` | high | 2026-05-11 | 현재성, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰는 핵심 조사 스킬 |
 | `skill-to-html` | `active` | medium | 2026-05-11 | `SKILL.md` 옆의 human visual guide를 만드는 시각화 스킬 |
+| `skill-update` | `active` | medium | 2026-05-11 | 기존 공유 스킬의 source, references, validator, visual guide, snippets, docs, history를 함께 맞추는 유지보수 스킬 |
 | `atomic-committer` | `active` | medium | 2026-05-11 | dirty git tree를 atomic commit 단위로 나눠 커밋하고 조건부 push를 수행하는 스킬 |
 | `project-structure` | `active` | medium | 2026-05-11 | frontend, backend, full-stack monorepo, desktop app 구조와 기본 stack/env 정책을 정하는 스킬 |
 | `sync-docs` | `active` | medium | 2026-05-11 | README, AGENTS, docs, snippets, history, skill 파일을 비교해 문서 최신화와 충돌 정리를 수행하는 스킬 |
@@ -18,6 +19,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | 2026-05-11 | `web-research` | Web research method hardened | `active -> critical` | query fan-out, source ledger, evidence scoring, stop rules, eval prompts, static validator 기준을 추가했다. | repo TS validator, skill-specific validator | broad topic eval runner는 필요해지면 추가한다. |
 | 2026-05-11 | `skill-to-html` | HTML guide standard hardened | `active -> active` | 단순 문서 분할이 아니라 decision matrix, flowchart, chart, resource map 중심으로 HTML을 만들도록 기준을 정리했다. | repo TS validator, skill-specific validator | 새 skill이 늘면 visual pattern 예시를 보강한다. |
+| 2026-05-11 | `skill-update` | Skill added | `none -> active` | 기존 스킬 수정 시 `SKILL.md`, references, validator, `agents/openai.yaml`, `skill.html`, snippets, docs, history를 한 번에 맞추는 상위 유지보수 스킬을 추가했다. | repo TS validator, skill-specific validator, repo validator | 실제 스킬 업데이트 요청에서 package completeness 품질을 점검한다. |
 | 2026-05-11 | `changeset-committer` | Skill added | `none -> active` | 커밋 요청 시 변경사항을 changeset 단위로 분류하고, 영어 prefix + 한글 메시지로 커밋하며, remote가 있을 때만 push하도록 새 스킬을 추가했다. | repo TS validator, skill-specific validator | 실제 프로젝트 커밋에서 grouping 품질을 점검한다. |
 | 2026-05-11 | `atomic-committer` | Skill renamed | `active -> active` | 기존 `changeset-committer` slug와 표시 이름을 Git 관례에 더 가까운 `atomic-committer` / Atomic Committer로 변경했다. | repo TS validator, skill-specific validator, repo validator | none |
 | 2026-05-11 | `project-structure` | Skill added | `none -> active` | 프로젝트 종류를 숫자로 고르고 Bun, Turborepo, Next.js, NestJS Fastify, GraphQL, urql, Drizzle, Zod env, Tauri 기본값으로 일관된 구조를 만들도록 새 스킬을 추가했다. | repo TS validator, skill-specific validator, repo validator | 실제 신규 프로젝트 scaffold에서 구조 적합성을 점검한다. |

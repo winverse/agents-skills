@@ -26,6 +26,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/claude-base.md`: Claude-oriented starter block.
 - `project-snippets/web-research.md`: only the web research skill.
 - `project-snippets/skill-to-html.md`: only the skill HTML guide workflow.
+- `project-snippets/skill-update.md`: only existing skill maintenance and package sync rules.
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
 - `project-snippets/project-structure.md`: only project structure and default stack rules.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
