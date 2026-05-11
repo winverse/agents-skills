@@ -251,7 +251,9 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
-      background: var(--surface);
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
     }
 
     .tree-wide {
@@ -279,136 +281,49 @@
     }
 
     .tree {
-      padding: 12px 14px 14px;
-      background: #ffffff;
+      background: #0f172a;
+      flex: 1;
     }
 
-    .tree-labels {
-      display: grid;
-      grid-template-columns: minmax(210px, 1fr) minmax(210px, 280px);
-      gap: 10px;
-      padding: 8px 14px;
-      border-bottom: 1px solid var(--border);
-      background: #f8fafc;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .tree-list,
-    .tree-list ul {
-      list-style: none;
+    .terminal-tree {
       margin: 0;
-      padding: 0;
-    }
-
-    .tree-list {
-      font-size: 12px;
-    }
-
-    .tree-list ul {
-      margin-left: 14px;
-    }
-
-    .tree-list li {
-      position: relative;
-      margin: 0;
-      padding: 0 0 0 22px;
-    }
-
-    .tree-list > li {
-      padding-left: 0;
-    }
-
-    .tree-list li::before {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 0;
-      bottom: 0;
-      border-left: 1px solid var(--strong-border);
-      opacity: 0.85;
-    }
-
-    .tree-list li::after {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 16px;
-      width: 15px;
-      border-top: 1px solid var(--strong-border);
-      opacity: 0.85;
-    }
-
-    .tree-list > li::before,
-    .tree-list > li::after {
-      display: none;
-    }
-
-    .tree-list li:last-child::before {
-      height: 17px;
-      bottom: auto;
-    }
-
-    .tree-node {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(210px, 1fr) minmax(210px, 280px);
-      gap: 10px;
-      align-items: center;
-      min-height: 32px;
-      padding: 4px 0;
-      border-bottom: 1px solid #eef2f7;
-      color: var(--text);
-      z-index: 1;
-    }
-
-    .tree-list li:last-child > .tree-node {
-      border-bottom-color: transparent;
-    }
-
-    .node-name {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      min-width: 0;
-      white-space: nowrap;
+      padding: 16px 18px;
+      min-height: 360px;
+      overflow-x: auto;
+      color: #e5eefc;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.58;
+      white-space: pre;
+      tab-size: 2;
+    }
+
+    .tree-root {
+      color: #bfdbfe;
+      font-weight: 800;
+    }
+
+    .tree-dir {
+      color: #93c5fd;
       font-weight: 750;
     }
 
-    .node-name::before {
-      content: "";
-      width: 9px;
-      height: 9px;
-      border-radius: 2px;
-      background: var(--accent);
-      border: 1px solid #1d4ed8;
-      flex: 0 0 auto;
+    .tree-file {
+      color: #e5eefc;
     }
 
-    .file > .tree-node .node-name::before {
-      border-radius: 50%;
-      background: var(--surface);
-      border-color: var(--strong-border);
+    .tree-generated {
+      color: #86efac;
+      font-weight: 750;
     }
 
-    .tool > .tree-node .node-name::before {
-      background: var(--warn);
-      border-color: #92400e;
+    .tree-tool {
+      color: #fcd34d;
+      font-weight: 750;
     }
 
-    .generated > .tree-node .node-name::before {
-      background: var(--ok);
-      border-color: #166534;
-    }
-
-    .node-role {
-      color: var(--muted);
-      font-size: 12px;
-      text-align: right;
-      line-height: 1.35;
+    .tree-role {
+      color: #94a3b8;
     }
 
     .env-grid {
@@ -702,37 +617,26 @@
               <strong>Frontend web tree</strong>
               <span>Next.js + urql</span>
             </div>
-            <div class="tree-labels"><span>Folder / file</span><span>Role</span></div>
             <div class="tree" aria-label="Frontend web folder structure">
-              <ul class="tree-list">
-                <li class="folder">
-                  <div class="tree-node"><span class="node-name">apps/web</span><span class="node-role">배포되는 Next.js 앱</span></div>
-                  <ul>
-                    <li class="folder"><div class="tree-node"><span class="node-name">env</span><span class="node-role">앱별 env 파일 위치</span></div></li>
-                    <li class="file"><div class="tree-node"><span class="node-name">codegen.ts</span><span class="node-role">GraphQL 타입 생성 설정</span></div></li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">scripts</span><span class="node-role">컴포넌트 생성 등 자동화</span></div></li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">src/app</span><span class="node-role">route, layout, error만 얇게 담당</span></div></li>
-                    <li class="folder">
-                      <div class="tree-node"><span class="node-name">src/config</span><span class="node-role">앱 env 검증과 노출 경계</span></div>
-                      <ul>
-                        <li class="file"><div class="tree-node"><span class="node-name">env.ts</span><span class="node-role">public/server env 분리</span></div></li>
-                      </ul>
-                    </li>
-                    <li class="folder">
-                      <div class="tree-node"><span class="node-name">src/features/posts</span><span class="node-role">posts 도메인 기능 묶음</span></div>
-                      <ul>
-                        <li class="folder"><div class="tree-node"><span class="node-name">components</span><span class="node-role">posts 전용 화면 조각</span></div></li>
-                        <li class="folder"><div class="tree-node"><span class="node-name">graphql</span><span class="node-role">posts query/mutation 문서</span></div></li>
-                        <li class="folder"><div class="tree-node"><span class="node-name">hooks</span><span class="node-role">posts 전용 client 로직</span></div></li>
-                        <li class="folder"><div class="tree-node"><span class="node-name">prefetch</span><span class="node-role">server prefetch 함수</span></div></li>
-                      </ul>
-                    </li>
-                    <li class="generated"><div class="tree-node"><span class="node-name">src/graphql</span><span class="node-role">urql client와 generated 타입</span></div></li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">src/providers</span><span class="node-role">전역 provider 조합</span></div></li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">src/components</span><span class="node-role">도메인 없는 공용 UI만</span></div></li>
-                  </ul>
-                </li>
-              </ul>
+<pre class="terminal-tree"><span class="tree-root">apps/web/</span>                           <span class="tree-role"># 배포되는 Next.js 앱</span>
+├── <span class="tree-dir">env/</span>                            <span class="tree-role"># 앱별 env 파일 위치</span>
+├── <span class="tree-file">codegen.ts</span>                      <span class="tree-role"># GraphQL 타입 생성 설정</span>
+├── <span class="tree-dir">scripts/</span>                        <span class="tree-role"># 컴포넌트 생성 등 자동화</span>
+└── <span class="tree-dir">src/</span>                            <span class="tree-role"># 애플리케이션 source root</span>
+    ├── <span class="tree-dir">app/</span>                        <span class="tree-role"># route, layout, error만 얇게 담당</span>
+    ├── <span class="tree-dir">config/</span>                     <span class="tree-role"># 앱 env 검증과 노출 경계</span>
+    │   └── <span class="tree-file">env.ts</span>                 <span class="tree-role"># public/server env 분리</span>
+    ├── <span class="tree-dir">features/</span>                   <span class="tree-role"># 도메인 단위 기능 묶음</span>
+    │   └── <span class="tree-dir">posts/</span>                  <span class="tree-role"># posts 도메인</span>
+    │       ├── <span class="tree-dir">components/</span>        <span class="tree-role"># posts 전용 화면 조각</span>
+    │       ├── <span class="tree-dir">graphql/</span>           <span class="tree-role"># posts query/mutation 문서</span>
+    │       ├── <span class="tree-dir">hooks/</span>             <span class="tree-role"># posts 전용 client 로직</span>
+    │       └── <span class="tree-dir">prefetch/</span>          <span class="tree-role"># server prefetch 함수</span>
+    ├── <span class="tree-generated">graphql/</span>               <span class="tree-role"># urql client와 GraphQL autogen</span>
+    │   ├── <span class="tree-file">client.ts</span>             <span class="tree-role"># urql client 설정</span>
+    │   └── <span class="tree-generated">autogen.ts</span>         <span class="tree-role"># web GraphQL autogen entrypoint</span>
+    ├── <span class="tree-dir">providers/</span>                 <span class="tree-role"># 전역 provider 조합</span>
+    └── <span class="tree-dir">components/</span>                <span class="tree-role"># 도메인 없는 공용 UI만</span></pre>
             </div>
           </div>
 
@@ -741,41 +645,37 @@
               <strong>Backend API tree</strong>
               <span>NestJS + Fastify + GraphQL</span>
             </div>
-            <div class="tree-labels"><span>Folder / file</span><span>Role</span></div>
             <div class="tree" aria-label="Backend API folder structure">
-              <ul class="tree-list">
-                <li class="folder">
-                  <div class="tree-node"><span class="node-name">apps/api</span><span class="node-role">배포되는 NestJS API 앱</span></div>
-                  <ul>
-                    <li class="folder"><div class="tree-node"><span class="node-name">env</span><span class="node-role">API 전용 env 파일 위치</span></div></li>
-                    <li class="file"><div class="tree-node"><span class="node-name">src/main.ts</span><span class="node-role">Fastify adapter 부트스트랩</span></div></li>
-                    <li class="file"><div class="tree-node"><span class="node-name">src/app.module.ts</span><span class="node-role">Nest root module</span></div></li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">src/config</span><span class="node-role">Zod env를 Nest 서비스로 제공</span></div></li>
-                    <li class="folder">
-                      <div class="tree-node"><span class="node-name">src/common</span><span class="node-role">공통 Nest 정책과 확장점</span></div>
-                      <ul>
-                        <li class="folder"><div class="tree-node"><span class="node-name">guards filters pipes</span><span class="node-role">인증, 예외, 입력 검증 규칙</span></div></li>
-                      </ul>
-                    </li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">src/graphql</span><span class="node-role">GraphQL module, context, scalars</span></div></li>
-                    <li class="folder">
-                      <div class="tree-node"><span class="node-name">src/modules/auth</span><span class="node-role">auth 도메인 기능 묶음</span></div>
-                      <ul>
-                        <li class="file"><div class="tree-node"><span class="node-name">auth.resolver.ts</span><span class="node-role">GraphQL 요청 진입점</span></div></li>
-                        <li class="file"><div class="tree-node"><span class="node-name">auth.service.ts</span><span class="node-role">auth 비즈니스 로직</span></div></li>
-                      </ul>
-                    </li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">src/modules/users</span><span class="node-role">users 도메인 기능 묶음</span></div></li>
-                    <li class="folder">
-                      <div class="tree-node"><span class="node-name">src/providers</span><span class="node-role">외부 서비스 adapter</span></div>
-                      <ul>
-                        <li class="folder"><div class="tree-node"><span class="node-name">jwt logger redis</span><span class="node-role">JWT, logging, cache 연결</span></div></li>
-                      </ul>
-                    </li>
-                    <li class="folder"><div class="tree-node"><span class="node-name">test</span><span class="node-role">API e2e 테스트</span></div></li>
-                  </ul>
-                </li>
-              </ul>
+<pre class="terminal-tree"><span class="tree-root">apps/api/</span>                           <span class="tree-role"># 배포되는 NestJS API 앱</span>
+├── <span class="tree-dir">env/</span>                            <span class="tree-role"># API 전용 env 파일 위치</span>
+├── <span class="tree-file">codegen.ts</span>                      <span class="tree-role"># GraphQL 타입 생성 설정</span>
+├── <span class="tree-dir">src/</span>                            <span class="tree-role"># NestJS source root</span>
+│   ├── <span class="tree-file">main.ts</span>                    <span class="tree-role"># Fastify adapter 부트스트랩</span>
+│   ├── <span class="tree-file">app.module.ts</span>              <span class="tree-role"># Nest root module</span>
+│   ├── <span class="tree-dir">config/</span>                    <span class="tree-role"># Zod env를 Nest 서비스로 제공</span>
+│   │   ├── <span class="tree-file">env.ts</span>                <span class="tree-role"># app-local env schema</span>
+│   │   └── <span class="tree-file">config.service.ts</span>     <span class="tree-role"># 검증된 env 주입</span>
+│   ├── <span class="tree-dir">common/</span>                    <span class="tree-role"># 공통 Nest 정책과 확장점</span>
+│   │   ├── <span class="tree-dir">guards/</span>               <span class="tree-role"># 인증/인가 guard</span>
+│   │   ├── <span class="tree-dir">filters/</span>              <span class="tree-role"># 예외 변환</span>
+│   │   ├── <span class="tree-dir">interceptors/</span>         <span class="tree-role"># request logging 등 횡단 관심사</span>
+│   │   └── <span class="tree-dir">pipes/</span>                <span class="tree-role"># 입력 검증/변환</span>
+│   ├── <span class="tree-dir">graphql/</span>                   <span class="tree-role"># GraphQL module과 autogen</span>
+│   │   ├── <span class="tree-file">context.ts</span>           <span class="tree-role"># request context 구성</span>
+│   │   ├── <span class="tree-file">graphql.module.ts</span>    <span class="tree-role"># GraphQL bootstrap</span>
+│   │   └── <span class="tree-generated">autogen.ts</span>       <span class="tree-role"># API GraphQL autogen entrypoint</span>
+│   ├── <span class="tree-dir">modules/</span>                   <span class="tree-role"># 도메인 module 모음</span>
+│   │   ├── <span class="tree-dir">auth/</span>                <span class="tree-role"># auth 도메인</span>
+│   │   │   ├── <span class="tree-file">auth.module.ts</span>   <span class="tree-role"># auth Nest module</span>
+│   │   │   ├── <span class="tree-file">auth.resolver.ts</span> <span class="tree-role"># GraphQL 요청 진입점</span>
+│   │   │   └── <span class="tree-file">auth.service.ts</span>  <span class="tree-role"># auth 비즈니스 로직</span>
+│   │   └── <span class="tree-dir">users/</span>               <span class="tree-role"># users 도메인</span>
+│   └── <span class="tree-dir">providers/</span>                 <span class="tree-role"># 외부 서비스 adapter</span>
+│       ├── <span class="tree-dir">jwt/</span>                   <span class="tree-role"># JWT 발급/검증</span>
+│       ├── <span class="tree-dir">logger/</span>                <span class="tree-role"># log level, formatter, request logger</span>
+│       └── <span class="tree-dir">cache/</span>                 <span class="tree-role"># cache abstraction</span>
+│           └── <span class="tree-dir">redis/</span>             <span class="tree-role"># Redis client와 cache/session 연결</span>
+└── <span class="tree-dir">test/</span>                           <span class="tree-role"># API e2e 테스트</span></pre>
             </div>
           </div>
         </div>
@@ -785,32 +685,21 @@
             <strong>Full-stack monorepo package boundary</strong>
             <span>Turborepo + Bun</span>
           </div>
-          <div class="tree-labels"><span>Folder / file</span><span>Role</span></div>
           <div class="tree" aria-label="Full-stack monorepo package structure">
-            <ul class="tree-list">
-              <li class="folder">
-                <div class="tree-node"><span class="node-name">repo root</span><span class="node-role">Bun + Turborepo workspace</span></div>
-                <ul>
-                  <li class="folder">
-                    <div class="tree-node"><span class="node-name">apps</span><span class="node-role">실행/배포되는 앱 모음</span></div>
-                    <ul>
-                      <li class="folder"><div class="tree-node"><span class="node-name">web</span><span class="node-role">Next.js frontend 앱</span></div></li>
-                      <li class="folder"><div class="tree-node"><span class="node-name">api</span><span class="node-role">NestJS GraphQL backend 앱</span></div></li>
-                    </ul>
-                  </li>
-                  <li class="folder">
-                    <div class="tree-node"><span class="node-name">packages</span><span class="node-role">앱들이 공유하는 source</span></div>
-                    <ul>
-                      <li class="tool"><div class="tree-node"><span class="node-name">packages/config</span><span class="node-role">env helper만 제공, schema 금지</span></div></li>
-                      <li class="folder"><div class="tree-node"><span class="node-name">packages/db</span><span class="node-role">Drizzle schema, client, migration</span></div></li>
-                      <li class="generated"><div class="tree-node"><span class="node-name">packages/graphql</span><span class="node-role">공유 schema 또는 generated 타입</span></div></li>
-                      <li class="folder"><div class="tree-node"><span class="node-name">packages/ui</span><span class="node-role">앱 중립 UI primitive</span></div></li>
-                      <li class="tool"><div class="tree-node"><span class="node-name">packages/tsconfig</span><span class="node-role">공유 TypeScript 설정</span></div></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+<pre class="terminal-tree"><span class="tree-root">repo-root/</span>                          <span class="tree-role"># Bun + Turborepo workspace</span>
+├── <span class="tree-dir">apps/</span>                           <span class="tree-role"># 실행/배포되는 앱 모음</span>
+│   ├── <span class="tree-dir">web/</span>                       <span class="tree-role"># Next.js frontend 앱</span>
+│   └── <span class="tree-dir">api/</span>                       <span class="tree-role"># NestJS GraphQL backend 앱</span>
+├── <span class="tree-dir">packages/</span>                       <span class="tree-role"># 앱들이 공유하는 source</span>
+│   ├── <span class="tree-tool">config/</span>                    <span class="tree-role"># env helper만 제공, schema 금지</span>
+│   ├── <span class="tree-dir">db/</span>                        <span class="tree-role"># Drizzle schema, client, migration</span>
+│   ├── <span class="tree-generated">graphql/</span>                  <span class="tree-role"># 공유 schema 또는 generated 타입</span>
+│   ├── <span class="tree-dir">ui/</span>                        <span class="tree-role"># 앱 중립 UI primitive</span>
+│   ├── <span class="tree-tool">tsconfig/</span>                  <span class="tree-role"># 공유 TypeScript 설정</span>
+│   └── <span class="tree-tool">eslint-config/</span>             <span class="tree-role"># 공유 lint 설정</span>
+├── <span class="tree-file">turbo.json</span>                     <span class="tree-role"># task pipeline</span>
+├── <span class="tree-file">package.json</span>                    <span class="tree-role"># workspace scripts</span>
+└── <span class="tree-file">bun.lock</span>                        <span class="tree-role"># dependency lockfile</span></pre>
           </div>
         </div>
         <div class="legend">
@@ -902,6 +791,7 @@
               <li>NestJS는 <code>modules/common/providers</code> 경계를 유지한다.</li>
               <li>중복 folder 역할을 최소화하고 app/domain/shared 경계를 명확히 한다.</li>
               <li>최종 tree가 선택한 folder 규칙을 지켰는지 검증한다.</li>
+              <li>API logger와 cache/Redis는 provider 경계 뒤에 둔다.</li>
               <li>env helper를 codegen, migration, build에도 재사용한다.</li>
             </ul>
           </div>

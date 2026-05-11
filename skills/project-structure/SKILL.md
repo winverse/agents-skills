@@ -50,6 +50,11 @@ Apply this policy to every generated or refactored structure:
 - Frontend public env and server env are separated.
 - Shared packages never read `process.env` directly.
 - GraphQL codegen, Drizzle migration, and Tauri build scripts must go through the same env helper layer.
+- Every app uses the same relative env and GraphQL autogen paths:
+  - `<app>/env/*`
+  - `<app>/src/config/env.ts`
+  - `<app>/codegen.ts` when GraphQL codegen is used
+  - `<app>/src/graphql/autogen.ts`
 
 Read `references/env-policy.md` when creating files, scripts, or package layout that touches environment variables.
 
@@ -78,7 +83,7 @@ For Next.js apps, prefer a hybrid route plus domain layout:
 - `src/features/<domain>` owns domain UI, hooks, GraphQL documents, prefetch/data loaders, state, and domain types.
 - `src/components` is only for shared UI that is not domain-specific.
 - `src/providers` owns app-wide provider composition.
-- `src/graphql` owns shared GraphQL client setup and generated artifacts.
+- `src/graphql` owns shared GraphQL client setup and the app-owned `autogen.ts` entrypoint.
 - `src/config/env.ts` owns app-local Zod env parsing.
 
 Read `references/frontend-next.md` before generating a web structure.
@@ -93,6 +98,12 @@ For NestJS APIs, preserve the proven separation of common, modules, and provider
 - Keep external service integrations in `providers`.
 - Use Zod env parsing in `src/config`, not ad hoc config reads.
 - Put Drizzle schema and migrations in `packages/db` for monorepos.
+- Keep GraphQL generated artifacts behind `src/graphql/autogen.ts`, the same relative path used by web apps.
+- Include API logging and cache as first-class provider boundaries:
+  - `src/providers/logger` owns structured app/request logging setup.
+  - `src/providers/cache` owns cache abstraction.
+  - `src/providers/cache/redis` owns Redis-specific connection details.
+- Validate logger and cache env values in `src/config/env.ts`; modules must not read logger/cache env directly.
 
 Read `references/backend-nest.md` before generating a backend structure.
 

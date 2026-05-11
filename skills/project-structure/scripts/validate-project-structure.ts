@@ -36,6 +36,9 @@ const requiredSkillPhrases = [
   "Shared packages never read `process.env` directly",
   "Minimize duplicate folder roles",
   "Verify the final tree against the selected folder rules",
+  "`<app>/src/graphql/autogen.ts`",
+  "`src/providers/logger`",
+  "`src/providers/cache/redis`",
 ];
 
 for (const phrase of requiredSkillPhrases) {
@@ -66,6 +69,8 @@ const envRules = [
   "GraphQL codegen",
   "Drizzle migration",
   "Tauri build",
+  "LOG_LEVEL",
+  "REDIS_URL",
 ];
 
 for (const rule of envRules) {
@@ -76,7 +81,7 @@ for (const rule of envRules) {
 
 for (const [name, text, phrases] of [
   ["frontend-next.md", frontend, ["src/features/<domain>", "urql", "codegen.ts", "providers"]],
-  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle"]],
+  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "providers/logger", "providers/cache/redis"]],
   ["monorepo.md", monorepo, ["packages/config", "packages/db", "turbo", "codegen"]],
   ["desktop-tauri.md", desktop, ["Tauri", "src-tauri", "tauri-env.ts"]],
 ] as const) {
@@ -108,9 +113,26 @@ for (const phrase of htmlRequired) {
   }
 }
 
-for (const treePhrase of ["apps/web", "src/features/posts", "apps/api", "src/modules/auth", "packages/db"]) {
+for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "modules/", "auth/", "packages/", "db/"]) {
   if (!html.includes(treePhrase)) {
     errors.push(`skill.html missing folder tree phrase: ${treePhrase}`);
+  }
+}
+
+for (const apiInfraPhrase of ["logger/", "cache/", "redis/", "request logging"]) {
+  if (!html.includes(apiInfraPhrase)) {
+    errors.push(`skill.html missing API infra phrase: ${apiInfraPhrase}`);
+  }
+}
+
+const graphQlAutogenPathCount = (html.match(/autogen\.ts/g) ?? []).length;
+if (graphQlAutogenPathCount < 2) {
+  errors.push("skill.html must show both web and api GraphQL autogen.ts paths");
+}
+
+for (const unifiedPhrase of ["web GraphQL autogen", "API GraphQL autogen", "codegen.ts", "src/config/env.ts"]) {
+  if (!html.includes(unifiedPhrase)) {
+    errors.push(`skill.html missing unified path phrase: ${unifiedPhrase}`);
   }
 }
 

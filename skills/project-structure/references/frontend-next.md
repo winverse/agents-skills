@@ -11,6 +11,7 @@ apps/web/
     .env.example
     .env.development
     .env.test
+    .env.stage
     .env.production
   scripts/
     create-component.ts
@@ -44,7 +45,7 @@ apps/web/
     graphql/
       client.ts
       cache.ts
-      generated/
+      autogen.ts
     hooks/
     lib/
       styles/
@@ -69,7 +70,9 @@ apps/web/
 - Global reusable UI belongs in `src/components`.
 - Global reusable hooks belong in `src/hooks`.
 - Global app providers belong in `src/providers`.
-- GraphQL generated artifacts should stay in `src/graphql/generated` or a shared `packages/graphql` only when more than one app consumes them.
+- The app-owned GraphQL generated entrypoint should stay at `src/graphql/autogen.ts`, the same relative path used by the API app.
+- Use a shared `packages/graphql` only when more than one app consumes the same generated artifacts.
+- App env files stay in app-root `env/`; the Zod schema stays in `src/config/env.ts`.
 
 ## Borrowed Patterns Worth Keeping
 
@@ -79,7 +82,7 @@ The user's existing `apps/web` style has useful patterns to carry forward:
 - colocated component files with test and index entry,
 - app-level `providers`,
 - `prefetch` functions separated from route files,
-- `src/graphql` documents and `codegen.ts`,
+- `codegen.ts` and `src/graphql/autogen.ts`,
 - local app `env/` folder and Zod-validated `src/config/env.ts`,
 - scripts for generating components or SVG components.
 
@@ -88,6 +91,7 @@ The user's existing `apps/web` style has useful patterns to carry forward:
 - Use `urql` by default.
 - Keep GraphQL documents near the feature that owns them.
 - Run GraphQL Code Generator after schema or document changes.
+- Keep the app-owned generated entrypoint in `src/graphql/autogen.ts`, the same relative path used by the API app.
 - Generated files are source artifacts only when the project policy requires committed generated code; otherwise keep them ignored and reproducible.
 
 ## CSS/UI Policy
