@@ -55,6 +55,9 @@ skills/skill-name/
 - `project-structure`: frontend, backend, full-stack monorepo, desktop app의 폴더 구조와 기본 stack/env 정책을 일관되게 잡는 스킬.
   - Source instruction: `skills/project-structure/SKILL.md`
   - Human visual guide: `skills/project-structure/skill.html`
+- `sync-docs`: README, AGENTS, docs, snippets, history, skill 파일을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.
+  - Source instruction: `skills/sync-docs/SKILL.md`
+  - Human visual guide: `skills/sync-docs/skill.html`
 
 ## 에이전트 연결 방식
 
@@ -128,6 +131,7 @@ export SKILLS_ROOT="$PWD"
 skill-creator 또는 SKILL.md 작성
 -> skill-to-html로 skill.html 생성/갱신
 -> project-snippets와 history 필요 여부 정리
+-> sync-docs로 README/AGENTS/docs/snippets/history 정합성 확인
 -> node scripts/validate-skill.ts skills/<skill-name>
 -> 스킬별 validator 실행
 -> node scripts/validate-skill-repo.ts .
@@ -153,6 +157,7 @@ node skills/web-research/scripts/validate-web-research.ts skills/web-research
 node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
+node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
 ```
 
 repo 운영 기준과 문서 정합성도 함께 확인한다.
@@ -177,6 +182,7 @@ Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skil
 - 긴 설명, 평가 prompt, source rule, 개인 취향은 `references/`로 분리한다.
 - 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `skill-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
+- 문서 최신화, stale 설명, 문서 간 충돌 검토 요청은 `sync-docs`로 처리한다.
 - repo가 소유하는 validator는 TypeScript로 작성하고 `node <path>.ts`로 실행한다.
 - trigger, workflow, validator, snippet, 생명주기 상태가 바뀌면 `history/skills.md`를 업데이트한다.
 - 미해결 이슈만 local-only `inspector/`에 남기고, 해결된 검사 파일은 삭제한다.

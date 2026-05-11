@@ -27,6 +27,8 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/web-research.md`: only the web research skill.
 - `project-snippets/skill-to-html.md`: only the skill HTML guide workflow.
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
+- `project-snippets/project-structure.md`: only project structure and default stack rules.
+- `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 
 ## Forking Rule
 

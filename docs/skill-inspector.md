@@ -28,12 +28,13 @@
 3. `skill.html`을 열어 한눈에 사용 판단이 가능한지 확인한다.
 4. `project-snippets/`와 README의 설명이 현재 trigger와 일치하는지 확인한다.
 5. `history/skills.md`에서 대상 스킬의 상태와 최근 큰 변경 기록이 맞는지 확인한다.
-6. repo 기본 TypeScript validator를 실행한다.
-7. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
-8. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다.
-9. 수정하기 전에 local-only `inspector/YYYY-MM-DD-<scope>.md` 파일을 만들고 findings, 근거 파일, 검증 명령, 해결 기준을 적는다.
-10. 그 검사 문서를 기준으로 수정한다.
-11. 이슈가 처리되면 해당 검사 파일은 삭제한다. 일부만 처리됐으면 해결된 항목을 제거하고 미해결 항목만 남긴다.
+6. 문서끼리 최신화가 안 됐거나 서로 충돌하는 부분은 `skills/sync-docs/SKILL.md` 기준으로 대조한다.
+7. repo 기본 TypeScript validator를 실행한다.
+8. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
+9. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다.
+10. 수정하기 전에 local-only `inspector/YYYY-MM-DD-<scope>.md` 파일을 만들고 findings, 근거 파일, 검증 명령, 해결 기준을 적는다.
+11. 그 검사 문서를 기준으로 수정한다.
+12. 이슈가 처리되면 해당 검사 파일은 삭제한다. 일부만 처리됐으면 해결된 항목을 제거하고 미해결 항목만 남긴다.
 
 ## 권장 검사 명령
 
