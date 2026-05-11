@@ -674,7 +674,7 @@
 │       ├── <span class="tree-dir">jwt/</span>                   <span class="tree-role"># JWT 발급/검증</span>
 │       ├── <span class="tree-dir">logger/</span>                <span class="tree-role"># log level, formatter, request logger</span>
 │       └── <span class="tree-dir">cache/</span>                 <span class="tree-role"># cache abstraction</span>
-│           └── <span class="tree-dir">redis/</span>             <span class="tree-role"># Redis client와 cache/session 연결</span>
+│           └── <span class="tree-file">cache.service.ts</span>   <span class="tree-role"># packages/db Redis helper를 감싸서 사용</span>
 └── <span class="tree-dir">test/</span>                           <span class="tree-role"># API e2e 테스트</span></pre>
             </div>
           </div>
@@ -692,7 +692,11 @@
 │   └── <span class="tree-dir">api/</span>                       <span class="tree-role"># NestJS GraphQL backend 앱</span>
 ├── <span class="tree-dir">packages/</span>                       <span class="tree-role"># 앱들이 공유하는 source</span>
 │   ├── <span class="tree-tool">config/</span>                    <span class="tree-role"># env helper만 제공, schema 금지</span>
-│   ├── <span class="tree-dir">db/</span>                        <span class="tree-role"># Drizzle schema, client, migration</span>
+│   ├── <span class="tree-dir">db/</span>                        <span class="tree-role"># Drizzle와 Redis DB boundary</span>
+│   │   ├── <span class="tree-dir">drizzle/</span>               <span class="tree-role"># migration 설정과 SQL 산출물</span>
+│   │   └── <span class="tree-dir">src/</span>                   <span class="tree-role"># DB package source</span>
+│   │       ├── <span class="tree-dir">schema/</span>            <span class="tree-role"># relational schema</span>
+│   │       └── <span class="tree-dir">redis/</span>             <span class="tree-role"># Redis client, keys, connection helpers</span>
 │   ├── <span class="tree-generated">graphql/</span>                  <span class="tree-role"># 공유 schema 또는 generated 타입</span>
 │   ├── <span class="tree-dir">ui/</span>                        <span class="tree-role"># 앱 중립 UI primitive</span>
 │   ├── <span class="tree-tool">tsconfig/</span>                  <span class="tree-role"># 공유 TypeScript 설정</span>
@@ -791,7 +795,7 @@
               <li>NestJS는 <code>modules/common/providers</code> 경계를 유지한다.</li>
               <li>중복 folder 역할을 최소화하고 app/domain/shared 경계를 명확히 한다.</li>
               <li>최종 tree가 선택한 folder 규칙을 지켰는지 검증한다.</li>
-              <li>API logger와 cache/Redis는 provider 경계 뒤에 둔다.</li>
+              <li>API logger는 provider에, Redis DB boundary는 monorepo의 <code>packages/db</code>에 둔다.</li>
               <li>env helper를 codegen, migration, build에도 재사용한다.</li>
             </ul>
           </div>

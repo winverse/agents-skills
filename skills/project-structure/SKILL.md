@@ -99,10 +99,11 @@ For NestJS APIs, preserve the proven separation of common, modules, and provider
 - Use Zod env parsing in `src/config`, not ad hoc config reads.
 - Put Drizzle schema and migrations in `packages/db` for monorepos.
 - Keep GraphQL generated artifacts behind `src/graphql/autogen.ts`, the same relative path used by web apps.
-- Include API logging and cache as first-class provider boundaries:
+- Include API logging and cache as first-class boundaries:
   - `src/providers/logger` owns structured app/request logging setup.
   - `src/providers/cache` owns cache abstraction.
-  - `src/providers/cache/redis` owns Redis-specific connection details.
+  - In monorepos, `packages/db/src/redis` owns Redis-specific client, key, and connection helpers.
+  - In backend-only repos, `src/providers/cache/redis` is acceptable only when there is no shared DB package.
 - Validate logger and cache env values in `src/config/env.ts`; modules must not read logger/cache env directly.
 
 Read `references/backend-nest.md` before generating a backend structure.

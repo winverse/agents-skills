@@ -51,7 +51,6 @@ apps/api/
       cache/
         cache.module.ts
         cache.service.ts
-        redis/
       jwt/
       logger/
         logger.module.ts
@@ -71,7 +70,8 @@ apps/api/
 - Put business domains in `modules`.
 - Put external integrations and platform services in `providers`.
 - Put structured logging in `providers/logger`.
-- Put cache behind `providers/cache`; keep Redis details inside `providers/cache/redis`.
+- Put cache behind `providers/cache`; in monorepos, keep Redis client/key/connection details inside `packages/db/src/redis`.
+- Use `providers/cache/redis` only for backend-only repos without a shared DB package.
 - Keep app env parsing in `src/config/env.ts`.
 - Wrap parsed env in injectable config modules/services only after Zod validation.
 - App env files stay in app-root `env/`; the Zod schema stays in `src/config/env.ts`.
@@ -83,7 +83,8 @@ apps/api/
 - `providers/logger` owns logger module setup, logger service binding, log level, and request logging integration.
 - `common/interceptors/request-logging.interceptor.ts` may use the logger provider, but should not configure it.
 - `providers/cache` exposes app-level cache services or interfaces.
-- `providers/cache/redis` owns Redis client creation, Redis options, and Redis-specific health checks.
+- In monorepos, `packages/db/src/redis` owns Redis client creation, Redis key builders, and Redis-specific connection helpers.
+- `providers/cache` may wrap the Redis client from `packages/db`, but it should not define Redis schema/key conventions itself.
 - Domain modules depend on cache/logger services, not Redis clients or raw logger libraries directly.
 - `src/config/env.ts` validates logger and cache env values before providers are constructed.
 
@@ -97,7 +98,7 @@ REDIS_TLS
 CACHE_TTL_SECONDS
 ```
 
-`REDIS_URL` and cache settings may be optional only when the selected project explicitly disables Redis-backed cache.
+`REDIS_URL` and cache settings may be optional only when the selected project explicitly disables Redis-backed cache. `packages/db` must receive validated values from the app or tooling entrypoint; it should not read `process.env` directly.
 
 ## Backend Style To Carry Forward
 
@@ -125,10 +126,13 @@ packages/db/
   drizzle/
   src/
     client.ts
+    redis/
+      client.ts
+      keys.ts
     schema/
     migrations/
 ```
 
-The API app imports the database package. It should not duplicate schema definitions in `apps/api`.
+The API app imports the database package. It should not duplicate relational schema or Redis key/client definitions in `apps/api`.
 
-For a backend-only repo, `src/db` is acceptable, but still keep migrations and schema under one clear DB boundary.
+For a backend-only repo, `src/db` or `src/providers/cache/redis` is acceptable, but still keep DB/cache boundaries explicit and avoid scattering Redis access through domain modules.

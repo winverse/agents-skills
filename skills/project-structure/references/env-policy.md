@@ -109,7 +109,7 @@ REDIS_TLS
 CACHE_TTL_SECONDS
 ```
 
-Do not let `providers/logger`, `providers/cache`, or `providers/cache/redis` read `process.env` directly.
+Do not let `providers/logger`, `providers/cache`, or `packages/db/src/redis` read `process.env` directly. The app or tooling entrypoint loads env first, validates it, and passes the resulting Redis settings into the DB/cache helper.
 
 ## Naming
 

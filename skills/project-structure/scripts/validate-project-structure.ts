@@ -38,7 +38,7 @@ const requiredSkillPhrases = [
   "Verify the final tree against the selected folder rules",
   "`<app>/src/graphql/autogen.ts`",
   "`src/providers/logger`",
-  "`src/providers/cache/redis`",
+  "`packages/db/src/redis`",
 ];
 
 for (const phrase of requiredSkillPhrases) {
@@ -81,8 +81,8 @@ for (const rule of envRules) {
 
 for (const [name, text, phrases] of [
   ["frontend-next.md", frontend, ["src/features/<domain>", "urql", "codegen.ts", "providers"]],
-  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "providers/logger", "providers/cache/redis"]],
-  ["monorepo.md", monorepo, ["packages/config", "packages/db", "turbo", "codegen"]],
+  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "providers/logger", "packages/db/src/redis"]],
+  ["monorepo.md", monorepo, ["packages/config", "packages/db", "packages/db/src/redis", "turbo", "codegen"]],
   ["desktop-tauri.md", desktop, ["Tauri", "src-tauri", "tauri-env.ts"]],
 ] as const) {
   for (const phrase of phrases) {
@@ -119,7 +119,7 @@ for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "module
   }
 }
 
-for (const apiInfraPhrase of ["logger/", "cache/", "redis/", "request logging"]) {
+for (const apiInfraPhrase of ["logger/", "cache/", "redis/", "packages/db Redis helper", "request logging"]) {
   if (!html.includes(apiInfraPhrase)) {
     errors.push(`skill.html missing API infra phrase: ${apiInfraPhrase}`);
   }

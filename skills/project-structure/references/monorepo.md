@@ -30,7 +30,7 @@ bun.lock
 | Package | Role |
 | --- | --- |
 | `packages/config` | Env loading helpers, Zod helper utilities, env mode normalization |
-| `packages/db` | Drizzle schema, client factory, migrations, seed scripts |
+| `packages/db` | Drizzle schema, relational client factory, Redis client/key helpers, migrations, seed scripts |
 | `packages/graphql` | Shared GraphQL schema artifacts or generated types when multiple apps consume them |
 | `packages/ui` | App-neutral UI primitives only |
 | `packages/tsconfig` | Shared TypeScript configs |
@@ -43,7 +43,8 @@ bun.lock
 - Shared packages do not read `process.env` directly.
 - `apps/web` owns frontend env parsing.
 - `apps/api` owns backend env parsing.
-- `packages/db` may expose tooling functions, but migration scripts must load env explicitly through config helpers.
+- `packages/db` may expose tooling functions, relational DB helpers, and Redis helpers, but scripts must load env explicitly through config helpers.
+- Redis belongs in `packages/db/src/redis` for monorepos. API apps should wrap it through `apps/api/src/providers/cache`, not define Redis key/client conventions inside app modules.
 - GraphQL Code Generator should be wired into `turbo` tasks.
 - Generated artifacts must have a clear policy: either committed and reviewed, or ignored and reproducible.
 
