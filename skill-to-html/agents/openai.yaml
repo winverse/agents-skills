@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill To HTML"
+  short_description: "Turn skills into visual HTML guides"
+  default_prompt: "Use $skill-to-html to create a diagram-rich skill.html for this skill."

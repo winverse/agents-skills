@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Research"
+  short_description: "Agentic source-first web research"
+  default_prompt: "Use $web-research to research this topic with query fan-out, source ledgers, evidence scoring, current sources, and citations."
