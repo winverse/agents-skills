@@ -8,7 +8,7 @@ This repo stores custom agent skills that are applied manually per project. The 
 - Do not treat default agent behavior as preferred when a custom skill in this repo covers the same job.
 - Keep this repo as the source of truth for project-selectable skills.
 - Configure projects by linking skill `SKILL.md` files from this repo inside each project's agent instruction file, such as `AGENTS.md`, `CLAUDE.md`, or an equivalent file.
-- `skill-creator` is not owned by this repo. It is an external system skill at `/Users/winverse/.codex/skills/.system/skill-creator/SKILL.md`.
+- `skill-creator` is not owned by this repo. It is an external system skill at `${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/SKILL.md`.
 
 ## Structure
 
@@ -16,7 +16,9 @@ This repo stores custom agent skills that are applied manually per project. The 
 - Each skill folder must include `SKILL.md` for agent instructions and `skill.html` for human install-time reading.
 - Project-ready snippets live in `project-snippets/`.
 - Workflow docs live in `docs/`.
+- Lifecycle criteria live in `docs/skill-lifecycle.md`; durable lifecycle events live in `history/skills.md`.
 - Skill inspector criteria live in `docs/skill-inspector.md`; local inspector scratch files live in ignored `inspector/`.
+- Archived skills, if any, live in `archive/`.
 - Personal taste and deeper guidance should live inside each skill's `references/` folder.
 
 ## Editing Skills
@@ -28,6 +30,9 @@ This repo stores custom agent skills that are applied manually per project. The 
 - Update that skill's `skill.html` when adding, removing, renaming, or materially changing a skill.
 - Make `skill.html` diagram-rich: include decision matrices, flowcharts, charts, resource maps, or input/output schemas instead of only splitting text into panels.
 - Validate changed skills with the skill creator validator and any skill-specific validator before calling them done.
+- Prefer `.ts` for Node-based validation scripts on Node 22+ unless a hook or external runtime specifically needs `.mjs`.
+- Run `node scripts/validate-skill-repo.ts .` after lifecycle, history, snippet, or repo-level documentation changes.
+- Update `history/skills.md` when adding, deprecating, archiving, renaming, splitting, merging, or materially changing a skill's trigger, workflow, validators, evals, or snippets.
 - Review `docs/skill-inspector.md` before calling a created or materially changed skill done. Leave only unresolved local review notes in ignored `inspector/`, and delete resolved review files.
 
 ## Project Setup

@@ -1,6 +1,6 @@
 # Project Skill Setup
 
-Use this workflow when configuring a project to use skills from `/Users/winverse/Desktop/skills`.
+Use this workflow when configuring a project to use skills from this repo. In copied snippets, replace `<skills-root>` with the actual path where this repo is cloned. Replace `<codex-home>` with `$CODEX_HOME` or `$HOME/.codex`.
 
 ## Goal
 
@@ -9,7 +9,7 @@ Each project should explicitly choose the skills it uses. The skills repo stays 
 This repo does not vendor Codex system skills. For new skill creation, use the installed system `skill-creator` at:
 
 ```text
-/Users/winverse/.codex/skills/.system/skill-creator/SKILL.md
+<codex-home>/skills/.system/skill-creator/SKILL.md
 ```
 
 Then apply this repo's `skill-to-html` to create the human-facing `skill.html`.
@@ -22,13 +22,14 @@ Then apply this repo's `skill-to-html` to create the human-facing `skill.html`.
 4. Add links to the selected skill `SKILL.md` files from this repo.
 5. Add project-specific overrides directly below the selected skill list.
 6. Keep the linked skill as the shared default. Fork only when one project needs a permanently different version.
+7. Check `history/skills.md` if the skill is unfamiliar, deprecated, or recently changed.
 
 ## Recommended Block
 
 ```markdown
 ## Project Skills
 
-- Use [$web-research](/Users/winverse/Desktop/skills/web-research/SKILL.md) when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, or technical documentation lookup.
+- Use $web-research at <skills-root>/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, or technical documentation lookup.
 
 ## Project Skill Overrides
 
@@ -62,4 +63,5 @@ When a shared skill changes:
 - Update `README.md` if the skill's purpose changed.
 - Use `skill-to-html` to update the skill's own `skill.html`.
 - Update the matching file in `project-snippets/`.
+- Update `history/skills.md` if trigger, workflow, validator, snippet, or lifecycle state changed.
 - Revisit project instruction files only when the trigger or path changed.

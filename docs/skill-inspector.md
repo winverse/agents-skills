@@ -15,6 +15,7 @@
 - `skill.html`이 단순 카드형 요약이 아니라 decision matrix, workflow, chart, resource map, input/output schema 같은 시각 구조를 제공하는가
 - `agents/openai.yaml`과 `project-snippets/`가 실제 스킬 목적과 맞는가
 - `AGENTS.md`, `CLAUDE.md`, 또는 다른 에이전트 instruction 파일에서 연결 가능한 방식으로 문서화되어 있는가
+- `docs/skill-lifecycle.md` 기준의 상태와 `history/skills.md`의 기록이 현재 스킬 상태와 맞는가
 - 참조 파일, 스크립트, HTML 링크가 깨지지 않았는가
 - validator와 스킬별 커스텀 검사가 통과하는가
 - 스킬이 기본/global 동작보다 이 repo의 커스텀 기준을 우선하도록 연결되어 있는가
@@ -26,23 +27,32 @@
 2. `SKILL.md`가 직접 언급하는 `references/` 파일만 필요한 만큼 읽는다.
 3. `skill.html`을 열어 한눈에 사용 판단이 가능한지 확인한다.
 4. `project-snippets/`와 README의 설명이 현재 trigger와 일치하는지 확인한다.
-5. 시스템 validator를 실행한다.
-6. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
-7. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다.
-8. 미해결 이슈만 local-only `inspector/` 파일로 남긴다.
-9. 이슈가 처리되면 해당 검사 파일은 삭제한다.
+5. `history/skills.md`에서 대상 스킬의 상태와 최근 큰 변경 기록이 맞는지 확인한다.
+6. 시스템 validator를 실행한다.
+7. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
+8. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다.
+9. 미해결 이슈만 local-only `inspector/` 파일로 남긴다.
+10. 이슈가 처리되면 해당 검사 파일은 삭제한다.
 
 ## 권장 검사 명령
 
 ```bash
-PYTHONPATH=/private/tmp/codex-pyyaml python3 /Users/winverse/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/winverse/Desktop/skills/<skill-name>
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" "$PWD/<skill-name>"
 ```
 
 스킬별 커스텀 validator가 있으면 추가로 실행한다.
 
 ```bash
-node <skill-name>/scripts/validate-<skill-name>.mjs <skill-name>
+node <skill-name>/scripts/validate-<skill-name>.ts <skill-name>
 ```
+
+repo 전체 lifecycle, history, portable path 기준도 확인한다.
+
+```bash
+node scripts/validate-skill-repo.ts .
+```
+
+Node 기반 validator는 특별한 런타임 제약이 없으면 `.ts`를 기본으로 한다. Node 22 이상에서 `node <file>.ts`로 직접 실행하는 것을 기준으로 하고, Codex hook처럼 다른 실행 환경과의 호환성이 중요한 파일은 예외적으로 `.mjs`를 유지할 수 있다.
 
 HTML 렌더링 검사는 로컬 서버로 확인한다.
 
@@ -68,6 +78,6 @@ python3 -m http.server 8787
 - `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.
 - `project-snippets/`의 문구가 실제 trigger와 맞다.
 - Codex용 `AGENTS.md`뿐 아니라 Claude용 `CLAUDE.md`에도 연결 가능한 trigger와 경로가 문서화되어 있다.
+- 큰 변경이면 `history/skills.md`에 event와 lifecycle state를 기록했다.
 - validator와 커스텀 validator가 모두 통과한다.
 - 미해결 검사 이슈가 있으면 local-only `inspector/` 파일에 남기고, 해결되면 삭제한다.
-

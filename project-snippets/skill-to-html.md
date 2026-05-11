@@ -1,6 +1,6 @@
 ## Project Skills
 
-- Use [$skill-to-html](/Users/winverse/Desktop/skills/skill-to-html/SKILL.md) whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
+- Use $skill-to-html at <skills-root>/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
 
 ## Project-Specific Overrides
 

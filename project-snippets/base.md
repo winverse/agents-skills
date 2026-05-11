@@ -1,8 +1,8 @@
 ## Project Skills
 
-- Use the system [$skill-creator](/Users/winverse/.codex/skills/.system/skill-creator/SKILL.md) only when creating or updating skill structure.
-- Use [$web-research](/Users/winverse/Desktop/skills/web-research/SKILL.md) when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
-- Use [$skill-to-html](/Users/winverse/Desktop/skills/skill-to-html/SKILL.md) whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
+- Use the system skill-creator at <codex-home>/skills/.system/skill-creator/SKILL.md only when creating or updating skill structure.
+- Use $web-research at <skills-root>/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
+- Use $skill-to-html at <skills-root>/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
 
 ## Project Skill Overrides
 

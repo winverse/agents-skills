@@ -30,6 +30,17 @@ skill-name/
 
 `skill.html`은 사람이 빠르게 판단하기 위한 시각 가이드다. 스킬을 프로젝트에 붙이기 전에 목적, trigger, workflow, 파일 구조를 한눈에 확인하는 용도다.
 
+## 생명주기와 History
+
+스킬은 한 번 만들고 끝나는 파일이 아니라 `draft -> active -> critical -> deprecated -> archived` 같은 생명주기를 가진다.
+
+- `docs/skill-lifecycle.md`: 상태 정의, 승격/폐기 기준, review cadence를 둔다.
+- `history/skills.md`: 확정된 상태 변경과 큰 변경만 기록하는 ledger다.
+- `inspector/`: 아직 해결되지 않은 local-only 검사 메모만 둔다.
+- `archive/`: 더 이상 새 프로젝트에 권장하지 않는 archived skill을 보관하는 위치다.
+
+작은 오탈자나 색상 조정은 history에 남기지 않는다. trigger, workflow, validator, snippet, 생명주기 상태가 바뀌는 변경만 기록한다.
+
 ## 현재 스킬
 
 - `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
@@ -48,7 +59,7 @@ Codex 프로젝트 예시:
 ```markdown
 ## Project Skills
 
-- Use [$web-research](/Users/winverse/Desktop/skills/web-research/SKILL.md) when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
+- Use $web-research at <skills-root>/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 ```
 
 Claude 프로젝트 예시:
@@ -56,8 +67,19 @@ Claude 프로젝트 예시:
 ```markdown
 ## Project Skills
 
-- For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `/Users/winverse/Desktop/skills/web-research/SKILL.md`.
+- For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/web-research/SKILL.md`.
 ```
+
+`<skills-root>`는 이 repo를 clone한 실제 위치로 바꾼다. 컴퓨터를 바꾸면 새 컴퓨터에서 이 repo를 clone한 경로만 다시 지정하면 된다. `<codex-home>`은 보통 `$HOME/.codex`이고, `CODEX_HOME`을 따로 설정했다면 그 값을 쓴다.
+
+새 컴퓨터에서 쓰는 기본 흐름:
+
+```bash
+cd /path/to/skills
+export SKILLS_ROOT="$PWD"
+```
+
+프로젝트 instruction 파일에 snippet을 붙일 때 `<skills-root>`를 `$SKILLS_ROOT` 값 또는 실제 clone 경로로 치환한다. repo 내부 validator는 repo root에서 상대경로로 실행한다.
 
 에이전트별 adapter와 연결 예시는 `docs/agent-compatibility.md`를 본다.
 
@@ -71,6 +93,7 @@ Claude 프로젝트 예시:
 4. `project-snippets/`의 맞는 snippet을 프로젝트의 instruction 파일에 추가한다.
 5. 프로젝트만의 예외나 취향은 snippet 아래에 override로 적는다.
 6. 특정 프로젝트에서만 완전히 다른 동작이 필요할 때만 스킬을 fork한다.
+7. 오래 쓰지 않거나 대체된 스킬은 `history/skills.md`에서 deprecated 또는 archived로 표시한다.
 
 자세한 흐름은 `docs/project-skill-setup.md`를 본다.
 
@@ -100,21 +123,31 @@ system skill-creator -> repo skill-to-html -> project snippet -> inspector check
 시스템 `skill-creator` 위치:
 
 ```text
-/Users/winverse/.codex/skills/.system/skill-creator/SKILL.md
+<codex-home>/skills/.system/skill-creator/SKILL.md
 ```
 
 기본 validator:
 
 ```bash
-PYTHONPATH=/private/tmp/codex-pyyaml python3 /Users/winverse/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/winverse/Desktop/skills/<skill-name>
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" "$PWD/<skill-name>"
 ```
 
 스킬별 static validator가 있으면 함께 돌린다.
 
 ```bash
-node /Users/winverse/Desktop/skills/web-research/scripts/validate-web-research.mjs /Users/winverse/Desktop/skills/web-research
-node /Users/winverse/Desktop/skills/skill-to-html/scripts/validate-skill-to-html.mjs /Users/winverse/Desktop/skills/skill-to-html
+node web-research/scripts/validate-web-research.ts web-research
+node skill-to-html/scripts/validate-skill-to-html.ts skill-to-html
 ```
+
+repo 운영 기준도 함께 확인한다.
+
+```bash
+node scripts/validate-skill-repo.ts .
+```
+
+Node 기반 validator는 특별한 런타임 제약이 없으면 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 한다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 경우에만 `.mjs`를 유지한다.
+
+Codex에서는 `.codex/config.toml`의 `PostToolUse` hook이 `SKILL.md` 변경 후 `skill.html` 갱신 누락을 감지한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 
 ## 검사관 기준
 
@@ -128,5 +161,6 @@ node /Users/winverse/Desktop/skills/skill-to-html/scripts/validate-skill-to-html
 - 긴 설명, 평가 prompt, source rule, 개인 취향은 `references/`로 분리한다.
 - 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `skill-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
+- trigger, workflow, validator, snippet, 생명주기 상태가 바뀌면 `history/skills.md`를 업데이트한다.
 - 미해결 이슈만 local-only `inspector/`에 남기고, 해결된 검사 파일은 삭제한다.
 - 스킬을 추가하거나 이름을 바꾸면 `project-snippets/`도 같이 업데이트한다.

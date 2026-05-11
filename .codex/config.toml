@@ -1,0 +1,19 @@
+[features]
+hooks = true
+
+[[hooks.PostToolUse]]
+matcher = "^apply_patch$|^functions.apply_patch$|^Edit$|^Write$|^Bash$|^exec_command$|^functions.exec_command$"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs"'
+timeout = 10
+statusMessage = "Checking skill HTML guide"
+
+[[hooks.UserPromptSubmit]]
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs"'
+timeout = 10
+statusMessage = "Checking pending skill HTML guide"

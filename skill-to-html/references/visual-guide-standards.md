@@ -1,6 +1,6 @@
 # Visual Guide Standards For `skill.html`
 
-These rules adapt the local `/Users/winverse/Desktop/skill-practice/design.md` system and a small set of external visualization/accessibility references.
+These rules adapt the local `skill-practice/design.md` reference used during initial design and a small set of external visualization/accessibility references.
 
 ## Local Design System
 
