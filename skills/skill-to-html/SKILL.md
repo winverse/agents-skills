@@ -19,6 +19,14 @@ skill-name/
 └── skill.html
 ```
 
+Inside this repo, the same pair lives under `skills/<skill-name>/`:
+
+```text
+skills/<skill-name>/
+├── SKILL.md
+└── skill.html
+```
+
 `SKILL.md` is the source instruction for agents. `skill.html` is for the user who wants to understand the skill quickly after installing it.
 
 ## Design Contract
@@ -71,7 +79,7 @@ Choose visuals based on the skill contents:
 6. Verify the HTML in a desktop browser viewport when practical.
 7. If the skill is part of this repo, run `node scripts/validate-skill.ts <skill-path>` from the repo root and then the skill-specific TypeScript validator when one exists.
 8. If paths, trigger wording, workflow, validators, snippets, or lifecycle state changed, update `README.md`, `AGENTS.md`, `project-snippets/`, and `history/skills.md` as applicable.
-9. Review `docs/skill-inspector.md`; keep only unresolved local review notes in ignored `inspector/` and delete resolved review files.
+9. Review `docs/skill-inspector.md`; if inspection finds issues, write `inspector/YYYY-MM-DD-<scope>.md` before fixing, then keep only unresolved local review notes and delete resolved review files.
 
 ## Quality Bar
 

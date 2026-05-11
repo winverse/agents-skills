@@ -32,7 +32,7 @@
         <div class="mark">S2H</div>
         <div><h1>skill-to-html</h1><p class="sub">SKILL.md를 도표 중심 skill.html로 바꾸고 repo 검증 흐름까지 맞추는 스킬</p></div>
       </div>
-      <div class="pair"><strong>Required pair</strong><code>SKILL.md + skill.html</code></div>
+      <div class="pair"><strong>Required pair</strong><code>skills/&lt;skill-name&gt;/SKILL.md + skill.html</code></div>
     </header>
 
     <section class="grid">
@@ -61,7 +61,7 @@
       </article>
 
       <article class="panel flow">
-        <div class="head"><h2>skill.html 생성 흐름</h2><p class="note">스킬 변경 뒤 HTML, TS 검증, history 정리를 함께 처리합니다.</p></div>
+        <div class="head"><h2>skill.html 생성 흐름</h2><p class="note">스킬 변경 뒤 HTML, snippet/history, TS 검증, inspector 기록을 함께 처리합니다.</p></div>
         <div class="body">
           <svg viewBox="0 0 720 250" role="img" aria-label="SKILL.md에서 구조를 추출해 visual patterns를 고르고 skill.html을 검증하는 흐름">
             <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
@@ -70,7 +70,7 @@
             </g>
             <g stroke="#6b7280" stroke-width="2" marker-end="url(#a)"><line x1="160" y1="108" x2="196" y2="108"/><line x1="340" y1="108" x2="376" y2="108"/><line x1="520" y1="108" x2="556" y2="108"/></g>
             <g font-size="15" font-weight="700" fill="#111827" text-anchor="middle"><text x="90" y="102">Read</text><text x="270" y="102">Extract</text><text x="450" y="102">Visualize</text><text x="630" y="102">Validate</text></g>
-            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="90" y="123">SKILL.md</text><text x="270" y="123">trigger/workflow</text><text x="450" y="123">charts/maps</text><text x="630" y="123">TS + desktop</text></g>
+            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="90" y="123">SKILL.md</text><text x="270" y="123">trigger/workflow</text><text x="450" y="123">charts/maps</text><text x="630" y="123">TS + inspector</text></g>
           </svg>
         </div>
       </article>
@@ -103,8 +103,8 @@
             <defs><marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
             <g fill="#fff" stroke="#d1d5db" stroke-width="2"><rect x="280" y="88" width="160" height="64" rx="8"/><rect x="40" y="40" width="160" height="56" rx="8"/><rect x="40" y="158" width="160" height="56" rx="8"/><rect x="520" y="40" width="160" height="56" rx="8"/><rect x="520" y="158" width="160" height="56" rx="8"/></g>
             <g stroke="#6b7280" stroke-width="2" marker-end="url(#m)"><line x1="200" y1="68" x2="276" y2="108"/><line x1="200" y1="186" x2="276" y2="132"/><line x1="440" y1="108" x2="516" y2="68"/><line x1="440" y1="132" x2="516" y2="186"/></g>
-            <g font-size="14" font-weight="700" fill="#111827" text-anchor="middle"><text x="360" y="113">Skill folder</text><text x="120" y="72">skill.html</text><text x="120" y="190">SKILL.md</text><text x="600" y="72">references</text><text x="600" y="190">snippet</text></g>
-            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="360" y="134">human + agent files</text><text x="120" y="86">human first</text><text x="120" y="204">agent first</text><text x="600" y="86">details</text><text x="600" y="204">project link</text></g>
+            <g font-size="14" font-weight="700" fill="#111827" text-anchor="middle"><text x="360" y="113">skills/name/</text><text x="120" y="72">skill.html</text><text x="120" y="190">SKILL.md</text><text x="600" y="72">references</text><text x="600" y="190">snippet</text></g>
+            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="360" y="134">repo skill folder</text><text x="120" y="86">human first</text><text x="120" y="204">agent first</text><text x="600" y="86">details</text><text x="600" y="204">project link</text></g>
           </svg>
           <div class="files">
             <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>agent workflow</span></a>
@@ -117,7 +117,7 @@
       </article>
 
       <article class="panel">
-        <div class="head"><h2>프로젝트 연결</h2><p class="note">스킬 생성 프로젝트에는 skill-creator, TS validator와 함께 연결합니다.</p></div>
+        <div class="head"><h2>프로젝트 연결</h2><p class="note">스킬 생성 프로젝트에는 TS validator와 inspector 기록 규칙을 함께 연결합니다.</p></div>
         <div class="body"><div class="code">## Project Skills
 
 - Use $skill-to-html at &lt;skills-root&gt;/skills/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich skill.html beside SKILL.md.
@@ -125,7 +125,8 @@
 ## Validation
 
 - Run node scripts/validate-skill.ts skills/&lt;skill-name&gt; before calling the skill done.
-- Use repo-owned .ts validators, not Python validators.</div></div>
+- Use repo-owned .ts validators, not Python validators.
+- If inspection finds issues, record inspector/YYYY-MM-DD-&lt;scope&gt;.md before fixing and delete it once resolved.</div></div>
       </article>
     </section>
   </main>

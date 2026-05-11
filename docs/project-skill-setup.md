@@ -1,18 +1,12 @@
 # Project Skill Setup
 
-Use this workflow when configuring a project to use skills from this repo. In copied snippets, replace `<skills-root>` with the actual path where this repo is cloned. Replace `<codex-home>` with `$CODEX_HOME` or `$HOME/.codex`.
+Use this workflow when configuring a project to use skills from this repo. In copied snippets, replace `<skills-root>` with the actual path where this repo is cloned.
 
 ## Goal
 
 Each project should explicitly choose the skills it uses. The skills repo stays as the shared catalog and source of truth for Codex, Claude, and other agents.
 
-This repo does not vendor Codex system skills. For new skill creation, use the installed system `skill-creator` at:
-
-```text
-<codex-home>/skills/.system/skill-creator/SKILL.md
-```
-
-Then run this repo's TypeScript validator and apply this repo's `skill-to-html` to create the human-facing `skill.html`.
+This document is only for connecting existing shared skills to a target project. For creating or materially changing a shared skill, use README's `생성과 검증` section and `docs/skill-inspector.md`.
 
 ## Setup Steps
 
@@ -24,18 +18,15 @@ Then run this repo's TypeScript validator and apply this repo's `skill-to-html` 
 6. Keep the linked skill as the shared default. Fork only when one project needs a permanently different version.
 7. Check `history/skills.md` if the skill is unfamiliar, deprecated, or recently changed.
 
-## Recommended Block
+## Snippet Sources
 
-```markdown
-## Project Skills
+Use the smallest snippet that matches the target project and agent:
 
-- Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, or technical documentation lookup.
-
-## Project Skill Overrides
-
-- Prefer this project's local docs, source code, and version logs before general web research.
-- Use external sources only when local project context is incomplete or current facts are required.
-```
+- `project-snippets/base.md`: agent-neutral starter block for the current shared skills.
+- `project-snippets/claude-base.md`: Claude-oriented starter block.
+- `project-snippets/web-research.md`: only the web research skill.
+- `project-snippets/skill-to-html.md`: only the skill HTML guide workflow.
+- `project-snippets/atomic-committer.md`: only commit grouping and push rules.
 
 ## Forking Rule
 

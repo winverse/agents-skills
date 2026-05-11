@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <title>Project Structure Skill</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --strong-border: #94a3b8;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --ok: #1f7a52;
+      --ok-soft: #dcfce7;
+      --warn: #a16207;
+      --warn-soft: #fef3c7;
+      --danger: #b42318;
+      --danger-soft: #fee2e2;
+      --ink-soft: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body {
+      padding: 32px 0 48px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    header {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 26px 28px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.15;
+    }
+
+    .summary {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 850px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .file-pair {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      background: var(--surface-muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+    }
+
+    section {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 22px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.94em;
+      color: #0f172a;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .matrix .cell {
+      min-height: 126px;
+      padding: 16px;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .matrix .cell:last-child {
+      border-right: 0;
+    }
+
+    .cell.use {
+      border-top: 5px solid var(--ok);
+    }
+
+    .cell.ask {
+      border-top: 5px solid var(--accent);
+    }
+
+    .cell.skip {
+      border-top: 5px solid var(--warn);
+    }
+
+    .cell.stop {
+      border-top: 5px solid var(--danger);
+    }
+
+    .cell ul,
+    .rules ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .flow {
+      width: 100%;
+      height: 290px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+      display: block;
+    }
+
+    .stack-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .bars {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 132px 1fr 144px;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 18px;
+      border: 1px solid var(--border);
+      background: var(--surface-muted);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .bar-fill.green {
+      background: var(--ok);
+    }
+
+    .bar-fill.amber {
+      background: var(--warn);
+    }
+
+    .note-box {
+      border: 1px solid var(--border);
+      background: var(--surface-muted);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .section-note {
+      margin: -4px 0 14px;
+      max-width: 880px;
+    }
+
+    .tree-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .tree-card,
+    .tree-wide {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .tree-wide {
+      margin-top: 14px;
+    }
+
+    .tree-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--surface-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tree-head strong {
+      font-size: 14px;
+    }
+
+    .tree-head span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tree {
+      padding: 12px 14px 14px;
+      background: #ffffff;
+    }
+
+    .tree-labels {
+      display: grid;
+      grid-template-columns: minmax(210px, 1fr) minmax(210px, 280px);
+      gap: 10px;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .tree-list,
+    .tree-list ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tree-list {
+      font-size: 12px;
+    }
+
+    .tree-list ul {
+      margin-left: 14px;
+    }
+
+    .tree-list li {
+      position: relative;
+      margin: 0;
+      padding: 0 0 0 22px;
+    }
+
+    .tree-list > li {
+      padding-left: 0;
+    }
+
+    .tree-list li::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      border-left: 1px solid var(--strong-border);
+      opacity: 0.85;
+    }
+
+    .tree-list li::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 16px;
+      width: 15px;
+      border-top: 1px solid var(--strong-border);
+      opacity: 0.85;
+    }
+
+    .tree-list > li::before,
+    .tree-list > li::after {
+      display: none;
+    }
+
+    .tree-list li:last-child::before {
+      height: 17px;
+      bottom: auto;
+    }
+
+    .tree-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(210px, 1fr) minmax(210px, 280px);
+      gap: 10px;
+      align-items: center;
+      min-height: 32px;
+      padding: 4px 0;
+      border-bottom: 1px solid #eef2f7;
+      color: var(--text);
+      z-index: 1;
+    }
+
+    .tree-list li:last-child > .tree-node {
+      border-bottom-color: transparent;
+    }
+
+    .node-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      white-space: nowrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-weight: 750;
+    }
+
+    .node-name::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+      background: var(--accent);
+      border: 1px solid #1d4ed8;
+      flex: 0 0 auto;
+    }
+
+    .file > .tree-node .node-name::before {
+      border-radius: 50%;
+      background: var(--surface);
+      border-color: var(--strong-border);
+    }
+
+    .tool > .tree-node .node-name::before {
+      background: var(--warn);
+      border-color: #92400e;
+    }
+
+    .generated > .tree-node .node-name::before {
+      background: var(--ok);
+      border-color: #166534;
+    }
+
+    .node-role {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+      line-height: 1.35;
+    }
+
+    .env-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .env-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 142px;
+      background: var(--surface);
+    }
+
+    .env-card strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .env-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.48;
+    }
+
+    .map {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .map-col {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .map-title {
+      padding: 11px 13px;
+      background: var(--surface-muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 750;
+      font-size: 13px;
+    }
+
+    .map-item {
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--ink-soft);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .map-item:last-child {
+      border-bottom: 0;
+    }
+
+    .schema {
+      display: grid;
+      grid-template-columns: 1fr 64px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .schema-box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 160px;
+      background: var(--surface-muted);
+    }
+
+    .arrow {
+      text-align: center;
+      font-size: 26px;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .rule {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 190px;
+    }
+
+    .rule.do {
+      background: var(--ok-soft);
+      border-color: #86efac;
+    }
+
+    .rule.dont {
+      background: var(--danger-soft);
+      border-color: #fca5a5;
+    }
+
+    .snippet {
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.55;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 1px solid var(--strong-border);
+      background: var(--accent);
+    }
+
+    .swatch.ok {
+      background: var(--ok);
+    }
+
+    .swatch.warn {
+      background: var(--warn);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <p class="eyebrow">Skill visual guide</p>
+      <h1>Project Structure</h1>
+      <p class="summary">프로젝트 종류를 숫자로 고르고, 기본 스택과 env 정책을 적용해 일관된 frontend, backend, monorepo, desktop 구조를 만든다.</p>
+      <div class="file-pair">
+        <span class="pill">SKILL.md: agent instruction</span>
+        <span class="pill">skill.html: install-time visual guide</span>
+        <span class="pill">references/: stack-specific layouts</span>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Decision Matrix</h2>
+        <div class="matrix" aria-label="When to use project-structure">
+          <div class="cell use">
+            <h3>Use</h3>
+            <p>새 프로젝트 구조, 기존 구조 정리, monorepo 설계, env 정책 정렬.</p>
+            <ul>
+              <li>Next.js web</li>
+              <li>NestJS API</li>
+              <li>Turborepo full-stack</li>
+            </ul>
+          </div>
+          <div class="cell ask">
+            <h3>Ask First</h3>
+            <p>프로젝트 종류가 불분명하면 숫자 선택지를 먼저 묻는다.</p>
+            <ul>
+              <li>1 web</li>
+              <li>2 backend</li>
+              <li>3 monorepo</li>
+              <li>4 desktop</li>
+            </ul>
+          </div>
+          <div class="cell skip">
+            <h3>Skip</h3>
+            <p>단일 파일 수정, 이미 구조가 명확한 작은 버그 수정.</p>
+            <ul>
+              <li>폴더 정책 변경 없음</li>
+              <li>stack 선택 없음</li>
+            </ul>
+          </div>
+          <div class="cell stop">
+            <h3>Stop</h3>
+            <p>기존 사용자 코드를 대량 이동해야 하는데 의도가 불명확한 경우.</p>
+            <ul>
+              <li>먼저 현재 구조 조사</li>
+              <li>삭제/이동 전 확인</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Wizard Flow</h2>
+        <svg class="flow" viewBox="0 0 1080 290" role="img" aria-label="Project structure workflow">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"></path>
+            </marker>
+          </defs>
+          <rect x="30" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="110" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">1. Project kind</text>
+          <text x="110" y="128" text-anchor="middle" font-size="12" fill="#6b7280">web / api / mono / desktop</text>
+
+          <line x1="190" y1="111" x2="264" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+          <rect x="270" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="350" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">2. Stack defaults</text>
+          <text x="350" y="128" text-anchor="middle" font-size="12" fill="#6b7280">Bun, Next, Nest, Drizzle</text>
+
+          <line x1="430" y1="111" x2="504" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+          <rect x="510" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="590" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">3. Env contract</text>
+          <text x="590" y="128" text-anchor="middle" font-size="12" fill="#6b7280">app-local Zod schemas</text>
+
+          <line x1="670" y1="111" x2="744" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+          <rect x="750" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="830" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">4. Tree output</text>
+          <text x="830" y="128" text-anchor="middle" font-size="12" fill="#6b7280">folders and boundaries</text>
+
+          <line x1="830" y1="150" x2="830" y2="202" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+          <rect x="720" y="208" width="220" height="52" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="830" y="238" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">validate scripts when available</text>
+
+          <rect x="500" y="198" width="180" height="62" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
+          <text x="590" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">codegen / migrate</text>
+          <text x="590" y="244" text-anchor="middle" font-size="12" fill="#475569">use env helpers</text>
+          <line x1="680" y1="229" x2="720" y2="229" stroke="#1f7a52" stroke-width="2" marker-end="url(#arrow)"></line>
+        </svg>
+        <div class="legend">
+          <span><i class="swatch"></i> choice and structure flow</span>
+          <span><i class="swatch ok"></i> env-aware tooling</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Default Stack</h2>
+        <div class="stack-grid">
+          <div class="bars" aria-label="Default stack confidence">
+            <div class="bar-row">
+              <strong>Monorepo</strong>
+              <span class="bar-track"><span class="bar-fill" style="width: 92%;"></span></span>
+              <span>Turborepo + Bun</span>
+            </div>
+            <div class="bar-row">
+              <strong>Frontend</strong>
+              <span class="bar-track"><span class="bar-fill" style="width: 90%;"></span></span>
+              <span>Next.js + urql</span>
+            </div>
+            <div class="bar-row">
+              <strong>Backend</strong>
+              <span class="bar-track"><span class="bar-fill green" style="width: 88%;"></span></span>
+              <span>NestJS + Fastify</span>
+            </div>
+            <div class="bar-row">
+              <strong>Data</strong>
+              <span class="bar-track"><span class="bar-fill green" style="width: 86%;"></span></span>
+              <span>Postgres + Drizzle</span>
+            </div>
+            <div class="bar-row">
+              <strong>Desktop</strong>
+              <span class="bar-track"><span class="bar-fill amber" style="width: 74%;"></span></span>
+              <span>Tauri, UI shell asked</span>
+            </div>
+          </div>
+          <div class="note-box">
+            <h3>Stack principle</h3>
+            <p>기본값은 빠르게 구조를 정하기 위한 출발점이다. 프로젝트 종류가 정해지면 관련 stack만 묻고, 나머지는 기본 정책으로 둔다. GraphQL codegen, Drizzle migration, Tauri build는 env helper를 반드시 거친다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Folder Structure Trees</h2>
+        <p class="section-note">처음 설치했을 때 바로 비교할 수 있도록 frontend와 backend 기본 구조를 tree 형태로 보여준다. Route는 얇게, domain과 provider 경계는 별도로 보이게 한다.</p>
+        <div class="tree-grid">
+          <div class="tree-card">
+            <div class="tree-head">
+              <strong>Frontend web tree</strong>
+              <span>Next.js + urql</span>
+            </div>
+            <div class="tree-labels"><span>Folder / file</span><span>Role</span></div>
+            <div class="tree" aria-label="Frontend web folder structure">
+              <ul class="tree-list">
+                <li class="folder">
+                  <div class="tree-node"><span class="node-name">apps/web</span><span class="node-role">배포되는 Next.js 앱</span></div>
+                  <ul>
+                    <li class="folder"><div class="tree-node"><span class="node-name">env</span><span class="node-role">앱별 env 파일 위치</span></div></li>
+                    <li class="file"><div class="tree-node"><span class="node-name">codegen.ts</span><span class="node-role">GraphQL 타입 생성 설정</span></div></li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">scripts</span><span class="node-role">컴포넌트 생성 등 자동화</span></div></li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">src/app</span><span class="node-role">route, layout, error만 얇게 담당</span></div></li>
+                    <li class="folder">
+                      <div class="tree-node"><span class="node-name">src/config</span><span class="node-role">앱 env 검증과 노출 경계</span></div>
+                      <ul>
+                        <li class="file"><div class="tree-node"><span class="node-name">env.ts</span><span class="node-role">public/server env 분리</span></div></li>
+                      </ul>
+                    </li>
+                    <li class="folder">
+                      <div class="tree-node"><span class="node-name">src/features/posts</span><span class="node-role">posts 도메인 기능 묶음</span></div>
+                      <ul>
+                        <li class="folder"><div class="tree-node"><span class="node-name">components</span><span class="node-role">posts 전용 화면 조각</span></div></li>
+                        <li class="folder"><div class="tree-node"><span class="node-name">graphql</span><span class="node-role">posts query/mutation 문서</span></div></li>
+                        <li class="folder"><div class="tree-node"><span class="node-name">hooks</span><span class="node-role">posts 전용 client 로직</span></div></li>
+                        <li class="folder"><div class="tree-node"><span class="node-name">prefetch</span><span class="node-role">server prefetch 함수</span></div></li>
+                      </ul>
+                    </li>
+                    <li class="generated"><div class="tree-node"><span class="node-name">src/graphql</span><span class="node-role">urql client와 generated 타입</span></div></li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">src/providers</span><span class="node-role">전역 provider 조합</span></div></li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">src/components</span><span class="node-role">도메인 없는 공용 UI만</span></div></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tree-card">
+            <div class="tree-head">
+              <strong>Backend API tree</strong>
+              <span>NestJS + Fastify + GraphQL</span>
+            </div>
+            <div class="tree-labels"><span>Folder / file</span><span>Role</span></div>
+            <div class="tree" aria-label="Backend API folder structure">
+              <ul class="tree-list">
+                <li class="folder">
+                  <div class="tree-node"><span class="node-name">apps/api</span><span class="node-role">배포되는 NestJS API 앱</span></div>
+                  <ul>
+                    <li class="folder"><div class="tree-node"><span class="node-name">env</span><span class="node-role">API 전용 env 파일 위치</span></div></li>
+                    <li class="file"><div class="tree-node"><span class="node-name">src/main.ts</span><span class="node-role">Fastify adapter 부트스트랩</span></div></li>
+                    <li class="file"><div class="tree-node"><span class="node-name">src/app.module.ts</span><span class="node-role">Nest root module</span></div></li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">src/config</span><span class="node-role">Zod env를 Nest 서비스로 제공</span></div></li>
+                    <li class="folder">
+                      <div class="tree-node"><span class="node-name">src/common</span><span class="node-role">공통 Nest 정책과 확장점</span></div>
+                      <ul>
+                        <li class="folder"><div class="tree-node"><span class="node-name">guards filters pipes</span><span class="node-role">인증, 예외, 입력 검증 규칙</span></div></li>
+                      </ul>
+                    </li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">src/graphql</span><span class="node-role">GraphQL module, context, scalars</span></div></li>
+                    <li class="folder">
+                      <div class="tree-node"><span class="node-name">src/modules/auth</span><span class="node-role">auth 도메인 기능 묶음</span></div>
+                      <ul>
+                        <li class="file"><div class="tree-node"><span class="node-name">auth.resolver.ts</span><span class="node-role">GraphQL 요청 진입점</span></div></li>
+                        <li class="file"><div class="tree-node"><span class="node-name">auth.service.ts</span><span class="node-role">auth 비즈니스 로직</span></div></li>
+                      </ul>
+                    </li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">src/modules/users</span><span class="node-role">users 도메인 기능 묶음</span></div></li>
+                    <li class="folder">
+                      <div class="tree-node"><span class="node-name">src/providers</span><span class="node-role">외부 서비스 adapter</span></div>
+                      <ul>
+                        <li class="folder"><div class="tree-node"><span class="node-name">jwt logger redis</span><span class="node-role">JWT, logging, cache 연결</span></div></li>
+                      </ul>
+                    </li>
+                    <li class="folder"><div class="tree-node"><span class="node-name">test</span><span class="node-role">API e2e 테스트</span></div></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="tree-wide">
+          <div class="tree-head">
+            <strong>Full-stack monorepo package boundary</strong>
+            <span>Turborepo + Bun</span>
+          </div>
+          <div class="tree-labels"><span>Folder / file</span><span>Role</span></div>
+          <div class="tree" aria-label="Full-stack monorepo package structure">
+            <ul class="tree-list">
+              <li class="folder">
+                <div class="tree-node"><span class="node-name">repo root</span><span class="node-role">Bun + Turborepo workspace</span></div>
+                <ul>
+                  <li class="folder">
+                    <div class="tree-node"><span class="node-name">apps</span><span class="node-role">실행/배포되는 앱 모음</span></div>
+                    <ul>
+                      <li class="folder"><div class="tree-node"><span class="node-name">web</span><span class="node-role">Next.js frontend 앱</span></div></li>
+                      <li class="folder"><div class="tree-node"><span class="node-name">api</span><span class="node-role">NestJS GraphQL backend 앱</span></div></li>
+                    </ul>
+                  </li>
+                  <li class="folder">
+                    <div class="tree-node"><span class="node-name">packages</span><span class="node-role">앱들이 공유하는 source</span></div>
+                    <ul>
+                      <li class="tool"><div class="tree-node"><span class="node-name">packages/config</span><span class="node-role">env helper만 제공, schema 금지</span></div></li>
+                      <li class="folder"><div class="tree-node"><span class="node-name">packages/db</span><span class="node-role">Drizzle schema, client, migration</span></div></li>
+                      <li class="generated"><div class="tree-node"><span class="node-name">packages/graphql</span><span class="node-role">공유 schema 또는 generated 타입</span></div></li>
+                      <li class="folder"><div class="tree-node"><span class="node-name">packages/ui</span><span class="node-role">앱 중립 UI primitive</span></div></li>
+                      <li class="tool"><div class="tree-node"><span class="node-name">packages/tsconfig</span><span class="node-role">공유 TypeScript 설정</span></div></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="swatch"></i> folder or source boundary</span>
+          <span><i class="swatch ok"></i> generated or GraphQL artifact</span>
+          <span><i class="swatch warn"></i> tooling/config package</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Env Contract</h2>
+        <div class="env-grid">
+          <div class="env-card">
+            <strong>App-local schema</strong>
+            <span><code>apps/web/src/config/env.ts</code>와 <code>apps/api/src/config/env.ts</code>가 각자 Zod schema를 가진다.</span>
+          </div>
+          <div class="env-card">
+            <strong>Helper-only package</strong>
+            <span><code>packages/config</code>는 env mode, dotenv loading, Zod helpers만 제공한다. app 변수 정의는 하지 않는다.</span>
+          </div>
+          <div class="env-card">
+            <strong>No shared env reads</strong>
+            <span>공유 패키지는 <code>process.env</code>를 직접 읽지 않는다. 필요한 값은 app에서 주입한다.</span>
+          </div>
+          <div class="env-card">
+            <strong>Frontend split</strong>
+            <span>browser 공개 값과 server-only 값을 분리한다. 공개 값만 framework public prefix를 사용한다.</span>
+          </div>
+          <div class="env-card">
+            <strong>Tooling uses helpers</strong>
+            <span>codegen, migration, Tauri build script가 각자 env를 다시 파싱하지 않고 공용 helper를 호출한다.</span>
+          </div>
+          <div class="env-card">
+            <strong>Per-app env files</strong>
+            <span><code>env/.env.development</code>, <code>.env.test</code>, <code>.env.production</code>을 app마다 둔다.</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Resource Map</h2>
+        <div class="map">
+          <div class="map-col">
+            <div class="map-title">Agent instruction</div>
+            <div class="map-item"><code>SKILL.md</code>: trigger, wizard, defaults</div>
+            <div class="map-item"><code>agents/openai.yaml</code>: display metadata</div>
+          </div>
+          <div class="map-col">
+            <div class="map-title">References</div>
+            <div class="map-item"><code>env-policy.md</code>: Zod and helper boundary</div>
+            <div class="map-item"><code>frontend-next.md</code>: Next.js web layout</div>
+            <div class="map-item"><code>backend-nest.md</code>: NestJS GraphQL layout</div>
+            <div class="map-item"><code>monorepo.md</code>: Turborepo packages</div>
+            <div class="map-item"><code>desktop-tauri.md</code>: Tauri layout</div>
+          </div>
+          <div class="map-col">
+            <div class="map-title">Outputs</div>
+            <div class="map-item">numeric choices</div>
+            <div class="map-item">directory tree</div>
+            <div class="map-item">folder boundary rules</div>
+            <div class="map-item">env/codegen/migration/build policy</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Input / Output Schema</h2>
+        <div class="schema">
+          <div class="schema-box">
+            <h3>Input</h3>
+            <p>프로젝트 종류, 선택한 stack, 기존 repo 구조, env/GraphQL/DB/Desktop 요구사항.</p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="schema-box">
+            <h3>Output</h3>
+            <p>선택된 구조, 디렉터리 트리, app/package 경계, codegen/migration/build script 정책, 남은 질문.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Do / Don't</h2>
+        <div class="rules">
+          <div class="rule do">
+            <h3>Do</h3>
+            <ul>
+              <li>먼저 숫자로 프로젝트 종류를 확정한다.</li>
+              <li>route는 얇게, domain은 <code>features</code>에 둔다.</li>
+              <li>NestJS는 <code>modules/common/providers</code> 경계를 유지한다.</li>
+              <li>중복 folder 역할을 최소화하고 app/domain/shared 경계를 명확히 한다.</li>
+              <li>최종 tree가 선택한 folder 규칙을 지켰는지 검증한다.</li>
+              <li>env helper를 codegen, migration, build에도 재사용한다.</li>
+            </ul>
+          </div>
+          <div class="rule dont">
+            <h3>Don't</h3>
+            <ul>
+              <li>기본값으로 full-stack single repo를 제안하지 않는다.</li>
+              <li>shared package에서 <code>process.env</code>를 읽지 않는다.</li>
+              <li>GraphQL 기본 프로젝트에 REST controller를 기본 생성하지 않는다.</li>
+              <li>기존 repo를 조사하지 않고 대량 이동하지 않는다.</li>
+            </ul>
+          </div>
+        </div>
+        <pre class="snippet">Use $project-structure at &lt;skills-root&gt;/skills/project-structure/SKILL.md
+when choosing, creating, standardizing, or refactoring web, backend,
+full-stack monorepo, or desktop project folder structures.</pre>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 ## Project Skills
 
-- Use $changeset-committer at <skills-root>/skills/changeset-committer/SKILL.md when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
+- Use $atomic-committer at <skills-root>/skills/atomic-committer/SKILL.md when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
 
 ## Project Skill Overrides
 

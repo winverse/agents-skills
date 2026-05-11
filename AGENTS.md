@@ -10,6 +10,22 @@ This repo stores custom agent skills that are applied manually per project. The 
 - Configure projects by linking skill `SKILL.md` files from this repo inside each project's agent instruction file, such as `AGENTS.md`, `CLAUDE.md`, or an equivalent file.
 - `skill-creator` is not owned by this repo. It is an external system skill at `${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/SKILL.md`.
 
+## Project Skills
+
+These repo-local links make the skills usable for this project without installing them globally.
+
+- Use $web-research at `skills/web-research/SKILL.md` when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
+- Use $skill-to-html at `skills/skill-to-html/SKILL.md` whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
+- Use $atomic-committer at `skills/atomic-committer/SKILL.md` when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
+- Use $project-structure at `skills/project-structure/SKILL.md` when asked to choose, create, standardize, or refactor frontend, backend, full-stack monorepo, or desktop app folder structures.
+
+## Project Skill Overrides
+
+- Use repo-linked custom skills before default/global agent behavior when the behavior overlaps.
+- When using `atomic-committer`, group dirty files by logical changeset, write commit messages with an English conventional prefix and Korean summary, and push only when a remote exists and push was requested.
+- When using `project-structure`, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL, Drizzle, Panda CSS with headless UI, Tauri, and Zod env validation unless the project says otherwise.
+- When using `skill-creator`, run `skill-to-html` immediately afterward for the same skill folder.
+
 ## Structure
 
 - Skill folders live under `skills/`, for example `skills/web-research/`.
@@ -33,7 +49,7 @@ This repo stores custom agent skills that are applied manually per project. The 
 - Use TypeScript for repo-owned validators and run them with Node 22+ as `node <file>.ts`; do not add Python validators to this repo. Keep `.mjs` only when a hook or external runtime specifically needs it.
 - Run `node scripts/validate-skill-repo.ts .` after lifecycle, history, snippet, or repo-level documentation changes.
 - Update `history/skills.md` when adding, deprecating, archiving, renaming, splitting, merging, or materially changing a skill's trigger, workflow, validators, evals, or snippets.
-- Review `docs/skill-inspector.md` before calling a created or materially changed skill done. Leave only unresolved local review notes in ignored `inspector/`, and delete resolved review files.
+- Review `docs/skill-inspector.md` before calling a created or materially changed skill done. After an inspection, write the review result to ignored `inspector/YYYY-MM-DD-<scope>.md` before fixing it. Leave only unresolved local review notes in `inspector/`, and delete resolved review files.
 
 ## Project Setup
 

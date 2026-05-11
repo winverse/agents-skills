@@ -1,0 +1,4 @@
+interface:
+  display_name: "Atomic Committer"
+  short_description: "Group dirty git changes into atomic commits"
+  default_prompt: "Use $atomic-committer to inspect the dirty git tree, group files into logical changesets, commit with English conventional prefixes and Korean messages, and push only when a remote exists and push was requested."

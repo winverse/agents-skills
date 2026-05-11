@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Structure"
+  short_description: "Consistent full-stack folder and stack layouts"
+  default_prompt: "Use $project-structure to choose a project kind, apply my default stack, and produce a consistent folder structure with env, GraphQL codegen, Drizzle, and build policies."

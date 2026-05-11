@@ -1,9 +1,9 @@
 ---
-name: changeset-committer
-description: Use when the user asks to commit, split work into commits, create git commits, or commit and push. This skill inspects changed files, groups them into logical changesets, commits each group with an English conventional prefix and Korean message body, and pushes only when a git remote exists and push was requested.
+name: atomic-committer
+description: Use when the user asks to commit, split work into commits, create git commits, or commit and push. This skill inspects changed files, groups them into atomic commit units, commits each group with an English conventional prefix and Korean message body, and pushes only when a git remote exists and push was requested.
 ---
 
-# Changeset Committer
+# Atomic Committer
 
 Use this skill when the user asks for committing work, splitting changes into commits, or committing and pushing.
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Changeset Committer</title>
+  <title>Atomic Committer</title>
   <style>
     :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#374151; }
     * { box-sizing: border-box; }
@@ -44,10 +44,10 @@
   <main class="shell">
     <header>
       <div>
-        <h1>Changeset Committer</h1>
+        <h1>Atomic Committer</h1>
         <p class="subtitle">dirty git tree를 작업 단위로 나눠 커밋하고, 메시지는 영어 prefix + 한글 메시지로 작성하며, remote 있을 때만 push합니다.</p>
       </div>
-      <div class="badge">CC</div>
+      <div class="badge">AC</div>
     </header>
 
     <section class="grid">
@@ -55,7 +55,7 @@
         <div class="head"><h2>사용 판단 매트릭스</h2><p class="note">커밋 요청이 있어도 무조건 `git add .`로 가지 않습니다.</p></div>
         <div class="body matrix">
           <div class="cell ok"><strong>Use now</strong><p>사용자가 commit, commit and push, 변경사항을 나눠 커밋하라고 요청했습니다.</p></div>
-          <div class="cell accent"><strong>Split first</strong><p>dirty file이 여러 관심사를 담고 있으면 diff를 읽고 changeset으로 분류합니다.</p></div>
+          <div class="cell accent"><strong>Split first</strong><p>dirty file이 여러 관심사를 담고 있으면 diff를 읽고 atomic commit 단위로 분류합니다.</p></div>
           <div class="cell warn"><strong>Ask</strong><p>한 파일 안에 unrelated hunk가 섞여 있고 안전하게 나누기 어렵습니다.</p></div>
           <div class="cell danger"><strong>Skip push</strong><p>remote가 없거나 push 요청이 없거나 detached HEAD 상태입니다.</p></div>
         </div>
@@ -85,7 +85,7 @@
               <path d="M451 144 C451 166 486 171 486 184" fill="none"/><path d="M594 184 C594 166 629 166 629 144" fill="none"/>
             </g>
             <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827">
-              <text x="95" y="103">git 상태 확인</text><text x="273" y="103">diff 읽기</text><text x="451" y="103">changeset 분류</text><text x="629" y="103">선택 stage</text><text x="807" y="103">commit</text><text x="985" y="103">조건부 push</text>
+              <text x="95" y="103">git 상태 확인</text><text x="273" y="103">diff 읽기</text><text x="451" y="103">atomic 분류</text><text x="629" y="103">선택 stage</text><text x="807" y="103">commit</text><text x="985" y="103">조건부 push</text>
             </g>
             <g text-anchor="middle" font-size="12" fill="#6b7280">
               <text x="95" y="124">repo / branch / remote</text><text x="273" y="124">unstaged + staged</text><text x="451" y="124">작업 단위</text><text x="629" y="124">파일 또는 hunk</text><text x="807" y="124">prefix + 한글</text><text x="985" y="124">remote 있을 때만</text><text x="540" y="218">섞인 파일은 안전하면 hunk split, 아니면 질문</text>
@@ -97,7 +97,7 @@
       <article class="panel">
         <div class="head"><h2>우선순위 차트</h2><p class="note">커밋 단위 결정에서 무엇을 먼저 보는지입니다.</p></div>
         <div class="body">
-          <svg viewBox="0 0 540 240" role="img" aria-label="changeset grouping priority bar chart">
+          <svg viewBox="0 0 540 240" role="img" aria-label="atomic commit grouping priority bar chart">
             <g font-size="13" fill="#374151"><text x="24" y="38">사용자 요청 / 이슈</text><text x="24" y="82">행동 변화</text><text x="24" y="126">테스트</text><text x="24" y="170">문서 / snippet</text><text x="24" y="214">도구 / 생성물</text></g>
             <g><rect x="170" y="20" width="330" height="24" rx="6" fill="#2563eb"/><rect x="170" y="64" width="286" height="24" rx="6" fill="#1f7a52"/><rect x="170" y="108" width="238" height="24" rx="6" fill="#64748b"/><rect x="170" y="152" width="202" height="24" rx="6" fill="#a16207"/><rect x="170" y="196" width="170" height="24" rx="6" fill="#6b7280"/></g>
             <g font-size="12" fill="#fff" font-weight="800" text-anchor="end"><text x="490" y="37">1</text><text x="446" y="81">2</text><text x="398" y="125">3</text><text x="362" y="169">4</text><text x="330" y="213">5</text></g>
@@ -116,19 +116,19 @@
       <article class="panel wide">
         <div class="head"><h2>파일 관계도</h2><p class="note">agent 지시문, grouping rule, validator, project snippet의 관계입니다.</p></div>
         <div class="body">
-          <svg viewBox="0 0 960 280" role="img" aria-label="changeset-committer 스킬 파일 관계도">
+          <svg viewBox="0 0 960 280" role="img" aria-label="atomic-committer 스킬 파일 관계도">
             <defs><marker id="mapArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
             <g fill="#fff" stroke="#d1d5db" stroke-width="2"><rect x="382" y="102" width="196" height="72" rx="8"/><rect x="44" y="38" width="186" height="60" rx="8"/><rect x="44" y="184" width="186" height="60" rx="8"/><rect x="734" y="38" width="186" height="60" rx="8"/><rect x="734" y="184" width="186" height="60" rx="8"/></g>
             <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#mapArrow)"><line x1="230" y1="68" x2="378" y2="116"/><line x1="230" y1="214" x2="378" y2="158"/><line x1="578" y1="116" x2="730" y2="68"/><line x1="578" y1="158" x2="730" y2="214"/></g>
-            <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827"><text x="480" y="132">changeset-committer</text><text x="137" y="72">SKILL.md</text><text x="137" y="218">grouping-rules</text><text x="827" y="72">skill.html</text><text x="827" y="218">validator / snippet</text></g>
+            <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827"><text x="480" y="132">atomic-committer</text><text x="137" y="72">SKILL.md</text><text x="137" y="218">grouping-rules</text><text x="827" y="72">skill.html</text><text x="827" y="218">validator / snippet</text></g>
             <g text-anchor="middle" font-size="12" fill="#6b7280"><text x="480" y="152">source folder</text><text x="137" y="86">agent workflow</text><text x="137" y="232">commit grouping</text><text x="827" y="86">human guide</text><text x="827" y="232">project setup checks</text></g>
           </svg>
           <div class="files">
             <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>agent workflow</span></a>
-            <a class="file" href="references/grouping-rules.md"><strong>grouping-rules.md</strong><span>changeset 기준</span></a>
+            <a class="file" href="references/grouping-rules.md"><strong>grouping-rules.md</strong><span>atomic commit 기준</span></a>
             <a class="file" href="agents/openai.yaml"><strong>openai.yaml</strong><span>UI metadata</span></a>
-            <a class="file" href="scripts/validate-changeset-committer.ts"><strong>validator</strong><span>static checks</span></a>
-            <a class="file" href="../../project-snippets/changeset-committer.md"><strong>snippet</strong><span>project link</span></a>
+            <a class="file" href="scripts/validate-atomic-committer.ts"><strong>validator</strong><span>static checks</span></a>
+            <a class="file" href="../../project-snippets/atomic-committer.md"><strong>snippet</strong><span>project link</span></a>
             <a class="file" href="skill.html"><strong>skill.html</strong><span>human visual guide</span></a>
           </div>
         </div>
@@ -138,7 +138,7 @@
         <div class="head"><h2>프로젝트 연결 snippet</h2><p class="note">프로젝트 instruction 파일에 붙이는 최소 블록입니다.</p></div>
         <div class="body"><pre class="snippet">## Project Skills
 
-- Use $changeset-committer at &lt;skills-root&gt;/skills/changeset-committer/SKILL.md when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
+- Use $atomic-committer at &lt;skills-root&gt;/skills/atomic-committer/SKILL.md when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
 
 ## Project Skill Overrides
 

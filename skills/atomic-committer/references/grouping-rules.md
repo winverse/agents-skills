@@ -1,10 +1,10 @@
-# Changeset Grouping Rules
+# Atomic Commit Grouping Rules
 
 Use these rules when a dirty git tree contains multiple concerns.
 
 ## Changeset Definition
 
-A changeset is a group of edits that should be reviewed, reverted, or cherry-picked together.
+A changeset is the atomic commit unit: a group of edits that should be reviewed, reverted, or cherry-picked together.
 
 Good changesets usually share one of these:
 

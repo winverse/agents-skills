@@ -49,9 +49,12 @@ skills/skill-name/
 - `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 diagram-rich `skill.html`을 만들거나 고치는 스킬.
   - Source instruction: `skills/skill-to-html/SKILL.md`
   - Human visual guide: `skills/skill-to-html/skill.html`
-- `changeset-committer`: dirty git tree를 논리적 changeset으로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
-  - Source instruction: `skills/changeset-committer/SKILL.md`
-  - Human visual guide: `skills/changeset-committer/skill.html`
+- `atomic-committer`: dirty git tree를 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
+  - Source instruction: `skills/atomic-committer/SKILL.md`
+  - Human visual guide: `skills/atomic-committer/skill.html`
+- `project-structure`: frontend, backend, full-stack monorepo, desktop app의 폴더 구조와 기본 stack/env 정책을 일관되게 잡는 스킬.
+  - Source instruction: `skills/project-structure/SKILL.md`
+  - Human visual guide: `skills/project-structure/skill.html`
 
 ## 에이전트 연결 방식
 
@@ -117,10 +120,18 @@ export SKILLS_ROOT="$PWD"
 
 이 repo는 `skill-creator` 같은 Codex 시스템 스킬을 소유하지 않는다. 새 스킬 구조를 잡을 때는 외부 시스템 `skill-creator`를 참고할 수 있지만, repo가 소유하는 반복 검증 명령은 TypeScript validator로 둔다.
 
-새 스킬을 만들 때의 기본 흐름:
+프로젝트에 기존 스킬을 연결하는 절차는 `docs/project-skill-setup.md`를 따른다. 새 스킬을 만들거나 기존 스킬을 크게 바꾸는 검증은 이 섹션과 `docs/skill-inspector.md`를 함께 따른다.
+
+새 스킬을 만들거나 기존 스킬을 크게 바꿀 때의 기본 흐름:
 
 ```text
-system skill-creator -> repo TS validator -> repo skill-to-html -> project snippet -> inspector check
+skill-creator 또는 SKILL.md 작성
+-> skill-to-html로 skill.html 생성/갱신
+-> project-snippets와 history 필요 여부 정리
+-> node scripts/validate-skill.ts skills/<skill-name>
+-> 스킬별 validator 실행
+-> node scripts/validate-skill-repo.ts .
+-> docs/skill-inspector.md 기준으로 검사
 ```
 
 시스템 `skill-creator` 위치:
@@ -140,24 +151,25 @@ node scripts/validate-skill.ts skills/<skill-name>
 ```bash
 node skills/web-research/scripts/validate-web-research.ts skills/web-research
 node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
-node skills/changeset-committer/scripts/validate-changeset-committer.ts skills/changeset-committer
+node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
+node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
 ```
 
-repo 운영 기준도 함께 확인한다.
+repo 운영 기준과 문서 정합성도 함께 확인한다.
 
 ```bash
 node scripts/validate-skill-repo.ts .
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다.
 
-Codex에서는 `.codex/config.toml`의 `PostToolUse` hook이 `SKILL.md` 변경 후 `skill.html` 갱신 누락을 감지한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
+Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 
 ## 검사관 기준
 
 스킬 검사 기준은 `docs/skill-inspector.md`에 둔다.
 
-`inspector/` 폴더는 local-only 검사 메모와 미해결 이슈를 임시로 두는 곳이다. GitHub에는 `.gitkeep`만 올리고, 처리 완료된 검사 파일은 삭제해서 같은 검증 사항을 반복 검토하지 않게 한다.
+`inspector/` 폴더는 local-only 검사 메모와 미해결 이슈를 임시로 두는 곳이다. GitHub에는 `.gitkeep`만 올린다. 검사에서 수정할 항목이 나오면 먼저 `inspector/YYYY-MM-DD-<scope>.md`에 findings, 근거 파일, 검증 명령, 해결 기준을 적고 그 문서를 기준으로 고친다. 처리 완료된 검사 파일은 삭제하고, 일부만 처리됐으면 해결된 항목을 제거해 미해결 항목만 남긴다.
 
 ## 유지보수
 

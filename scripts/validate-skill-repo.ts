@@ -54,6 +54,22 @@ function requireFile(relativePath: string): void {
   }
 }
 
+function requireText(relativePath: string, needle: string, label: string): void {
+  if (!existsSync(path.join(root, relativePath))) return;
+  const text = readText(relativePath);
+  if (!text.includes(needle)) {
+    errors.push(`${relativePath} is missing ${label}: ${needle}`);
+  }
+}
+
+function requirePattern(relativePath: string, pattern: RegExp, label: string): void {
+  if (!existsSync(path.join(root, relativePath))) return;
+  const text = readText(relativePath);
+  if (!pattern.test(text)) {
+    errors.push(`${relativePath} is missing ${label}`);
+  }
+}
+
 function skillDirs(): string[] {
   const skillsRoot = path.join(root, "skills");
   if (!existsSync(skillsRoot)) return [];
@@ -96,6 +112,7 @@ requireFile("docs/skill-lifecycle.md");
 requireFile("docs/skill-inspector.md");
 requireFile("history/skills.md");
 requireFile("project-snippets/base.md");
+requireFile("project-snippets/claude-base.md");
 
 if (nodeMajor < 22) {
   errors.push(`Node 22+ is required for direct .ts validator execution; current Node is ${process.versions.node}`);
@@ -113,14 +130,47 @@ for (const state of ["draft", "active", "critical", "deprecated", "archived"]) {
 const history = existsSync(path.join(root, "history/skills.md"))
   ? readText("history/skills.md")
   : "";
-for (const skill of skillDirs()) {
+const skills = skillDirs();
+const skillNames = new Set(skills.map((skill) => path.basename(skill)));
+
+for (const skill of skills) {
   const skillName = path.basename(skill);
   requireFile(`${skill}/SKILL.md`);
   requireFile(`${skill}/skill.html`);
   requireFile(`project-snippets/${skillName}.md`);
 
-  if (!history.includes(`\`${skillName}\``)) {
-    errors.push(`history/skills.md is missing registry entry for ${skillName}`);
+  requirePattern(
+    "history/skills.md",
+    new RegExp("^\\| `" + escapeRegExp(skillName) + "` \\|", "m"),
+    `current registry row for ${skillName}`,
+  );
+  requireText("README.md", `- \`${skillName}\`:`, `current skill entry for ${skillName}`);
+  requireText("README.md", `${skill}/SKILL.md`, `source path for ${skillName}`);
+  requireText("README.md", `${skill}/skill.html`, `HTML guide path for ${skillName}`);
+  requireText(
+    "AGENTS.md",
+    `${skill}/SKILL.md`,
+    `repo-local project skill link for ${skillName}`,
+  );
+  requireText(
+    "project-snippets/base.md",
+    `<skills-root>/${skill}/SKILL.md`,
+    `base snippet link for ${skillName}`,
+  );
+  requireText(
+    "project-snippets/claude-base.md",
+    `<skills-root>/${skill}/SKILL.md`,
+    `Claude base snippet link for ${skillName}`,
+  );
+  requireText(
+    `project-snippets/${skillName}.md`,
+    `<skills-root>/${skill}/SKILL.md`,
+    `skill snippet link for ${skillName}`,
+  );
+
+  const validatorPath = `${skill}/scripts/validate-${skillName}.ts`;
+  if (existsSync(path.join(root, validatorPath))) {
+    requireText("README.md", `node ${validatorPath} ${skill}`, `validator command for ${skillName}`);
   }
 }
 
@@ -132,6 +182,16 @@ for (const filePath of walkSourceFiles()) {
   }
   if (privatePathPatterns.some((pattern) => pattern.test(text))) {
     errors.push(`Non-portable local path found in ${relativePath}`);
+  }
+
+  const skillPathPattern = /skills\/([a-z0-9-]+)\/(?:SKILL\.md|skill\.html|scripts\/validate-[a-z0-9-]+\.ts)/g;
+  for (const match of text.matchAll(skillPathPattern)) {
+    const referencedSkill = match[1];
+    if (!skillNames.has(referencedSkill)) {
+      errors.push(
+        `${relativePath} references missing current skill path: ${match[0]}`,
+      );
+    }
   }
 }
 

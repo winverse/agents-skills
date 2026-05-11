@@ -2,12 +2,14 @@
 
 - For current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
 - When creating, installing, forking, or updating a shared skill, use the shared guide at `<skills-root>/skills/skill-to-html/SKILL.md` so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
-- For commit requests, split dirty files into logical changesets and use the shared skill at `<skills-root>/skills/changeset-committer/SKILL.md`.
+- For commit requests, split dirty files into logical changesets and use the shared skill at `<skills-root>/skills/atomic-committer/SKILL.md`.
+- For choosing, creating, standardizing, or refactoring frontend, backend, full-stack monorepo, or desktop app folder structures, use the shared skill at `<skills-root>/skills/project-structure/SKILL.md`.
 
 ## Project Skill Overrides
 
 - Prefer this project's local docs, source code, and logs before general web results.
 - Use repo-linked custom skills before default/global Claude behavior when the behavior overlaps.
 - Commit messages should use an English conventional prefix with a Korean summary, and push only when a remote exists and push was requested.
+- For project structure choices, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL, Drizzle, Panda CSS with headless UI, Tauri, and Zod env validation unless the project says otherwise.
 - If Claude cannot automatically load a linked `SKILL.md`, read or paste the relevant section from that skill into the current task context.
 - Keep project-specific rules here instead of changing the shared skill unless the rule should apply everywhere.

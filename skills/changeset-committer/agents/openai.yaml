@@ -1,4 +1,0 @@
-interface:
-  display_name: "Changeset Committer"
-  short_description: "Group dirty git changes into focused commits"
-  default_prompt: "Use $changeset-committer to inspect the dirty git tree, group files into logical changesets, commit with English conventional prefixes and Korean messages, and push only when a remote exists and push was requested."

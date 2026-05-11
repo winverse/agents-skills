@@ -40,8 +40,8 @@ const yaml = exists("agents/openai.yaml") ? read("agents/openai.yaml") : "";
 if (!/^---\n[\s\S]+?\n---/.test(skill)) {
   fail("SKILL.md must start with YAML frontmatter");
 }
-if (!/^name:\s*changeset-committer/m.test(skill)) {
-  fail("SKILL.md frontmatter must include name: changeset-committer");
+if (!/^name:\s*atomic-committer/m.test(skill)) {
+  fail("SKILL.md frontmatter must include name: atomic-committer");
 }
 
 for (const term of [
@@ -61,7 +61,7 @@ for (const type of ["feat", "fix", "docs", "chore"]) {
 }
 
 for (const term of [
-  "Changeset Committer",
+  "Atomic Committer",
   "작업 단위",
   "영어 prefix + 한글 메시지",
   "remote 있을 때만 push",
@@ -99,9 +99,9 @@ if (/https?:\/\/[^"]+/.test(html)) {
 }
 
 if (failures.length) {
-  console.error("changeset-committer validation failed:");
+  console.error("atomic-committer validation failed:");
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log("changeset-committer validation passed");
+console.log("atomic-committer validation passed");

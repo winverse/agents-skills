@@ -6,14 +6,14 @@ matcher = "^apply_patch$|^functions.apply_patch$|^Edit$|^Write$|^Bash$|^exec_com
 
 [[hooks.PostToolUse.hooks]]
 type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs"'
-timeout = 10
-statusMessage = "Checking skill HTML guide"
+command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs" --auto'
+timeout = 300
+statusMessage = "Auto-updating skill HTML and validating repo"
 
 [[hooks.UserPromptSubmit]]
 
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs"'
-timeout = 10
-statusMessage = "Checking pending skill HTML guide"
+command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs" --auto'
+timeout = 300
+statusMessage = "Auto-updating pending skill HTML and validating repo"
