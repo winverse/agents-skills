@@ -1,0 +1,4 @@
+interface:
+  display_name: "Karpathy Thinkings"
+  short_description: "Karpathy-style coding agent discipline"
+  default_prompt: "Use $karpathy-thinkings to think before coding, avoid silent assumptions, keep changes simple and surgical, and verify success criteria before calling the work done."

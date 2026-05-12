@@ -49,6 +49,9 @@ skills/skill-name/
 - `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 diagram-rich `skill.html`을 만들거나 고치는 스킬.
   - Source instruction: `skills/skill-to-html/SKILL.md`
   - Human visual guide: `skills/skill-to-html/skill.html`
+- `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
+  - Source instruction: `skills/karpathy-thinkings/SKILL.md`
+  - Human visual guide: `skills/karpathy-thinkings/skill.html`
 - `skill-update`: 기존 공유 스킬을 수정할 때 `SKILL.md`, references, validator, `skill.html`, snippets, docs, history를 함께 맞추는 유지보수 스킬.
   - Source instruction: `skills/skill-update/SKILL.md`
   - Human visual guide: `skills/skill-update/skill.html`
@@ -160,6 +163,7 @@ node scripts/validate-skill.ts skills/<skill-name>
 ```bash
 node skills/web-research/scripts/validate-web-research.ts skills/web-research
 node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
+node skills/karpathy-thinkings/scripts/validate-karpathy-thinkings.ts skills/karpathy-thinkings
 node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure

@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>karpathy-thinkings guide</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --ink: #0f172a;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --ok: #1f7a52;
+      --ok-soft: #dcfce7;
+      --warn: #a16207;
+      --warn-soft: #fef3c7;
+      --danger: #b42318;
+      --danger-soft: #fee2e2;
+      --purple: #6d28d9;
+      --purple-soft: #ede9fe;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      padding: 24px 0 18px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.05;
+    }
+
+    h2 {
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .sub {
+      margin-top: 8px;
+      max-width: 800px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .pair {
+      display: grid;
+      gap: 6px;
+      min-width: 300px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+    }
+
+    .pair span {
+      color: var(--muted);
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+      padding: 20px 0 34px;
+    }
+
+    section {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-muted);
+    }
+
+    .note {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .cell {
+      min-height: 146px;
+      display: grid;
+      align-content: start;
+      gap: 9px;
+      padding: 15px;
+      border-right: 1px solid var(--border);
+    }
+
+    .cell:last-child {
+      border-right: 0;
+    }
+
+    .cell strong {
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .cell p,
+    .cell li {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .cell ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .visual {
+      padding: 18px;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .principle {
+      min-height: 162px;
+      display: grid;
+      gap: 9px;
+      align-content: start;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .principle .num {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .principle p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .risk {
+      padding: 18px;
+    }
+
+    .risk-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 72px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+
+    .risk-row span:first-child {
+      font-weight: 750;
+    }
+
+    .track {
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .risk-row span:last-child {
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .io {
+      display: grid;
+      grid-template-columns: 1fr 82px 1fr;
+      gap: 12px;
+      align-items: stretch;
+      padding: 18px;
+    }
+
+    .box {
+      min-height: 176px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .box ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .arrow {
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .file {
+      min-height: 88px;
+      display: grid;
+      gap: 6px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .file strong {
+      font-size: 13px;
+    }
+
+    .file span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .snippet {
+      margin: 0;
+      padding: 16px 18px;
+      overflow-x: auto;
+      background: #0f172a;
+      color: #e5eefc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .split > div {
+      padding: 18px;
+    }
+
+    .split > div:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .rules {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <h1>karpathy-thinkings</h1>
+        <p class="sub">Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 전용 스킬</p>
+      </div>
+      <div class="pair" aria-label="skill file pair">
+        <strong>skills/karpathy-thinkings/</strong>
+        <span>SKILL.md - agent workflow</span>
+        <span>skill.html - human guide</span>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <div class="head">
+          <h2>Decision Matrix</h2>
+          <p class="note">코딩 작업에서 언제 이 사고방식을 강하게 적용할지 판단합니다.</p>
+        </div>
+        <div class="matrix" role="list">
+          <div class="cell" style="background: var(--ok-soft)">
+            <strong>Use</strong>
+            <p>구현, 디버깅, 리팩터링, 리뷰처럼 코드 변경의 판단 품질이 중요한 작업.</p>
+          </div>
+          <div class="cell" style="background: var(--accent-soft)">
+            <strong>Intensify</strong>
+            <p>요구사항이 애매하거나 기존 코드와 충돌하거나 검증 기준이 흐릿한 작업.</p>
+          </div>
+          <div class="cell" style="background: var(--warn-soft)">
+            <strong>Ask</strong>
+            <p>두 해석이 서로 다른 구현을 만들면 추측하지 말고 짧게 확인합니다.</p>
+          </div>
+          <div class="cell" style="background: var(--danger-soft)">
+            <strong>Skip</strong>
+            <p>문서 동기화, 스킬 업데이트, 커밋처럼 더 구체적인 repo 스킬이 직접 커버하는 경우.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Four Principles</h2>
+          <p class="note">Karpathy식 사고의 네 축을 구현 행동으로 압축했습니다.</p>
+        </div>
+        <div class="principles">
+          <div class="principle">
+            <span class="num">1</span>
+            <h3>Think Before Coding</h3>
+            <p>모호함, 가정, tradeoff를 먼저 드러내고 구현이 갈리는 질문은 확인합니다.</p>
+          </div>
+          <div class="principle">
+            <span class="num">2</span>
+            <h3>Simplicity First</h3>
+            <p>가장 작은 boring solution을 고르고 speculative abstraction을 만들지 않습니다.</p>
+          </div>
+          <div class="principle">
+            <span class="num">3</span>
+            <h3>Surgical Changes</h3>
+            <p>요청과 연결된 파일과 줄만 건드리고 주변 개선은 별도 이슈로 남깁니다.</p>
+          </div>
+          <div class="principle">
+            <span class="num">4</span>
+            <h3>Goal-Driven Execution</h3>
+            <p>성공 기준을 정하고 최소 검증 루프를 돌린 뒤 완료를 보고합니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Workflow</h2>
+          <p class="note">작게 생각하고, 작게 고치고, 확인 가능한 기준으로 끝냅니다.</p>
+        </div>
+        <div class="visual">
+          <svg viewBox="0 0 1040 300" role="img" aria-label="karpathy-thinkings workflow">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L9,3 L0,6 Z" fill="#2563eb"></path>
+              </marker>
+            </defs>
+            <rect x="18" y="42" width="150" height="82" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+            <rect x="210" y="42" width="150" height="82" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <rect x="402" y="42" width="150" height="82" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
+            <rect x="594" y="42" width="150" height="82" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
+            <rect x="786" y="42" width="150" height="82" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <path d="M168 83 H204" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+            <path d="M360 83 H396" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+            <path d="M552 83 H588" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+            <path d="M744 83 H780" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
+            <g font-size="13" font-weight="800" fill="#111827" text-anchor="middle">
+              <text x="93" y="76">Restate Goal</text>
+              <text x="285" y="76">Find Ambiguity</text>
+              <text x="477" y="76">Inspect Code</text>
+              <text x="669" y="76">Surgical Edit</text>
+              <text x="861" y="76">Verify</text>
+            </g>
+            <g font-size="12" fill="#4b5563" text-anchor="middle">
+              <text x="93" y="100">성공 기준</text>
+              <text x="285" y="100">가정/질문</text>
+              <text x="477" y="100">관련 범위만</text>
+              <text x="669" y="100">최소 변경</text>
+              <text x="861" y="100">테스트/빌드</text>
+            </g>
+            <path d="M285 124 V196 H669 V132" fill="none" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5"></path>
+            <rect x="376" y="196" width="202" height="58" rx="8" fill="#fff7ed" stroke="#a16207"></rect>
+            <text x="477" y="224" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">ask if implementation changes</text>
+            <text x="477" y="244" text-anchor="middle" font-size="12" fill="#4b5563">추측으로 코드 쓰지 않기</text>
+          </svg>
+        </div>
+      </section>
+
+      <div class="two">
+        <section>
+          <div class="head">
+            <h2>Risk Meter</h2>
+            <p class="note">위험이 높을수록 질문과 검증을 더 강하게 적용합니다.</p>
+          </div>
+          <div class="risk">
+            <div class="risk-row"><span>Ambiguous goal</span><div class="track"><div class="fill" style="width:96%; background:var(--danger)"></div></div><span>ask</span></div>
+            <div class="risk-row"><span>Bug fix</span><div class="track"><div class="fill" style="width:86%; background:var(--warn)"></div></div><span>repro</span></div>
+            <div class="risk-row"><span>Refactor</span><div class="track"><div class="fill" style="width:80%; background:var(--warn)"></div></div><span>guard</span></div>
+            <div class="risk-row"><span>Small edit</span><div class="track"><div class="fill" style="width:42%"></div></div><span>check</span></div>
+            <div class="risk-row"><span>Cosmetic</span><div class="track"><div class="fill" style="width:22%; background:var(--ok)"></div></div><span>light</span></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="head">
+            <h2>Input / Output</h2>
+            <p class="note">요청을 검증 가능한 작은 변경으로 바꿉니다.</p>
+          </div>
+          <div class="io">
+            <div class="box">
+              <h3>Input</h3>
+              <ul>
+                <li>코딩/디버깅/리팩터링 요청</li>
+                <li>기존 코드와 테스트</li>
+                <li>모호한 요구사항</li>
+                <li>검증 가능한 기대 결과</li>
+              </ul>
+            </div>
+            <div class="arrow">→</div>
+            <div class="box">
+              <h3>Output</h3>
+              <ul>
+                <li>명시된 가정</li>
+                <li>최소 구현</li>
+                <li>관련 범위만 수정</li>
+                <li>검증 결과와 남은 불확실성</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section>
+        <div class="head">
+          <h2>Resource Map</h2>
+          <p class="note">원칙은 SKILL.md에, 출처와 업데이트 기준은 reference에 둡니다.</p>
+        </div>
+        <div class="resources">
+          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, four principles, workflow, final report</span></a>
+          <a class="file" href="references/source-notes.md"><strong>source-notes</strong><span>unofficial source context and adaptation rules</span></a>
+          <a class="file" href="scripts/validate-karpathy-thinkings.ts"><strong>validator</strong><span>static checks for this skill</span></a>
+          <a class="file" href="../../project-snippets/karpathy-thinkings.md"><strong>project-snippets/karpathy-thinkings.md</strong><span>portable project connection block</span></a>
+          <a class="file" href="../atomic-committer/SKILL.md"><strong>atomic-committer</strong><span>commit only when requested</span></a>
+          <a class="file" href="../skill-update/SKILL.md"><strong>skill-update</strong><span>use for skill maintenance work</span></a>
+        </div>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Project Connection</h2>
+          <p class="note">코딩 품질을 강하게 제어하고 싶은 프로젝트에 붙입니다.</p>
+        </div>
+        <pre class="snippet">## Project Skills
+
+- Use $karpathy-thinkings at &lt;skills-root&gt;/skills/karpathy-thinkings/SKILL.md when coding, reviewing, refactoring, debugging, or planning implementation work that should follow Karpathy-style agent discipline: think before coding, keep solutions simple, make surgical changes, and verify success criteria.
+
+## Project-Specific Overrides
+
+- Do not silently assume ambiguous requirements; ask when the answer changes the implementation.
+- Prefer the smallest boring implementation that satisfies the current goal.
+- Touch only files and lines connected to the task.
+- Define and run the smallest meaningful verification before calling the work done.</pre>
+      </section>
+
+      <section>
+        <div class="split">
+          <div>
+            <h2>Do</h2>
+            <ul class="rules">
+              <li>구현 전 성공 기준과 가정을 드러냅니다.</li>
+              <li>요청 범위와 기존 스타일을 우선합니다.</li>
+              <li>작게 고치고 작게 검증합니다.</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Do Not</h2>
+            <ul class="rules">
+              <li>애매한 요구를 추측으로 확정하지 않습니다.</li>
+              <li>필요 없는 추상화와 설정을 만들지 않습니다.</li>
+              <li>주변 코드를 조용히 리팩터링하지 않습니다.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
