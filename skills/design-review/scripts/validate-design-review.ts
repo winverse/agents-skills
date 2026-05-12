@@ -18,26 +18,25 @@ for (const file of [
   "SKILL.md",
   "skill.html",
   "agents/openai.yaml",
-  "references/interline-design-review.md",
+  "references/design-review-criteria.md",
 ]) {
   if (!exists(file)) failures.push(`Missing required file: ${file}`);
 }
 
 const skill = exists("SKILL.md") ? read("SKILL.md") : "";
-const reference = exists("references/interline-design-review.md")
-  ? read("references/interline-design-review.md")
+const reference = exists("references/design-review-criteria.md")
+  ? read("references/design-review-criteria.md")
   : "";
 const html = exists("skill.html") ? read("skill.html") : "";
 
 for (const term of [
-  "Interline",
-  "quiet, operational UI",
+  "general UI review criteria",
+  "existing design system",
+  "product domain",
   "8px",
   "letter spacing",
   "browser-qa",
   "responsive",
-  "Section Study",
-  "Chunking Level",
 ]) {
   if (!skill.toLowerCase().includes(term.toLowerCase())) {
     failures.push(`SKILL.md missing term: ${term}`);
@@ -45,30 +44,27 @@ for (const term of [
 }
 
 for (const term of [
-  "Core Taste",
-  "Tokens To Prefer",
+  "Review Model",
+  "Product Context Matrix",
+  "Default Taste Profile",
+  "Token Baseline",
+  "Domain Fit",
   "Typography",
   "Controls And States",
-  "Interline Product Screens",
-  "Interline Implementation Cues",
-  "Library",
-  "Book Detail",
-  "Section Study",
-  "Chunking Level",
-  "Book Cover",
-  "Coolicons",
-  "Motion for React",
+  "Accessibility",
+  "Responsive Strategy",
+  "Evidence Boundaries",
 ]) {
-  if (!reference.includes(term)) failures.push(`interline-design-review.md missing section: ${term}`);
+  if (!reference.includes(term)) failures.push(`design-review-criteria.md missing section: ${term}`);
 }
 
-for (const term of ["사용 판단", "리뷰 흐름", "Interline 화면별 체크", "Section Study", "Chunking Level", "파일 관계", "품질 게이트", "금지와 허용"]) {
+for (const term of ["사용 판단", "리뷰 흐름", "범용 리뷰 체크", "제품 도메인", "디자인 시스템", "파일 관계", "품질 게이트", "금지와 허용"]) {
   if (!html.includes(term)) failures.push(`skill.html missing visible section: ${term}`);
 }
 
 for (const [name, content] of [
   ["SKILL.md", skill],
-  ["interline-design-review.md", reference],
+  ["design-review-criteria.md", reference],
   ["skill.html", html],
 ] as const) {
   if (/\/Users\/|\/home\/|\/private\/tmp|Desktop\/skills/.test(content)) {

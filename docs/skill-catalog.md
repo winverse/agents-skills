@@ -63,7 +63,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | `browser-qa` | 브라우저 runtime evidence로 렌더링, console, network, accessibility snapshot, viewport, text overflow를 확인한다. | [SKILL.md](../skills/browser-qa/SKILL.md) · [skill.html](../skills/browser-qa/skill.html) |
 | `code-review` | Findings-first 방식으로 버그, 회귀, 누락 테스트, SRP/SOLID, JS/TS 스타일 위험을 검토한다. | [SKILL.md](../skills/code-review/SKILL.md) · [skill.html](../skills/code-review/skill.html) |
-| `design-review` | Interline 기준으로 UI hierarchy, density, typography, state, accessibility, responsive order를 리뷰한다. | [SKILL.md](../skills/design-review/SKILL.md) · [skill.html](../skills/design-review/skill.html) |
+| `design-review` | 제품 도메인과 기존 디자인 시스템을 우선해 UI hierarchy, density, typography, state, accessibility, responsive order를 리뷰한다. | [SKILL.md](../skills/design-review/SKILL.md) · [skill.html](../skills/design-review/skill.html) |
 
 ## 보는 방법
 

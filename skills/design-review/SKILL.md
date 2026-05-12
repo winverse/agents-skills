@@ -1,15 +1,13 @@
 ---
 name: design-review
-description: Use when the user asks for design review, UI review, visual critique, layout critique, interaction critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, product surface polish, or Interline-style design judgment. This skill applies the local Interline design preferences and reports concrete design findings without replacing browser runtime QA.
+description: Use when the user asks for design review, UI review, visual critique, layout critique, interaction critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, product surface polish, or product-aware design judgment. This skill applies general UI review criteria across repositories, respects the target project's existing design system first, and uses the local quiet operational taste only as a fallback profile.
 ---
 
 # Design Review
 
-Use this skill to review UI quality and design fit. It focuses on visual hierarchy, density, spacing, typography, color, layout stability, states, accessibility, interaction affordances, and whether the interface matches the product's domain.
+Use this skill to review UI quality and design fit across product, SaaS, dashboard, content, commerce, docs, tool, game, and internal application repos. It focuses on visual hierarchy, density, spacing, typography, color, layout stability, states, accessibility, interaction affordances, and whether the interface matches the product domain.
 
-Read `references/interline-design-review.md` before reviewing UI that should follow the local Interline design taste.
-
-For the Interline study app itself, apply the product-specific screen checks in that reference. They cover `Library`, `Book Detail`, `Section Study`, `Book Cover`, `Chunking Level`, `Study Settings`, `Sentence List`, disclosure states, icon family, motion, and asset behavior from the local design source.
+Read `references/design-review-criteria.md` for broad reviews, for any repo without a clear local design guide, or when the user asks for a thorough pass. If the target project has its own design system, product docs, screenshots, component library, or brand rules, treat those as the first source of truth.
 
 ## Boundaries
 
@@ -17,11 +15,13 @@ For the Interline study app itself, apply the product-specific screen checks in 
 - Use `browser-qa` for runtime proof: console, network, screenshots, actual overlap, broken links, and responsive rendering.
 - Use `code-review` for implementation quality.
 - If screenshots or browser evidence are missing and the review depends on rendering, request or run `browser-qa` first when practical.
+- Do not import project-specific screen rules from another repo. Put project-only design rules in that project's instructions or overrides, not in this shared skill.
 
 ## Review Principles
 
-- Prefer quiet, operational UI over marketing-style composition.
-- Favor dense but readable layouts for repeated work.
+- Respect the existing design system, brand, component library, and product domain before applying a default taste profile.
+- Prefer quiet, operational UI for SaaS, admin, docs, developer tools, and repeated-work surfaces.
+- Allow more expressive visuals for marketing, editorial, games, portfolios, or brand-heavy pages when that matches the product.
 - Avoid oversized hero sections, decorative gradients, orbs, bokeh, nested cards, and card-heavy page sections unless the product context clearly needs them.
 - Keep card radius at 8px or less unless the existing design system requires otherwise.
 - Use stable dimensions for fixed-format controls, lists, panels, diagrams, covers, and toolbars.
@@ -35,6 +35,7 @@ For the Interline study app itself, apply the product-specific screen checks in 
 1. Identify the surface, user task, audience, and design system in force.
 2. Collect evidence: screenshots, browser view, component file, design doc, or rendered HTML.
 3. Review in this order:
+   - product domain fit and intended user task;
    - information hierarchy and task flow;
    - layout grid, density, spacing, and stable dimensions;
    - typography, line height, wrapping, and Korean/English mixed text;
@@ -68,3 +69,4 @@ Severity order: `Blocker`, `High`, `Medium`, `Low`, `Note`.
 - Do not turn operational apps into landing pages.
 - Do not hide real workflow complexity behind decorative cards.
 - Do not make claims about actual browser behavior without runtime evidence.
+- Do not apply one project's screen-specific rules to another repo.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Design Review"
-  short_description: "Interline-style UI and visual design critique"
-  default_prompt: "Use $design-review to critique this UI for Interline design fit, hierarchy, density, typography, layout stability, controls, states, accessibility, responsive behavior, and visual polish. Pair with $browser-qa when runtime evidence is needed."
+  short_description: "Product-aware UI and visual design critique"
+  default_prompt: "Use $design-review to critique this UI for product-domain fit, existing design-system consistency, hierarchy, density, typography, layout stability, controls, states, accessibility, responsive behavior, and visual polish. Pair with $browser-qa when runtime evidence is needed."

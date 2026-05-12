@@ -35,7 +35,7 @@
     <header>
       <div>
         <h1>design-review</h1>
-        <p>Interline 취향과 화면별 규칙을 기준으로 정보 위계, 밀도, 타이포그래피, 안정적 레이아웃, 상태와 접근성을 검토하는 디자인 리뷰 스킬.</p>
+        <p>기존 디자인 시스템과 제품 도메인을 우선해 정보 위계, 밀도, 타이포그래피, 안정적 레이아웃, 상태와 접근성을 검토하는 범용 디자인 리뷰 스킬.</p>
       </div>
       <div class="pair">
         <span><strong>에이전트</strong><a href="SKILL.md">SKILL.md</a></span>
@@ -47,7 +47,7 @@
       <h2>사용 판단 매트릭스</h2>
       <div class="matrix">
         <div class="cell"><span class="tag ok">사용</span><h3>UI 품질 판단</h3><p>hierarchy, density, spacing, typography, color, states, responsive order를 본다.</p></div>
-        <div class="cell"><span class="tag accent">Interline</span><h3>조용한 운영 UI</h3><p>절제된 색, 얕은 border, 8px 이하 radius, stable dimensions를 선호한다.</p></div>
+        <div class="cell"><span class="tag accent">맥락</span><h3>제품 도메인 적합성</h3><p>SaaS, docs, commerce, marketing, game 등 제품 유형에 맞는 화면인지 본다.</p></div>
         <div class="cell"><span class="tag warn">함께 사용</span><h3>브라우저 증거</h3><p>실제 렌더링, console, network 문제는 browser-qa와 함께 확인한다.</p></div>
         <div class="cell"><span class="tag danger">건너뜀</span><h3>구현 리뷰</h3><p>코드 구조, 테스트, 보안은 code-review로 넘긴다.</p></div>
       </div>
@@ -73,17 +73,17 @@
       <h2>입출력 스키마</h2>
       <div class="grid3">
         <div class="cell"><h3>입력</h3><ul><li>screenshot/browser view</li><li>surface와 사용자 task</li><li>design-system context</li></ul></div>
-        <div class="cell"><h3>리뷰 축</h3><ul><li>hierarchy/density</li><li>typography/color</li><li>states/responsive</li><li>Interline screen rules</li></ul></div>
+        <div class="cell"><h3>리뷰 축</h3><ul><li>domain fit</li><li>hierarchy/density</li><li>typography/color</li><li>states/responsive</li></ul></div>
         <div class="cell"><h3>출력</h3><ul><li>severity design findings</li><li>visual evidence</li><li>browser-qa follow-up</li></ul></div>
       </div>
     </section>
 
     <section>
-      <h2>Interline 화면별 체크</h2>
+      <h2>범용 리뷰 체크</h2>
       <div class="grid3">
-        <div class="cell"><h3>Library / Book Detail</h3><ul><li>Book Series 우선</li><li>Book Cover 고정 비율</li><li>Section List와 cover 분리</li></ul></div>
-        <div class="cell"><h3>Section Study</h3><ul><li>desktop: Sentence List | Study Panel | Study Settings</li><li>mobile: Study Panel 먼저</li><li>Book Translation/Vocabulary Note는 disclosure</li></ul></div>
-        <div class="cell"><h3>Controls / Motion</h3><ul><li>Chunking Level은 실제 select</li><li>Coolicons family 일관성</li><li>Motion for React는 짧고 안정적으로</li></ul></div>
+        <div class="cell"><h3>제품 유형</h3><ul><li>운영 도구는 dense and predictable</li><li>문서/콘텐츠는 readability 우선</li><li>마케팅/게임은 더 표현적일 수 있음</li></ul></div>
+        <div class="cell"><h3>디자인 시스템</h3><ul><li>기존 token/component 우선</li><li>icon family와 motion 규칙 일관성</li><li>fallback taste는 보수적으로 적용</li></ul></div>
+        <div class="cell"><h3>상태와 반응형</h3><ul><li>loading/empty/error/disabled/focus</li><li>mobile은 primary task 우선</li><li>긴 텍스트와 badge overflow 확인</li></ul></div>
       </div>
     </section>
 
@@ -94,7 +94,7 @@
 ├── SKILL.md
 ├── skill.html
 ├── agents/openai.yaml
-├── references/interline-design-review.md
+├── references/design-review-criteria.md
 └── scripts/validate-design-review.ts</div>
         <div class="cell"><h3>프로젝트 연결 조각</h3><p><a href="../../project-snippets/design-review.md">project-snippets/design-review.md</a>가 외부 프로젝트 연결 문구를 제공한다.</p></div>
       </div>
@@ -111,8 +111,8 @@ node scripts/validate-skill-repo.ts .</pre>
     <section>
       <h2>금지와 허용</h2>
       <div class="grid2">
-        <div class="cell"><span class="tag ok">허용</span><ul><li>정보 위계와 반복 작업 효율을 먼저 본다.</li><li>Interline 기준과 화면별 규칙을 적용한다.</li><li>렌더링 의존 판단은 browser-qa 증거를 요구한다.</li></ul></div>
-        <div class="cell"><span class="tag danger">금지</span><ul><li>운영 UI를 landing page처럼 만들라고 하지 않는다.</li><li>decorative gradients/orbs/bokeh를 권하지 않는다.</li><li>브라우저 동작을 증거 없이 단정하지 않는다.</li></ul></div>
+        <div class="cell"><span class="tag ok">허용</span><ul><li>기존 디자인 시스템과 제품 도메인을 먼저 본다.</li><li>프로젝트 규칙이 없을 때만 fallback taste를 적용한다.</li><li>렌더링 의존 판단은 browser-qa 증거를 요구한다.</li></ul></div>
+        <div class="cell"><span class="tag danger">금지</span><ul><li>한 프로젝트의 화면 규칙을 다른 repo에 강요하지 않는다.</li><li>decorative gradients/orbs/bokeh를 무조건 권하지 않는다.</li><li>브라우저 동작을 증거 없이 단정하지 않는다.</li></ul></div>
       </div>
     </section>
   </main>
