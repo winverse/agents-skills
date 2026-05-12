@@ -1,0 +1,92 @@
+[
+  {
+    "id": "output-code-review-findings-first",
+    "title": "Code review answers lead with findings",
+    "prompt": "이 diff를 코드 리뷰해줘",
+    "scope": "output_quality",
+    "expectedSkills": ["code-review"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/code-review/SKILL.md",
+        "value": "Findings lead"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/code-review/SKILL.md",
+        "value": "file and line"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/code-review/SKILL.md",
+        "value": "If there are no findings"
+      }
+    ]
+  },
+  {
+    "id": "output-web-research-citations-and-dates",
+    "title": "Web research answers include links and exact dates",
+    "prompt": "최신 OpenAI agent eval 문서를 조사해서 추천해줘",
+    "scope": "output_quality",
+    "expectedSkills": ["web-research"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
+        "value": "Include links to sources used"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
+        "value": "Use exact dates"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/references/structured-search.md",
+        "value": "Source Ledger"
+      }
+    ]
+  },
+  {
+    "id": "output-agent-eval-harness-baseline-report",
+    "title": "Harness setup reports path, command, CI mode, and baseline",
+    "prompt": "초기 에이전트 eval harness를 깔고 결과를 요약해줘",
+    "scope": "output_quality",
+    "expectedSkills": ["agent-eval-harness"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "Harness"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "Baseline"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "Next Cases"
+      }
+    ]
+  }
+]

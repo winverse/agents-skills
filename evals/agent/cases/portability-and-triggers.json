@@ -1,0 +1,67 @@
+[
+  {
+    "id": "portability-cross-agent-surfaces",
+    "title": "Harness checks portable instruction surfaces without treating them as equivalent",
+    "prompt": "Codex, Claude, Copilot, Cursor, Windsurf에서 스킬 연결이 잘 되는지 eval로 확인해줘",
+    "scope": "cross_agent_portability",
+    "expectedSkills": ["agent-eval-harness"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex", "claude-code", "copilot", "cursor", "windsurf"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "edge",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "Cross-agent portability"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/references/harness-blueprint.md",
+        "value": ".github/copilot-instructions.md"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/references/harness-blueprint.md",
+        "value": ".cursor/rules"
+      },
+      {
+        "type": "required_text",
+        "file": "docs/agent-compatibility.md",
+        "value": "Do not assume identical scope or precedence across agents."
+      }
+    ]
+  },
+  {
+    "id": "trigger-quality-positive-near-miss-forbidden",
+    "title": "Routing evals cover positive, near-miss, forbidden-skill, and shortened descriptions",
+    "prompt": "스킬 description이 줄어들어도 올바른 스킬이 선택되는지 확인해줘",
+    "scope": "trigger_quality",
+    "expectedSkills": ["agent-eval-harness"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex", "claude-code"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "adversarial",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "positive, near-miss, and forbidden-skill prompts"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/references/harness-blueprint.md",
+        "value": "shortened-description cases"
+      },
+      {
+        "type": "required_text",
+        "file": "scripts/run-agent-evals.ts",
+        "value": "trigger_quality"
+      }
+    ]
+  }
+]

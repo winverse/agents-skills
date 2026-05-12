@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>workflow 작업 흐름</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --muted-surface: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --accent: #2563eb;
+      --ok: #1f7a52;
+      --warn: #a16207;
+      --danger: #b42318;
+      --ink: #0f172a;
+    }
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+    * { box-sizing: border-box; }
+    .shell { width: 100%; max-width: 1192px; margin: 0 auto; padding: 32px; }
+    header, section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 18px; }
+    header { display: grid; grid-template-columns: 1fr 330px; gap: 18px; align-items: start; }
+    h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.2; letter-spacing: 0; }
+    h2 { margin: 0 0 14px; font-size: 18px; letter-spacing: 0; }
+    h3 { margin: 0 0 8px; font-size: 15px; letter-spacing: 0; }
+    p { margin: 0; color: var(--muted); }
+    a { color: var(--accent); overflow-wrap: anywhere; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+    pre, .tree { margin: 0; padding: 14px; background: var(--ink); color: #e5e7eb; border-radius: 8px; overflow-x: auto; white-space: pre; }
+    ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+    li + li { margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--muted-surface); font-size: 12px; color: var(--text); }
+    td { color: var(--muted); }
+    .pair, .cell { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 14px; min-width: 0; }
+    .pair { background: var(--muted-surface); display: grid; gap: 8px; }
+    .pair span { display: flex; justify-content: space-between; gap: 14px; color: var(--muted); }
+    .matrix { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .tag { display: inline-block; margin-bottom: 8px; padding: 2px 8px; border: 1px solid currentColor; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+    .accent { color: var(--accent); }
+    .flow, .map, .bars { width: 100%; border: 1px solid var(--border); border-radius: 8px; background: var(--muted-surface); }
+    .flow { height: 284px; }
+    .map { height: 250px; }
+    .bars { height: 214px; }
+    .note { margin-top: 10px; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>workflow 작업 흐름</h1>
+        <p>아이디어를 바로 코드로 보내지 않고 domain language, ADR, office-hours 제품 검증, PRD, issue, mockup 선택, TDD, QA, document sync, ship 순서로 안전하게 진행하는 프로젝트 workflow 스킬.</p>
+      </div>
+      <div class="pair">
+        <span><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></span>
+        <span><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></span>
+        <span><strong>상세 playbook</strong><a href="references/project-workflow-playbook.md">project-workflow-playbook.md</a></span>
+        <span><strong>업스트림 맵</strong><a href="references/upstream-dependency-map.md">upstream-dependency-map.md</a></span>
+        <span><strong>프로젝트 연결</strong><a href="../../project-snippets/workflow.md">project-snippets/workflow.md</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>사용 판단 매트릭스</h2>
+      <div class="matrix">
+        <div class="cell"><span class="tag ok">사용</span><h3>새 프로젝트</h3><p>아이디어를 제품 언어, ADR, PRD, vertical issue로 바꿔야 할 때.</p></div>
+        <div class="cell"><span class="tag ok">사용</span><h3>새 feature</h3><p>기존 docs를 읽고 다음 workflow 단계와 산출물을 정해야 할 때.</p></div>
+        <div class="cell"><span class="tag warn">함께 사용</span><h3>구조/리서치</h3><p>stack 구조는 domain language 이후 `project-structure`로 검증하고, 최신 외부 사실은 `web-research`로 확인한다.</p></div>
+        <div class="cell"><span class="tag danger">건너뜀</span><h3>작은 코드 수정</h3><p>이미 issue와 plan이 명확한 단순 버그 수정은 직접 구현 스킬이 더 낫다.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>원본 호출 순서</h2>
+      <table aria-label="source workflow direct skill order">
+        <thead>
+          <tr><th>구간</th><th>호출 skill</th><th>역할</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td><code>setup-matt-pocock-skills</code></td><td>repo 규칙, issue tracker, triage label, domain doc 위치를 만든다.</td></tr>
+          <tr><td>1</td><td><code>grill-me</code> 또는 <code>grill-with-docs</code></td><td>도메인 언어, 제품 흐름, canonical term, 첫 usable slice를 뽑는다.</td></tr>
+          <tr><td>2</td><td><code>grill-with-docs</code>, 필요하면 <code>plan-eng-review</code></td><td>기술 스택, app boundary, persistence, test strategy를 ADR로 고정한다.</td></tr>
+          <tr><td>3-7</td><td><code>office-hours</code> -> <code>plan-ceo-review</code> -> <code>to-prd</code> -> <code>to-issues</code> -> <code>triage</code></td><td>제품 검증, PRD, vertical issue, ready 상태를 만든다.</td></tr>
+          <tr><td>8-10</td><td><code>brainstorming</code> -> <code>writing-plans</code> -> <code>plan-eng-review</code></td><td>구현 spec, TDD plan, engineering lock을 만든다.</td></tr>
+          <tr><td>11</td><td><code>plan-design-review</code>, <code>design-consultation</code> 또는 <code>design-shotgun</code></td><td>UI가 있으면 mockup 선택과 design.md 반영을 먼저 한다.</td></tr>
+          <tr><td>12-16</td><td><code>subagent-driven-development</code> + <code>tdd</code> -> <code>review</code>/<code>qa</code>/<code>diagnose</code> -> <code>document-sync</code> -> <code>improve-codebase-architecture</code> -> <code>semantic-commits</code>/<code>ship</code></td><td>TDD 구현, 검증, 문서 동기화, 구조 개선, commit/ship을 처리한다.</td></tr>
+        </tbody>
+      </table>
+      <p class="note">이 repo의 `workflow` 스킬은 위 이름을 숨기지 않는다. 설치되어 있으면 해당 skill을 직접 호출하고, 없으면 같은 역할을 fallback으로 수행한다.</p>
+    </section>
+
+    <section>
+      <h2>의존 스킬 확인</h2>
+      <table aria-label="workflow dependency inventory">
+        <thead>
+          <tr><th>묶음</th><th>대표 skill</th><th>사용 구간</th><th>없을 때</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Matt Pocock</td><td><code>setup-matt-pocock-skills</code>, <code>grill-me</code>, <code>grill-with-docs</code>, <code>to-prd</code>, <code>to-issues</code></td><td>setup, domain, PRD, issue, review, 문서/구조 정리</td><td>설치/연결 여부를 묻거나 fallback을 명시한다.</td></tr>
+          <tr><td>GStack</td><td><code>office-hours</code>, <code>plan-ceo-review</code></td><td>제품 검증, scope 제거, MVP 압축</td><td>제품 검증 질문을 fallback으로 실행했다고 표시한다.</td></tr>
+          <tr><td>Superpowers</td><td><code>brainstorming</code>, <code>writing-plans</code>, <code>plan-eng-review</code>, <code>subagent-driven-development</code>, <code>tdd</code></td><td>구현 spec, TDD plan, plan review, subagent TDD</td><td>manual plan/TDD fallback임을 표시한다.</td></tr>
+          <tr><td>Design</td><td><code>design-consultation</code>, <code>design-shotgun</code>, <code>design-review</code>, <code>browser-qa</code></td><td>mockup 방향, 사용자가 선택할 UI 안, 브라우저 증거</td><td>2-3개 mock 방향을 만들고 선택 결과를 문서화한다.</td></tr>
+        </tbody>
+      </table>
+      <p class="note">workflow 실행 전 각 묶음을 `available`, `missing`, `fallback`으로 표시한다. 없는 스킬을 사용했다고 말하지 않는다.</p>
+    </section>
+
+    <section>
+      <h2>업스트림 추적</h2>
+      <div class="grid2">
+        <div class="cell">
+          <h3>업데이트를 따라가는 방법</h3>
+          <ul>
+            <li>원본 skill이 바뀌면 먼저 해당 <code>SKILL.md</code>를 다시 읽는다.</li>
+            <li><code>workflow</code>에는 전체 내용을 복사하지 않고 handoff, 순서, 산출물, validator만 갱신한다.</li>
+            <li>출처 묶음은 <code>mattpocock/skills</code>, <code>garrytan/gstack</code>, Superpowers local skills로 기록한다.</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>방향 우선</h3>
+          <ul>
+            <li>도메인과 제품 판단을 건너뛰고 빠르게 구현하지 않는다.</li>
+            <li>PRD 전에는 <code>office-hours</code>와 CEO/spec review를 거친다.</li>
+            <li>큰 UI는 <code>design.md</code>, plan review, mockup 선택 전에는 구현하지 않는다.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">자세한 추적 표와 중복 방지 기준은 <a href="references/upstream-dependency-map.md">upstream-dependency-map.md</a>에 둔다.</p>
+    </section>
+
+    <section>
+      <h2>기본 흐름</h2>
+      <svg class="flow" viewBox="0 0 1080 284" role="img" aria-label="workflow 기본 흐름">
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
+        <rect x="24" y="44" width="135" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="91" y="75" text-anchor="middle" font-size="13" font-weight="700">도메인 언어</text><text x="91" y="96" text-anchor="middle" font-size="12" fill="#6b7280">CONTEXT</text>
+        <line x1="159" y1="79" x2="209" y2="79" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="212" y="44" width="135" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="279" y="75" text-anchor="middle" font-size="13" font-weight="700">기술 결정</text><text x="279" y="96" text-anchor="middle" font-size="12" fill="#6b7280">ADR</text>
+        <line x1="347" y1="79" x2="397" y2="79" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="400" y="44" width="135" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="467" y="75" text-anchor="middle" font-size="13" font-weight="700">제품 검증</text><text x="467" y="96" text-anchor="middle" font-size="12" fill="#6b7280">office-hours</text>
+        <line x1="535" y1="79" x2="585" y2="79" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="588" y="44" width="135" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="655" y="75" text-anchor="middle" font-size="13" font-weight="700">PRD</text><text x="655" y="96" text-anchor="middle" font-size="12" fill="#6b7280">요구사항</text>
+        <line x1="723" y1="79" x2="773" y2="79" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="776" y="44" width="135" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="843" y="75" text-anchor="middle" font-size="13" font-weight="700">vertical issue</text><text x="843" y="96" text-anchor="middle" font-size="12" fill="#6b7280">분류</text>
+        <path d="M843 114 V154 H89 V184" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
+        <rect x="24" y="184" width="130" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="89" y="208" text-anchor="middle" font-size="12" font-weight="700">구현 brainstorming</text><text x="89" y="230" text-anchor="middle" font-size="12" fill="#6b7280">행동/파일/테스트</text>
+        <line x1="154" y1="219" x2="199" y2="219" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="202" y="184" width="130" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="267" y="208" text-anchor="middle" font-size="12" font-weight="700">plan review</text><text x="267" y="230" text-anchor="middle" font-size="12" fill="#6b7280">eng lock</text>
+        <line x1="332" y1="219" x2="377" y2="219" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="380" y="184" width="130" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="445" y="208" text-anchor="middle" font-size="12" font-weight="700">mockup 선택</text><text x="445" y="230" text-anchor="middle" font-size="12" fill="#6b7280">2-3안 비교</text>
+        <line x1="510" y1="219" x2="555" y2="219" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="558" y="184" width="130" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="623" y="208" text-anchor="middle" font-size="12" font-weight="700">TDD 구현</text><text x="623" y="230" text-anchor="middle" font-size="12" fill="#6b7280">RED/GREEN</text>
+        <line x1="688" y1="219" x2="733" y2="219" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="736" y="184" width="130" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="801" y="208" text-anchor="middle" font-size="12" font-weight="700">review / QA</text><text x="801" y="230" text-anchor="middle" font-size="12" fill="#6b7280">증거</text>
+        <line x1="866" y1="219" x2="911" y2="219" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="914" y="184" width="130" height="70" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="979" y="208" text-anchor="middle" font-size="12" font-weight="700">문서 동기화</text><text x="979" y="230" text-anchor="middle" font-size="12" fill="#6b7280">출시</text>
+      </svg>
+      <div class="grid2" style="margin-top:14px;">
+        <div class="cell"><span class="tag warn">구조 handoff</span><h3>project-structure 시점</h3><p>raw idea 단계에서는 부르지 않는다. domain language와 architecture 질문이 구체화된 뒤 folder/env/codegen/db/infra 구조를 검토하고 ADR에 기록한다.</p></div>
+        <div class="cell"><span class="tag accent">eval seed</span><h3>agent-eval-harness 시점</h3><p>workflow routing, dependency inventory, project-structure timing, PRD 설정, mockup 선택, document sync, artifact hygiene를 별도 case로 남긴다.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>입출력 스키마</h2>
+      <div class="grid3">
+        <div class="cell"><h3>입력</h3><ul><li>아이디어나 feature 요청</li><li>기존 docs, ADR, issue, plan</li><li>현재 code/test/UI evidence</li></ul></div>
+        <div class="cell"><h3>판단</h3><ul><li>현재 mode 선택</li><li>authority docs 확인</li><li>다음 산출물 하나로 좁힘</li></ul></div>
+        <div class="cell"><h3>출력</h3><ul><li>다음 workflow step</li><li>만들거나 갱신할 파일</li><li>검증 command와 done 조건</li></ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>중복 방지 흐름</h2>
+      <div class="grid3">
+        <div class="cell"><span class="tag ok">제품 검증</span><h3>office-hours</h3><p>누가 원하는지, 지금 해결 방식은 무엇인지, 가장 작은 useful slice와 제거할 범위를 정한다.</p></div>
+        <div class="cell"><span class="tag warn">구현 설계</span><h3>brainstorming</h3><p>triage된 issue 하나의 behavior, file boundary, UI state, test boundary를 좁힌다.</p></div>
+        <div class="cell"><span class="tag accent">UI 선택</span><h3>mockup 선택</h3><p>2-3개 화면 방향을 비교하고 사용자가 고른 방향을 `design.md`와 issue/spec에 기록한다.</p></div>
+      </div>
+      <p class="note">같은 “브레인스토밍”이라도 제품 검증, 구현 설계, UI 시안 선택은 서로 대체하지 않는다.</p>
+    </section>
+
+    <section>
+      <h2>PRD 설정</h2>
+      <div class="grid2">
+        <div class="cell">
+          <h3>쓰기 전 고정</h3>
+          <ul>
+            <li>경로: <code>.scratch/&lt;feature-slug&gt;/PRD.md</code></li>
+            <li>입력: <code>CONTEXT.md</code>, <code>docs/adr/</code>, <code>office-hours</code>, <code>plan-ceo-review</code>, 관련 <code>specs/</code></li>
+            <li>언어: 한국어 설명, code-facing canonical term은 영어</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>검증 기준</h3>
+          <ul>
+            <li>첫 usable slice가 한 문장으로 보인다.</li>
+            <li>포함 범위와 제외 범위가 분리된다.</li>
+            <li>stack과 app boundary는 ADR을 참조한다.</li>
+            <li>data source of truth가 명확하다.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note"><code>to-prd</code>는 자유 요약이 아니라 위 설정을 잠근 뒤 실행한다. 입력 문서가 충돌하면 PRD를 쓰기 전에 사용자에게 묻는다.</p>
+    </section>
+
+    <section>
+      <h2>에이전트 adapter 확인</h2>
+      <table aria-label="cross-agent adapter surface">
+        <thead>
+          <tr><th>런타임</th><th>지속 지시문 위치</th><th>확인할 것</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Codex</td><td><code>AGENTS.md</code>, <code>SKILL.md</code>, hooks, subagents</td><td>skill이 보이는지, hook 승인이 필요한지, subagent가 명시 요청인지 확인한다.</td></tr>
+          <tr><td>Claude</td><td><code>CLAUDE.md</code>, <code>.claude/rules/</code>, hooks, subagents</td><td>project/local memory 범위와 hook event가 실제 의도한 시점에 맞는지 확인한다.</td></tr>
+          <tr><td>Cursor</td><td><code>.cursor/rules/*.mdc</code>, <code>AGENTS.md</code></td><td>always, auto attached, agent requested, manual 중 어떤 방식으로 붙는지 확인한다.</td></tr>
+          <tr><td>Windsurf</td><td><code>AGENTS.md</code>, <code>.windsurf/rules/</code>, workflows, skills</td><td>rules, workflows, skills, memories 중 재사용 목적에 맞는 표면을 고른다.</td></tr>
+          <tr><td>Copilot</td><td><code>.github/copilot-instructions.md</code></td><td>짧고 독립적인 repo instruction으로 유지하고 review 제한을 고려한다.</td></tr>
+        </tbody>
+      </table>
+      <p class="note">외부 런타임 동작에 의존하면 공식 문서를 확인하고 `checked: YYYY-MM-DD`를 workflow log에 남긴다.</p>
+    </section>
+
+    <section>
+      <h2>파일 관계 지도</h2>
+      <div class="grid2">
+        <div class="tree">skills/workflow/
+├── SKILL.md
+├── skill.html
+├── agents/openai.yaml
+├── references/
+│   ├── project-workflow-playbook.md
+│   └── upstream-dependency-map.md
+└── scripts/
+    └── validate-workflow.ts</div>
+        <svg class="map" viewBox="0 0 520 250" role="img" aria-label="workflow 산출물 관계 지도">
+          <rect x="28" y="24" width="150" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="103" y="54" text-anchor="middle" font-size="13" font-weight="700">CONTEXT.md</text>
+          <rect x="28" y="100" width="150" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="103" y="130" text-anchor="middle" font-size="13" font-weight="700">docs/adr</text>
+          <rect x="28" y="176" width="150" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="103" y="206" text-anchor="middle" font-size="13" font-weight="700">design.md</text>
+          <rect x="314" y="24" width="170" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="399" y="54" text-anchor="middle" font-size="13" font-weight="700">PRD.md</text>
+          <rect x="314" y="100" width="170" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="399" y="130" text-anchor="middle" font-size="13" font-weight="700">issues / plans</text>
+          <rect x="314" y="176" width="170" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="399" y="206" text-anchor="middle" font-size="13" font-weight="700">WORKFLOW_LOG</text>
+          <line x1="178" y1="48" x2="314" y2="48" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="178" y1="124" x2="314" y2="124" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="178" y1="200" x2="314" y2="200" stroke="#2563eb" stroke-width="2"></line>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>품질 게이트</h2>
+      <svg class="bars" viewBox="0 0 1080 214" role="img" aria-label="workflow 품질 게이트">
+        <line x1="275" y1="36" x2="275" y2="178" stroke="#d1d5db"></line>
+        <line x1="275" y1="178" x2="1015" y2="178" stroke="#d1d5db"></line>
+        <text x="36" y="64" font-size="13" font-weight="700">도메인/ADR 정합성</text><rect x="275" y="46" width="680" height="24" fill="#2563eb"></rect>
+        <text x="36" y="102" font-size="13" font-weight="700">vertical issue 여부</text><rect x="275" y="84" width="610" height="24" fill="#1f7a52"></rect>
+        <text x="36" y="140" font-size="13" font-weight="700">TDD와 역할 분리</text><rect x="275" y="122" width="555" height="24" fill="#a16207"></rect>
+        <text x="36" y="178" font-size="13" font-weight="700">QA와 document sync</text><rect x="275" y="160" width="510" height="24" fill="#6b7280"></rect>
+      </svg>
+      <p class="note">완료 선언은 code가 아니라 PRD/ADR/issue/test/UI evidence/docs가 같은 말을 할 때 가능하다.</p>
+    </section>
+
+    <section>
+      <h2>검증 명령</h2>
+      <pre>node scripts/validate-skill.ts skills/workflow
+node skills/workflow/scripts/validate-workflow.ts skills/workflow
+node scripts/validate-skill-html.ts .
+node scripts/validate-skill-repo.ts .</pre>
+    </section>
+
+    <section>
+      <h2>금지와 허용</h2>
+      <div class="grid2">
+        <div class="cell"><span class="tag ok">허용</span><ul><li>다음 workflow step을 하나로 좁힌다.</li><li>missing source of truth는 질문으로 막는다.</li><li>오래된 plan은 보존하고 현재 truth는 docs/log에 남긴다.</li></ul></div>
+        <div class="cell"><span class="tag danger">금지</span><ul><li>아이디어 단계에서 바로 코드부터 작성하지 않는다.</li><li>DB-only, API-only, UI-only issue를 기본값으로 만들지 않는다.</li><li>검증 산출물을 repo root에 흩뿌리지 않는다.</li></ul></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,17 @@
+## Project Skill: Agent Eval Harness
+
+- Use $agent-eval-harness at `<skills-root>/skills/agent-eval-harness/SKILL.md` when asked to set up, scaffold, configure, or improve an evaluation harness for agent skills, agent instructions, prompt routing, cross-agent portability, tool choice, guardrails, artifact hygiene, or repeatable AI-agent workflows.
+
+## Agent Eval Harness Overrides
+
+- Start with a small repo-local harness before adding external eval platforms.
+- Put durable cases under `evals/agent/cases/` and fixtures under `evals/agent/fixtures/` unless the project already has an eval convention.
+- Prefer deterministic checks first: expected skill, forbidden skill, required output sections, required citations or file references, approval gates, and validator command results.
+- Define success criteria before writing cases, then cover typical, edge, and adversarial examples.
+- Add cross-agent portability cases when instructions are shared across Codex, Claude, Copilot, Cursor, Windsurf, or other agents; record `agentSurfaces` and `assumptionDate` for those cases.
+- Include a minimum safety pack for tool-enabled agents: approval gates, destructive command avoidance, prompt injection/tool misuse, secret/private-data redaction, least privilege, and high-risk blocking promotion.
+- Scrub saved outputs, traces, screenshots, logs, CI reports, and exported artifacts before committing them; keep raw live artifacts ignored unless intentionally reviewed as golden fixtures.
+- Keep live model/API calls advisory until budget, secrets, retry policy, and flake handling are explicit.
+- Calibrate model-graded checks against human review, edge cases, and repeat/variance evidence before making them blocking.
+- Convert real agent failures into the smallest reproducing regression case before broadening instructions.
+- When called from `workflow`, keep the harness as a separate validation layer and seed cases for workflow routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, document sync, and artifact hygiene. A pre-workflow bootstrap harness should stay limited to routing, safety, and artifact policy until workflow artifacts exist.

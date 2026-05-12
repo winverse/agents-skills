@@ -1,0 +1,87 @@
+[
+  {
+    "id": "workflow-new-project-routing",
+    "title": "New project flow routes through workflow before specialist skills",
+    "prompt": "새 프로젝트를 시작하려고 해. 구조도 잡고 PRD도 만들고 구현까지 진행해줘.",
+    "scope": "workflow",
+    "expectedSkills": ["workflow"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex", "claude-code"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "workflow",
+        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/workflow/SKILL.md",
+        "value": "Use `project-structure` only after domain language"
+      }
+    ]
+  },
+  {
+    "id": "workflow-project-structure-timing",
+    "title": "Project structure is called after domain context and before ADR or PRD lock",
+    "prompt": "아이디어 단계인데 바로 Next.js/NestJS 모노레포 구조부터 만들어줘.",
+    "scope": "workflow",
+    "expectedSkills": ["workflow", "project-structure"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex", "claude-code"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "edge",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/workflow/references/project-workflow-playbook.md",
+        "value": "Project Structure Handoff"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/workflow/references/project-workflow-playbook.md",
+        "value": "Do not use `project-structure` during raw idea discovery"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/workflow/skill.html",
+        "value": "구조 handoff"
+      }
+    ]
+  },
+  {
+    "id": "workflow-agent-eval-handoff-seeds",
+    "title": "Workflow hands repeatable behavior checks to agent-eval-harness",
+    "prompt": "workflow가 앞으로 계속 잘 호출되는지 하네스로 검증되게 해줘.",
+    "scope": "workflow",
+    "expectedSkills": ["workflow", "agent-eval-harness"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex", "claude-code"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/workflow/references/project-workflow-playbook.md",
+        "value": "Agent Eval Handoff"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "Workflow Handoff Seed Cases"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/skill.html",
+        "value": "project-structure timing"
+      }
+    ]
+  }
+]

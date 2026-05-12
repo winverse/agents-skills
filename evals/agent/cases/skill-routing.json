@@ -1,0 +1,122 @@
+[
+  {
+    "id": "route-current-facts-to-web-research",
+    "title": "Current source-backed research uses web-research",
+    "prompt": "웹 서치 기술을 사용해서 최신 MCP 보안 가이드를 조사해줘",
+    "scope": "skill_invocation",
+    "expectedSkills": ["web-research"],
+    "forbiddenSkills": ["browser-qa"],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "web-research",
+        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
+        "value": "current facts"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
+        "value": "parallel sub-agent fan-out"
+      }
+    ]
+  },
+  {
+    "id": "route-rendering-check-to-browser-qa",
+    "title": "Browser runtime verification uses browser-qa",
+    "prompt": "skill.html 렌더링을 Playwright로 확인하고 콘솔 오류를 봐줘",
+    "scope": "skill_invocation",
+    "expectedSkills": ["browser-qa"],
+    "forbiddenSkills": ["design-review"],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "browser-qa",
+        "files": ["AGENTS.md", "project-snippets/base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/browser-qa/SKILL.md",
+        "value": "Playwright"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/browser-qa/SKILL.md",
+        "value": "console"
+      }
+    ]
+  },
+  {
+    "id": "route-ui-critique-to-design-review",
+    "title": "UI critique uses design-review",
+    "prompt": "이 화면의 디자인 시스템 적합성과 시각 위계를 리뷰해줘",
+    "scope": "skill_invocation",
+    "expectedSkills": ["design-review"],
+    "forbiddenSkills": ["browser-qa"],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "design-review",
+        "files": ["AGENTS.md", "project-snippets/base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/design-review/SKILL.md",
+        "value": "design-system fit"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/design-review/SKILL.md",
+        "value": "product-aware design judgment"
+      }
+    ]
+  },
+  {
+    "id": "route-harness-setup-to-agent-eval-harness",
+    "title": "Initial eval setup uses agent-eval-harness",
+    "prompt": "이 repo에 에이전트 평가 하네스를 처음 세팅해줘",
+    "scope": "skill_invocation",
+    "expectedSkills": ["agent-eval-harness"],
+    "forbiddenSkills": ["agent-improvement-loop"],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "agent-eval-harness",
+        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "evals/agent/cases/*.json"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/references/harness-blueprint.md",
+        "value": "Saved-output mode"
+      }
+    ]
+  }
+]
