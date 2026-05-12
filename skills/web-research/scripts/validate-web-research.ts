@@ -57,6 +57,8 @@ if (!/^description:\s*["'].+["']/m.test(skill)) {
 const requiredSkillTerms = [
   "research budget",
   "query fan-out",
+  "parallel sub-agent fan-out",
+  "default parallel sub-agent fan-out",
   "citation ledger",
   "evidence scoring",
   "extraction",
@@ -74,6 +76,7 @@ for (const term of requiredSkillTerms) {
 const requiredStructuredHeadings = [
   "## Research Budget Router",
   "## Query Fan-Out",
+  "## Default Parallel Sub-Agent Fan-Out",
   "## Stop Rules",
   "## Extraction Layer",
   "## Source Ledger",
@@ -89,8 +92,10 @@ for (const heading of requiredStructuredHeadings) {
 }
 
 const requiredHtmlTerms = [
-  "Agentic research loop",
+  "에이전트 조사 루프",
   "query fan-out",
+  "병렬 하위 에이전트 분기",
+  "runtime이 허용하면 기본 사용",
   "source ledger",
   "safety boundary",
   "fan-out / ledger",

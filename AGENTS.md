@@ -14,6 +14,7 @@ This repo stores custom agent skills that are applied manually per project. The 
 
 These repo-local links make the skills usable for this project without installing them globally.
 
+- Use $show-skills at `skills/show-skills/SKILL.md` when asked to see, list, browse, summarize, choose, compare, or discover the current skills in this repository, or when asked which skill to use for a task.
 - Use $web-research at `skills/web-research/SKILL.md` when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 - Use $skill-to-html at `skills/skill-to-html/SKILL.md` whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich `skill.html` beside `SKILL.md`.
 - Use $karpathy-thinkings at `skills/karpathy-thinkings/SKILL.md` when coding, reviewing, refactoring, debugging, or planning implementation work that should follow Karpathy-style agent discipline.
@@ -21,17 +22,29 @@ These repo-local links make the skills usable for this project without installin
 - Use $atomic-committer at `skills/atomic-committer/SKILL.md` when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
 - Use $project-structure at `skills/project-structure/SKILL.md` when asked to choose, create, standardize, or refactor frontend, backend, full-stack monorepo, or desktop app folder structures.
 - Use $sync-docs at `skills/sync-docs/SKILL.md` when asked to review, refresh, reconcile, or update documentation by comparing existing docs, snippets, history, skills, and repo instruction files.
+- Use $cmux-automation at `skills/cmux-automation/SKILL.md` when asked to automate, configure, debug, or document cmux workflows, including cmux hooks, Codex/Claude/OpenCode integrations, prompt-to-tab or prompt-to-status pinning, workspace/tab/pane/status automation, feed workflows, browser surfaces, or cmux CLI-driven session ergonomics.
+- Use $agent-improvement-loop at `skills/agent-improvement-loop/SKILL.md` when asked to use spare token or context budget productively, improve agent skill usage, make skills easier to invoke, add or review validators, align documentation with source files, create self-improvement loops, or raise repo quality through tests, hooks, docs, evals, and review automation.
+- Use $browser-qa at `skills/browser-qa/SKILL.md` when asked to verify browser runtime behavior, Playwright checks, screenshots, console or network output, accessibility snapshots, broken links, responsive layout, text overlap, or `skill.html` rendering.
+- Use $code-review at `skills/code-review/SKILL.md` when asked for code review, PR review, diff review, implementation audit, regression risk review, missing test review, maintainability review, or JS/TS style review.
+- Use $design-review at `skills/design-review/SKILL.md` when asked for design review, UI review, visual critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, or Interline-style design judgment.
 
 ## Project Skill Overrides
 
 - Use repo-linked custom skills before default/global agent behavior when the behavior overlaps.
+- When using `show-skills`, prefer `node skills/show-skills/scripts/show-skills.ts` for the live list and `docs/skill-catalog.md` for the static human catalog; do not install or globally register skills while listing them.
+- When using `web-research` for verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation. Fall back to main-agent query fan-out for quick checks, private data, or runtime/tool policy limits.
 - When using `karpathy-thinkings`, think before coding, avoid silent assumptions, prefer simple implementations, make surgical changes, and verify success criteria.
-- When using `atomic-committer`, group dirty files by logical changeset, write commit messages with an English conventional prefix and Korean summary, and push only when a remote exists and push was requested.
+- When using `atomic-committer`, scan candidate commits for forbidden secret-bearing content, hard-block live-looking credential assignments and private-key material across common providers, group dirty files by logical changeset, write commit messages with an English conventional prefix and Korean summary, and push only when a remote exists and push was requested.
 - When using `skill-update`, keep `SKILL.md`, references, validators, `agents/openai.yaml`, `skill.html`, snippets, docs, and history aligned when behavior changes.
 - When using `project-structure`, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL, Drizzle, Panda CSS with headless UI, Tauri, and Zod env validation unless the project says otherwise.
 - When using `project-structure`, keep app env/codegen paths consistent and place monorepo Redis boundaries in `packages/db/src/redis`, with API cache wrappers under `apps/api/src/providers/cache`.
 - When using `project-structure`, show selected test, security, health/readiness, observability, Panda CSS, GraphQL generated artifact, and Drizzle migration boundaries in the final tree.
 - When using `sync-docs`, treat current repo files as the first evidence source and ask before changing a documentation rule when the source of truth is unclear.
+- When using `cmux-automation`, prefer local cmux CLI output and `cmux docs ...`, keep hook changes project-local unless global setup is explicitly requested, and ask before installing hooks, editing socket auth, sending text to panes, closing surfaces, or clearing history.
+- When using `agent-improvement-loop`, choose the skills-repo track for skill catalogs and the general-repo track for application or library repos; before any spend-down run, ask `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`; if the answer is yes, run safe backlog items in small multi-agent batches; if no, treat token budget as a ceiling and review one lane at a time; prefer durable artifacts such as docs, validators, tests, hooks, snippets, or eval cases over chat-only advice.
+- When using `browser-qa`, keep the review grounded in observed browser evidence and do not enter secrets, payment data, or destructive live actions.
+- When using `code-review`, lead with findings and file/line references; for JS/TS prefer clear functional collection style where it improves clarity, without forcing it over simpler loops.
+- When using `design-review`, apply the Interline preference for quiet operational UI, restrained color, shallow borders, stable dimensions, 8px-or-less radius, no decorative orbs/gradients/bokeh, and no nested cards.
 - When using `skill-creator`, run `skill-to-html` immediately afterward for the same skill folder.
 
 ## Structure

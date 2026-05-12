@@ -46,6 +46,10 @@ if (!/^name:\s*atomic-committer/m.test(skill)) {
 
 for (const term of [
   "logical changeset",
+  "forbidden content",
+  "live-looking credential assignments",
+  "placeholder",
+  "hard-block",
   "English conventional prefix",
   "Korean",
   "Push only",
@@ -62,12 +66,41 @@ for (const type of ["feat", "fix", "docs", "chore"]) {
 
 for (const term of [
   "Atomic Committer",
+  "비밀값 검사",
+  "live-looking credential assignments",
+  "AWS_ACCESS_KEY=...",
+  "OpenAI",
+  "DB URL",
+  "강제 차단",
+  "forbidden-content scan",
   "작업 단위",
   "영어 prefix + 한글 메시지",
   "remote 있을 때만 push",
   "파일 관계도",
 ]) {
   if (!html.includes(term)) fail(`skill.html missing visible term: ${term}`);
+}
+
+for (const term of [
+  "Forbidden Content Triage",
+  "git diff --cached -U0 --no-ext-diff",
+  "AWS_ACCESS_KEY=...",
+  "OPENAI_API_KEY",
+  "DATABASE_URL",
+  "placeholder",
+  "live-looking",
+  "cannot be overridden",
+]) {
+  if (!rules.includes(term)) fail(`grouping-rules.md missing guard term: ${term}`);
+}
+
+for (const term of [
+  "live-looking credential assignments",
+  "AWS_ACCESS_KEY=...",
+  "forbidden content",
+]) {
+  const snippet = fs.readFileSync(path.join(repoRoot, "project-snippets/atomic-committer.md"), "utf8");
+  if (!snippet.includes(term)) fail(`project snippet missing guard term: ${term}`);
 }
 
 for (const [name, content] of [

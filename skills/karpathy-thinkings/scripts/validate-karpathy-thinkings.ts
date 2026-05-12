@@ -59,11 +59,11 @@ for (const phrase of [
 }
 
 for (const phrase of [
-  "Decision Matrix",
-  "Four Principles",
-  "Workflow",
-  "Risk Meter",
-  "Resource Map",
+  "사용 판단 매트릭스",
+  "네 가지 원칙",
+  "실행 흐름",
+  "위험도 막대",
+  "파일 관계 지도",
   "project-snippets/karpathy-thinkings.md",
 ]) {
   requireSkillText("skill.html", phrase, `HTML section ${phrase}`);

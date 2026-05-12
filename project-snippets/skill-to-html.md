@@ -7,4 +7,7 @@
 - Run this immediately after `skill-creator` initializes or updates a skill.
 - Do not accept a `skill.html` that only partitions text into cards.
 - Prefer decision matrices, flowcharts, ranked charts, resource maps, and input/output schemas.
+- Keep skill explanations consistent across skills: purpose, use/skip, workflow, inputs/outputs, resources, validation, and misuse guardrails.
+- Use Korean-first visible labels in `skill.html`; keep English only for normal coding terms, exact file names, commands, products, protocols, libraries, or copyable instruction snippets.
+- Follow the Interline-style visual rules: quiet operational UI, shallow borders, restrained color, stable dimensions, no decorative hero treatment, and dark surfaces only for code or terminal snippets.
 - Verify the HTML visually in a PC desktop viewport when practical.

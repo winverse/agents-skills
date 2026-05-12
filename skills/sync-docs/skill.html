@@ -323,7 +323,7 @@
       </div>
       <div class="pair" aria-label="skill file pair">
         <strong>skills/sync-docs/</strong>
-        <span>SKILL.md - agent workflow</span>
+        <span>SKILL.md - 에이전트 흐름</span>
         <span>skill.html - human guide</span>
       </div>
     </header>
@@ -331,24 +331,24 @@
     <main>
       <section>
         <div class="head">
-          <h2>Decision Matrix</h2>
+          <h2>사용 판단 매트릭스</h2>
           <p class="note">문서 변경 요청을 받았을 때 바로 수정할지, 비교할지, 질문할지 판단합니다.</p>
         </div>
         <div class="matrix" role="list">
           <div class="cell" style="background: var(--ok-soft)">
-            <strong>Use</strong>
+            <strong>사용</strong>
             <p>README, AGENTS, docs, snippets, history, skill guide가 서로 맞는지 검토하거나 최신화할 때.</p>
           </div>
           <div class="cell" style="background: var(--accent-soft)">
-            <strong>Compare</strong>
+            <strong>비교</strong>
             <p>스킬 목록, 경로, validator 명령, hook 설명, lifecycle state가 여러 문서에 반복될 때.</p>
           </div>
           <div class="cell" style="background: var(--warn-soft)">
-            <strong>Ask</strong>
+            <strong>확인 필요</strong>
             <p>두 문서가 서로 다른 선호를 말하고 현재 repo만으로 source of truth를 정할 수 없을 때.</p>
           </div>
           <div class="cell" style="background: var(--danger-soft)">
-            <strong>Skip</strong>
+            <strong>건너뜀</strong>
             <p>문서가 아니라 코드 설계 자체를 정해야 하거나, 외부 최신 사실 조사가 핵심이면 다른 스킬과 조합합니다.</p>
           </div>
         </div>
@@ -356,7 +356,7 @@
 
       <section>
         <div class="head">
-          <h2>Workflow</h2>
+          <h2>실행 흐름</h2>
           <p class="note">먼저 현황을 모으고, claim 단위로 source of truth를 정한 뒤 확실한 mismatch만 고칩니다.</p>
         </div>
         <div class="visual">
@@ -376,11 +376,11 @@
             <path d="M602 82 H640" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
             <path d="M814 82 H852" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
             <g font-size="14" font-weight="800" fill="#111827" text-anchor="middle">
-              <text x="94" y="71">Inventory</text>
-              <text x="306" y="71">Claim Ledger</text>
-              <text x="518" y="71">Resolve or Ask</text>
-              <text x="730" y="71">Patch Docs</text>
-              <text x="942" y="71">Validate</text>
+              <text x="94" y="71">문서 목록</text>
+              <text x="306" y="71">주장 기록</text>
+              <text x="518" y="71">해결 또는 질문</text>
+              <text x="730" y="71">문서 수정</text>
+              <text x="942" y="71">검증</text>
             </g>
             <g font-size="12" fill="#4b5563" text-anchor="middle">
               <text x="94" y="96">files, status, rg</text>
@@ -405,7 +405,7 @@
       <div class="two">
         <section>
           <div class="head">
-            <h2>Conflict Priority Chart</h2>
+            <h2>충돌 우선순위 차트</h2>
             <p class="note">위에 있을수록 먼저 고칩니다.</p>
           </div>
           <div class="visual">
@@ -426,7 +426,7 @@
               </g>
               <g font-size="12" font-weight="800" fill="#111827">
                 <text x="485" y="42">critical</text>
-                <text x="450" y="90">high</text>
+                <text x="450" y="90">중요</text>
                 <text x="420" y="138">medium</text>
                 <text x="378" y="186">medium</text>
                 <text x="282" y="234">low</text>
@@ -437,12 +437,12 @@
 
         <section>
           <div class="head">
-            <h2>Input / Output Schema</h2>
+            <h2>입출력 스키마</h2>
             <p class="note">입력은 문서 묶음, 출력은 수정과 질문, 검증 결과입니다.</p>
           </div>
           <div class="io">
             <div class="box">
-              <h3>Input</h3>
+              <h3>입력</h3>
               <ul>
                 <li>문서 최신화 요청</li>
                 <li>README, AGENTS, docs</li>
@@ -453,7 +453,7 @@
             </div>
             <div class="arrow">→</div>
             <div class="box">
-              <h3>Output</h3>
+              <h3>출력</h3>
               <ul>
                 <li>확실한 stale 문서 수정</li>
                 <li>충돌 claim과 source of truth 정리</li>
@@ -468,22 +468,22 @@
 
       <section>
         <div class="head">
-          <h2>Resource Map</h2>
+          <h2>파일 관계 지도</h2>
           <p class="note">스킬 본문은 짧게 두고, 반복 audit 기준은 reference와 validator에 둡니다.</p>
         </div>
         <div class="resources">
-          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, workflow, ask rule, output shape</span></a>
-          <a class="file" href="references/doc-audit-checklist.md"><strong>doc-audit-checklist</strong><span>inventory, claim ledger, conflict taxonomy</span></a>
-          <a class="file" href="scripts/validate-sync-docs.ts"><strong>validator</strong><span>static checks for this skill</span></a>
-          <a class="file" href="../../project-snippets/sync-docs.md"><strong>project-snippets/sync-docs.md</strong><span>portable project connection block</span></a>
-          <a class="file" href="../../README.md"><strong>README.md</strong><span>public skill catalog source</span></a>
-          <a class="file" href="../../history/skills.md"><strong>history/skills.md</strong><span>durable lifecycle ledger</span></a>
+          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, 실행 흐름, 질문 규칙, 출력 형태</span></a>
+          <a class="file" href="references/doc-audit-checklist.md"><strong>doc-audit-checklist</strong><span>inventory, claim ledger, 충돌 분류</span></a>
+          <a class="file" href="scripts/validate-sync-docs.ts"><strong>검증기</strong><span>정적 검사</span></a>
+          <a class="file" href="../../project-snippets/sync-docs.md"><strong>project-snippets/sync-docs.md</strong><span>프로젝트 연결 블록</span></a>
+          <a class="file" href="../../README.md"><strong>README.md</strong><span>공개 스킬 목록 기준</span></a>
+          <a class="file" href="../../history/skills.md"><strong>history/skills.md</strong><span>영구 lifecycle 기록</span></a>
         </div>
       </section>
 
       <section>
         <div class="head">
-          <h2>Project Connection</h2>
+          <h2>프로젝트 연결</h2>
           <p class="note">프로젝트 instruction 파일에 필요한 경우만 붙입니다.</p>
         </div>
         <pre class="snippet">## Project Skills
@@ -500,7 +500,7 @@
       <section>
         <div class="split">
           <div>
-            <h2>Do</h2>
+            <h2>허용</h2>
             <ul class="rules">
               <li>문서끼리 먼저 비교하고 claim ledger로 판단합니다.</li>
               <li>확실한 stale 경로, 명령, 스킬 목록은 바로 고칩니다.</li>
@@ -508,7 +508,7 @@
             </ul>
           </div>
           <div>
-            <h2>Do Not</h2>
+            <h2>금지</h2>
             <ul class="rules">
               <li>애매한 선호 충돌을 임의로 결정하지 않습니다.</li>
               <li>history ledger를 임시 검사 메모처럼 바꾸지 않습니다.</li>

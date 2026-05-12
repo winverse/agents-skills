@@ -43,6 +43,8 @@ const requiredSkillPhrases = [
   "GraphQL Codegen Contract",
   "Testing shape",
   "health/readiness",
+  "security",
+  "observability",
   "Verification Checklist",
 ];
 
@@ -104,20 +106,20 @@ for (const [name, text, phrases] of [
 }
 
 const htmlRequired = [
-  "Decision Matrix",
-  "Wizard Flow",
-  "Compact Menus",
-  "Default Stack",
-  "Folder Structure Trees",
-  "Frontend web tree",
-  "Backend API tree",
-  "Full-stack monorepo package boundary",
-  "Desktop app tree",
-  "Env Contract",
-  "GraphQL Codegen Contract",
-  "Structure Verification",
-  "Resource Map",
-  "Do / Don't",
+  "사용 판단 매트릭스",
+  "질문 흐름",
+  "선택 메뉴",
+  "기본 스택",
+  "폴더 구조 트리",
+  "프론트엔드 web 트리",
+  "백엔드 API 트리",
+  "풀스택 모노레포 package 경계",
+  "데스크톱 앱 트리",
+  "env 계약",
+  "GraphQL codegen 계약",
+  "구조 검증",
+  "파일 관계 지도",
+  "금지와 허용",
   "중복 folder 역할을 최소화",
   "folder 규칙을 지켰는지 검증",
 ];
@@ -125,6 +127,18 @@ const htmlRequired = [
 for (const phrase of htmlRequired) {
   if (!html.includes(phrase)) {
     errors.push(`skill.html missing visual section: ${phrase}`);
+  }
+}
+
+for (const menuPhrase of ["API contract", "DB", "Cache", "Auth", "Generated artifacts", "Desktop shell"]) {
+  if (!skill.includes(menuPhrase)) {
+    errors.push(`SKILL.md missing compact menu phrase: ${menuPhrase}`);
+  }
+}
+
+for (const menuPhrase of ["API 계약", "DB", "캐시", "인증", "생성 산출물", "데스크톱 shell"]) {
+  if (!html.includes(menuPhrase)) {
+    errors.push(`skill.html missing compact menu phrase: ${menuPhrase}`);
   }
 }
 

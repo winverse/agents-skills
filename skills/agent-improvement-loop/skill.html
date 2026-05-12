@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>agent-improvement-loop</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --accent: #2563eb;
+      --ok: #1f7a52;
+      --warn: #a16207;
+      --danger: #b42318;
+      --ink: #0f172a;
+    }
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+    * { box-sizing: border-box; }
+    .shell {
+      width: 100%;
+      max-width: 1192px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    header {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 20px;
+      align-items: start;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 22px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    p { margin: 0; color: var(--muted); }
+    a { color: var(--accent); overflow-wrap: anywhere; }
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      margin: 0;
+      padding: 14px;
+      background: var(--ink);
+      color: #e5e7eb;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    section {
+      margin-top: 18px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .file-pair {
+      display: grid;
+      gap: 8px;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .file-pair span {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+    }
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .cell {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 120px;
+      background: var(--surface);
+    }
+    .tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+    .accent { color: var(--accent); }
+    .flow {
+      width: 100%;
+      height: 220px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+    }
+    .schema {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .schema ul,
+    .lanes ul,
+    .guard ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .lanes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .bars {
+      display: grid;
+      gap: 10px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 90px;
+      gap: 10px;
+      align-items: center;
+    }
+    .bar-track {
+      height: 18px;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+    }
+    .map {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .tree {
+      background: var(--ink);
+      color: #e5e7eb;
+      border-radius: 8px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .guard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .note {
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      background: var(--surface-muted);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>agent-improvement-loop</h1>
+        <p>남은 토큰 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 staged ceiling review를 수행하는 루프 스킬.</p>
+      </div>
+      <div class="file-pair" aria-label="file pair">
+        <span><strong>에이전트</strong><a href="SKILL.md">SKILL.md</a></span>
+        <span><strong>사용자</strong><a href="skill.html">skill.html</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>사용 판단 매트릭스</h2>
+      <div class="matrix">
+        <div class="cell">
+          <span class="tag ok">사용</span>
+          <h3>남은 토큰 활용 여부를 정할 때</h3>
+          <p>먼저 예/아니오로 확인한 뒤 spend-down 또는 ceiling mode로 문서, 테스트, validator, hook, eval, skill trigger를 개선한다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag accent">분기</span>
+          <h3>저장소 성격이 다를 때</h3>
+          <p>skills repo track과 general repo track 중 현재 파일 구조에 맞춰 분기한다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag warn">확인 필요</span>
+          <h3>정책 변경이 필요할 때</h3>
+          <p>skill split, global install, broad rewrite, 삭제성 정리는 사용자에게 묻는다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag danger">건너뜀</span>
+          <h3>확인 없는 자동 소진일 때</h3>
+          <p>사용자 동의 없는 대량 리팩터링, 외부 OSS issue 양산, chat-only 조언은 피한다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>루프 실행 흐름</h2>
+      <svg class="flow" viewBox="0 0 1080 220" role="img" aria-label="workflow">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+          </marker>
+        </defs>
+        <rect x="24" y="60" width="150" height="78" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="99" y="92" text-anchor="middle" font-size="14" font-weight="700">1. 현황 확인</text>
+        <text x="99" y="116" text-anchor="middle" font-size="12" fill="#6b7280">상태 + 문서</text>
+        <line x1="174" y1="99" x2="236" y2="99" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="238" y="60" width="150" height="78" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="313" y="92" text-anchor="middle" font-size="14" font-weight="700">2. 분류</text>
+        <text x="313" y="116" text-anchor="middle" font-size="12" fill="#6b7280">스킬/일반 repo</text>
+        <line x1="388" y1="99" x2="450" y2="99" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="452" y="60" width="176" height="78" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="540" y="92" text-anchor="middle" font-size="14" font-weight="700">3. 검토 경로</text>
+        <text x="540" y="116" text-anchor="middle" font-size="12" fill="#6b7280">단계별 multi-agent</text>
+        <line x1="628" y1="99" x2="690" y2="99" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="692" y="60" width="150" height="78" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="767" y="92" text-anchor="middle" font-size="14" font-weight="700">4. 수정</text>
+        <text x="767" y="116" text-anchor="middle" font-size="12" fill="#6b7280">작고 유지되는 수정</text>
+        <line x1="842" y1="99" x2="904" y2="99" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="906" y="60" width="150" height="78" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="981" y="92" text-anchor="middle" font-size="14" font-weight="700">5. 검증</text>
+        <text x="981" y="116" text-anchor="middle" font-size="12" fill="#6b7280">테스트 + 보고</text>
+      </svg>
+    </section>
+
+    <section>
+      <h2>예/아니오 판단</h2>
+      <div class="schema">
+        <div class="cell">
+          <span class="tag warn">질문</span>
+          <h3>남은 토큰을 최대한 사용할까요?</h3>
+          <p><code>남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)</code>를 한 번 묻는다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag ok">예</span>
+          <h3>토큰 소진 모드</h3>
+          <p>안전한 backlog를 작은 multi-agent batch로 처리한다. 문서 동기화, validator/eval 보강, smoke check처럼 되돌리기 쉬운 작업만 고른다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag accent">아니오</span>
+          <h3>상한 유지 모드</h3>
+          <p>토큰을 목표치가 아니라 상한선으로 두고, 한 lane씩 검토한 뒤 다음 lane의 가치가 낮으면 멈춘다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>입출력 스키마</h2>
+      <div class="schema">
+        <div class="cell">
+          <h3>입력</h3>
+          <ul>
+            <li>남는 토큰 사용 요청</li>
+            <li>스킬 호출성 개선 요청</li>
+            <li>repo 품질 개선 요청</li>
+            <li>문서/검증 불일치 의심</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>읽기</h3>
+          <ul>
+            <li>AGENTS / README / docs</li>
+            <li>skills / snippets / history</li>
+            <li>tests / CI / hooks</li>
+            <li>source files and manifests</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>출력</h3>
+          <ul>
+            <li>작은 patch 또는 개선 리포트</li>
+            <li>validator, test, hook, eval</li>
+            <li>문서 정합성 수정</li>
+            <li>검증 결과와 open question</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>검토 경로 차트</h2>
+      <p style="margin-bottom: 12px;">Spend-down mode는 예라고 답했을 때만 쓰는 예외다. 기본은 staged review이며, main agent가 subagent 증거를 합친 뒤 다음 lane 진행 여부를 결정한다.</p>
+      <div class="bars" aria-label="priority chart">
+        <div class="bar-row"><strong>호출</strong><div class="bar-track"><div class="bar-fill" style="width: 95%"></div></div><span>호출 조건</span></div>
+        <div class="bar-row"><strong>검증</strong><div class="bar-track"><div class="bar-fill" style="width: 90%"></div></div><span>검사</span></div>
+        <div class="bar-row"><strong>정합성</strong><div class="bar-track"><div class="bar-fill" style="width: 88%"></div></div><span>문서</span></div>
+        <div class="bar-row"><strong>품질</strong><div class="bar-track"><div class="bar-fill" style="width: 76%"></div></div><span>코드</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>파일 관계 지도</h2>
+      <div class="map">
+        <div class="tree">skills/agent-improvement-loop/
+├── SKILL.md
+├── skill.html
+├── agents/openai.yaml
+├── references/
+│   └── loop-checklist.md
+└── scripts/
+    └── validate-agent-improvement-loop.ts</div>
+        <div class="cell">
+          <h3>repo 연결</h3>
+          <p><a href="../../project-snippets/agent-improvement-loop.md">project-snippets/agent-improvement-loop.md</a>가 외부 프로젝트 연결 문구를 제공한다. README, AGENTS, history는 현재 skill 목록과 validator 명령을 맞춘다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>검증 게이트</h2>
+      <pre>node scripts/validate-skill.ts skills/agent-improvement-loop
+node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
+node scripts/validate-skill-html.ts .
+node scripts/validate-skill-repo.ts .</pre>
+    </section>
+
+    <section>
+      <h2>금지와 허용</h2>
+      <div class="guard">
+        <div class="cell">
+          <span class="tag ok">허용</span>
+          <ul>
+            <li>현재 repo evidence에서 시작한다.</li>
+            <li>chat-only 조언을 파일, 테스트, validator로 바꾼다.</li>
+            <li>작고 검증 가능한 변경을 선호한다.</li>
+            <li>예라고 답했을 때만 안전한 소진형 backlog를 batch 처리한다.</li>
+            <li>불명확한 source of truth는 질문한다.</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <span class="tag danger">금지</span>
+          <ul>
+            <li>남는 토큰을 이유로 대량 리팩터링하지 않는다.</li>
+            <li>예/아니오 확인 없이 spend-down을 시작하지 않는다.</li>
+            <li>전역 설치나 hook 정책을 몰래 바꾸지 않는다.</li>
+            <li>skill repo 규칙을 일반 app repo에 강요하지 않는다.</li>
+            <li>검증 없이 문서만 좋아 보이게 만들지 않는다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>프로젝트 연결 예시</h2>
+      <div class="note">외부 프로젝트에서는 snippet의 <code>&lt;skills-root&gt;</code>를 실제 clone 경로로 치환한다.</div>
+      <pre>- Use $agent-improvement-loop at &lt;skills-root&gt;/skills/agent-improvement-loop/SKILL.md when asked to use spare token or context budget productively, ask whether to use the remaining token budget before spend-down work, run staged multi-agent review, improve agent skill usage, align documentation, or raise repo quality through tests, hooks, docs, evals, and review automation.</pre>
+    </section>
+  </main>
+</body>
+</html>

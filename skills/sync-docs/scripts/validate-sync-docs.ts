@@ -45,9 +45,9 @@ requireText("SKILL.md", "documentation inventory", "inventory workflow");
 requireText("SKILL.md", "claim", "claim ledger concept");
 requireText("references/doc-audit-checklist.md", "Claim Ledger", "claim ledger checklist");
 requireText("references/doc-audit-checklist.md", "Common Conflict Types", "conflict taxonomy");
-requireText("skill.html", "Decision Matrix", "decision matrix");
-requireText("skill.html", "Workflow", "workflow diagram");
-requireText("skill.html", "Resource Map", "resource map");
+requireText("skill.html", "사용 판단 매트릭스", "decision matrix");
+requireText("skill.html", "실행 흐름", "workflow diagram");
+requireText("skill.html", "파일 관계 지도", "resource map");
 requireText("skill.html", "project-snippets/sync-docs.md", "snippet link");
 requireText("agents/openai.yaml", "Sync Docs", "display name");
 

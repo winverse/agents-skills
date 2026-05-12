@@ -1,0 +1,4 @@
+interface:
+  display_name: "Show Skills"
+  short_description: "List and explain available repo skills"
+  default_prompt: "Use $show-skills to list the current skills in this repository, group them by use case, and recommend which skill or combination to use for the user task."

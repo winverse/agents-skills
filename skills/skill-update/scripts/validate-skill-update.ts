@@ -46,10 +46,10 @@ requireSkillText("SKILL.md", "Ask", "ambiguity escalation");
 requireSkillText("references/update-checklist.md", "Package Completeness Matrix", "package matrix");
 requireSkillText("references/update-checklist.md", "Coordination Rules", "coordination rules");
 requireSkillText("references/update-checklist.md", "History Rules", "history rules");
-requireSkillText("skill.html", "Decision Matrix", "decision matrix");
-requireSkillText("skill.html", "Workflow", "workflow");
-requireSkillText("skill.html", "Package Coverage", "coverage chart");
-requireSkillText("skill.html", "Resource Map", "resource map");
+requireSkillText("skill.html", "사용 판단 매트릭스", "decision matrix");
+requireSkillText("skill.html", "실행 흐름", "workflow");
+requireSkillText("skill.html", "변경 패키지 범위", "coverage chart");
+requireSkillText("skill.html", "파일 관계 지도", "resource map");
 requireSkillText("skill.html", "project-snippets/skill-update.md", "snippet link");
 requireSkillText("agents/openai.yaml", "Skill Update", "display name");
 

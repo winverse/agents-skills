@@ -24,13 +24,19 @@ Use the smallest snippet that matches the target project and agent:
 
 - `project-snippets/base.md`: agent-neutral starter block for the current shared skills.
 - `project-snippets/claude-base.md`: Claude-oriented starter block.
+- `project-snippets/show-skills.md`: only current skill catalog browsing and skill recommendation.
 - `project-snippets/web-research.md`: only the web research skill.
 - `project-snippets/skill-to-html.md`: only the skill HTML guide workflow.
 - `project-snippets/karpathy-thinkings.md`: only Karpathy-style coding agent discipline.
 - `project-snippets/skill-update.md`: only existing skill maintenance and package sync rules.
+- `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.
+- `project-snippets/browser-qa.md`: only browser runtime evidence and Playwright QA.
+- `project-snippets/code-review.md`: only findings-first code review.
+- `project-snippets/design-review.md`: only Interline-style UI and design review.
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
 - `project-snippets/project-structure.md`: only project structure and default stack rules.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
+- `project-snippets/cmux-automation.md`: only cmux automation, prompt pinning, tab/status automation, workspace boards, feed workflows, and cmux CLI ergonomics.
 
 ## Forking Rule
 

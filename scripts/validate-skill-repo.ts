@@ -113,6 +113,8 @@ requireFile("docs/skill-inspector.md");
 requireFile("history/skills.md");
 requireFile("project-snippets/base.md");
 requireFile("project-snippets/claude-base.md");
+requireFile("scripts/validate-skill-html.ts");
+requireText("README.md", "node scripts/validate-skill-html.ts .", "common skill HTML validator command");
 
 if (nodeMajor < 22) {
   errors.push(`Node 22+ is required for direct .ts validator execution; current Node is ${process.versions.node}`);
@@ -166,6 +168,11 @@ for (const skill of skills) {
     `project-snippets/${skillName}.md`,
     `<skills-root>/${skill}/SKILL.md`,
     `skill snippet link for ${skillName}`,
+  );
+  requireText(
+    "docs/project-skill-setup.md",
+    `project-snippets/${skillName}.md`,
+    `project setup snippet source for ${skillName}`,
   );
 
   const validatorPath = `${skill}/scripts/validate-${skillName}.ts`;

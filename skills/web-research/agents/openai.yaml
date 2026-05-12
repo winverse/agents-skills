@@ -1,4 +1,4 @@
 interface:
   display_name: "Web Research"
   short_description: "Agentic source-first web research"
-  default_prompt: "Use $web-research to research this topic with query fan-out, source ledgers, evidence scoring, current sources, and citations."
+  default_prompt: "Use $web-research to research this topic with query fan-out, default parallel sub-agent fan-out when the runtime permits delegation, source ledgers, evidence scoring, current sources, and citations."

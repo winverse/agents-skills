@@ -13,9 +13,9 @@ Choose the smallest budget that can answer safely. Escalate only when the eviden
 | Budget | Use When | Search Shape | Stop Target |
 |---|---|---|---|
 | Quick check | One official/current fact settles it | 1-2 direct sources, no ledger | Official or primary source confirms the answer |
-| Verified search | Recommendation, comparison, docs, pricing, policy, or changing facts | 3-5 sources, concept blocks, light ledger | Key claims have direct evidence and dates |
-| Deep research | Broad decision, conflicting claims, market/product scan, high-impact choice | 3-7 subqueries, 5-12 sources, source ledger, counterexample search | Main alternatives and risks are covered |
-| Reproducible search | User asks for method, audit trail, or rerunnable evidence | Exact queries, filters, result counts when available, ledger summary | Another agent could rerun the search |
+| Verified search | Recommendation, comparison, docs, pricing, policy, or changing facts | 3-5 sources, concept blocks, light ledger, default parallel lanes when runtime permits | Key claims have direct evidence and dates |
+| Deep research | Broad decision, conflicting claims, market/product scan, high-impact choice | 3-7 subqueries, 5-12 sources, source ledger, counterexample search, default parallel sub-agent fan-out when runtime permits | Main alternatives and risks are covered |
+| Reproducible search | User asks for method, audit trail, or rerunnable evidence | Exact queries, filters, result counts when available, subagent assignments when used, ledger summary | Another agent could rerun the search |
 
 Escalation triggers:
 
@@ -72,6 +72,64 @@ Use separate query purposes:
 - **Extraction**: open the best pages/PDFs/docs and pull the exact fields needed.
 
 Avoid fan-out when the answer is a simple known fact or a single official page will settle the question.
+
+## Default Parallel Sub-Agent Fan-Out
+
+Parallel sub-agent fan-out is the default for verified, deep, and reproducible web research when the runtime permits delegation. Do not wait for the user to repeat "use subagents" after they ask for web research. Treat subagents as the normal execution path, and fall back to main-agent query fan-out only when a skip condition applies.
+
+Use subagents by default when all of these are true:
+
+- the active runtime permits subagent delegation,
+- the selected budget is verified, deep, or reproducible search, not a quick check,
+- there are at least two independent query lanes,
+- the main thread is not blocked on one urgent source,
+- no active system, developer, project, or tool policy requires the main agent to keep the work local,
+- no subagent needs private files, secrets, credentials, or unrelated local data.
+
+Skip subagents when any of these are true:
+
+- a single official or primary source will settle the answer,
+- the user explicitly opts out of subagents or asks for a quick answer,
+- the task is a quick check, not verified, deep, or reproducible research,
+- the search would expose sensitive local context,
+- the runtime does not support delegation or active tool policy requires explicit per-task delegation approval.
+
+Keep the main agent on the critical path. The main agent owns the question frame, source quality bar, query decomposition, final citations, conflict resolution, safety, and final answer. Subagents are sidecar researchers.
+
+Good subagent lanes:
+
+```text
+Primary-source scout: official docs, filings, standards, source repos, vendor pages
+Market/category scout: public directories, comparison pages, adoption signals
+Counterexample scout: limitations, deprecations, lawsuits, recalls, security advisories
+Technical-doc scout: changelogs, migration notes, API references, issue trackers
+Extraction scout: tables, dates, prices, version numbers, requirements, specs
+```
+
+Subagent prompt shape:
+
+```text
+Research lane:
+Question:
+Search constraints:
+Prefer:
+Avoid:
+Return only:
+- 5-8 source ledger rows
+- link, date checked, evidence date, support level, confidence, limits
+- one short note on conflicts or gaps
+Do not write the final answer.
+```
+
+Merge subagent results by claim, not by subagent. Deduplicate repeated sources, prefer primary sources, check dates, reconcile conflicts, and run one counterexample query yourself before making a high-impact recommendation.
+
+Do not use subagents for:
+
+- simple fact checks,
+- a single official page lookup,
+- tasks where the next main step depends on one urgent source,
+- sensitive local data,
+- source reading that could expose private project details.
 
 ## Stop Rules
 
@@ -185,6 +243,20 @@ Limits:
 ```
 
 The final answer does not need to show the full ledger unless the user asks, but it should reflect it. Every important claim should be traceable to at least one cited source.
+
+When subagents are used, add a lane or agent field to each row before merging:
+
+```text
+Lane:
+Claim:
+Source:
+Source type:
+Date checked:
+Evidence date:
+Support: direct | indirect | background | conflicting
+Confidence: high | medium | low
+Limits:
+```
 
 Compact ledger format for internal use:
 

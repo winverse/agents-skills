@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>show-skills</title>
+  <style>
+    :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#0f172a; }
+    html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
+    * { box-sizing:border-box; }
+    .shell { width:100%; max-width:1192px; margin:0 auto; padding:32px; }
+    header, section { margin-bottom:18px; padding:20px; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    header { display:grid; grid-template-columns:1fr 310px; gap:18px; align-items:start; }
+    h1 { margin:0 0 8px; font-size:28px; line-height:1.2; letter-spacing:0; }
+    h2 { margin:0 0 14px; font-size:18px; letter-spacing:0; }
+    h3 { margin:0 0 8px; font-size:15px; letter-spacing:0; }
+    p { margin:0; color:var(--muted); }
+    a { color:var(--accent); overflow-wrap:anywhere; }
+    code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; overflow-wrap:anywhere; }
+    pre { margin:0; padding:14px; background:var(--ink); color:#e5e7eb; border-radius:8px; overflow-x:auto; white-space:pre; }
+    .pair, .cell { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
+    .pair { display:grid; gap:8px; background:var(--muted-surface); }
+    .pair span { display:flex; justify-content:space-between; gap:14px; color:var(--muted); }
+    .matrix { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .tag { display:inline-block; margin-bottom:8px; padding:2px 8px; border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .danger { color:var(--danger); } .accent { color:var(--accent); }
+    .flow { width:100%; height:220px; border:1px solid var(--border); border-radius:8px; background:var(--muted-surface); }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    ul { margin:8px 0 0; padding-left:18px; color:var(--muted); }
+    .tree { background:var(--ink); color:#e5e7eb; border-radius:8px; padding:14px; overflow-x:auto; white-space:pre; }
+    .bars { display:grid; gap:10px; }
+    .bar { display:grid; grid-template-columns:145px 1fr 110px; align-items:center; gap:10px; }
+    .track { height:18px; border:1px solid var(--border); border-radius:4px; background:var(--muted-surface); overflow:hidden; }
+    .fill { height:100%; background:var(--accent); }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>show-skills</h1>
+        <p>파일을 직접 클릭하지 않아도 현재 skills root를 읽고, 카테고리별 목록과 추천 스킬 조합을 보여주는 portable 탐색 스킬.</p>
+      </div>
+      <div class="pair">
+        <span><strong>에이전트</strong><a href="SKILL.md">SKILL.md</a></span>
+        <span><strong>사용자</strong><a href="skill.html">skill.html</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>사용 판단 매트릭스</h2>
+      <div class="matrix">
+        <div class="cell"><span class="tag ok">사용</span><h3>목록 보기</h3><p>현재 스킬 전체, 카테고리, 경로, 상태를 빠르게 보고 싶을 때.</p></div>
+        <div class="cell"><span class="tag accent">추천</span><h3>무엇을 쓸지 모를 때</h3><p>사용자 작업에 맞는 주 스킬과 함께 쓸 스킬을 추천한다.</p></div>
+        <div class="cell"><span class="tag warn">문서</span><h3>문서로 훑을 때</h3><p><a href="../../docs/skill-catalog.md">docs/skill-catalog.md</a>가 있으면 정적 카탈로그로 연다.</p></div>
+        <div class="cell"><span class="tag danger">건너뜀</span><h3>스킬 실행이 목적일 때</h3><p>목록만 보여준다. 설치, global 등록, 실제 작업 실행은 하지 않는다.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>목록 생성 흐름</h2>
+      <svg class="flow" viewBox="0 0 1080 220" role="img" aria-label="show skills workflow">
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
+        <rect x="28" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="100" y="99" text-anchor="middle" font-size="14" font-weight="700">스킬 읽기</text><text x="100" y="120" text-anchor="middle" font-size="12" fill="#6b7280">SKILL.md</text>
+        <line x1="173" y1="104" x2="243" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="246" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="318" y="99" text-anchor="middle" font-size="14" font-weight="700">상태 병합</text><text x="318" y="120" text-anchor="middle" font-size="12" fill="#6b7280">history 상태</text>
+        <line x1="391" y1="104" x2="461" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="464" y="68" width="160" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="544" y="99" text-anchor="middle" font-size="14" font-weight="700">묶기</text><text x="544" y="120" text-anchor="middle" font-size="12" fill="#6b7280">사용 목적</text>
+        <line x1="624" y1="104" x2="694" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="697" y="68" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="772" y="99" text-anchor="middle" font-size="14" font-weight="700">출력</text><text x="772" y="120" text-anchor="middle" font-size="12" fill="#6b7280">markdown/json</text>
+        <line x1="847" y1="104" x2="917" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="920" y="68" width="132" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="986" y="99" text-anchor="middle" font-size="14" font-weight="700">추천</text><text x="986" y="120" text-anchor="middle" font-size="12" fill="#6b7280">스킬 조합</text>
+      </svg>
+    </section>
+
+    <section>
+      <h2>입출력 스키마</h2>
+      <div class="grid3">
+        <div class="cell"><h3>입력</h3><ul><li>현재 스킬 보여줘</li><li>이 작업에 맞는 스킬은?</li><li>리뷰/QA 스킬만 보여줘</li></ul></div>
+        <div class="cell"><h3>읽는 파일</h3><ul><li>skills/*/SKILL.md</li><li>agents/openai.yaml</li><li>history/skills.md</li></ul></div>
+        <div class="cell"><h3>출력</h3><ul><li>카테고리별 목록</li><li>상태와 risk</li><li>SKILL.md / skill.html 경로</li></ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>카테고리 차트</h2>
+      <div class="bars">
+        <div class="bar"><strong>탐색</strong><div class="track"><div class="fill" style="width:45%"></div></div><span>show/web</span></div>
+        <div class="bar"><strong>스킬 운영</strong><div class="track"><div class="fill" style="width:92%"></div></div><span>update/docs</span></div>
+        <div class="bar"><strong>구현과 구조</strong><div class="track"><div class="fill" style="width:68%"></div></div><span>code/build</span></div>
+        <div class="bar"><strong>리뷰와 QA</strong><div class="track"><div class="fill" style="width:70%"></div></div><span>review/test</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>파일 관계 지도</h2>
+      <div class="grid2">
+        <div class="tree">skills/show-skills/
+├── SKILL.md
+├── skill.html
+├── agents/openai.yaml
+└── scripts/
+    ├── show-skills.ts
+    └── validate-show-skills.ts</div>
+        <div class="cell"><h3>연결 문서</h3><p><a href="../../docs/skill-catalog.md">docs/skill-catalog.md</a>는 이 repo의 정적 카탈로그이고, <a href="../../project-snippets/show-skills.md">project-snippets/show-skills.md</a>는 프로젝트 연결 문구다. 독립 설치에서는 <code>--root</code>로 skills root를 지정한다.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>품질 게이트</h2>
+      <pre>node skills/show-skills/scripts/show-skills.ts --compact
+node skills/show-skills/scripts/show-skills.ts --root skills --compact
+node scripts/validate-skill.ts skills/show-skills
+node skills/show-skills/scripts/validate-show-skills.ts skills/show-skills
+node scripts/validate-skill-html.ts .
+node scripts/validate-skill-repo.ts .</pre>
+    </section>
+
+    <section>
+      <h2>금지와 허용</h2>
+      <div class="grid2">
+        <div class="cell"><span class="tag ok">허용</span><ul><li>현재 filesystem에서 스킬을 읽는다.</li><li>필요하면 주 스킬과 함께 쓸 스킬을 추천한다.</li><li>상세 확인용 파일 경로를 제공한다.</li></ul></div>
+        <div class="cell"><span class="tag danger">금지</span><ul><li>스킬을 자동 설치하지 않는다.</li><li>오래된 수동 목록만 믿지 않는다.</li><li>목록 요청에서 실제 작업을 실행하지 않는다.</li></ul></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

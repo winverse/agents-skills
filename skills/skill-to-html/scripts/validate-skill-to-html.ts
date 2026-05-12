@@ -43,7 +43,27 @@ if (!/^name:\s*skill-to-html/m.test(skill)) {
   fail("SKILL.md frontmatter must include name: skill-to-html");
 }
 
-for (const term of ["Use now", "Revise", "Skip", "Ask / combine"]) {
+for (const term of [
+  "same explanation grammar",
+  "Pick at least four visual patterns",
+  "Read the existing `skill.html`",
+  "Dark surfaces only for code",
+  "Korean-first visible copy",
+]) {
+  if (!skill.includes(term)) fail(`SKILL.md missing design instruction: ${term}`);
+}
+
+for (const term of [
+  "Skill Explanation Grammar",
+  "Clean Layout Recipe",
+  "Language Policy",
+  "Dark surfaces are allowed only for literal code",
+  "overflow-wrap: anywhere",
+]) {
+  if (!standards.includes(term)) fail(`visual-guide-standards.md missing design standard: ${term}`);
+}
+
+for (const term of ["바로 사용", "수정", "건너뜀", "확인 후 결합"]) {
   if (!html.includes(term)) fail(`skill.html decision matrix missing: ${term}`);
 }
 
@@ -88,13 +108,38 @@ for (const match of html.matchAll(hrefPattern)) {
 const visualSignals = [
   "사용 판단 매트릭스",
   "skill.html 생성 흐름",
+  "설명 구조",
   "필수 시각 요소 비중",
   "파일 관계 지도",
+  "품질 게이트",
   "금지와 허용",
 ];
 
 for (const signal of visualSignals) {
   if (!html.includes(signal)) fail(`skill.html missing visual section: ${signal}`);
+}
+
+const englishOnlyUiLabels = [
+  "Use now",
+  "Revise",
+  "Ask / combine",
+  "Purpose",
+  "Workflow",
+  "Input / output",
+  "Resources",
+  "Validation",
+  "Misuse",
+  "Decision matrix",
+  "Resource map",
+  "Do / don't",
+  "Do not",
+  "Required pair",
+];
+
+for (const label of englishOnlyUiLabels) {
+  if (html.includes(`>${label}<`) || html.includes(`>${label}</strong>`)) {
+    fail(`skill.html should use Korean-first visible label instead of: ${label}`);
+  }
 }
 
 if (failures.length) {

@@ -7,7 +7,7 @@ description: Create or revise the human-facing `skill.html` that sits beside an 
 
 Use this skill immediately after `skill-creator` or another agent initializes, forks, installs, or materially updates a shared skill. The output is a static `skill.html` file inside the same skill folder as `SKILL.md`.
 
-Read `references/visual-guide-standards.md` before designing or revising a `skill.html`.
+Read `references/visual-guide-standards.md` before designing or revising a `skill.html`. Treat that file as the shared design system for all skill explanation pages.
 
 ## Required Outcome
 
@@ -37,9 +37,12 @@ Do not make `skill.html` a partitioned article. Use visual structure to reduce r
 - Use a decision matrix for when to use, skip, or combine the skill.
 - Use a source/file map for bundled resources.
 - Use a compact chart for priorities, risk, confidence, or coverage.
+- Use the same explanation grammar across skills: purpose, use/skip, workflow, inputs/outputs, resources, validation, and misuse prevention.
 - Use labels and legends directly in diagrams.
 - Keep all visuals understandable without color alone.
 - Keep text short, Korean-friendly, and scannable.
+- Use Korean-first visible copy. Section titles, chart labels, matrix cells, legends, and guardrail labels should be Korean unless the word is a normal coding term, file name, command, library, protocol, or product name such as `commit`, `push`, `repo`, `diff`, `SKILL.md`, `HTML`, `GraphQL`, `TypeScript`, or `Playwright`.
+- When an English technical term is useful but not universally obvious, pair it with Korean once, for example `source ledger(출처 기록)` or `fan-out(분기 검색)`.
 
 ## HTML Rules
 
@@ -54,6 +57,8 @@ Do not make `skill.html` a partitioned article. Use visual structure to reduce r
 - Avoid decorative gradients, orbs, bokeh, oversized hero sections, and nested cards.
 - Use restrained colors and enough contrast for text and non-text marks.
 - Target PC desktop screens only. Do not spend effort on mobile-specific layout support.
+- Use the local Interline design principles: quiet operational UI, fast scanning, shallow borders, minimal shadows, stable grid dimensions, and no decorative hero treatment.
+- Dark surfaces only for code, terminal trees, or literal snippets. Do not use dark panels as general visual decoration.
 
 ## Visual Pattern Selection
 
@@ -72,14 +77,16 @@ Choose visuals based on the skill contents:
 ## Creation Workflow
 
 1. Read the target skill's `SKILL.md`.
-2. Read only the relevant reference files named from `SKILL.md`.
-3. Extract the skill's trigger, workflow, resources, output shape, and failure modes.
-4. Pick 3-5 visual patterns from the table above.
-5. Create or replace `skill.html` next to `SKILL.md`.
-6. Verify the HTML in a desktop browser viewport when practical.
-7. If the skill is part of this repo, run `node scripts/validate-skill.ts <skill-path>` from the repo root and then the skill-specific TypeScript validator when one exists.
-8. If paths, trigger wording, workflow, validators, snippets, or lifecycle state changed, update `README.md`, `AGENTS.md`, `project-snippets/`, and `history/skills.md` as applicable.
-9. Review `docs/skill-inspector.md`; if inspection finds issues, write `inspector/YYYY-MM-DD-<scope>.md` before fixing, then keep only unresolved local review notes and delete resolved review files.
+2. Read the existing `skill.html` if it exists, and preserve useful diagrams or layout ideas while removing stale or weak parts.
+3. Read only the relevant reference files named from `SKILL.md`.
+4. Extract the skill's trigger, workflow, resources, output shape, validation gates, and failure modes.
+5. Fill the shared explanation grammar: purpose, use/skip, workflow, inputs/outputs, resources, validation, and misuse prevention.
+6. Pick at least four visual patterns from the table above.
+7. Create or revise `skill.html` next to `SKILL.md`.
+8. Verify the HTML in a desktop browser viewport when practical.
+9. If the skill is part of this repo, run `node scripts/validate-skill.ts <skill-path>` from the repo root and then the skill-specific TypeScript validator when one exists.
+10. If paths, trigger wording, workflow, validators, snippets, or lifecycle state changed, update `README.md`, `AGENTS.md`, `project-snippets/`, and `history/skills.md` as applicable.
+11. Review `docs/skill-inspector.md`; if inspection finds issues, write `inspector/YYYY-MM-DD-<scope>.md` before fixing, then keep only unresolved local review notes and delete resolved review files.
 
 ## Quality Bar
 

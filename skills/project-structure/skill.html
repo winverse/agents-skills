@@ -508,7 +508,7 @@
 <body>
   <div class="shell">
     <header>
-      <p class="eyebrow">Skill visual guide</p>
+      <p class="eyebrow">스킬 시각 가이드</p>
       <h1>Project Structure</h1>
       <p class="summary">프로젝트 종류를 숫자로 고르고, 기본 스택과 env 정책을 적용해 일관된 frontend, backend, monorepo, desktop 구조를 만든다.</p>
       <div class="file-pair">
@@ -520,10 +520,10 @@
 
     <main>
       <section>
-        <h2>Decision Matrix</h2>
+        <h2>사용 판단 매트릭스</h2>
         <div class="matrix" aria-label="When to use project-structure">
           <div class="cell use">
-            <h3>Use</h3>
+            <h3>사용</h3>
             <p>새 프로젝트 구조, 기존 구조 정리, monorepo 설계, env 정책 정렬.</p>
             <ul>
               <li>Next.js web</li>
@@ -532,7 +532,7 @@
             </ul>
           </div>
           <div class="cell ask">
-            <h3>Ask First</h3>
+            <h3>먼저 확인</h3>
             <p>프로젝트 종류가 불분명하면 숫자 선택지를 먼저 묻는다.</p>
             <ul>
               <li>1 web</li>
@@ -542,7 +542,7 @@
             </ul>
           </div>
           <div class="cell skip">
-            <h3>Skip</h3>
+            <h3>건너뜀</h3>
             <p>단일 파일 수정, 이미 구조가 명확한 작은 버그 수정.</p>
             <ul>
               <li>폴더 정책 변경 없음</li>
@@ -550,7 +550,7 @@
             </ul>
           </div>
           <div class="cell stop">
-            <h3>Stop</h3>
+            <h3>중지</h3>
             <p>기존 사용자 코드를 대량 이동해야 하는데 의도가 불명확한 경우.</p>
             <ul>
               <li>먼저 현재 구조 조사</li>
@@ -561,7 +561,7 @@
       </section>
 
       <section>
-        <h2>Wizard Flow</h2>
+        <h2>질문 흐름</h2>
         <svg class="flow" viewBox="0 0 1080 290" role="img" aria-label="Project structure workflow">
           <defs>
             <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
@@ -569,7 +569,7 @@
             </marker>
           </defs>
           <rect x="30" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-          <text x="110" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">1. Project kind</text>
+          <text x="110" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">1. 프로젝트 종류</text>
           <text x="110" y="128" text-anchor="middle" font-size="12" fill="#6b7280">web / api / mono / desktop</text>
 
           <line x1="190" y1="111" x2="264" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
@@ -603,11 +603,11 @@
       </section>
 
       <section>
-        <h2>Compact Menus</h2>
+        <h2>선택 메뉴</h2>
         <p class="section-note">긴 architecture questionnaire 대신 tree가 바뀌는 선택지만 숫자로 묻는다.</p>
         <div class="contract-grid">
           <div class="contract-card">
-            <strong>API contract</strong>
+            <strong>API 계약</strong>
             <span>1 GraphQL default, 2 REST, 3 hybrid. REST를 고른 경우에만 controller 경계를 만든다.</span>
           </div>
           <div class="contract-card">
@@ -615,65 +615,73 @@
             <span>1 PostgreSQL + Drizzle default, 2 no DB, 3 external DB. migration owner를 하나만 둔다.</span>
           </div>
           <div class="contract-card">
-            <strong>Cache</strong>
+            <strong>캐시</strong>
             <span>1 Redis through cache boundary when needed, 2 no Redis. monorepo Redis는 <code>packages/db/src/redis</code>.</span>
           </div>
           <div class="contract-card">
-            <strong>Generated artifacts</strong>
+            <strong>인증</strong>
+            <span>1 app-owned auth module when needed, 2 external auth, 3 no auth. security folder를 선택에 맞춘다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>생성 산출물</strong>
             <span>1 ignored and reproducible default, 2 committed and reviewed. GraphQL/Panda 산출물 정책을 하나로 고른다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>데스크톱 shell</strong>
+            <span>1 Tauri + Vite React default, 2 Tauri + existing frontend shell. GraphQL 사용 시 desktop autogen 경로를 맞춘다.</span>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Default Stack</h2>
+        <h2>기본 스택</h2>
         <div class="stack-grid">
           <div class="bars" aria-label="Default stack confidence">
             <div class="bar-row">
-              <strong>Monorepo</strong>
+              <strong>모노레포</strong>
               <span class="bar-track"><span class="bar-fill" style="width: 92%;"></span></span>
               <span>Turborepo + Bun</span>
             </div>
             <div class="bar-row">
-              <strong>Frontend</strong>
+              <strong>프론트엔드</strong>
               <span class="bar-track"><span class="bar-fill" style="width: 90%;"></span></span>
               <span>Next.js + urql</span>
             </div>
             <div class="bar-row">
-              <strong>Backend</strong>
+              <strong>백엔드</strong>
               <span class="bar-track"><span class="bar-fill green" style="width: 88%;"></span></span>
               <span>NestJS + Fastify</span>
             </div>
             <div class="bar-row">
-              <strong>Data</strong>
+              <strong>데이터</strong>
               <span class="bar-track"><span class="bar-fill green" style="width: 86%;"></span></span>
               <span>Postgres + Drizzle</span>
             </div>
             <div class="bar-row">
-              <strong>Desktop</strong>
+              <strong>데스크톱</strong>
               <span class="bar-track"><span class="bar-fill amber" style="width: 82%;"></span></span>
               <span>Tauri + Vite React</span>
             </div>
             <div class="bar-row">
-              <strong>Ops</strong>
+              <strong>운영</strong>
               <span class="bar-track"><span class="bar-fill green" style="width: 84%;"></span></span>
               <span>tests, health, logging</span>
             </div>
           </div>
           <div class="note-box">
-            <h3>Stack principle</h3>
+            <h3>스택 원칙</h3>
             <p>기본값은 빠르게 구조를 정하기 위한 출발점이다. 프로젝트 종류가 정해지면 관련 stack만 묻고, 나머지는 기본 정책으로 둔다. GraphQL codegen, Drizzle migration, Tauri build는 env helper를 반드시 거친다.</p>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Folder Structure Trees</h2>
+        <h2>폴더 구조 트리</h2>
         <p class="section-note">처음 설치했을 때 바로 비교할 수 있도록 frontend, backend, desktop 기본 구조를 tree 형태로 보여준다. Route는 얇게, domain과 provider 경계는 별도로 보이게 한다.</p>
         <div class="tree-grid">
           <div class="tree-card">
             <div class="tree-head">
-              <strong>Frontend web tree</strong>
+              <strong>프론트엔드 web 트리</strong>
               <span>Next.js + urql</span>
             </div>
             <div class="tree" aria-label="Frontend web folder structure">
@@ -710,7 +718,7 @@
 
           <div class="tree-card">
             <div class="tree-head">
-              <strong>Backend API tree</strong>
+              <strong>백엔드 API 트리</strong>
               <span>NestJS + Fastify + GraphQL</span>
             </div>
             <div class="tree" aria-label="Backend API folder structure">
@@ -759,7 +767,7 @@
 
         <div class="tree-wide">
           <div class="tree-head">
-            <strong>Full-stack monorepo package boundary</strong>
+            <strong>풀스택 모노레포 package 경계</strong>
             <span>Turborepo + Bun</span>
           </div>
           <div class="tree" aria-label="Full-stack monorepo package structure">
@@ -786,7 +794,7 @@
         </div>
         <div class="tree-wide">
           <div class="tree-head">
-            <strong>Desktop app tree</strong>
+            <strong>데스크톱 앱 트리</strong>
             <span>Tauri + app-local env</span>
           </div>
           <div class="tree" aria-label="Desktop app folder structure">
@@ -823,72 +831,72 @@
       </section>
 
       <section>
-        <h2>Env Contract</h2>
+        <h2>env 계약</h2>
         <div class="env-grid">
           <div class="env-card">
-            <strong>App-local schema</strong>
+            <strong>앱별 schema</strong>
             <span><code>apps/web</code>, <code>apps/api</code>, <code>apps/desktop</code>가 각자 <code>src/config/env.ts</code> Zod schema를 가진다.</span>
           </div>
           <div class="env-card">
-            <strong>Helper-only package</strong>
+            <strong>helper 전용 package</strong>
             <span><code>packages/config</code>는 env mode, dotenv loading, Zod helpers만 제공한다. app 변수 정의는 하지 않는다.</span>
           </div>
           <div class="env-card">
-            <strong>No shared env reads</strong>
+            <strong>shared env 직접 읽기 금지</strong>
             <span>공유 패키지는 <code>process.env</code>를 직접 읽지 않는다. 필요한 값은 app에서 주입한다.</span>
           </div>
           <div class="env-card">
-            <strong>Frontend split</strong>
+            <strong>프론트엔드 분리</strong>
             <span>browser 공개 값과 server-only 값을 분리한다. 공개 값만 framework public prefix를 사용한다.</span>
           </div>
           <div class="env-card">
-            <strong>Tooling uses helpers</strong>
+            <strong>도구도 helper 사용</strong>
             <span>codegen, migration, Tauri build script가 각자 env를 다시 파싱하지 않고 공용 helper를 호출한다.</span>
           </div>
           <div class="env-card">
-            <strong>Per-app env files</strong>
+            <strong>앱별 env 파일</strong>
             <span><code>env/.env.development</code>, <code>.env.test</code>, <code>.env.stage</code>, <code>.env.production</code>을 app마다 둔다.</span>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>GraphQL Codegen Contract</h2>
+        <h2>GraphQL codegen 계약</h2>
         <div class="contract-grid">
           <div class="contract-card">
-            <strong>App-owned config</strong>
+            <strong>앱 소유 config</strong>
             <span>GraphQL을 쓰는 각 app은 app root에 <code>codegen.ts</code>를 둔다.</span>
           </div>
           <div class="contract-card">
-            <strong>Schema owner</strong>
+            <strong>schema 소유자</strong>
             <span>API schema source/output은 <code>apps/api/src/graphql</code> 아래에 둔다.</span>
           </div>
           <div class="contract-card">
-            <strong>Document owner</strong>
+            <strong>document 소유자</strong>
             <span>query/mutation 문서는 <code>src/features/&lt;domain&gt;/graphql</code>에 둔다.</span>
           </div>
           <div class="contract-card">
-            <strong>Autogen path</strong>
+            <strong>자동 생성 경로</strong>
             <span>web, API, desktop 모두 <code>&lt;app&gt;/src/graphql/autogen.ts</code>를 entrypoint로 쓴다.</span>
           </div>
           <div class="contract-card">
-            <strong>Artifact policy</strong>
+            <strong>산출물 정책</strong>
             <span>generated 파일은 ignored/reproducible 또는 committed/reviewed 중 하나로 통일한다.</span>
           </div>
           <div class="contract-card">
-            <strong>Turbo task</strong>
+            <strong>Turbo 작업</strong>
             <span>monorepo에서는 <code>codegen</code>을 app scripts와 <code>turbo</code> task에 연결한다.</span>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Resource Map</h2>
+        <h2>파일 관계 지도</h2>
         <div class="map">
           <div class="map-col">
             <div class="map-title">Agent instruction</div>
             <div class="map-item"><code>SKILL.md</code>: trigger, wizard, defaults</div>
-            <div class="map-item"><code>agents/openai.yaml</code>: display metadata</div>
+            <div class="map-item"><code>agents/openai.yaml</code>: 표시 metadata</div>
           </div>
           <div class="map-col">
             <div class="map-title">References</div>
@@ -900,57 +908,57 @@
             <div class="map-item"><code>structure-validation.md</code>: final checklist</div>
           </div>
           <div class="map-col">
-            <div class="map-title">Outputs</div>
+            <div class="map-title">출력</div>
             <div class="map-item">numeric choices</div>
             <div class="map-item">directory tree</div>
             <div class="map-item">folder boundary rules</div>
-            <div class="map-item">env/codegen/migration/build policy</div>
+            <div class="map-item">env/codegen/migration/build/test/security policy</div>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Input / Output Schema</h2>
+        <h2>입출력 스키마</h2>
         <div class="schema">
           <div class="schema-box">
-            <h3>Input</h3>
+            <h3>입력</h3>
             <p>프로젝트 종류, 선택한 stack, 기존 repo 구조, env/GraphQL/DB/Desktop, auth/cache/test 요구사항.</p>
           </div>
           <div class="arrow">→</div>
           <div class="schema-box">
-            <h3>Output</h3>
+            <h3>출력</h3>
             <p>선택된 구조, 디렉터리 트리, app/package 경계, codegen/migration/build/test 정책, 검증 결과.</p>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Structure Verification</h2>
+        <h2>구조 검증</h2>
         <div class="checklist-grid">
           <div class="check-card">
-            <strong>Env parity</strong>
+            <strong>env 일치</strong>
             <span>모든 app은 <code>env/*</code>, <code>src/config/env.ts</code>, Zod schema를 같은 상대 경로로 가진다.</span>
           </div>
           <div class="check-card">
-            <strong>DB boundary</strong>
+            <strong>DB 경계</strong>
             <span>Drizzle migration은 <code>packages/db/drizzle</code>, Redis는 <code>packages/db/src/redis</code>에 둔다.</span>
           </div>
           <div class="check-card">
-            <strong>API readiness</strong>
+            <strong>API 준비 상태</strong>
             <span>logger, request logging, health/readiness, security plugins, observability 경계를 확인한다.</span>
           </div>
           <div class="check-card">
-            <strong>Test surface</strong>
+            <strong>테스트 범위</strong>
             <span>unit/component는 colocated, e2e는 app-level <code>test/e2e</code> 또는 API <code>test</code>에 둔다.</span>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Do / Don't</h2>
+        <h2>금지와 허용</h2>
         <div class="rules">
           <div class="rule do">
-            <h3>Do</h3>
+            <h3>허용</h3>
             <ul>
               <li>먼저 숫자로 프로젝트 종류를 확정한다.</li>
               <li>route는 얇게, domain은 <code>features</code>에 둔다.</li>
@@ -963,7 +971,7 @@
             </ul>
           </div>
           <div class="rule dont">
-            <h3>Don't</h3>
+            <h3>금지</h3>
             <ul>
               <li>기본값으로 full-stack single repo를 제안하지 않는다.</li>
               <li>shared package에서 <code>process.env</code>를 읽지 않는다.</li>

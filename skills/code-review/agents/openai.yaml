@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Findings-first code and diff review"
+  default_prompt: "Use $code-review to review this code or diff for bugs, regressions, missing tests, SRP/SOLID boundary issues, security risks, and pragmatic JavaScript/TypeScript style, with findings first and file-line references."

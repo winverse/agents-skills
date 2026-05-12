@@ -1,6 +1,6 @@
 ---
 name: project-structure
-description: Use when a user asks to choose, create, standardize, or refactor a web, backend, full-stack monorepo, or desktop app folder structure. This skill asks compact numeric choices, applies the user's default stack preferences, and produces a consistent project layout with env, GraphQL codegen, Drizzle migration, and Tauri build policies.
+description: Use when a user asks to choose, create, standardize, or refactor a web, backend, full-stack monorepo, or desktop app folder structure. This skill asks compact numeric choices, applies the user's default stack preferences, and produces a consistent project layout with env, GraphQL codegen, Drizzle migration, Tauri build, testing, security, health/readiness, and observability policies.
 ---
 
 # Project Structure
@@ -157,7 +157,7 @@ When answering, return:
 1. Chosen project kind and stack assumptions.
 2. Directory tree.
 3. Boundary rules for the main folders.
-4. Env/codegen/migration/build script policy.
+4. Env/codegen/migration/build/test/security/observability policy.
 5. Folder rule verification result.
 6. Any project-specific questions that remain.
 

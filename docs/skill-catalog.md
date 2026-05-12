@@ -1,0 +1,80 @@
+# Skill Catalog
+
+이 문서는 현재 repo의 스킬을 사람이 빠르게 고르기 위한 정적 카탈로그다. 최신 목록을 대화 안에서 바로 보려면 `show-skills`를 사용한다. `show-skills`는 독립 설치된 skills root에서도 `--root` 또는 `SKILLS_ROOT`로 현재 스킬 목록을 읽을 수 있다.
+
+```bash
+node skills/show-skills/scripts/show-skills.ts --compact
+node skills/show-skills/scripts/show-skills.ts --root skills --compact
+```
+
+## 스킬 빠른 선택표
+
+| 상황 | 먼저 쓸 스킬 | 같이 쓰면 좋은 스킬 |
+| --- | --- | --- |
+| 현재 스킬 목록을 보고 싶다 | `show-skills` | `sync-docs` |
+| 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다 | `web-research` | `agent-improvement-loop` |
+| 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | `browser-qa`, `design-review` |
+| 기존 스킬을 수정한다 | `skill-update` | `skill-to-html`, `sync-docs` |
+| 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
+| cmux tab/status/hook으로 세션 질문을 기억한다 | `cmux-automation` | `sync-docs`, `browser-qa` |
+| 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
+| 구현, 디버깅, 리팩터링을 신중하게 한다 | `karpathy-thinkings` | `code-review` |
+| 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
+| 커밋을 논리 단위로 나누고 push한다 | `atomic-committer` | `code-review` |
+| 브라우저 렌더링과 console/network를 확인한다 | `browser-qa` | `design-review` |
+| 코드 리뷰와 회귀 위험을 본다 | `code-review` | `browser-qa` |
+| UI 위계, 밀도, 타이포그래피, 취향을 본다 | `design-review` | `browser-qa` |
+
+## 카테고리별 목록
+
+### 탐색
+
+| Skill | 설명 | 자세히 |
+| --- | --- | --- |
+| `show-skills` | 현재 repo의 스킬을 파일 시스템에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천한다. | [SKILL.md](../skills/show-skills/SKILL.md) · [skill.html](../skills/show-skills/skill.html) |
+| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
+
+### 스킬 운영
+
+| Skill | 설명 | 자세히 |
+| --- | --- | --- |
+| `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 diagram-rich `skill.html`을 만든다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
+| `skill-update` | 기존 공유 스킬을 수정할 때 source, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
+| `sync-docs` | README, AGENTS, docs, snippets, history, skill 파일을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
+| `cmux-automation` | cmux hooks, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리한다. | [SKILL.md](../skills/cmux-automation/SKILL.md) · [skill.html](../skills/cmux-automation/skill.html) |
+| `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
+
+### 구현과 구조
+
+| Skill | 설명 | 자세히 |
+| --- | --- | --- |
+| `karpathy-thinkings` | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄인다. | [SKILL.md](../skills/karpathy-thinkings/SKILL.md) · [skill.html](../skills/karpathy-thinkings/skill.html) |
+| `project-structure` | frontend, backend, full-stack monorepo, desktop app의 구조와 기본 stack/env/codegen/test/security 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
+
+### 문서와 커밋
+
+| Skill | 설명 | 자세히 |
+| --- | --- | --- |
+| `atomic-committer` | dirty git tree를 secret guard로 검사하고 atomic commit 단위로 나눠 조건부 push를 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
+
+### 리뷰와 QA
+
+| Skill | 설명 | 자세히 |
+| --- | --- | --- |
+| `browser-qa` | 브라우저 runtime evidence로 렌더링, console, network, accessibility snapshot, viewport, text overflow를 확인한다. | [SKILL.md](../skills/browser-qa/SKILL.md) · [skill.html](../skills/browser-qa/skill.html) |
+| `code-review` | Findings-first 방식으로 버그, 회귀, 누락 테스트, SRP/SOLID, JS/TS 스타일 위험을 검토한다. | [SKILL.md](../skills/code-review/SKILL.md) · [skill.html](../skills/code-review/skill.html) |
+| `design-review` | Interline 기준으로 UI hierarchy, density, typography, state, accessibility, responsive order를 리뷰한다. | [SKILL.md](../skills/design-review/SKILL.md) · [skill.html](../skills/design-review/skill.html) |
+
+## 보는 방법
+
+- 대화에서 바로 보고 싶으면 `show-skills`를 사용한다.
+- 전체 흐름과 repo 목적은 [README.md](../README.md)를 본다.
+- 각 스킬의 자세한 사용 판단은 해당 `skill.html`을 본다.
+- 프로젝트에 붙일 문구는 [project-snippets](../project-snippets/)를 본다.
+- 생명주기와 최근 변경은 [history/skills.md](../history/skills.md)를 본다.
+
+## 유지보수 규칙
+
+- 새 스킬을 추가하면 이 문서, README, AGENTS, base snippets, history, validator 명령을 함께 갱신한다.
+- 스킬 설명이 길어지면 README보다 이 문서를 먼저 확장한다.
+- 현재 목록을 자동으로 확인할 때는 `show-skills` 스크립트를 우선한다.

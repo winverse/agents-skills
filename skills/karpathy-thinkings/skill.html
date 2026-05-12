@@ -362,7 +362,7 @@
       </div>
       <div class="pair" aria-label="skill file pair">
         <strong>skills/karpathy-thinkings/</strong>
-        <span>SKILL.md - agent workflow</span>
+        <span>SKILL.md - 에이전트 흐름</span>
         <span>skill.html - human guide</span>
       </div>
     </header>
@@ -370,24 +370,24 @@
     <main>
       <section>
         <div class="head">
-          <h2>Decision Matrix</h2>
+          <h2>사용 판단 매트릭스</h2>
           <p class="note">코딩 작업에서 언제 이 사고방식을 강하게 적용할지 판단합니다.</p>
         </div>
         <div class="matrix" role="list">
           <div class="cell" style="background: var(--ok-soft)">
-            <strong>Use</strong>
+            <strong>사용</strong>
             <p>구현, 디버깅, 리팩터링, 리뷰처럼 코드 변경의 판단 품질이 중요한 작업.</p>
           </div>
           <div class="cell" style="background: var(--accent-soft)">
-            <strong>Intensify</strong>
+            <strong>강화</strong>
             <p>요구사항이 애매하거나 기존 코드와 충돌하거나 검증 기준이 흐릿한 작업.</p>
           </div>
           <div class="cell" style="background: var(--warn-soft)">
-            <strong>Ask</strong>
+            <strong>확인 필요</strong>
             <p>두 해석이 서로 다른 구현을 만들면 추측하지 말고 짧게 확인합니다.</p>
           </div>
           <div class="cell" style="background: var(--danger-soft)">
-            <strong>Skip</strong>
+            <strong>건너뜀</strong>
             <p>문서 동기화, 스킬 업데이트, 커밋처럼 더 구체적인 repo 스킬이 직접 커버하는 경우.</p>
           </div>
         </div>
@@ -395,28 +395,28 @@
 
       <section>
         <div class="head">
-          <h2>Four Principles</h2>
+          <h2>네 가지 원칙</h2>
           <p class="note">Karpathy식 사고의 네 축을 구현 행동으로 압축했습니다.</p>
         </div>
         <div class="principles">
           <div class="principle">
             <span class="num">1</span>
-            <h3>Think Before Coding</h3>
+            <h3>코딩 전 사고</h3>
             <p>모호함, 가정, tradeoff를 먼저 드러내고 구현이 갈리는 질문은 확인합니다.</p>
           </div>
           <div class="principle">
             <span class="num">2</span>
-            <h3>Simplicity First</h3>
+            <h3>단순함 우선</h3>
             <p>가장 작은 boring solution을 고르고 speculative abstraction을 만들지 않습니다.</p>
           </div>
           <div class="principle">
             <span class="num">3</span>
-            <h3>Surgical Changes</h3>
+            <h3>작은 변경</h3>
             <p>요청과 연결된 파일과 줄만 건드리고 주변 개선은 별도 이슈로 남깁니다.</p>
           </div>
           <div class="principle">
             <span class="num">4</span>
-            <h3>Goal-Driven Execution</h3>
+            <h3>목표 기준 실행</h3>
             <p>성공 기준을 정하고 최소 검증 루프를 돌린 뒤 완료를 보고합니다.</p>
           </div>
         </div>
@@ -424,7 +424,7 @@
 
       <section>
         <div class="head">
-          <h2>Workflow</h2>
+          <h2>실행 흐름</h2>
           <p class="note">작게 생각하고, 작게 고치고, 확인 가능한 기준으로 끝냅니다.</p>
         </div>
         <div class="visual">
@@ -444,11 +444,11 @@
             <path d="M552 83 H588" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
             <path d="M744 83 H780" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
             <g font-size="13" font-weight="800" fill="#111827" text-anchor="middle">
-              <text x="93" y="76">Restate Goal</text>
-              <text x="285" y="76">Find Ambiguity</text>
-              <text x="477" y="76">Inspect Code</text>
-              <text x="669" y="76">Surgical Edit</text>
-              <text x="861" y="76">Verify</text>
+              <text x="93" y="76">목표 재확인</text>
+              <text x="285" y="76">모호함 찾기</text>
+              <text x="477" y="76">코드 확인</text>
+              <text x="669" y="76">작은 수정</text>
+              <text x="861" y="76">검증</text>
             </g>
             <g font-size="12" fill="#4b5563" text-anchor="middle">
               <text x="93" y="100">성공 기준</text>
@@ -459,7 +459,7 @@
             </g>
             <path d="M285 124 V196 H669 V132" fill="none" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5"></path>
             <rect x="376" y="196" width="202" height="58" rx="8" fill="#fff7ed" stroke="#a16207"></rect>
-            <text x="477" y="224" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">ask if implementation changes</text>
+            <text x="477" y="224" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">구현 변경이면 질문</text>
             <text x="477" y="244" text-anchor="middle" font-size="12" fill="#4b5563">추측으로 코드 쓰지 않기</text>
           </svg>
         </div>
@@ -468,26 +468,26 @@
       <div class="two">
         <section>
           <div class="head">
-            <h2>Risk Meter</h2>
+            <h2>위험도 막대</h2>
             <p class="note">위험이 높을수록 질문과 검증을 더 강하게 적용합니다.</p>
           </div>
           <div class="risk">
-            <div class="risk-row"><span>Ambiguous goal</span><div class="track"><div class="fill" style="width:96%; background:var(--danger)"></div></div><span>ask</span></div>
-            <div class="risk-row"><span>Bug fix</span><div class="track"><div class="fill" style="width:86%; background:var(--warn)"></div></div><span>repro</span></div>
-            <div class="risk-row"><span>Refactor</span><div class="track"><div class="fill" style="width:80%; background:var(--warn)"></div></div><span>guard</span></div>
-            <div class="risk-row"><span>Small edit</span><div class="track"><div class="fill" style="width:42%"></div></div><span>check</span></div>
+            <div class="risk-row"><span>목표가 모호함</span><div class="track"><div class="fill" style="width:96%; background:var(--danger)"></div></div><span>질문</span></div>
+            <div class="risk-row"><span>버그 수정</span><div class="track"><div class="fill" style="width:86%; background:var(--warn)"></div></div><span>재현</span></div>
+            <div class="risk-row"><span>리팩터링</span><div class="track"><div class="fill" style="width:80%; background:var(--warn)"></div></div><span>가드</span></div>
+            <div class="risk-row"><span>작은 수정</span><div class="track"><div class="fill" style="width:42%"></div></div><span>확인</span></div>
             <div class="risk-row"><span>Cosmetic</span><div class="track"><div class="fill" style="width:22%; background:var(--ok)"></div></div><span>light</span></div>
           </div>
         </section>
 
         <section>
           <div class="head">
-            <h2>Input / Output</h2>
+            <h2>입출력</h2>
             <p class="note">요청을 검증 가능한 작은 변경으로 바꿉니다.</p>
           </div>
           <div class="io">
             <div class="box">
-              <h3>Input</h3>
+              <h3>입력</h3>
               <ul>
                 <li>코딩/디버깅/리팩터링 요청</li>
                 <li>기존 코드와 테스트</li>
@@ -497,7 +497,7 @@
             </div>
             <div class="arrow">→</div>
             <div class="box">
-              <h3>Output</h3>
+              <h3>출력</h3>
               <ul>
                 <li>명시된 가정</li>
                 <li>최소 구현</li>
@@ -511,22 +511,22 @@
 
       <section>
         <div class="head">
-          <h2>Resource Map</h2>
+          <h2>파일 관계 지도</h2>
           <p class="note">원칙은 SKILL.md에, 출처와 업데이트 기준은 reference에 둡니다.</p>
         </div>
         <div class="resources">
-          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, four principles, workflow, final report</span></a>
-          <a class="file" href="references/source-notes.md"><strong>source-notes</strong><span>unofficial source context and adaptation rules</span></a>
-          <a class="file" href="scripts/validate-karpathy-thinkings.ts"><strong>validator</strong><span>static checks for this skill</span></a>
-          <a class="file" href="../../project-snippets/karpathy-thinkings.md"><strong>project-snippets/karpathy-thinkings.md</strong><span>portable project connection block</span></a>
-          <a class="file" href="../atomic-committer/SKILL.md"><strong>atomic-committer</strong><span>commit only when requested</span></a>
-          <a class="file" href="../skill-update/SKILL.md"><strong>skill-update</strong><span>use for skill maintenance work</span></a>
+          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, 네 원칙, 실행 흐름, 최종 보고</span></a>
+          <a class="file" href="references/source-notes.md"><strong>source-notes</strong><span>비공식 출처 맥락과 적용 규칙</span></a>
+          <a class="file" href="scripts/validate-karpathy-thinkings.ts"><strong>검증기</strong><span>정적 검사</span></a>
+          <a class="file" href="../../project-snippets/karpathy-thinkings.md"><strong>project-snippets/karpathy-thinkings.md</strong><span>프로젝트 연결 블록</span></a>
+          <a class="file" href="../atomic-committer/SKILL.md"><strong>atomic-committer</strong><span>요청이 있을 때만 commit</span></a>
+          <a class="file" href="../skill-update/SKILL.md"><strong>skill-update</strong><span>스킬 유지보수에 사용</span></a>
         </div>
       </section>
 
       <section>
         <div class="head">
-          <h2>Project Connection</h2>
+          <h2>프로젝트 연결</h2>
           <p class="note">코딩 품질을 강하게 제어하고 싶은 프로젝트에 붙입니다.</p>
         </div>
         <pre class="snippet">## Project Skills
@@ -544,7 +544,7 @@
       <section>
         <div class="split">
           <div>
-            <h2>Do</h2>
+            <h2>허용</h2>
             <ul class="rules">
               <li>구현 전 성공 기준과 가정을 드러냅니다.</li>
               <li>요청 범위와 기존 스타일을 우선합니다.</li>
@@ -552,7 +552,7 @@
             </ul>
           </div>
           <div>
-            <h2>Do Not</h2>
+            <h2>금지</h2>
             <ul class="rules">
               <li>애매한 요구를 추측으로 확정하지 않습니다.</li>
               <li>필요 없는 추상화와 설정을 만들지 않습니다.</li>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Improvement Loop"
+  short_description: "Improve invocation, validation, and docs"
+  default_prompt: "Use $agent-improvement-loop to inspect this project, ask whether to use the remaining token budget before spend-down work, and turn available agent capacity into concrete improvements for skill invocation, validation coverage, documentation consistency, and code quality gates."

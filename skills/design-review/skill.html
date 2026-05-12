@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>design-review</title>
+  <style>
+    :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#0f172a; }
+    html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
+    * { box-sizing:border-box; }
+    .shell { width:100%; max-width:1192px; margin:0 auto; padding:32px; }
+    header, section { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:18px; }
+    header { display:grid; grid-template-columns:1fr 300px; gap:18px; align-items:start; }
+    h1 { margin:0 0 8px; font-size:28px; line-height:1.2; letter-spacing:0; }
+    h2 { margin:0 0 14px; font-size:18px; letter-spacing:0; }
+    h3 { margin:0 0 8px; font-size:15px; letter-spacing:0; }
+    p { margin:0; color:var(--muted); }
+    a { color:var(--accent); overflow-wrap:anywhere; }
+    code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; overflow-wrap:anywhere; }
+    pre { margin:0; padding:14px; color:#e5e7eb; background:var(--ink); border-radius:8px; overflow-x:auto; white-space:pre; }
+    .pair, .cell { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
+    .pair { background:var(--muted-surface); display:grid; gap:8px; }
+    .pair span { display:flex; justify-content:space-between; gap:14px; color:var(--muted); }
+    .matrix { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .tag { display:inline-block; margin-bottom:8px; padding:2px 8px; border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .danger { color:var(--danger); } .accent { color:var(--accent); }
+    .flow { width:100%; height:220px; border:1px solid var(--border); border-radius:8px; background:var(--muted-surface); }
+    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    ul { margin:8px 0 0; padding-left:18px; color:var(--muted); }
+    .tree { background:var(--ink); color:#e5e7eb; border-radius:8px; padding:14px; overflow-x:auto; white-space:pre; }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>design-review</h1>
+        <p>Interline 취향과 화면별 규칙을 기준으로 정보 위계, 밀도, 타이포그래피, 안정적 레이아웃, 상태와 접근성을 검토하는 디자인 리뷰 스킬.</p>
+      </div>
+      <div class="pair">
+        <span><strong>에이전트</strong><a href="SKILL.md">SKILL.md</a></span>
+        <span><strong>사용자</strong><a href="skill.html">skill.html</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>사용 판단 매트릭스</h2>
+      <div class="matrix">
+        <div class="cell"><span class="tag ok">사용</span><h3>UI 품질 판단</h3><p>hierarchy, density, spacing, typography, color, states, responsive order를 본다.</p></div>
+        <div class="cell"><span class="tag accent">Interline</span><h3>조용한 운영 UI</h3><p>절제된 색, 얕은 border, 8px 이하 radius, stable dimensions를 선호한다.</p></div>
+        <div class="cell"><span class="tag warn">함께 사용</span><h3>브라우저 증거</h3><p>실제 렌더링, console, network 문제는 browser-qa와 함께 확인한다.</p></div>
+        <div class="cell"><span class="tag danger">건너뜀</span><h3>구현 리뷰</h3><p>코드 구조, 테스트, 보안은 code-review로 넘긴다.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>리뷰 흐름</h2>
+      <svg class="flow" viewBox="0 0 1080 220" role="img" aria-label="design review workflow">
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
+        <rect x="28" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="100" y="99" text-anchor="middle" font-size="14" font-weight="700">화면</text><text x="100" y="120" text-anchor="middle" font-size="12" fill="#6b7280">작업/대상 사용자</text>
+        <line x1="173" y1="104" x2="243" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="246" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="318" y="99" text-anchor="middle" font-size="14" font-weight="700">위계</text><text x="318" y="120" text-anchor="middle" font-size="12" fill="#6b7280">작업 흐름</text>
+        <line x1="391" y1="104" x2="461" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="464" y="68" width="160" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="544" y="99" text-anchor="middle" font-size="14" font-weight="700">배치</text><text x="544" y="120" text-anchor="middle" font-size="12" fill="#6b7280">밀도/안정성</text>
+        <line x1="624" y1="104" x2="694" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="697" y="68" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="772" y="99" text-anchor="middle" font-size="14" font-weight="700">상태</text><text x="772" y="120" text-anchor="middle" font-size="12" fill="#6b7280">접근성/반응형</text>
+        <line x1="847" y1="104" x2="917" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="920" y="68" width="132" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="986" y="99" text-anchor="middle" font-size="14" font-weight="700">발견사항</text><text x="986" y="120" text-anchor="middle" font-size="12" fill="#6b7280">방향</text>
+      </svg>
+    </section>
+
+    <section>
+      <h2>입출력 스키마</h2>
+      <div class="grid3">
+        <div class="cell"><h3>입력</h3><ul><li>screenshot/browser view</li><li>surface와 사용자 task</li><li>design-system context</li></ul></div>
+        <div class="cell"><h3>리뷰 축</h3><ul><li>hierarchy/density</li><li>typography/color</li><li>states/responsive</li><li>Interline screen rules</li></ul></div>
+        <div class="cell"><h3>출력</h3><ul><li>severity design findings</li><li>visual evidence</li><li>browser-qa follow-up</li></ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Interline 화면별 체크</h2>
+      <div class="grid3">
+        <div class="cell"><h3>Library / Book Detail</h3><ul><li>Book Series 우선</li><li>Book Cover 고정 비율</li><li>Section List와 cover 분리</li></ul></div>
+        <div class="cell"><h3>Section Study</h3><ul><li>desktop: Sentence List | Study Panel | Study Settings</li><li>mobile: Study Panel 먼저</li><li>Book Translation/Vocabulary Note는 disclosure</li></ul></div>
+        <div class="cell"><h3>Controls / Motion</h3><ul><li>Chunking Level은 실제 select</li><li>Coolicons family 일관성</li><li>Motion for React는 짧고 안정적으로</li></ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>파일 관계 지도</h2>
+      <div class="grid2">
+        <div class="tree">skills/design-review/
+├── SKILL.md
+├── skill.html
+├── agents/openai.yaml
+├── references/interline-design-review.md
+└── scripts/validate-design-review.ts</div>
+        <div class="cell"><h3>프로젝트 연결 조각</h3><p><a href="../../project-snippets/design-review.md">project-snippets/design-review.md</a>가 외부 프로젝트 연결 문구를 제공한다.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>품질 게이트</h2>
+      <pre>node scripts/validate-skill.ts skills/design-review
+node skills/design-review/scripts/validate-design-review.ts skills/design-review
+node scripts/validate-skill-html.ts .
+node scripts/validate-skill-repo.ts .</pre>
+    </section>
+
+    <section>
+      <h2>금지와 허용</h2>
+      <div class="grid2">
+        <div class="cell"><span class="tag ok">허용</span><ul><li>정보 위계와 반복 작업 효율을 먼저 본다.</li><li>Interline 기준과 화면별 규칙을 적용한다.</li><li>렌더링 의존 판단은 browser-qa 증거를 요구한다.</li></ul></div>
+        <div class="cell"><span class="tag danger">금지</span><ul><li>운영 UI를 landing page처럼 만들라고 하지 않는다.</li><li>decorative gradients/orbs/bokeh를 권하지 않는다.</li><li>브라우저 동작을 증거 없이 단정하지 않는다.</li></ul></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

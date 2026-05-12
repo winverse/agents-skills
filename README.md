@@ -43,10 +43,13 @@ skills/skill-name/
 
 ## 현재 스킬
 
-- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
+- `show-skills`: 현재 repo의 스킬 목록을 파일 시스템과 history에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천하는 탐색 스킬.
+  - Source instruction: `skills/show-skills/SKILL.md`
+  - Human visual guide: `skills/show-skills/skill.html`
+- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, runtime이 허용할 때 기본 병렬 sub-agent fan-out, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
-- `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 diagram-rich `skill.html`을 만들거나 고치는 스킬.
+- `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 우선 diagram-rich `skill.html`을 만들거나 고치는 스킬.
   - Source instruction: `skills/skill-to-html/SKILL.md`
   - Human visual guide: `skills/skill-to-html/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
@@ -55,7 +58,7 @@ skills/skill-name/
 - `skill-update`: 기존 공유 스킬을 수정할 때 `SKILL.md`, references, validator, `skill.html`, snippets, docs, history를 함께 맞추는 유지보수 스킬.
   - Source instruction: `skills/skill-update/SKILL.md`
   - Human visual guide: `skills/skill-update/skill.html`
-- `atomic-committer`: dirty git tree를 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
+- `atomic-committer`: dirty git tree를 secret guard로 검사한 뒤 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
   - Source instruction: `skills/atomic-committer/SKILL.md`
   - Human visual guide: `skills/atomic-committer/skill.html`
 - `project-structure`: frontend, backend, full-stack monorepo, desktop app의 폴더 구조와 기본 stack/env/codegen 정책, backend logger/cache/security/observability, Redis DB boundary, Drizzle migration, test surface를 일관되게 잡는 스킬.
@@ -64,6 +67,21 @@ skills/skill-name/
 - `sync-docs`: README, AGENTS, docs, snippets, history, skill 파일을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.
   - Source instruction: `skills/sync-docs/SKILL.md`
   - Human visual guide: `skills/sync-docs/skill.html`
+- `cmux-automation`: cmux hook, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리하는 스킬.
+  - Source instruction: `skills/cmux-automation/SKILL.md`
+  - Human visual guide: `skills/cmux-automation/skill.html`
+- `agent-improvement-loop`: 소진형 실행 전 “남은 토큰을 최대한 사용할까요?”를 예/아니오로 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
+  - Source instruction: `skills/agent-improvement-loop/SKILL.md`
+  - Human visual guide: `skills/agent-improvement-loop/skill.html`
+- `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하는 스킬.
+  - Source instruction: `skills/browser-qa/SKILL.md`
+  - Human visual guide: `skills/browser-qa/skill.html`
+- `code-review`: findings-first 코드/PR/diff 리뷰로 버그, 회귀, 테스트 누락, SRP/SOLID 경계, JS/TS 함수형 collection style 선호를 점검하는 스킬.
+  - Source instruction: `skills/code-review/SKILL.md`
+  - Human visual guide: `skills/code-review/skill.html`
+- `design-review`: Interline design 기준으로 UI hierarchy, layout density, typography, state, accessibility, responsive order, visual polish를 리뷰하는 스킬.
+  - Source instruction: `skills/design-review/SKILL.md`
+  - Human visual guide: `skills/design-review/skill.html`
 
 ## 에이전트 연결 방식
 
@@ -75,6 +93,7 @@ Codex 프로젝트 예시:
 ## Project Skills
 
 - Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
+- For verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation.
 ```
 
 Claude 프로젝트 예시:
@@ -83,6 +102,7 @@ Claude 프로젝트 예시:
 ## Project Skills
 
 - For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
+- For verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation.
 ```
 
 `<skills-root>`는 이 repo를 clone한 실제 위치로 바꾼다. 컴퓨터를 바꾸면 새 컴퓨터에서 이 repo를 clone한 경로만 다시 지정하면 된다. `<codex-home>`은 보통 `$HOME/.codex`이고, `CODEX_HOME`을 따로 설정했다면 그 값을 쓴다.
@@ -102,7 +122,7 @@ export SKILLS_ROOT="$PWD"
 
 새 프로젝트를 시작하거나 기존 프로젝트에 스킬을 붙일 때는 이 repo를 카탈로그처럼 사용한다.
 
-1. 이 README에서 사용 가능한 스킬을 확인한다.
+1. `docs/skill-catalog.md` 또는 `show-skills`로 사용 가능한 스킬을 확인한다.
 2. 후보 스킬의 `skill.html`을 열어 빠르게 훑는다.
 3. 해당 프로젝트에 필요한 스킬만 고른다.
 4. `project-snippets/`의 맞는 snippet을 프로젝트의 instruction 파일에 추가한다.
@@ -123,7 +143,7 @@ export SKILLS_ROOT="$PWD"
 - 사용자가 주는 입력과 스킬이 내는 출력을 보여주는 input/output schema
 - 하면 되는 것과 하면 안 되는 것을 대비하는 do/don't matrix
 
-`skill-to-html`을 사용할 때는 `skills/skill-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 빠르게 읽히는 정적인 HTML이어야 하며, 외부 CDN이나 빌드 도구에 의존하지 않는다.
+`skill-to-html`을 사용할 때는 `skills/skill-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 빠르게 읽히는 정적인 HTML이어야 하며, 화면 라벨은 한국어 우선으로 작성하고 외부 CDN이나 빌드 도구에 의존하지 않는다.
 
 ## 생성과 검증
 
@@ -142,6 +162,7 @@ skill-creator 또는 SKILL.md 작성
 -> sync-docs로 README/AGENTS/docs/snippets/history 정합성 확인
 -> node scripts/validate-skill.ts skills/<skill-name>
 -> 스킬별 validator 실행
+-> node scripts/validate-skill-html.ts .
 -> node scripts/validate-skill-repo.ts .
 -> docs/skill-inspector.md 기준으로 검사
 ```
@@ -162,21 +183,28 @@ node scripts/validate-skill.ts skills/<skill-name>
 
 ```bash
 node skills/web-research/scripts/validate-web-research.ts skills/web-research
+node skills/show-skills/scripts/validate-show-skills.ts skills/show-skills
 node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
 node skills/karpathy-thinkings/scripts/validate-karpathy-thinkings.ts skills/karpathy-thinkings
 node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
+node skills/cmux-automation/scripts/validate-cmux-automation.ts skills/cmux-automation
+node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
+node skills/browser-qa/scripts/validate-browser-qa.ts skills/browser-qa
+node skills/code-review/scripts/validate-code-review.ts skills/code-review
+node skills/design-review/scripts/validate-design-review.ts skills/design-review
 ```
 
 repo 운영 기준과 문서 정합성도 함께 확인한다.
 
 ```bash
+node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다.
 
 Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 
