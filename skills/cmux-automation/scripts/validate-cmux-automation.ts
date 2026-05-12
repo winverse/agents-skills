@@ -37,18 +37,36 @@ for (const file of [
   "SKILL.md",
   "skill.html",
   "references/hook-recipes.md",
+  "scripts/cmux-pin-prompt.mjs",
   "agents/openai.yaml",
 ]) {
   requireFile(file);
 }
 
 requireText("SKILL.md", "name: cmux-automation", "frontmatter name");
+requireText("SKILL.md", "scripts/cmux-pin-prompt.mjs", "bundled prompt pin script");
 requireText("SKILL.md", "UserPromptSubmit", "Codex prompt hook guidance");
 requireText("SKILL.md", "CMUX_WORKSPACE_ID", "cmux environment detection");
 requireText("SKILL.md", "cmux rename-tab", "tab title command");
 requireText("SKILL.md", "cmux set-status", "status command");
+requireText("SKILL.md", "Do not stop at a recipe", "actual setup requirement");
+requireText("SKILL.md", "compact prompt title", "compact tab title rule");
+requireText("SKILL.md", "original full prompt", "full prompt status rule");
 requireText("SKILL.md", "Ask before", "safety escalation rule");
+requireText("scripts/cmux-pin-prompt.mjs", "CMUX_SURFACE_ID", "surface env targeting");
+requireText("scripts/cmux-pin-prompt.mjs", "--surface", "surface-targeted rename");
+requireText("scripts/cmux-pin-prompt.mjs", "compactTitle", "compact title helper");
+requireText("scripts/cmux-pin-prompt.mjs", "CMUX_PIN_PROMPT_TITLE_CHARS", "title length option");
+requireText("scripts/cmux-pin-prompt.mjs", "CMUX_PIN_PROMPT_SCOPE", "workspace scope option");
+requireText("scripts/cmux-pin-prompt.mjs", "workspaceSurfaceTargets", "workspace target fan-out");
+requireText("scripts/cmux-pin-prompt.mjs", "cmux identify", "tab ref fallback discovery");
+requireText("scripts/cmux-pin-prompt.mjs", "rename-tab", "rename command");
+requireText("scripts/cmux-pin-prompt.mjs", "set-status", "status command");
+requireText("scripts/cmux-pin-prompt.mjs", "const title = compactTitle(prompt)", "compact title use");
+requireText("scripts/cmux-pin-prompt.mjs", "truncate(prompt, 500)", "long status limit");
 requireText("references/hook-recipes.md", "Prompt Pinning Recipe", "prompt pinning recipe");
+requireText("references/hook-recipes.md", "CMUX_PIN_PROMPT_SCOPE=workspace", "workspace scope recipe");
+requireText("references/hook-recipes.md", "compact prompt title", "compact title recipe");
 requireText("references/hook-recipes.md", "Payload Discovery", "payload discovery guidance");
 requireText("references/hook-recipes.md", "Safety Rules", "safety rules");
 requireText("skill.html", "사용 판단 매트릭스", "decision matrix");

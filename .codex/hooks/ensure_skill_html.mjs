@@ -8,6 +8,7 @@ const args = new Set(process.argv.slice(2));
 const autoRun = args.has("--auto");
 const dryRun = args.has("--dry-run");
 const recursionGuard = process.env.SKILL_HTML_HOOK_ACTIVE === "1";
+const noWrite = process.env.SKILL_HTML_HOOK_NO_WRITE === "1";
 
 async function readStdin() {
   const chunks = [];
@@ -196,6 +197,7 @@ function runValidation(root, skillDirs) {
     }
   }
 
+  results.push(runCommand(root, "Skill HTML validator", "node", ["scripts/validate-skill-html.ts", "."]));
   results.push(runCommand(root, "Repo validator", "node", ["scripts/validate-skill-repo.ts", "."]));
 
   return results;
@@ -242,8 +244,6 @@ function runSkillToHtml(root, reminders) {
       "--ephemeral",
       "--sandbox",
       "workspace-write",
-      "--ask-for-approval",
-      "never",
       "-c",
       "features.hooks=false",
       prompt,
@@ -300,7 +300,7 @@ for (const skillDir of [...candidateDirs].sort()) {
 
 let autoRunMessage = "";
 
-if (reminders.length > 0 && autoRun && !recursionGuard) {
+if (reminders.length > 0 && autoRun && !recursionGuard && !noWrite) {
   try {
     const output = runSkillToHtml(root, reminders);
     autoRunMessage = [

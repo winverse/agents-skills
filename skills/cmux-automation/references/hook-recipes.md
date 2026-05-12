@@ -19,7 +19,13 @@ Use docs output or printed raw documentation URLs only when needed. Prefer local
 
 ## Prompt Pinning Recipe
 
-Goal: after a Codex prompt is submitted, show a short version in the cmux tab and a longer version in the cmux status area.
+Goal: after a Codex prompt is submitted, show a compact prompt title in the cmux tab and preserve the user's original prompt text in the status area. Normalize whitespace for one-line display. The tab should stay short because cmux truncates narrow tab labels.
+
+Use the bundled script as the source implementation:
+
+```text
+skills/cmux-automation/scripts/cmux-pin-prompt.mjs
+```
 
 Recommended trigger:
 
@@ -31,14 +37,29 @@ timeout = 5
 statusMessage = "Pinning question to cmux"
 ```
 
-Hook script shape:
+Use `CMUX_PIN_PROMPT_SCOPE=workspace` only when Codex receives the prompt in one cmux surface but tool commands run in another surface and you intentionally want every related terminal tab in the workspace to receive the same prompt title. The default hook should update only the current surface for lower latency.
+
+The project-local hook file can be a tiny wrapper when the project contains this skill:
+
+```js
+#!/usr/bin/env node
+import "../../skills/cmux-automation/scripts/cmux-pin-prompt.mjs";
+```
+
+Or copy the bundled script into `.codex/hooks/cmux_pin_prompt.mjs` when the target project only links to this shared skills repo and needs a self-contained hook.
+
+Core hook script shape:
 
 ```js
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 
 let input = "";
-for await (const chunk of process.stdin) input += chunk;
+if (process.env.CMUX_PROMPT_PAYLOAD_B64) {
+  input = Buffer.from(process.env.CMUX_PROMPT_PAYLOAD_B64, "base64").toString("utf8");
+} else {
+  for await (const chunk of process.stdin) input += chunk;
+}
 
 let payload = {};
 try {
@@ -62,16 +83,35 @@ const inCmux =
 if (!prompt.trim() || !inCmux) process.exit(0);
 
 const oneLine = prompt.replace(/\s+/g, " ").trim();
-const title = `Q: ${oneLine.slice(0, 48)}`;
+const compactTitle = oneLine.split(/[?!.,。！？]/u)[0].slice(0, 16);
+const title = compactTitle;
+
+function currentTabArgs() {
+  if (process.env.CMUX_SURFACE_ID) {
+    return ["--surface", process.env.CMUX_SURFACE_ID];
+  }
+
+  try {
+    const raw = execFileSync("cmux", ["identify"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    const info = JSON.parse(raw);
+    const tabRef = info?.caller?.tab_ref ?? info?.focused?.tab_ref;
+    return tabRef ? ["--tab", tabRef] : [];
+  } catch {
+    return [];
+  }
+}
 
 try {
-  execFileSync("cmux", ["rename-tab", title], { stdio: "ignore" });
+  execFileSync("cmux", ["rename-tab", ...currentTabArgs(), title], { stdio: "ignore" });
   execFileSync(
     "cmux",
     [
       "set-status",
       "current-question",
-      oneLine.slice(0, 140),
+      oneLine.slice(0, 500),
       "--icon",
       "pin",
       "--color",
@@ -114,6 +154,6 @@ Keep boards local to the project unless the user asks for a global workspace mem
 
 - Back up config files before editing cmux settings or Codex hook config.
 - Never store socket passwords, tokens, or secrets in hook scripts.
-- Keep UI helper hooks non-blocking.
+- Keep UI helper hooks short. Do not run validators, `codex exec`, or broad repo scans from `UserPromptSubmit`.
 - Ask before commands that send text to panes, clear history, close surfaces, or change global settings.
 - Prefer `rename-tab`, `set-status`, and `markdown open` before stronger automation.
