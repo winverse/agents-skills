@@ -19,8 +19,9 @@ Load `references/hook-recipes.md` when implementing or modifying a hook script, 
 - Keep project-local hook changes project-local unless the user explicitly asks for global cmux or global Codex configuration changes.
 - Back up existing cmux or agent config files before editing them.
 - Use `cmux rename-tab`, `cmux set-status`, and `cmux markdown open` for lightweight session memory before building heavier tooling.
-- Keep tab titles short because cmux truncates narrow tab labels. Store a fast rule-based fallback label in the tab and the original full prompt in `current-question` status.
-- Do not call the hook label a semantic summary. `UserPromptSubmit` runs before the agent reasons about the prompt, so true semantic tab summaries must be written by the agent after the turn starts, or by an explicitly approved model-backed hook.
+- For prompt pinning, put the submitted question text directly into the cmux tab title after only one-line whitespace normalization. Do not summarize, rule-map, strip filler words, or truncate it by default; cmux may visually shorten narrow tabs, but hover can reveal the full title.
+- Mirror the same original prompt in `current-question` status so the tab title and status agree.
+- Do not call the hook label a semantic summary. `UserPromptSubmit` runs before the agent reasons about the prompt, so semantic tab summaries must be explicit opt-in actions written by the agent after the turn starts, or by an explicitly approved model-backed hook.
 - Fail quietly for ergonomics hooks when cmux is not available or the terminal is outside cmux.
 - Ask before installing/uninstalling hooks, changing global cmux settings, editing socket auth, closing panes/workspaces, clearing history, or sending text into another pane.
 
@@ -28,8 +29,8 @@ Load `references/hook-recipes.md` when implementing or modifying a hook script, 
 
 | Job | Preferred cmux surface |
 | --- | --- |
-| Show the current user question in the tab header | `cmux rename-tab` with a fast fallback label, then optional agent-written semantic title |
-| Keep the longer original question visible | `cmux set-status current-question ...` |
+| Show the current user question in the tab header | `cmux rename-tab` with the original prompt text |
+| Keep the same original question visible outside the tab | `cmux set-status current-question ...` |
 | Keep a multi-agent work board | `cmux markdown open <board.md>` |
 | Route agent events into a queue | `cmux feed tui` or `cmux hooks feed` |
 | Debug whether cmux is available | environment variables, `cmux identify`, `cmux capabilities` |
@@ -43,28 +44,27 @@ When the user wants each submitted question to appear in the current cmux tab:
 2. Use the bundled `scripts/cmux-pin-prompt.mjs` as the implementation source. A project-local hook can be a tiny wrapper that imports this script, or it can copy the script when the target project needs a self-contained hook.
 3. Parse the hook JSON from stdin.
 4. Extract the submitted prompt from known payload fields, and log only temporary payload keys during discovery if the field name is unknown.
-5. Normalize whitespace, derive a short rule-based fallback label, and keep the user's original wording in `current-question` status. Do not lose the full prompt.
-   - Strip leading filler words such as `오케이`, `okay`, `ㅇㅇ`, `그리고`, and `이제` before fallback truncation so filler fragments do not become tab titles.
+5. Normalize whitespace to one line and use that original prompt text as both the tab title and `current-question` status. Do not summarize, rule-map, strip filler words, or truncate the title by default.
 6. If `CMUX_SURFACE_ID` exists, target the current session with `cmux rename-tab --surface "$CMUX_SURFACE_ID" ...`; use `cmux identify` only as a fallback when the surface env var is missing. Raw `CMUX_TAB_ID` may not be accepted by every `rename-tab` path.
    - If Codex hook execution and agent command execution land in different cmux surfaces, set `CMUX_PIN_PROMPT_SCOPE=workspace` for the hook command so terminal surfaces in the same workspace receive the same prompt title.
 7. Call:
-   - `cmux rename-tab --surface "$CMUX_SURFACE_ID" "<task label>"`
-   - or `cmux rename-tab --tab <tab-ref> "<task label>"` when falling back to `cmux identify`
-   - `cmux set-status current-question "<original prompt>" --icon pin --color "#2563eb"` so the full prompt remains available outside the narrow tab label
+   - `cmux rename-tab --surface "$CMUX_SURFACE_ID" "<original prompt>"`
+   - or `cmux rename-tab --tab <tab-ref> "<original prompt>"` when falling back to `cmux identify`
+   - `cmux set-status current-question "<original prompt>" --icon pin --color "#2563eb"` so the full prompt remains available outside the tab
 8. Test with a sample stdin payload, confirm the tab/status changes, and measure foreground wrapper latency if the hook feels slow.
 9. Tell the user to approve the new or changed Codex hook in `/hooks` when required.
 10. Do not block Codex if cmux is unavailable. Ergonomic hooks should return success unless a requested setup action clearly failed.
 
 ## Semantic Title Pattern
 
-If the user expects the tab title to be a real prompt summary, the agent should update it after reading the prompt:
+If the user explicitly asks for a short or semantic tab title instead of the original question, the agent should update it after reading the prompt:
 
 ```bash
 cmux rename-tab --surface "$CMUX_SURFACE_ID" "<agent-written semantic title>"
 cmux set-status current-question "<short explanation or original prompt>" --workspace "$CMUX_WORKSPACE_ID" --icon pin --color "#2563eb"
 ```
 
-Use this for meaning-sensitive titles such as `workflow 스킬 생성`, `hook 요약 구조 검토`, or `문서 최신화 전략`. Keep this agent-written title short, Korean-first, and more specific than the fallback label.
+Use this only for opt-in meaning-sensitive titles such as `workflow 스킬 생성`, `hook 요약 구조 검토`, or `문서 최신화 전략`. Otherwise leave the original submitted question in the tab title.
 
 Avoid model-backed `UserPromptSubmit` hooks by default. They would call another agent or API before every prompt, add latency, may need credentials, and can make prompt submission fragile.
 

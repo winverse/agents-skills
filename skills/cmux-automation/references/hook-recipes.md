@@ -19,11 +19,9 @@ Use docs output or printed raw documentation URLs only when needed. Prefer local
 
 ## Prompt Pinning Recipe
 
-Goal: after a Codex prompt is submitted, show a short rule-based fallback label in the cmux tab and preserve the user's original prompt text in the status area. Normalize whitespace for one-line display. The tab should stay short because cmux truncates narrow tab labels.
+Goal: after a Codex prompt is submitted, put the user's original prompt text directly in the cmux tab and mirror it in the status area. Normalize whitespace for one-line display only. Do not summarize, rule-map, strip filler words, or truncate the tab title by default; cmux may visually shorten narrow tabs, but hover can reveal the full title.
 
-This hook does not produce a semantic summary. `UserPromptSubmit` runs before the agent has reasoned about the prompt. If the user wants the tab title to be the agent's actual summary, use the two-stage pattern: hook writes a fast fallback label, then the agent updates the tab title after it understands the task.
-
-Leading filler such as `오케이`, `okay`, `ㅇㅇ`, `그리고`, `이제`, and `좋아` should not become the tab title. Strip full filler words before fallback truncation, and keep rules for recurring task shapes such as `workflow 스킬 생성`, `cmux 자동화 검토`, and `날씨 확인`.
+This hook does not produce a semantic summary. `UserPromptSubmit` runs before the agent has reasoned about the prompt. If the user explicitly wants a shorter or semantic tab title, use the two-stage pattern: hook writes the original prompt, then the agent updates the tab title after it understands the task.
 
 ## Agent Semantic Title Recipe
 
@@ -31,7 +29,7 @@ When the agent has read the prompt and can name the task better than the hook:
 
 ```bash
 cmux rename-tab --surface "$CMUX_SURFACE_ID" "hook 요약 구조 검토"
-cmux set-status current-question "hook fallback label과 agent semantic title의 역할을 분리" \
+cmux set-status current-question "원래 질문을 tab/status에 넣고, 명시 요청 때만 짧은 제목으로 덮어쓰기" \
   --workspace "$CMUX_WORKSPACE_ID" \
   --icon pin \
   --color "#2563eb"
@@ -100,22 +98,8 @@ const inCmux =
 
 if (!prompt.trim() || !inCmux) process.exit(0);
 
-function fallbackLabelWithFastRules(text) {
-  if (/요약.*그대로|그대로.*요약|질문한\s*내용\s*그대로/u.test(text)) {
-    return "요약 규칙 수정";
-  }
-  if (/(탭|tab).*(길이|폭|가로|ellipsis|말줄임)|가로.*탭/u.test(text)) {
-    return "탭 폭 확인";
-  }
-  if (/(탭|tab).*(안.?바뀌|왜|이름)|이름.*안.?바뀌/u.test(text)) {
-    return "탭 변경 디버그";
-  }
-  return text.split(/[?!.,。！？]/u)[0];
-}
-
 const oneLine = prompt.replace(/\s+/g, " ").trim();
-const taskLabel = fallbackLabelWithFastRules(oneLine).slice(0, 16);
-const title = taskLabel;
+const title = oneLine;
 
 function currentTabArgs() {
   if (process.env.CMUX_SURFACE_ID) {
@@ -142,7 +126,7 @@ try {
     [
       "set-status",
       "current-question",
-      oneLine.slice(0, 500),
+      oneLine,
       "--icon",
       "pin",
       "--color",
