@@ -67,7 +67,7 @@
 
     h1 {
       font-size: 34px;
-      line-height: 1.05;
+      line-height: 1.2;
     }
 
     h2 {
@@ -441,7 +441,7 @@
       <div class="two">
         <section>
           <div class="head">
-            <h2>변경 패키지 범위</h2>
+            <h2>변경 패키지 범위와 검증</h2>
             <p class="note">행동 변경 시 같이 확인해야 하는 파일군입니다.</p>
           </div>
           <div class="coverage" aria-label="package coverage chart">
@@ -450,6 +450,7 @@
             <div class="bar"><span>검증기</span><div class="track"><div class="fill" style="width:78%"></div></div><span>자주</span></div>
             <div class="bar"><span>skill.html</span><div class="track"><div class="fill" style="width:92%"></div></div><span>큰 변경</span></div>
             <div class="bar"><span>snippets/docs</span><div class="track"><div class="fill" style="width:74%"></div></div><span>paths</span></div>
+            <div class="bar"><span>show-skills</span><div class="track"><div class="fill" style="width:70%"></div></div><span>inventory</span></div>
             <div class="bar"><span>history</span><div class="track"><div class="fill" style="width:66%"></div></div><span>durable</span></div>
           </div>
         </section>
@@ -494,6 +495,7 @@
           <a class="file" href="scripts/validate-skill-update.ts"><strong>검증기</strong><span>정적 검사</span></a>
           <a class="file" href="../../project-snippets/skill-update.md"><strong>project-snippets/skill-update.md</strong><span>프로젝트 연결 블록</span></a>
           <a class="file" href="../skill-to-html/SKILL.md"><strong>skill-to-html</strong><span>시각 가이드 갱신</span></a>
+          <a class="file" href="../show-skills/scripts/update-html-catalog.ts"><strong>show-skills 카탈로그</strong><span>스킬 inventory HTML 링크 생성</span></a>
           <a class="file" href="../sync-docs/SKILL.md"><strong>sync-docs</strong><span>문서 불일치 정리</span></a>
         </div>
       </section>
@@ -511,6 +513,7 @@
 
 - Keep SKILL.md, references, validator, agents/openai.yaml, skill.html, snippets, docs, and history aligned when behavior changes.
 - Use skill-to-html after material skill changes.
+- Run node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills when skill inventory changes.
 - Use sync-docs when paths, snippets, README, AGENTS, docs, history, or validation commands may drift.
 - Ask before changing unclear trigger behavior, lifecycle state, rename, split, merge, deprecation, or removal.</pre>
       </section>

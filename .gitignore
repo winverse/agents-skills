@@ -3,3 +3,10 @@
 /.playwright-mcp/
 /inspector/*
 !/inspector/.gitkeep
+
+# Local browser QA and eval artifacts are ignored unless promoted as reviewed fixtures.
+/*-browser-qa.png
+/evals/agent/outputs/*
+!/evals/agent/outputs/README.md
+/evals/agent/artifacts/*
+!/evals/agent/artifacts/README.md

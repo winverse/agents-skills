@@ -41,15 +41,18 @@ requireFile("agents/openai.yaml");
 requireSkillText("SKILL.md", "name: skill-update", "frontmatter name");
 requireSkillText("SKILL.md", "skill-to-html", "skill-to-html coordination");
 requireSkillText("SKILL.md", "sync-docs", "sync-docs coordination");
+requireSkillText("SKILL.md", "update-html-catalog.ts", "show-skills catalog sync");
 requireSkillText("SKILL.md", "history/skills.md", "history update rule");
 requireSkillText("SKILL.md", "Ask", "ambiguity escalation");
 requireSkillText("references/update-checklist.md", "Package Completeness Matrix", "package matrix");
 requireSkillText("references/update-checklist.md", "Coordination Rules", "coordination rules");
 requireSkillText("references/update-checklist.md", "History Rules", "history rules");
+requireSkillText("references/update-checklist.md", "update-html-catalog.ts", "show-skills catalog sync");
 requireSkillText("skill.html", "사용 판단 매트릭스", "decision matrix");
 requireSkillText("skill.html", "실행 흐름", "workflow");
 requireSkillText("skill.html", "변경 패키지 범위", "coverage chart");
 requireSkillText("skill.html", "파일 관계 지도", "resource map");
+requireSkillText("skill.html", "show-skills/scripts/update-html-catalog.ts", "show-skills catalog sync");
 requireSkillText("skill.html", "project-snippets/skill-update.md", "snippet link");
 requireSkillText("agents/openai.yaml", "Skill Update", "display name");
 
@@ -57,6 +60,11 @@ requireRepoText(
   "project-snippets/skill-update.md",
   "<skills-root>/skills/skill-update/SKILL.md",
   "project snippet link",
+);
+requireRepoText(
+  "project-snippets/skill-update.md",
+  "update-html-catalog.ts",
+  "show-skills catalog sync snippet guidance",
 );
 
 if (errors.length) {

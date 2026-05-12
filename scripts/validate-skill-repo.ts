@@ -114,7 +114,14 @@ requireFile("history/skills.md");
 requireFile("project-snippets/base.md");
 requireFile("project-snippets/claude-base.md");
 requireFile("scripts/validate-skill-html.ts");
+requireFile("scripts/run-agent-evals.ts");
+requireFile("evals/agent/README.md");
+requireFile("evals/agent/cases/skill-routing.json");
+requireFile("evals/agent/cases/safety-boundaries.json");
+requireFile("evals/agent/cases/output-shape.json");
 requireText("README.md", "node scripts/validate-skill-html.ts .", "common skill HTML validator command");
+requireText("README.md", "node scripts/run-agent-evals.ts", "agent eval harness command");
+requireText("AGENTS.md", "node scripts/run-agent-evals.ts", "agent eval harness command");
 
 if (nodeMajor < 22) {
   errors.push(`Node 22+ is required for direct .ts validator execution; current Node is ${process.versions.node}`);

@@ -18,6 +18,8 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | cmux tab/status/hook으로 세션 질문을 기억한다 | `cmux-automation` | `sync-docs`, `browser-qa` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
+| 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
+| 새 프로젝트나 feature의 작업 순서를 잡는다 | `workflow` | `project-structure`, `sync-docs` |
 | 구현, 디버깅, 리팩터링을 신중하게 한다 | `karpathy-thinkings` | `code-review` |
 | 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
 | 커밋을 논리 단위로 나누고 push한다 | `atomic-committer` | `code-review` |
@@ -43,13 +45,15 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | `sync-docs` | README, AGENTS, docs, snippets, history, skill 파일을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
 | `cmux-automation` | cmux hooks, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리한다. | [SKILL.md](../skills/cmux-automation/SKILL.md) · [skill.html](../skills/cmux-automation/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
+| `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `workflow`가 호출할 때는 workflow routing, dependency inventory, `project-structure` timing, PRD/mockup/document sync seed case를 만든다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
 
 ### 구현과 구조
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `karpathy-thinkings` | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄인다. | [SKILL.md](../skills/karpathy-thinkings/SKILL.md) · [skill.html](../skills/karpathy-thinkings/skill.html) |
-| `project-structure` | frontend, backend, full-stack monorepo, desktop app의 구조와 기본 stack/env/codegen/test/security 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
+| `project-structure` | frontend, backend, full-stack monorepo, desktop app과 선택형 MongoDB Atlas, Supabase Postgres, Pulumi/Docker/AWS infra 구조, 기본 stack/env/codegen/test/security 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
+| `workflow` | Matt Pocock-style, GStack-style, Superpowers-style, design-direction skill 의존성을 확인하고 원본 `WORKFLOW.md` 순서를 보존한다. `project-structure`는 domain/architecture 질문이 구체화된 뒤 호출하고, `agent-eval-harness`는 별도 검증 handoff로 호출한다. | [SKILL.md](../skills/workflow/SKILL.md) · [skill.html](../skills/workflow/skill.html) |
 
 ### 문서와 커밋
 

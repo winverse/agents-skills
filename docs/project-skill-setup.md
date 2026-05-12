@@ -34,9 +34,11 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/code-review.md`: only findings-first code review.
 - `project-snippets/design-review.md`: only product-aware UI and design review.
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
-- `project-snippets/project-structure.md`: only project structure and default stack rules.
+- `project-snippets/project-structure.md`: only project structure, default stack rules, selected DB provider options, and requested infra/deployment boundaries.
+- `project-snippets/workflow.md`: only project and feature workflow sequencing, domain/ADR/PRD/issue/planning/TDD/QA/document-sync flow, and workflow artifact placement.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/cmux-automation.md`: only cmux automation, prompt pinning, tab/status automation, workspace boards, feed workflows, and cmux CLI ergonomics.
+- `project-snippets/agent-eval-harness.md`: only initial agent eval harness setup, skill routing cases, cross-agent portability checks, guardrail checks, artifact hygiene, local runner wiring, and regression capture.
 
 ## Forking Rule
 
@@ -68,4 +70,5 @@ When a shared skill changes:
 - Update `history/skills.md` if trigger, workflow, validator, eval prompt, snippet, inspector criteria, or lifecycle state changed.
 - Keep repo-owned validators in `.ts` and run them with Node 22+.
 - Run `node scripts/validate-skill-html.ts .` and `node scripts/validate-skill-repo.ts .` after shared skill or repo-level docs changes.
+- Run `node scripts/run-agent-evals.ts` after changing skill triggers, project-facing behavior, safety boundaries, or expected final answer shapes.
 - Revisit project instruction files only when the trigger or path changed.

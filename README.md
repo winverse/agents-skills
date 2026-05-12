@@ -61,9 +61,12 @@ skills/skill-name/
 - `atomic-committer`: dirty git tree를 secret guard로 검사한 뒤 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
   - Source instruction: `skills/atomic-committer/SKILL.md`
   - Human visual guide: `skills/atomic-committer/skill.html`
-- `project-structure`: frontend, backend, full-stack monorepo, desktop app의 폴더 구조와 기본 stack/env/codegen 정책, backend logger/cache/security/observability, Redis DB boundary, Drizzle migration, test surface를 일관되게 잡는 스킬.
+- `project-structure`: frontend, backend, full-stack monorepo, desktop app, infrastructure-aware 구조의 폴더 구조와 기본 stack/env/codegen 정책, PostgreSQL/Drizzle, MongoDB Atlas, Supabase Postgres, psql/mongosh helper, Pulumi/Docker/AWS ECR/ECS/EC2 infra, backend logger/cache/security/observability, Redis DB boundary, migration/index sync, test surface를 일관되게 잡는 스킬.
   - Source instruction: `skills/project-structure/SKILL.md`
   - Human visual guide: `skills/project-structure/skill.html`
+- `workflow`: Matt Pocock-style, GStack-style, Superpowers-style, design-direction skill 의존성을 먼저 확인하고 업스트림 원본 스킬 업데이트를 추적한 뒤 원본 `WORKFLOW.md`의 직접 호출 순서를 보존하는 front-loaded workflow orchestration 스킬. `project-structure`는 domain language와 구체적 architecture 질문 이후 ADR/PRD 전에 호출하고, `agent-eval-harness`는 workflow routing과 handoff를 회귀 검증하는 별도 layer로 호출한다.
+  - Source instruction: `skills/workflow/SKILL.md`
+  - Human visual guide: `skills/workflow/skill.html`
 - `sync-docs`: README, AGENTS, docs, snippets, history, skill 파일을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.
   - Source instruction: `skills/sync-docs/SKILL.md`
   - Human visual guide: `skills/sync-docs/skill.html`
@@ -73,6 +76,9 @@ skills/skill-name/
 - `agent-improvement-loop`: 소진형 실행 전 `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`를 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
   - Source instruction: `skills/agent-improvement-loop/SKILL.md`
   - Human visual guide: `skills/agent-improvement-loop/skill.html`
+- `agent-eval-harness`: agent skill routing, cross-agent instruction portability, workflow, safety boundary, artifact hygiene, output quality, regression capture를 검증하는 초기 repo-local eval harness를 세팅하는 스킬. `workflow`에서 호출될 때는 routing, dependency inventory, `project-structure` timing, PRD settings, mockup selection, document sync, artifact hygiene seed case를 만든다.
+  - Source instruction: `skills/agent-eval-harness/SKILL.md`
+  - Human visual guide: `skills/agent-eval-harness/skill.html`
 - `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하는 스킬.
   - Source instruction: `skills/browser-qa/SKILL.md`
   - Human visual guide: `skills/browser-qa/skill.html`
@@ -158,12 +164,14 @@ export SKILLS_ROOT="$PWD"
 ```text
 skill-creator 또는 SKILL.md 작성
 -> skill-to-html로 skill.html 생성/갱신
+-> 스킬 추가/삭제/rename이면 show-skills HTML catalog 재생성
 -> project-snippets와 history 필요 여부 정리
 -> sync-docs로 README/AGENTS/docs/snippets/history 정합성 확인
 -> node scripts/validate-skill.ts skills/<skill-name>
 -> 스킬별 validator 실행
 -> node scripts/validate-skill-html.ts .
 -> node scripts/validate-skill-repo.ts .
+-> node scripts/run-agent-evals.ts
 -> docs/skill-inspector.md 기준으로 검사
 ```
 
@@ -179,6 +187,13 @@ skill-creator 또는 SKILL.md 작성
 node scripts/validate-skill.ts skills/<skill-name>
 ```
 
+스킬 inventory가 바뀌면 show-skills HTML catalog를 filesystem 기준으로 갱신하고 stale 여부를 확인한다.
+
+```bash
+node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills
+node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills --check
+```
+
 스킬별 static validator가 있으면 함께 돌린다.
 
 ```bash
@@ -189,9 +204,11 @@ node skills/karpathy-thinkings/scripts/validate-karpathy-thinkings.ts skills/kar
 node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
+node skills/workflow/scripts/validate-workflow.ts skills/workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
 node skills/cmux-automation/scripts/validate-cmux-automation.ts skills/cmux-automation
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
+node skills/agent-eval-harness/scripts/validate-agent-eval-harness.ts skills/agent-eval-harness
 node skills/browser-qa/scripts/validate-browser-qa.ts skills/browser-qa
 node skills/code-review/scripts/validate-code-review.ts skills/code-review
 node skills/design-review/scripts/validate-design-review.ts skills/design-review
@@ -202,9 +219,10 @@ repo 운영 기준과 문서 정합성도 함께 확인한다.
 ```bash
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .
+node scripts/run-agent-evals.ts
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다.
 
 Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 
@@ -219,6 +237,7 @@ Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skil
 - `SKILL.md`에는 핵심 trigger와 workflow만 간결하게 둔다.
 - 긴 설명, 평가 prompt, source rule, 개인 취향은 `references/`로 분리한다.
 - 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `skill-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
+- 스킬을 추가, 삭제, rename, archive, restore하면 `show-skills`의 HTML catalog를 `update-html-catalog.ts`로 재생성한다.
 - 기존 스킬을 업데이트할 때는 `skill-update`로 관련 references, validator, snippet, docs, history까지 함께 맞춘다.
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
 - 문서 최신화, stale 설명, 문서 간 충돌 검토 요청은 `sync-docs`로 처리한다.

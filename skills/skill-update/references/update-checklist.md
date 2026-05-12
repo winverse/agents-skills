@@ -27,11 +27,13 @@ Read only the target files needed for the requested update.
 | `README.md` | Current skill catalog entry and validator command are present |
 | `AGENTS.md` | Repo-local skill link and overrides are present if relevant |
 | `history/skills.md` | Durable lifecycle and material behavior changes are recorded |
+| `show-skills/skill.html` | Skill inventory changes are reflected by `update-html-catalog.ts` |
 | `docs/` | Shared workflow docs do not contradict the updated skill |
 
 ## Coordination Rules
 
 - Use `skill-to-html` for any material change that affects how a human chooses or uses the skill.
+- Run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills` after skill add, remove, rename, archive, or restore operations.
 - Use `sync-docs` when the update changes names, paths, snippets, validation commands, history, lifecycle, or repo-level wording.
 - Use `atomic-committer` only when the user asks to commit or push the completed update.
 - Use web research only if the update depends on external current facts.
@@ -48,6 +50,7 @@ Record in `history/skills.md` when the update changes:
 - lifecycle state,
 - skill name or folder,
 - split, merge, deprecation, or archive status.
+- generated `show-skills/skill.html` catalog behavior.
 
 Do not record purely cosmetic HTML spacing, typo-only edits, or repeated validator results.
 
@@ -58,6 +61,7 @@ Run the target skill and repo validators:
 ```bash
 node scripts/validate-skill.ts skills/<skill-name>
 node skills/<skill-name>/scripts/validate-<skill-name>.ts skills/<skill-name>
+node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills --check
 node scripts/validate-skill-repo.ts .
 ```
 
@@ -66,6 +70,7 @@ If the update touched hooks or generated HTML, run the hook dry-run or HTML stat
 ## Failure Modes
 
 - Updating `SKILL.md` but leaving `skill.html` stale.
+- Adding, removing, or renaming a skill without regenerating the `show-skills` HTML catalog.
 - Updating README but forgetting `project-snippets/`.
 - Changing a validator command without documenting it.
 - Turning history into a scratchpad instead of a durable ledger.

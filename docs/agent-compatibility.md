@@ -16,6 +16,21 @@ Copied snippets use `<skills-root>` as a placeholder for the actual clone path o
 
 `skill.html`은 에이전트가 아니라 사람이 빠르게 판단하기 위한 시각 가이드다. 새 프로젝트에 스킬을 붙이기 전에 먼저 `skill.html`을 열어 목적, trigger, workflow, 파일 구조를 확인한다.
 
+Do not assume identical scope or precedence across agents. `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `.cursor/rules`, `.windsurf/rules`, `SKILL.md`, `.agents/skills`, and `.claude/skills` are portable connection surfaces, but each product can apply different discovery, nesting, precedence, activation metadata, and feature-support rules.
+
+## Surface Matrix
+
+| Surface | Use for | Compatibility note |
+| --- | --- | --- |
+| `AGENTS.md` | Codex-style project instructions and some agent-compatible repo instructions | Verify nested-file and precedence behavior per agent. |
+| `CLAUDE.md` | Claude-oriented project instructions | Keep shared skill links readable even when automatic skill loading is unavailable. |
+| `GEMINI.md` | Gemini-oriented project instructions | Treat as an adapter surface, not proof that other agents will read it. |
+| `.github/copilot-instructions.md` | GitHub Copilot repo-wide instructions | Check feature support and path-specific instruction precedence. |
+| `.github/instructions/*.instructions.md` | GitHub Copilot path or task instructions | Keep globs and agent-specific conditions explicit. |
+| `.cursor/rules` | Cursor rules and activation metadata | Verify root/nested behavior and `description`, `globs`, or `alwaysApply` support for the installed version. |
+| `.windsurf/rules` | Windsurf rules and durable reusable context | Distinguish rules, workflows, skills, and memory behavior. |
+| `SKILL.md`, `.agents/skills`, `.claude/skills` | Reusable skill package instructions | Keep descriptions short, trigger-focused, and tested with positive and near-miss prompts. |
+
 ## Codex 연결
 
 Codex 프로젝트에서는 보통 `AGENTS.md`에 다음처럼 연결한다.

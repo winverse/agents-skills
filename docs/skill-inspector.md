@@ -56,11 +56,14 @@ repo 전체 lifecycle, history, portable path, 문서 정합성 기준도 확인
 ```bash
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .
+node scripts/run-agent-evals.ts
 ```
 
 Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상에서 `node <file>.ts`로 직접 실행하는 것을 기준으로 하고, 새 validator를 `.py`로 추가하지 않는다. Codex hook처럼 다른 실행 환경과의 호환성이 중요한 파일은 예외적으로 `.mjs`를 유지할 수 있다.
 
 `scripts/validate-skill-repo.ts`는 현재 스킬 목록이 README, AGENTS, `project-snippets/`, `history/skills.md`, 스킬별 validator 명령과 일치하는지도 검사한다. 스킬 이름을 바꾸거나 새 스킬을 추가했는데 문서 한 곳이 이전 이름을 가리키면 이 검증에서 실패해야 한다.
+
+`scripts/run-agent-evals.ts`는 `evals/agent/cases/`의 대표 prompt 계약을 검사한다. 정적 validator가 파일 정합성을 보는 동안, 이 runner는 skill routing, safety boundary, output shape 같은 agent behavior regression을 빠르게 확인한다.
 
 `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
 

@@ -18,6 +18,7 @@ Load `references/update-checklist.md` when the update touches trigger wording, w
 - Keep `SKILL.md` concise; move deeper examples, preferences, and edge cases into `references/`.
 - Update the whole skill package when behavior changes: `SKILL.md`, references, validator, `agents/openai.yaml`, `skill.html`, project snippets, repo docs, and history as needed.
 - Use `skill-to-html` after material skill changes so the adjacent `skill.html` stays current.
+- When a skill is added, removed, renamed, archived, or restored, run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills` so `show-skills/skill.html` reflects the current `skills/*` inventory.
 - Use `sync-docs` when README, AGENTS, docs, snippets, history, or paths may drift.
 - Ask the user before deciding unclear behavior, source-of-truth conflicts, deprecation, rename, split, or removal.
 - Run relevant validators before calling the update done.
@@ -32,7 +33,7 @@ Classify the change before editing:
 | Workflow or rules | Update `SKILL.md`, references, validator, `skill.html`, history |
 | Reference detail | Update reference file, validator if it checks the detail, `skill.html` if the visible behavior changes |
 | Validator or script | Keep TypeScript for repo-owned validators, update README command, run it, record history when material |
-| Rename, split, merge, deprecate | Ask if unclear, update paths everywhere, update history lifecycle, run `sync-docs` |
+| Rename, split, merge, deprecate | Ask if unclear, update paths everywhere, refresh `show-skills/skill.html`, update history lifecycle, run `sync-docs` |
 | Visual guide only | Use `skill-to-html` standards, run skill validator, skip history unless behavior changed |
 
 ## Workflow
@@ -44,13 +45,15 @@ Classify the change before editing:
 5. Ask a focused question if the intended behavior or source of truth is ambiguous.
 6. Edit the minimal set of files needed for a complete package update.
 7. Run `skill-to-html` for material skill changes or any visible trigger/workflow change.
-8. Run `sync-docs` when cross-document wording, paths, snippets, history, or validator commands may be stale.
-9. Review `docs/skill-inspector.md`; if inspection finds issues, write a local `inspector/YYYY-MM-DD-<scope>.md`, fix from that record, and delete the record once resolved.
-10. Run validation:
+8. If the set of skill folders changed, run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills`.
+9. Run `sync-docs` when cross-document wording, paths, snippets, history, or validator commands may be stale.
+10. Review `docs/skill-inspector.md`; if inspection finds issues, write a local `inspector/YYYY-MM-DD-<scope>.md`, fix from that record, and delete the record once resolved.
+11. Run validation:
     - `node scripts/validate-skill.ts skills/<skill-name>`
     - the target skill's custom validator when one exists
+    - `node skills/show-skills/scripts/validate-show-skills.ts skills/show-skills` when inventory or catalog links changed
     - `node scripts/validate-skill-repo.ts .`
-11. Report changed files, behavior changes, validation, and unresolved questions.
+12. Report changed files, behavior changes, validation, and unresolved questions.
 
 ## Ask Before Changing
 
