@@ -1,0 +1,76 @@
+[
+  {
+    "id": "project-setup-verifies-skill-links",
+    "title": "Project setup verification checks selected skill links and avoids global install drift",
+    "prompt": "이 프로젝트 AGENTS.md에 선택한 스킬 연결이 맞는지 검증해줘.",
+    "scope": "cross_agent_portability",
+    "expectedSkills": ["sync-docs", "show-skills"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex", "claude-code"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "docs/project-skill-setup.md",
+        "value": "Project Setup Verification"
+      },
+      {
+        "type": "required_file_reference",
+        "file": "evals/agent/fixtures/project-setup/skill-link-report.md",
+        "values": [
+          "AGENTS.md",
+          "skills/workflow/SKILL.md",
+          "skills/project-structure/SKILL.md",
+          "skills/browser-qa/SKILL.md"
+        ]
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/project-setup/skill-link-report.md",
+        "value": "Install globally"
+      },
+      {
+        "type": "json_schema",
+        "file": "evals/agent/fixtures/project-setup/skill-link-report.json",
+        "schema": {
+          "required": ["targetInstructionFile", "skills", "linksValid", "globalInstallAllowed", "validation"],
+          "properties": {
+            "targetInstructionFile": {"type": "string"},
+            "skills": {"type": "array"},
+            "linksValid": {"type": "boolean"},
+            "globalInstallAllowed": {"type": "boolean"},
+            "validation": {"type": "array"}
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "output-quality-requires-current-research-links",
+    "title": "Output quality checks can count citations in saved research outputs",
+    "prompt": "최신 AI agent guardrail 자료를 웹서치로 조사하고 출처를 달아줘.",
+    "scope": "output_quality",
+    "expectedSkills": ["web-research"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-12",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/output/web-research-answer.md",
+        "value": "date checked"
+      },
+      {
+        "type": "required_link_count",
+        "file": "evals/agent/fixtures/output/web-research-answer.md",
+        "min": 3
+      }
+    ]
+  }
+]

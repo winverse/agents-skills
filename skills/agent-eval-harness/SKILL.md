@@ -1,6 +1,6 @@
 ---
 name: agent-eval-harness
-description: Use when asked to set up, scaffold, configure, or improve an evaluation harness for agent skills, agent instructions, prompt routing, cross-agent portability, tool choice, guardrails, artifact hygiene, or repeatable AI-agent workflows. This skill helps create the initial eval dataset, fixture layout, local runner, grader checklist, CI gate, and regression capture process before a repo has mature agent evaluation infrastructure.
+description: Use when asked to set up, scaffold, configure, or improve an evaluation harness for agent skills, agent instructions, prompt routing, cross-agent portability, tool choice, guardrails, artifact hygiene, deterministic file/link/schema checks, or repeatable AI-agent workflows. This skill helps create the initial eval dataset, fixture layout, local runner, grader checklist, CI gate, and regression capture process before a repo has mature agent evaluation infrastructure.
 ---
 
 # Agent Eval Harness
@@ -61,6 +61,8 @@ Load `references/harness-blueprint.md` when choosing folder layout, case schema,
 
 When this skill is called from `workflow`, keep the harness separate but seed cases that protect the workflow contract. A bootstrap harness may run before `workflow` only to check routing, safety, and artifact policy; full workflow regression cases should be added after `workflow` has identified domain, architecture, PRD, issue, design, and verification artifacts.
 
+Workflow cases must check at least one scrubbed saved output fixture under `evals/agent/fixtures/workflow/`. Static source phrase checks are allowed as support, but they are not enough to prove the workflow handoff.
+
 Create or adapt cases for:
 
 - **workflow routing**: new project and feature prompts select `workflow` instead of jumping straight to coding or `project-structure`;
@@ -68,6 +70,10 @@ Create or adapt cases for:
 - **project-structure timing**: `project-structure` is used after domain language and concrete architecture questions, before ADR lock and PRD, not during raw idea discovery;
 - **PRD settings**: PRD path, inputs, language, scope lock, architecture lock, and data source of truth are fixed before `to-prd`;
 - **mockup selection**: substantial UI work requires two or three mock directions and a user-selected direction before implementation;
+- **CLI/no-browser evidence**: CLI, service, library, and automation projects use command, API, runtime, report, or log evidence instead of browser screenshots;
+- **MCP/API gate decisions**: tool-connected automation records `approved`, `dev-only`, `needs-info`, or `blocked` before implementation planning;
+- **project setup verification**: cross-agent setup checks target instruction files, valid skill links, `skill.html`, selected snippets, no global install drift, and eval seed status;
+- **completion/ship mapping**: source workflow stages map to repo-local skills and release prep stays separate from publishing;
 - **document sync and artifact hygiene**: completion calls doc sync, preserves historical plans/specs, and stores workflow logs, screenshots, traces, and QA artifacts under the project workflow area.
 
 ## Case Design
@@ -84,12 +90,14 @@ Good initial cases are small and named after the behavior they protect:
   "assumptionDate": "2026-05-12",
   "exampleType": "typical",
   "checks": [
-    {"type": "required_text", "value": "date checked"},
-    {"type": "required_link_count", "min": 3}
+    {"type": "required_text", "file": "evals/agent/fixtures/output/web-research-answer.md", "value": "date checked"},
+    {"type": "required_link_count", "file": "evals/agent/fixtures/output/web-research-answer.md", "min": 3}
   ],
   "risk": "medium"
 }
 ```
+
+This repo's local runner supports deterministic file checks such as `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, and `command_passed`. Prefer those before adding model-graded checks.
 
 Do not overfit to one model's wording. Check the observable contract, not private reasoning.
 

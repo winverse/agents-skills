@@ -1,9 +1,10 @@
 ## Project Skill: Project Structure
 
-- For choosing, creating, standardizing, or refactoring frontend, backend, full-stack monorepo, desktop app, or infrastructure-aware folder structures, use the shared skill at `<skills-root>/skills/project-structure/SKILL.md`.
+- For choosing, creating, standardizing, or refactoring frontend, backend, full-stack monorepo, desktop app, infrastructure-aware folder structures, or folder-local `AGENTS.md` indexes, use the shared skill at `<skills-root>/skills/project-structure/SKILL.md`.
 
 ## Project Structure Overrides
 
+- If the request is still raw product discovery, end-to-end project workflow, domain modeling, PRD/issues, or “start a new project and take it through planning/implementation,” use `workflow` first. Use `project-structure` after domain language and architecture questions are concrete enough to choose folder/env/codegen/db/infra boundaries.
 - Prefer numeric choices when the project kind or stack is not clear.
 - Default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation, and Pulumi/Docker/AWS ECR/ECS Fargate when infrastructure is requested unless the project says otherwise.
 - Use MongoDB + Atlas when MongoDB/document DB is selected, and Supabase Postgres when the user wants managed psql-compatible Postgres. Keep Supabase service-role keys and MongoDB URIs server-only.
@@ -16,5 +17,7 @@
 - For MongoDB, keep client/collection/index helpers in `packages/db/src/mongo` and use seed/index sync scripts instead of Drizzle migrations.
 - When GraphQL is selected, define the schema/document/autogen contract and choose one generated artifact policy: ignored and reproducible, or committed and reviewed.
 - Represent frontend Panda CSS tokens/recipes/generated output, backend health/security/observability, and app-level test surfaces in the final tree when those capabilities are selected.
+- When agent tools, MCP servers, external APIs, DB shells, deploy scripts, migrations, or write-capable automation are part of the structure, document the read/write/delete/network authority, approval boundary, least-privilege credential scope, and scrubbed logs/fixtures policy.
 - Include `infra/pulumi`, app-local Dockerfiles, AWS ECR image ownership, and an ECS Fargate or EC2 Docker host runtime path only when deployment, cloud, Docker, Pulumi, AWS, ECR, ECS, EC2, or CI/CD structure is requested.
 - For infrastructure-aware structures, include the public entrypoint choice, required secret names, Pulumi stack config examples without live values, immutable image tag handoff, and a post-deploy smoke check.
+- Add short folder-local `AGENTS.md` indexes for meaningful boundary folders such as `apps/web`, `apps/api`, `packages/db`, and `infra/pulumi`. Keep them as table-of-contents files with purpose, local map, work-here, do-not-change, related skills, and validation commands.

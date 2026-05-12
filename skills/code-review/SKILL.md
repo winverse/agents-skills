@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Use when the user asks for code review, PR review, diff review, implementation audit, regression risk review, bug finding, missing test review, maintainability review, or JavaScript and TypeScript style review. This skill produces findings first with file and line references, checks SRP and SOLID boundaries, and prefers clear functional collection style in JS and TS without over-engineering.
+description: Use when the user asks for code review, PR review, diff review, implementation audit, regression risk review, bug finding, missing test review, maintainability review, JavaScript and TypeScript style review, or review of agent/tool-call boundaries. This skill produces findings first with file and line references, checks SRP and SOLID boundaries, security/tool surfaces, and clear functional collection style in JS and TS without over-engineering.
 ---
 
 # Code Review
@@ -43,6 +43,7 @@ Read `references/review-checklist.md` for broad reviews. Read `references/js-ts-
 
 5. Security and operations.
    - Watch for secrets, injection, unsafe parsing, auth bypass, SSRF, XSS, CSRF, path traversal, broken rate limits, and logging sensitive data.
+   - Review agent/tool surfaces when relevant: MCP or tool-call boundaries, untrusted tool output, prompt-injection exposure, destructive side effects, least privilege, and approval requirements.
    - Check observability, error messages, rollback safety, and operational failure modes when relevant.
 
 ## Output Shape

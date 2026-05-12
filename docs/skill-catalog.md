@@ -19,13 +19,25 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | cmux tab/status/hook으로 세션 질문을 기억한다 | `cmux-automation` | `sync-docs`, `browser-qa` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
-| 새 프로젝트나 feature의 작업 순서를 잡는다 | `workflow` | `project-structure`, `sync-docs` |
+| 새 프로젝트나 feature의 작업 순서를 잡는다 | `workflow` | `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
 | 구현, 디버깅, 리팩터링을 신중하게 한다 | `karpathy-thinkings` | `code-review` |
 | 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
 | 커밋을 논리 단위로 나누고 push한다 | `atomic-committer` | `code-review` |
 | 브라우저 렌더링과 console/network를 확인한다 | `browser-qa` | `design-review` |
 | 코드 리뷰와 회귀 위험을 본다 | `code-review` | `browser-qa` |
 | UI 위계, 밀도, 타이포그래피, 취향을 본다 | `design-review` | `browser-qa` |
+
+## 비슷해 보이는 스킬 경계
+
+| 헷갈리는 묶음 | 먼저 고를 기준 | 같이 쓰는 경우 |
+| --- | --- | --- |
+| `show-skills` / `sync-docs` | `show-skills`는 현재 목록을 읽고 추천할 때, `sync-docs`는 문서끼리 맞지 않는 설명을 고칠 때 쓴다. | 목록을 본 뒤 catalog, README, snippet이 stale인지 확인할 때 둘을 같이 쓴다. |
+| `skill-update` / `skill-to-html` / `sync-docs` | `skill-update`는 기존 스킬 패키지 자체를 바꾸는 작업, `skill-to-html`은 사람용 HTML guide 작업, `sync-docs`는 주변 문서 정합성 작업이다. | 스킬 trigger나 workflow가 바뀌면 세 개가 순서대로 이어질 수 있다. |
+| `agent-improvement-loop` / `agent-eval-harness` | `agent-improvement-loop`는 repo 품질 backlog를 고르는 루프, `agent-eval-harness`는 반복 검증 harness를 만드는 스킬이다. | 개선 루프에서 재발 방지가 필요하면 eval harness case를 추가한다. |
+| `workflow` / `project-structure` | `workflow`는 새 프로젝트나 feature의 product, architecture, issue, TDD, QA 순서를 잡는다. `project-structure`는 구조 선택이 구체화된 뒤 폴더/env/codegen/db/infra 경계를 잡는다. | workflow가 architecture handoff 지점에 도달하면 project-structure를 호출한다. |
+| `browser-qa` / `design-review` / `code-review` | `browser-qa`는 실제 렌더링과 console/network 증거, `design-review`는 UI 위계와 시각 판단, `code-review`는 구현 위험과 테스트 누락을 본다. | UI 변경 검토는 browser-qa로 사실을 확인하고 design-review로 판단을 보강한다. |
+| `web-research` / `sync-docs` | `web-research`는 외부 최신 사실과 출처 검증, `sync-docs`는 repo 안의 현재 문서와 파일 대조다. | 문서가 외부 최신 사실을 포함하면 web-research로 근거를 확인한 뒤 sync-docs로 반영한다. |
+| `karpathy-thinkings` / `code-review` | `karpathy-thinkings`는 구현 전후의 작업 discipline, `code-review`는 결과 diff의 findings-first 검토다. | 중요한 구현은 karpathy-thinkings로 진행하고 code-review로 마무리한다. |
 
 ## 카테고리별 목록
 
@@ -42,18 +54,18 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 diagram-rich `skill.html`을 만든다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
 | `skill-update` | 기존 공유 스킬을 수정할 때 source, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
-| `sync-docs` | README, AGENTS, docs, snippets, history, skill 파일을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
+| `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
 | `cmux-automation` | cmux hooks, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리한다. | [SKILL.md](../skills/cmux-automation/SKILL.md) · [skill.html](../skills/cmux-automation/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
-| `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `workflow`가 호출할 때는 workflow routing, dependency inventory, `project-structure` timing, PRD/mockup/document sync seed case를 만든다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
+| `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check와 workflow scenario/project setup seed case를 지원한다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
 
 ### 구현과 구조
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `karpathy-thinkings` | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄인다. | [SKILL.md](../skills/karpathy-thinkings/SKILL.md) · [skill.html](../skills/karpathy-thinkings/skill.html) |
-| `project-structure` | frontend, backend, full-stack monorepo, desktop app과 선택형 MongoDB Atlas, Supabase Postgres, Pulumi/Docker/AWS infra 구조, 기본 stack/env/codegen/test/security 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
-| `workflow` | Matt Pocock-style, GStack-style, Superpowers-style, design-direction skill 의존성을 확인하고 원본 `WORKFLOW.md` 순서를 보존한다. `project-structure`는 domain/architecture 질문이 구체화된 뒤 호출하고, `agent-eval-harness`는 별도 검증 handoff로 호출한다. | [SKILL.md](../skills/workflow/SKILL.md) · [skill.html](../skills/workflow/skill.html) |
+| `project-structure` | frontend, backend, full-stack monorepo, desktop app과 folder-local AGENTS.md 목차, 선택형 DB/infra 구조, 기본 stack/env/codegen/test/security/tool-boundary 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
+| `workflow` | 외부 workflow skill 의존성을 확인하고 원본 순서를 보존한다. raw service, 기존 API cleanup, substantial UI, CLI/no-browser, infra, MCP/API, cross-agent setup, completion/ship scenario lane을 제공하며, 구현 helper가 없으면 fallback lane을 쓰고 tool/security gate와 project setup verification을 별도 handoff로 둔다. | [SKILL.md](../skills/workflow/SKILL.md) · [skill.html](../skills/workflow/skill.html) |
 
 ### 문서와 커밋
 
@@ -66,7 +78,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `browser-qa` | 브라우저 runtime evidence로 렌더링, console, network, accessibility snapshot, viewport, text overflow를 확인한다. | [SKILL.md](../skills/browser-qa/SKILL.md) · [skill.html](../skills/browser-qa/skill.html) |
-| `code-review` | Findings-first 방식으로 버그, 회귀, 누락 테스트, SRP/SOLID, JS/TS 스타일 위험을 검토한다. | [SKILL.md](../skills/code-review/SKILL.md) · [skill.html](../skills/code-review/skill.html) |
+| `code-review` | Findings-first 방식으로 버그, 회귀, 누락 테스트, SRP/SOLID, JS/TS 스타일, agent/tool-call boundary 위험을 검토한다. | [SKILL.md](../skills/code-review/SKILL.md) · [skill.html](../skills/code-review/skill.html) |
 | `design-review` | 제품 도메인과 기존 디자인 시스템을 우선해 UI hierarchy, density, typography, state, accessibility, responsive order를 리뷰한다. | [SKILL.md](../skills/design-review/SKILL.md) · [skill.html](../skills/design-review/skill.html) |
 
 ## 보는 방법

@@ -1,13 +1,13 @@
 ---
 name: workflow
-description: Use when the user asks to design, run, review, or document a project workflow; start a new project or feature; turn an idea into domain docs, ADRs, PRDs, issues, implementation plans, TDD cycles, QA, document sync, and ship steps; decide which planning or implementation skill should run next; or prevent agents from coding before product, architecture, and issue boundaries are clear.
+description: Use when the user asks to design, run, review, or document a project workflow; start a new project or feature; turn an idea into domain docs, ADRs, PRDs, issues, implementation plans, TDD cycles, QA, document sync, and ship steps; decide which planning or implementation skill should run next; prevent agents from coding before product, architecture, and issue boundaries are clear; or run fallback implementation, tool/security, and project setup verification gates.
 ---
 
 # Workflow
 
 Use this skill to guide a front-loaded AI coding workflow. The goal is to keep agents from starting with code before the product language, architecture choices, issue boundaries, implementation plan, and verification gates are explicit. Keep the workflow portable across Codex, Claude, Cursor, Windsurf, Copilot, and other agents by treating each agent's instruction files, rules, hooks, skills, workflows, memories, and subagents as runtime adapters rather than as the workflow itself.
 
-Load `references/project-workflow-playbook.md` when the user asks for a complete project plan, a feature workflow, issue sequencing, subagent-assisted implementation, or a workflow audit.
+Load `references/project-workflow-playbook.md` when the user asks for a complete project plan, a feature workflow, issue sequencing, subagent-assisted implementation, cross-agent setup, completion/ship, tool-connected automation, or a workflow audit.
 
 Load `references/upstream-dependency-map.md` when checking whether the source workflow still matches Matt Pocock, GStack, Superpowers, design-direction, or repo-local helper skills; when a source skill may have updated; or when auditing duplicate workflow stages, direction quality, PRD handoffs, or mockup selection.
 
@@ -45,30 +45,68 @@ Rules:
 - When current agent behavior matters, verify it from official docs and record the checked date in the workflow log or planning artifact.
 - Keep workflow artifacts in the project’s chosen workflow area. If the project follows this repo’s default pattern, use `.scratch/<feature-slug>/`.
 - Prefer vertical slices over horizontal setup work. A good first implementation issue proves real input -> persistence -> API or command boundary -> user-visible output.
+- For CLI or no-browser work, the vertical slice may be local fixture/input -> command boundary -> report artifact/stdout -> CLI or runtime evidence. Do not require browser QA or mockup selection when no browser surface exists.
 - Keep UI design rules explicit before frontend implementation. If there is user-facing UI, read or create `design.md` before coding screens.
 - Keep product challenge, implementation brainstorming, and visual mockup selection separate. Product challenge asks whether and what to build; implementation brainstorming narrows how to build one issue; visual mockup selection compares UI directions before implementation.
 - When GStack-style skills are available, use `office-hours` and product/spec review skills for product challenge before PRD. When they are not installed, run the same review questions manually and record the result as an equivalent product challenge artifact.
 - When Superpowers-style skills are available, use implementation `brainstorming` after issue triage and before writing implementation plans. Do not use it as a substitute for product validation.
+- When `brainstorming`, `writing-plans`, `tdd`, or `verification-before-completion` are missing, run the Local Implementation Fallback Lane instead of skipping implementation design, plan review, RED/GREEN/REFACTOR, or verification evidence.
 - For substantial UI, present two or three mock design directions, ask the user to select or combine one, then record the chosen direction in `design.md`, the issue/spec, and a mockup decision artifact before coding the UI.
 - Favor direction quality over speed. The source workflow intentionally spends time on domain, product, PRD, plan, design, and mock direction before code.
 - Use TDD as behavior cycles, not as one giant test batch: `RED -> GREEN -> REFACTOR`.
 - When subagents are available and explicitly appropriate, separate roles: Unit Test Agent writes failing tests, Implementer Agent changes production code, Verifier Agent checks spec and test quality.
 - Log major workflow decisions in the project’s workflow log. Do not rely on chat history as the durable record.
+- Run an Agent Tool And Security Risk Gate before connecting new tools, MCP servers, external APIs, write-capable automation, or untrusted content to the implementation path.
+- Treat the Agent Tool And Security Risk Gate as a hard decision point. The decision must be `approved`, `dev-only`, `needs-info`, or `blocked` before the implementation plan can rely on that tool or API.
 - If the next source of truth is missing or contradictory, ask a focused question before inventing architecture or scope.
+
+## Local Implementation Fallback Lane
+
+Use this lane only when the target project does not have the direct implementation skills available. Mark the dependency status as `fallback` and create the same durable artifacts the missing skills would have produced:
+
+```text
+ready issue and prior gates verified
+-> issue-level implementation design with behavior, files, states, tool/security risks, and tests
+-> TDD plan with exact paths and commands
+-> RED check or characterization check
+-> minimal GREEN implementation
+-> REFACTOR only after green
+-> verification-before-completion evidence
+```
+
+The implementation design belongs under `.scratch/<feature-slug>/specs/`. The plan belongs under `.scratch/<feature-slug>/plans/`. Verification evidence must include the relevant tests plus browser evidence for UI, CLI/API evidence for services, and non-browser runtime evidence when no browser surface exists.
+
+Before implementation, record the tool/security risk boundary: untrusted input, prompt-injection exposure, network access, filesystem writes, secrets or private data, destructive commands, approval needs, least-privilege limits, and a gate decision of `approved`, `dev-only`, `needs-info`, or `blocked`.
+
+## Scenario Lane Guardrails
+
+Use the detailed scenario lanes in `references/project-workflow-playbook.md` when a request matches one of these common edge cases:
+
+- Raw SaaS, service, or feature idea: Discovery comes before `project-structure`, PRD, and implementation.
+- Existing backend/API structure cleanup: audit existing docs/tree/scripts/tests, write a boundary map, then use `project-structure` as an architecture cleanup handoff. Do not force a full product PRD if behavior is not changing.
+- Substantial UI: create or refresh baseline `design.md` before PRD/issue work when information architecture and states shape the product; run mockup selection after implementation planning and before TDD.
+- CLI/no-browser tool: replace browser screenshots with CLI/API/non-browser runtime evidence and keep file-write boundaries explicit.
+- New service with Docker/AWS/Pulumi: Discovery and ADR still come before infra tree generation; `project-structure` proposes infra only after service shape is constrained.
+- MCP/API/file-write automation: run the tool/security gate after ADR and before implementation design/plan.
+- Cross-agent portability setup: use the smallest adapter snippets and run Project Setup Verification.
+- Completion/ship: map source names to repo-local skills when needed: `review -> code-review`, `qa -> browser-qa`, `document-sync -> sync-docs`, `semantic-commits -> atomic-committer`. Release prep is not release publishing.
 
 ## Mode Router
 
 Choose one mode before acting:
 
+The mode router is not a bypass. Before running any non-discovery mode, first check whether required prior gates already exist. If `CONTEXT.md`, ADRs, product challenge notes, PRD settings, issue triage, design direction, or implementation plans are missing, make the next step the missing gate instead of jumping ahead.
+
 | User situation | Mode | First action |
 | --- | --- | --- |
 | “I have an idea/new project” | Discovery | Use `grill-me`; use `grill-with-docs` if existing docs/code already exist |
-| “Which stack/structure?” | Architecture | Use `grill-with-docs`, then `plan-eng-review` when needed; write ADR |
-| “Make a PRD/issues” | Product planning | Use `office-hours`, `plan-ceo-review`, `to-prd`, `to-issues`, then `triage` |
-| “Start implementing this issue” | Implementation | Use `brainstorming`, `writing-plans`, `plan-eng-review`, then TDD |
+| “Which stack/structure?” | Architecture | Verify domain context first, then use `grill-with-docs`, call `project-structure` only when structure questions are concrete, run architecture review when needed, and write ADR |
+| “Clean up this existing API/backend structure” | Architecture cleanup | Read existing docs/tree/scripts/tests, write a current boundary map, use `project-structure` as an audit/handoff, then create staged refactor issues |
+| “Make a PRD/issues” | Product planning | Verify `CONTEXT.md`, ADRs, and PRD settings first; then use `office-hours`, `plan-ceo-review`, `to-prd`, `to-issues`, then `triage` |
+| “Start implementing this issue” | Implementation | Verify PRD, issue triage, and plan inputs first; use `brainstorming`, `writing-plans`, `plan-eng-review`; if substantial UI, run mockup selection before TDD |
 | “Is this workflow going well?” | Workflow audit | Compare docs, issues, plan, tests, UI evidence, and workflow log |
-| “Implementation is done” | Completion | Use `review`, `qa`, `diagnose` if needed, `document-sync`, architecture cleanup, then commit/ship |
-| “Make this work in Codex/Claude/Cursor/Windsurf/Copilot” | Portability setup | Pick the instruction/rule/workflow surface and write the smallest adapter snippet |
+| “Implementation is done” | Completion | Use `review`/`code-review`, `qa`/`browser-qa` when relevant, `diagnose` if needed, `document-sync`/`sync-docs`, architecture cleanup only if it changes nothing stale or is followed by re-verification, then commit/ship only on request |
+| “Make this work in Codex/Claude/Cursor/Windsurf/Copilot” | Portability setup | Pick the instruction/rule/workflow surface, write the smallest adapter snippet, then run Project Setup Verification |
 
 ## Default Flow
 
@@ -117,6 +155,16 @@ Direct-use order copied from the source workflow:
 16. semantic-commits, ship when requested
 ```
 
+Repo-local completion mapping when the upstream source skills are not installed:
+
+```text
+review -> code-review
+qa -> browser-qa when a browser surface exists; otherwise runtime/CLI/API evidence
+document-sync -> sync-docs
+semantic-commits -> atomic-committer
+ship -> release notes/checklist by default; tag or release publishing only when explicitly requested
+```
+
 Run a cross-agent portability pass whenever the workflow is meant to be reused outside the current runtime:
 
 ```text
@@ -124,6 +172,7 @@ shared workflow contract
 -> active agent adapter surface
 -> project snippet or rule target
 -> current official-doc check if behavior is runtime-specific
+-> Project Setup Verification for skill links, snippets, and no global install drift
 -> agent-eval-harness seed cases when the workflow must stay reliable
 ```
 
@@ -144,6 +193,7 @@ design.md
   plans/
   artifacts/
     screenshots/
+    cli-output/
     logs/
 ```
 
@@ -170,8 +220,9 @@ The PRD becomes the authority for `to-issues`. If the inputs disagree, stop and 
 - Use `browser-qa` for runtime UI evidence, screenshots, console, network, accessibility, and text overlap.
 - Use `code-review` after implementation or when a plan/diff needs findings-first risk review.
 - Use `sync-docs` after implementation, QA, or HITL feedback to keep docs aligned.
+- Use `sync-docs` after project skill setup changes to compare the target instruction file, selected snippets, `docs/skill-catalog.md`, and `docs/project-skill-setup.md`.
 - Use `agent-eval-harness` when workflow routing, cross-agent instruction portability, guardrails, or repeated agent behavior must be regression-tested.
-- When handing off to `agent-eval-harness`, seed cases for workflow routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, document-sync, and artifact hygiene.
+- When handing off to `agent-eval-harness`, seed cases for workflow routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, CLI/no-browser evidence, MCP/API gate decisions, cross-agent setup verification, completion/ship local-skill mapping, document-sync, and artifact hygiene.
 - Use `atomic-committer` only when the user asks to commit or push.
 
 ## Output Shape

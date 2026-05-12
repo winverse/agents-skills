@@ -23,6 +23,7 @@ const backend = read("references/backend-nest.md");
 const monorepo = read("references/monorepo.md");
 const desktop = read("references/desktop-tauri.md");
 const dbOptions = read("references/db-options.md");
+const folderAgents = read("references/folder-agents.md");
 const infra = read("references/infra-pulumi-aws.md");
 const structureValidation = read("references/structure-validation.md");
 read("agents/openai.yaml");
@@ -49,6 +50,8 @@ const requiredSkillPhrases = [
   "psql",
   "Testing shape",
   "Infrastructure Policy",
+  "Folder AGENTS Policy",
+  "folder-local `AGENTS.md` indexes",
   "Pulumi",
   "Docker",
   "AWS ECR",
@@ -56,8 +59,11 @@ const requiredSkillPhrases = [
   "EC2",
   "health/readiness",
   "security",
+  "Tool And Security Boundaries",
   "observability",
   "Verification Checklist",
+  "defer to `workflow` first",
+  "after the domain language and architecture questions are concrete",
 ];
 
 for (const phrase of requiredSkillPhrases) {
@@ -73,6 +79,7 @@ const requiredReferences = [
   "references/monorepo.md",
   "references/desktop-tauri.md",
   "references/db-options.md",
+  "references/folder-agents.md",
   "references/infra-pulumi-aws.md",
   "references/structure-validation.md",
 ];
@@ -114,8 +121,9 @@ for (const [name, text, phrases] of [
   ["monorepo.md", monorepo, ["packages/config", "packages/db", "packages/db/src/redis", "turbo", "codegen", "packages/db/drizzle", "packages/db/scripts", "packages/db/src/mongo", "db:shell", "infra/pulumi", "AWS ECR", "deploy:smoke"]],
   ["desktop-tauri.md", desktop, ["Tauri", "src-tauri", "tauri-env.ts", ".env.stage", "src/graphql/autogen.ts", "codegen.ts"]],
   ["db-options.md", dbOptions, ["Database Menu", "PostgreSQL + Drizzle", "MongoDB + Atlas", "Supabase Postgres", "psql", "mongosh", "MONGODB_URI", "SUPABASE_SERVICE_ROLE_KEY", "DATABASE_DIRECT_URL"]],
+  ["folder-agents.md", folderAgents, ["Folder AGENTS Indexes", "Contents Template", "apps/web", "packages/db", "infra/pulumi", "Do Not Change Here", "Related Skills", "Validation", "Sync Rules"]],
   ["infra-pulumi-aws.md", infra, ["Infrastructure Menu", "Pulumi AWS", "Dockerfile", ".dockerignore", "AWS ECR", "ECS Fargate", "EC2 Docker host", "Public entrypoint", "Route 53", "ACM", "infra/pulumi", "Pulumi.<stack>.yaml.example", "smoke-check.ts", "Do not commit live secrets"]],
-  ["structure-validation.md", structureValidation, ["Final Tree Checklist", "GraphQL apps have", "Drizzle migration files have one owner", "MongoDB structures include", "Supabase service-role keys", "Backend observability", "Desktop apps include", "Infrastructure-aware repos include", "deploy:smoke"]],
+  ["structure-validation.md", structureValidation, ["Final Tree Checklist", "GraphQL apps have", "Drizzle migration files have one owner", "MongoDB structures include", "Supabase service-role keys", "Tool and automation boundaries", "Folder-local AGENTS.md indexes", "Backend observability", "Desktop apps include", "Infrastructure-aware repos include", "deploy:smoke"]],
 ] as const) {
   for (const phrase of phrases) {
     if (!text.includes(phrase)) {
@@ -137,9 +145,11 @@ const htmlRequired = [
   "인프라 포함 트리",
   "인프라 정책",
   "DB 옵션",
+  "폴더 AGENTS.md",
   "env 계약",
   "GraphQL codegen 계약",
   "구조 검증",
+  "도구 보안 경계",
   "파일 관계 지도",
   "금지와 허용",
   "중복 folder 역할을 최소화",
@@ -152,13 +162,13 @@ for (const phrase of htmlRequired) {
   }
 }
 
-for (const menuPhrase of ["API contract", "DB", "Postgres hosting", "Mongo hosting", "DB shell", "Cache", "Auth", "Generated artifacts", "Desktop shell", "Infrastructure", "Container registry", "Runtime target", "Public entrypoint"]) {
+for (const menuPhrase of ["API contract", "DB", "Postgres hosting", "Mongo hosting", "DB shell", "Cache", "Auth", "Generated artifacts", "Desktop shell", "Infrastructure", "Container registry", "Runtime target", "Public entrypoint", "Folder instructions"]) {
   if (!skill.includes(menuPhrase)) {
     errors.push(`SKILL.md missing compact menu phrase: ${menuPhrase}`);
   }
 }
 
-for (const menuPhrase of ["API 계약", "DB", "Postgres hosting", "Mongo hosting", "DB shell", "캐시", "인증", "생성 산출물", "데스크톱 shell", "인프라", "컨테이너 registry", "런타임 target", "공개 진입점"]) {
+for (const menuPhrase of ["API 계약", "DB", "Postgres hosting", "Mongo hosting", "DB shell", "캐시", "인증", "생성 산출물", "데스크톱 shell", "인프라", "컨테이너 registry", "런타임 target", "공개 진입점", "Folder instructions"]) {
   if (!html.includes(menuPhrase)) {
     errors.push(`skill.html missing compact menu phrase: ${menuPhrase}`);
   }
@@ -185,6 +195,12 @@ for (const infraPhrase of ["Pulumi AWS", "Docker", "AWS ECR", "ECS Fargate", "EC
 for (const dbPhrase of ["MongoDB Atlas", "Supabase Postgres", "psql", "mongosh", "MONGODB_URI", "DATABASE_DIRECT_URL", "SUPABASE_SERVICE_ROLE_KEY"]) {
   if (!html.includes(dbPhrase)) {
     errors.push(`skill.html missing database phrase: ${dbPhrase}`);
+  }
+}
+
+for (const folderAgentsPhrase of ["AGENTS.md", "boundary", "purpose", "local map", "do-not-change", "related skills", "validation"]) {
+  if (!html.includes(folderAgentsPhrase)) {
+    errors.push(`skill.html missing folder AGENTS phrase: ${folderAgentsPhrase}`);
   }
 }
 

@@ -1,6 +1,6 @@
 ---
 name: project-structure
-description: Use when a user asks to choose, create, standardize, or refactor a web, backend, full-stack monorepo, desktop app, or infrastructure-aware project folder structure. This skill asks compact numeric choices, applies the user's default stack preferences, and produces a consistent project layout with env, GraphQL codegen, Drizzle migration, Tauri build, Pulumi/Docker/AWS infrastructure, testing, security, health/readiness, and observability policies.
+description: Use when a user asks to choose, create, standardize, or refactor a web, backend, full-stack monorepo, desktop app, or infrastructure-aware project folder structure. This skill asks compact numeric choices, applies the user's default stack preferences, and produces a consistent project layout with env, GraphQL codegen, Drizzle migration, Tauri build, Pulumi/Docker/AWS infrastructure, folder-local AGENTS.md indexes, testing, security, tool boundaries, health/readiness, and observability policies.
 ---
 
 # Project Structure
@@ -8,6 +8,8 @@ description: Use when a user asks to choose, create, standardize, or refactor a 
 Use this skill when the user asks how to structure a project, create a new project skeleton, align an existing repo to a consistent layout, or choose folders/stacks for frontend, backend, full-stack monorepo, desktop apps, or application infrastructure.
 
 ## First Move
+
+If the request is still raw product discovery, end-to-end project workflow, domain modeling, PRD/issues, or “start a new project and take it through planning/implementation,” defer to `workflow` first. Use `project-structure` after the domain language and architecture questions are concrete enough to choose or validate folder/env/codegen/db/infra boundaries.
 
 If the project kind is not already clear, ask a compact numeric choice:
 
@@ -38,6 +40,7 @@ Infrastructure: 1 Pulumi AWS default when infra is requested, 2 no infra, 3 exis
 Container registry: 1 Docker image to AWS ECR default when deploying containers, 2 no registry, 3 external registry
 Runtime target: 1 ECS Fargate default for new AWS container runtime, 2 EC2 Docker host, 3 no cloud runtime
 Public entrypoint: 1 ALB default for public AWS services, 2 internal service, 3 existing DNS/CDN
+Folder instructions: 1 boundary AGENTS.md index default, 2 root AGENTS.md only, 3 existing instruction files
 ```
 
 ## Default Stack
@@ -62,10 +65,21 @@ Public entrypoint: 1 ALB default for public AWS services, 2 internal service, 3 
 | Container registry | AWS ECR |
 | Cloud runtime | ECS Fargate by default, EC2 when VM control is required |
 | Public entrypoint | ALB, with Route 53 and ACM only when custom domain/TLS is requested |
+| Folder instructions | Boundary-folder `AGENTS.md` table-of-contents indexes by default |
 | Testing shape | colocated unit/component tests, app-level e2e tests |
 | Observability | logger, request logging, health/readiness, metrics/tracing boundary |
 
 Do not offer a full-stack single-repo layout by default. The preferred full-stack shape is a monorepo.
+
+## Tool And Security Boundaries
+
+When a structure includes agent tools, MCP servers, external APIs, cloud deploy automation, CI/CD, database shells, or write-capable scripts, make the boundary explicit in the tree and docs:
+
+- Keep secret-bearing env values server-only and validate them through app-local Zod schemas.
+- Put tool adapters, API clients, and automation scripts behind named provider or script folders instead of spreading direct calls through feature code.
+- Document which commands can write, deploy, migrate, delete, send network requests, or touch production-like resources.
+- Prefer least-privilege credentials, scoped directories, and explicit approval gates for destructive or account-changing actions.
+- Keep eval fixtures, screenshots, logs, and examples scrubbed of real credentials and private data.
 
 ## Infrastructure Policy
 
@@ -103,6 +117,22 @@ When database choices are selected:
 - Keep domain modules behind repositories/services; resolvers should not directly use raw `MongoClient`, `pg`, Drizzle, or Supabase admin clients.
 
 Read `references/db-options.md` before generating MongoDB, Atlas, Supabase, PostgreSQL hosting, psql, or database shell structure.
+
+## Folder AGENTS Policy
+
+Add folder-local `AGENTS.md` indexes for meaningful boundary folders by default. Treat them as table-of-contents and ownership maps, not long duplicate rulebooks.
+
+When folder instructions are selected:
+
+- Put a root `AGENTS.md` at the repo root for global project rules.
+- Put local `AGENTS.md` files in boundary folders such as `apps/web`, `apps/api`, `apps/desktop`, `packages/db`, `packages/ui`, and `infra/pulumi` when those folders exist.
+- Add deeper `AGENTS.md` files only when the subfolder has a different responsibility, validator, deployment unit, security boundary, or ownership model.
+- Keep each folder `AGENTS.md` short and structured as a contents index: purpose, local map, editable areas, do-not-touch areas, relevant skills, and validation commands.
+- Do not copy the full root instructions into every folder. Local files should point up to root rules and only add folder-specific guidance.
+- Do not create folder-local `AGENTS.md` for generated output, vendored code, build artifacts, or trivial leaf folders.
+- If the target agent uses `CLAUDE.md`, `.cursor/rules`, or another instruction surface, mirror the same folder-index idea in that agent's local instruction file rather than creating Codex-only guidance.
+
+Read `references/folder-agents.md` before generating folder-local `AGENTS.md` indexes.
 
 ## Env Policy
 
@@ -145,6 +175,7 @@ When GraphQL is selected:
    - `references/monorepo.md` for full-stack monorepos.
    - `references/desktop-tauri.md` for Tauri apps.
    - `references/db-options.md` when MongoDB, Atlas, Supabase, PostgreSQL hosting, psql, or database shell choices are selected.
+   - `references/folder-agents.md` when folder-local `AGENTS.md`, `CLAUDE.md`, or agent instruction indexes are selected.
    - `references/infra-pulumi-aws.md` when infrastructure, Docker, AWS, ECR, ECS, EC2, or deployment pipeline folders are selected.
    - `references/structure-validation.md` before final verification.
 4. Produce a directory tree first.
@@ -152,8 +183,9 @@ When GraphQL is selected:
 6. Minimize duplicate folder roles. Do not create both global and domain folders for the same responsibility unless the boundary is explicit.
 7. If editing a repo, inspect existing folders before changing anything and preserve user code.
 8. Add or update env/codegen/migration/build/infra/deploy scripts only when they match the selected project kind.
-9. Verify the final tree against the selected folder rules before calling it done.
-10. Run targeted validation when a repo has scripts for typecheck, lint, tests, codegen, migrations, infrastructure preview, or deploy checks.
+9. Add or update boundary-folder `AGENTS.md` indexes when folder instructions are selected, and keep them aligned with the final tree.
+10. Verify the final tree against the selected folder rules before calling it done.
+11. Run targeted validation when a repo has scripts for typecheck, lint, tests, codegen, migrations, infrastructure preview, or deploy checks.
 
 ## Web App Policy
 
@@ -207,6 +239,7 @@ Before calling a structure done, verify:
 - Frontend UI/CSS, backend security, observability, health, and test folders are represented when selected.
 - Desktop apps include Tauri build env handling and the same env/codegen path shape when GraphQL is used.
 - Infrastructure-aware repos include Pulumi AWS structure, app-local Dockerfiles and `.dockerignore`, ECR image ownership, public entrypoint choice, documented secret names, smoke checks, and exactly one selected runtime path: ECS Fargate or EC2.
+- Boundary folders include short `AGENTS.md` indexes when selected, and those indexes list purpose, local map, editable areas, do-not-touch areas, relevant skills, and validation commands.
 
 ## Output Shape
 
@@ -215,8 +248,9 @@ When answering, return:
 1. Chosen project kind and stack assumptions.
 2. Directory tree.
 3. Boundary rules for the main folders.
-4. Env/codegen/database/migration/build/infra/test/security/observability policy.
-5. Folder rule verification result.
-6. Any project-specific questions that remain.
+4. Folder-local `AGENTS.md` index plan when selected.
+5. Env/codegen/database/migration/build/infra/test/security/observability policy.
+6. Folder rule verification result.
+7. Any project-specific questions that remain.
 
 Keep the answer implementation-ready. Avoid broad architecture essays unless the user explicitly asks for a design discussion.

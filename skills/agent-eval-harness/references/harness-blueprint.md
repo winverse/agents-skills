@@ -57,9 +57,9 @@ Use JSON unless the target repo already has a stronger fixture format.
   "exampleType": "typical",
   "fixtures": [],
   "checks": [
-    {"type": "required_text", "value": "Sources"},
-    {"type": "forbidden_text", "value": "I cannot browse"},
-    {"type": "required_link_count", "min": 3}
+    {"type": "required_text", "file": "evals/agent/fixtures/output/web-research-answer.md", "value": "Sources"},
+    {"type": "forbidden_text", "file": "evals/agent/fixtures/output/web-research-answer.md", "value": "I cannot browse"},
+    {"type": "required_link_count", "file": "evals/agent/fixtures/output/web-research-answer.md", "min": 3}
   ],
   "risk": "low",
   "mode": "blocking"
@@ -165,10 +165,22 @@ Start with deterministic cases for:
 | Project-structure timing | `project-structure` appears after domain language and concrete architecture questions, before ADR/PRD lock; raw idea discovery does not call it first. |
 | PRD settings | Required PRD path, inputs, language, scope lock, architecture lock, and data source of truth are present. |
 | Mockup selection | UI implementation waits for two or three mock directions and a user-selected direction. |
+| CLI/no-browser evidence | Non-browser projects require command, API, runtime, report, or log evidence instead of browser screenshots. |
+| MCP/API gate decision | Tool-connected automation records `approved`, `dev-only`, `needs-info`, or `blocked` before implementation planning. |
+| Project setup verification | Cross-agent setup checks instruction files, skill links, `skill.html`, selected snippet, no global install drift, and eval seed status. |
+| Completion/ship mapping | Source workflow stages map to repo-local skills, and release prep stays separate from tag/release/deploy publishing. |
 | Document sync | Completion path includes doc sync and preserves historical plans/specs as historical. |
 | Artifact hygiene | Workflow logs and QA artifacts stay under the project workflow area, and raw traces/screenshots are scrubbed or ignored. |
 
 If the project only wants bootstrap coverage before `workflow` runs, keep cases limited to routing, safety, and artifact policy. Add the workflow-specific cases after the workflow has created or identified the actual project artifacts.
+
+For workflow cases, require at least one scrubbed saved output or trace fixture. In this repo, saved workflow outputs live under:
+
+```text
+evals/agent/fixtures/workflow/<case-id>.md
+```
+
+Use source-file checks as supporting evidence only. A case that merely checks whether `SKILL.md` contains a phrase does not prove the workflow handoff will work.
 
 ## Artifact And Trace Hygiene
 

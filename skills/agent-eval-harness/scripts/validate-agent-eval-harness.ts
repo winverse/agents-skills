@@ -70,6 +70,9 @@ requireText("SKILL.md", "prompt injection or tool misuse", "prompt injection saf
 requireText("SKILL.md", "least privilege", "least privilege safety");
 requireText("SKILL.md", "Scrub saved outputs", "artifact hygiene");
 requireText("SKILL.md", "Calibrate model-graded", "model grader calibration");
+requireText("SKILL.md", "required_link_count", "required link count check");
+requireText("SKILL.md", "required_file_reference", "required file reference check");
+requireText("SKILL.md", "json_schema", "json schema check");
 
 requireText("references/harness-blueprint.md", "Scope Router", "scope router");
 requireText("references/harness-blueprint.md", "Minimal Folder Shape", "folder shape");
@@ -93,6 +96,10 @@ requireText("skill.html", "하네스 설정 흐름", "workflow diagram");
 requireText("skill.html", "검증 강도 차트", "validation chart");
 requireText("skill.html", "입출력 스키마", "input output schema");
 requireText("skill.html", "필수 케이스 팩", "case pack section");
+requireText("skill.html", "결정적 체크 타입", "deterministic check type section");
+requireText("skill.html", "required_link_count", "required link count visible guidance");
+requireText("skill.html", "required_file_reference", "required file reference visible guidance");
+requireText("skill.html", "json_schema", "json schema visible guidance");
 requireText("skill.html", "workflow handoff", "workflow handoff visible guidance");
 requireText("skill.html", "project-structure timing", "project-structure timing visible guidance");
 requireText("skill.html", "파일 관계 지도", "resource map");
@@ -128,6 +135,35 @@ requireRepoText(
   "evals/agent/cases/workflow-orchestration.json",
   "workflow-project-structure-timing",
   "workflow orchestration eval case",
+);
+requireRepoText(
+  "evals/agent/cases/project-setup-verification.json",
+  "project-setup-verifies-skill-links",
+  "project setup verification eval case",
+);
+for (const caseId of [
+  "workflow-new-project-routing",
+  "workflow-dependency-inventory",
+  "workflow-prd-settings-gate",
+  "workflow-ui-mockup-gate",
+  "workflow-cli-no-browser-evidence",
+  "workflow-mcp-api-gate-decision",
+  "workflow-cross-agent-setup-verification",
+  "workflow-completion-ship-local-skill-mapping",
+  "workflow-document-sync-artifact-hygiene",
+  "workflow-agent-eval-handoff-seeds",
+]) {
+  requireRepoText("evals/agent/cases/workflow-orchestration.json", caseId, `workflow eval case ${caseId}`);
+}
+requireRepoText(
+  "evals/agent/fixtures/workflow/project-structure-timing.md",
+  "Blocked specialist: project-structure",
+  "workflow saved output fixture",
+);
+requireRepoText(
+  "scripts/run-agent-evals.ts",
+  "workflow cases must check a saved workflow output fixture",
+  "workflow saved output enforcement",
 );
 requireRepoText(
   "README.md",

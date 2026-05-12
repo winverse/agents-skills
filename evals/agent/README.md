@@ -20,7 +20,9 @@ evals/agent/
 │   ├── skill-routing.json
 │   ├── safety-boundaries.json
 │   ├── portability-and-triggers.json
-│   └── output-shape.json
+│   ├── output-shape.json
+│   ├── project-setup-verification.json
+│   └── workflow-orchestration.json
 ├── artifacts/
 │   └── README.md
 ├── fixtures/
@@ -35,9 +37,14 @@ evals/agent/
 2. Name the expected skill or safety boundary.
 3. Include `assumptionDate` and `agentSurfaces` when the case depends on fast-changing agent behavior.
 4. Mark the example as `typical`, `edge`, or `adversarial`.
-5. Prefer checks that read current repo files: `AGENTS.md`, `project-snippets/`, `skills/*/SKILL.md`, references, and compatibility docs.
-6. Keep high-confidence deterministic checks `blocking`.
-7. Mark judgment-heavy, live-routing, or future live-output checks `advisory` until calibrated.
+5. Prefer checks that read current repo files or scrubbed fixtures: `AGENTS.md`, `project-snippets/`, `skills/*/SKILL.md`, references, compatibility docs, saved output files, and JSON reports.
+6. For `workflow` scope, include at least one scrubbed saved output fixture under `evals/agent/fixtures/workflow/`; static source phrases alone are not enough.
+7. Keep high-confidence deterministic checks `blocking`.
+8. Mark judgment-heavy, live-routing, or future live-output checks `advisory` until calibrated.
+
+The runner validates repo-local skill names against `skills/*/SKILL.md` and allows known external system skills such as `skill-creator` and `skill-installer` when a case needs to assert that global installation should not be used.
+
+Useful deterministic check types include `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed`, `forbidden_command`, and `trace_event`.
 
 Real agent failures should become regression cases before broad instruction rewrites.
 

@@ -16,12 +16,33 @@ type Scope =
   | "output_quality"
   | "regression";
 type ExampleType = "typical" | "edge" | "adversarial";
+type JsonSchemaType = "string" | "number" | "boolean" | "array" | "object";
+type JsonSchemaCheck = {
+  required?: string[];
+  properties?: Record<string, { type: JsonSchemaType }>;
+};
 
 type Check =
   | {
       type: "required_text" | "forbidden_text" | "forbidden_command" | "trace_event";
       file: string;
       value: string;
+    }
+  | {
+      type: "required_link_count";
+      file: string;
+      min: number;
+    }
+  | {
+      type: "required_file_reference";
+      file: string;
+      value?: string;
+      values?: string[];
+    }
+  | {
+      type: "json_schema";
+      file: string;
+      schema: JsonSchemaCheck;
     }
   | {
       type: "skill_listed_in";
@@ -62,6 +83,7 @@ const modeFilter = valueFor("--mode");
 const jsonOutput = args.includes("--json");
 const casesDir = path.join(repoRoot, "evals/agent/cases");
 const errors: string[] = [];
+const externalSystemSkills = new Set(["imagegen", "openai-docs", "plugin-creator", "skill-creator", "skill-installer"]);
 
 function valueFor(flag: string): string | undefined {
   const index = args.indexOf(flag);
@@ -93,6 +115,19 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
 }
 
+function isJsonSchemaCheck(value: unknown): value is JsonSchemaCheck {
+  if (!isRecord(value)) return false;
+  if (value.required !== undefined && !isStringArray(value.required)) return false;
+  if (value.properties !== undefined) {
+    if (!isRecord(value.properties)) return false;
+    for (const property of Object.values(value.properties)) {
+      if (!isRecord(property) || typeof property.type !== "string") return false;
+      if (!["string", "number", "boolean", "array", "object"].includes(property.type)) return false;
+    }
+  }
+  return true;
+}
+
 function isCheck(value: unknown): value is Check {
   if (!isRecord(value) || typeof value.type !== "string") return false;
 
@@ -105,6 +140,23 @@ function isCheck(value: unknown): value is Check {
     return typeof value.file === "string" && typeof value.value === "string";
   }
 
+  if (value.type === "required_link_count") {
+    return typeof value.file === "string" && typeof value.min === "number" && value.min >= 0;
+  }
+
+  if (value.type === "required_file_reference") {
+    return (
+      typeof value.file === "string" &&
+      (value.value === undefined || typeof value.value === "string") &&
+      (value.values === undefined || isStringArray(value.values)) &&
+      (typeof value.value === "string" || isStringArray(value.values))
+    );
+  }
+
+  if (value.type === "json_schema") {
+    return typeof value.file === "string" && isJsonSchemaCheck(value.schema);
+  }
+
   if (value.type === "skill_listed_in") {
     return typeof value.skill === "string" && isStringArray(value.files);
   }
@@ -114,6 +166,21 @@ function isCheck(value: unknown): value is Check {
   }
 
   return false;
+}
+
+function textCheckFile(check: Check): string | null {
+  if (
+    check.type === "required_text" ||
+    check.type === "forbidden_text" ||
+    check.type === "forbidden_command" ||
+    check.type === "trace_event" ||
+    check.type === "required_link_count" ||
+    check.type === "required_file_reference" ||
+    check.type === "json_schema"
+  ) {
+    return check.file;
+  }
+  return null;
 }
 
 function parseCase(raw: unknown, source: string, index: number): EvalCase | null {
@@ -185,6 +252,16 @@ function parseCase(raw: unknown, source: string, index: number): EvalCase | null
   if (!Array.isArray(raw.checks) || !raw.checks.every(isCheck)) {
     caseErrors.push(`${source}[${index}] checks contain an unsupported shape`);
   }
+  if (
+    raw.scope === "workflow" &&
+    Array.isArray(raw.checks) &&
+    raw.checks.every(isCheck) &&
+    !raw.checks.some((check) => textCheckFile(check)?.startsWith("evals/agent/fixtures/workflow/"))
+  ) {
+    caseErrors.push(
+      `${source}[${index}] workflow cases must check a saved workflow output fixture under evals/agent/fixtures/workflow/`,
+    );
+  }
 
   if (caseErrors.length) {
     errors.push(...caseErrors);
@@ -244,6 +321,53 @@ function skillNames(): Set<string> {
   );
 }
 
+function readCheckText(file: string): string | null {
+  const fullPath = repoPath(file);
+  if (!existsSync(fullPath)) return null;
+  return readFileSync(fullPath, "utf8");
+}
+
+function countLinks(text: string): number {
+  const links = new Set<string>();
+  const markdownLinkPattern = /\[[^\]]+\]\((https?:\/\/[^)\s]+)[^)]*\)/g;
+  const bareLinkPattern = /https?:\/\/[^\s)\]]+/g;
+  for (const match of text.matchAll(markdownLinkPattern)) links.add(match[1]);
+  for (const match of text.matchAll(bareLinkPattern)) links.add(match[0]);
+  return links.size;
+}
+
+function jsonTypeMatches(value: unknown, expected: JsonSchemaType): boolean {
+  if (expected === "array") return Array.isArray(value);
+  if (expected === "object") return isRecord(value);
+  return typeof value === expected;
+}
+
+function validateJsonSchema(file: string, schema: JsonSchemaCheck): string | null {
+  const fullPath = repoPath(file);
+  if (!existsSync(fullPath)) return `${file} does not exist`;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(fullPath, "utf8")) as unknown;
+  } catch (error) {
+    return `${file} is not valid JSON${error instanceof Error ? ` (${error.message})` : ""}`;
+  }
+
+  if (!isRecord(parsed)) return `${file} must contain a JSON object`;
+
+  for (const field of schema.required ?? []) {
+    if (!(field in parsed)) return `${file} missing required JSON field: ${field}`;
+  }
+
+  for (const [field, rule] of Object.entries(schema.properties ?? {})) {
+    if (field in parsed && !jsonTypeMatches(parsed[field], rule.type)) {
+      return `${file} field ${field} must be ${rule.type}`;
+    }
+  }
+
+  return null;
+}
+
 function runCheck(check: Check): string | null {
   if (
     check.type === "required_text" ||
@@ -262,6 +386,28 @@ function runCheck(check: Check): string | null {
       return `${check.file} includes forbidden text: ${check.value}`;
     }
     return null;
+  }
+
+  if (check.type === "required_link_count") {
+    const text = readCheckText(check.file);
+    if (text === null) return `${check.file} does not exist`;
+    const found = countLinks(text);
+    if (found < check.min) return `${check.file} has ${found} links, expected at least ${check.min}`;
+    return null;
+  }
+
+  if (check.type === "required_file_reference") {
+    const text = readCheckText(check.file);
+    if (text === null) return `${check.file} does not exist`;
+    const values = [check.value, ...(check.values ?? [])].filter((item): item is string => typeof item === "string");
+    for (const value of values) {
+      if (!text.includes(value)) return `${check.file} missing file reference: ${value}`;
+    }
+    return null;
+  }
+
+  if (check.type === "json_schema") {
+    return validateJsonSchema(check.file, check.schema);
   }
 
   if (check.type === "skill_listed_in") {
@@ -296,7 +442,9 @@ function runCheck(check: Check): string | null {
 function validateCaseReferences(testCase: EvalCase, allSkills: Set<string>): string[] {
   const failures: string[] = [];
   for (const skill of [...testCase.expectedSkills, ...(testCase.forbiddenSkills ?? [])]) {
-    if (!allSkills.has(skill)) failures.push(`referenced skill does not exist: ${skill}`);
+    if (!allSkills.has(skill) && !externalSystemSkills.has(skill)) {
+      failures.push(`referenced skill does not exist: ${skill}`);
+    }
   }
   return failures;
 }

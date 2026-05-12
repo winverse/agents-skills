@@ -1,0 +1,7 @@
+{
+  "targetInstructionFile": "AGENTS.md",
+  "skills": ["workflow", "project-structure", "browser-qa", "sync-docs"],
+  "linksValid": true,
+  "globalInstallAllowed": false,
+  "validation": ["node scripts/run-agent-evals.ts --scope cross_agent_portability"]
+}

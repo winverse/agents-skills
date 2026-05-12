@@ -1,4 +1,4 @@
 interface:
   display_name: "Agent Eval Harness"
   short_description: "Set up agent behavior evals"
-  default_prompt: "Use $agent-eval-harness to set up an initial repo-local evaluation harness for agent skill routing, cross-agent portability, workflow behavior, safety boundaries, artifact hygiene, output quality, regression capture, local runner commands, and optional CI gating. When called from workflow, seed cases for workflow routing, dependency inventory, project-structure timing, PRD settings, mockup selection, document sync, and artifact hygiene."
+  default_prompt: "Use $agent-eval-harness to set up an initial repo-local evaluation harness for agent skill routing, cross-agent portability, workflow behavior, safety boundaries, artifact hygiene, output quality, regression capture, local runner commands, and optional CI gating. When called from workflow, seed cases for workflow routing, dependency inventory, project-structure timing, PRD settings, mockup selection, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, and artifact hygiene."

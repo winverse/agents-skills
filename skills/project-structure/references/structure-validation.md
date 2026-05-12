@@ -16,6 +16,9 @@ Use this reference before presenting the final project tree or before finishing 
 - PostgreSQL and Supabase Postgres structures include psql or migration helper boundaries when selected.
 - MongoDB structures include `packages/db/src/mongo`, collection/index helpers, seed/index sync scripts, and no Drizzle migration folder unless PostgreSQL is also selected.
 - Supabase service-role keys, MongoDB URIs, and direct database URLs are server-only and not exposed through frontend public env.
+- Tool and automation boundaries are explicit: agent tools, MCP servers, external API clients, database shells, deploy scripts, migrations, destructive commands, and account-changing actions have named owners and approval expectations.
+- Eval fixtures, screenshots, logs, and examples are scrubbed of live credentials, private data, and production identifiers.
+- Folder-local AGENTS.md indexes exist for selected boundary folders, stay short, and list purpose, local map, editable areas, do-not-touch areas, related skills, and validation commands.
 - Monorepo Redis client, key, and connection helpers live in `packages/db/src/redis`.
 - API cache providers wrap Redis helpers and do not define Redis key conventions.
 - Frontend UI/CSS structure includes Panda config, token/recipe location, and generated style output policy when Panda is selected.

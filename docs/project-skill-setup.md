@@ -12,11 +12,37 @@ This document is only for connecting existing shared skills to a target project.
 
 1. Open the target project's agent instruction file, usually `AGENTS.md` for Codex or `CLAUDE.md` for Claude.
 2. Open each candidate skill's `skill.html` to understand the skill visually before linking it.
-3. Add a `Project Skills` section if it does not exist.
-4. Add links to the selected skill `SKILL.md` files from this repo.
-5. Add project-specific overrides directly below the selected skill list.
-6. Keep the linked skill as the shared default. Fork only when one project needs a permanently different version.
-7. Check `history/skills.md` if the skill is unfamiliar, deprecated, or recently changed.
+3. If candidates look similar, resolve the primary and companion roles using `docs/skill-catalog.md` before linking multiple skills.
+4. Add a `Project Skills` section if it does not exist.
+5. Add links to the selected skill `SKILL.md` files from this repo.
+6. Add project-specific overrides directly below the selected skill list.
+7. Keep the linked skill as the shared default. Fork only when one project needs a permanently different version.
+8. Check `history/skills.md` if the skill is unfamiliar, deprecated, or recently changed.
+
+## Project Setup Verification
+
+Before calling a project setup complete, verify it from the target project:
+
+- The selected instruction file exists, usually `AGENTS.md`, `CLAUDE.md`, or both.
+- Every selected skill link points to an existing `SKILL.md` under the actual `<skills-root>`, not a placeholder path.
+- No setup step installs, symlinks, or auto-registers these repo skills globally unless the user explicitly asked for that.
+- Each selected skill has a neighboring `skill.html`, and the setup notes say the human-readable HTML was reviewed.
+- Any selected project snippet was copied or linked intentionally, and its skill list matches the target instruction file.
+- Project-specific overrides live in the target project instruction file, not in the shared skill, unless the preference should apply everywhere.
+- The linked skill names, trigger names, and paths match `docs/skill-catalog.md`, `project-snippets/base.md`, and `project-snippets/claude-base.md` when those snippets are used.
+- If the setup needs to stay reliable over time, add or update an `agent-eval-harness` case that checks the target instruction file references the expected skills and avoids global install instructions.
+
+Suggested verification report shape:
+
+```json
+{
+  "targetInstructionFile": "AGENTS.md",
+  "skills": ["workflow", "project-structure", "browser-qa"],
+  "linksValid": true,
+  "globalInstallAllowed": false,
+  "validation": ["node scripts/run-agent-evals.ts --scope cross_agent_portability"]
+}
+```
 
 ## Snippet Sources
 

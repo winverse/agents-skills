@@ -31,6 +31,14 @@ Use this checklist for broad or high-risk reviews.
 - Logs and messages help diagnose failures without leaking secrets.
 - Complexity is justified by the problem.
 
+## Tool And Security Surfaces
+
+- MCP servers, agent tools, CLI wrappers, browser automation, and external API clients have clear read/write/delete/network authority.
+- Tool output, web content, generated files, and user-provided data are treated as untrusted input.
+- Prompt injection, SSRF, path traversal, shell injection, and unsafe file writes are considered at tool boundaries.
+- Destructive commands, production writes, outbound messages, and account-changing actions require an explicit approval path.
+- Secrets, private data, screenshots, logs, traces, and eval fixtures are scrubbed before commit or sharing.
+
 ## Review Output
 
 - Findings first.

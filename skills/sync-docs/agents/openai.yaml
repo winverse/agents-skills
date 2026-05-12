@@ -1,4 +1,4 @@
 interface:
   display_name: "Sync Docs"
-  short_description: "Find stale or conflicting repo documentation"
-  default_prompt: "Use $sync-docs to compare existing docs, snippets, skills, history, and repo instructions, then update stale or conflicting documentation and ask when the source of truth is unclear."
+  short_description: "Find stale or conflicting repo and folder documentation"
+  default_prompt: "Use $sync-docs to compare existing docs, snippets, skills, history, root and folder-local AGENTS.md indexes, and repo instructions, then update stale or conflicting documentation and ask when the source of truth is unclear."

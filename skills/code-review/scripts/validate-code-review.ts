@@ -28,7 +28,7 @@ const skill = exists("SKILL.md") ? read("SKILL.md") : "";
 const jsTs = exists("references/js-ts-style.md") ? read("references/js-ts-style.md") : "";
 const html = exists("skill.html") ? read("skill.html") : "";
 
-for (const term of ["Findings lead", "SRP", "SOLID", "map", "filter", "reduce", "Iterable", "missing tests"]) {
+for (const term of ["Findings lead", "SRP", "SOLID", "map", "filter", "reduce", "Iterable", "missing tests", "MCP or tool-call boundaries"]) {
   if (!skill.includes(term)) failures.push(`SKILL.md missing term: ${term}`);
 }
 
