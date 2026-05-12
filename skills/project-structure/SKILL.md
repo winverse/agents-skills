@@ -20,6 +20,17 @@ If the project kind is not already clear, ask a compact numeric choice:
 
 Then ask only the stack choices that matter for that kind. Prefer defaults unless the user says otherwise.
 
+Use compact numeric menus, not long architecture questionnaires. Ask a menu only when the answer changes the tree:
+
+```text
+API contract: 1 GraphQL default, 2 REST, 3 hybrid
+DB: 1 PostgreSQL + Drizzle default, 2 no DB, 3 external DB
+Cache: 1 Redis through cache boundary default when cache/session is needed, 2 no Redis
+Auth: 1 app-owned auth module default when auth is needed, 2 external auth, 3 no auth
+Generated artifacts: 1 ignored and reproducible default, 2 committed and reviewed
+Desktop shell: 1 Tauri + Vite React default, 2 Tauri + existing frontend shell
+```
+
 ## Default Stack
 
 | Area | Default |
@@ -36,6 +47,8 @@ Then ask only the stack choices that matter for that kind. Prefer defaults unles
 | CSS/UI | Panda CSS with Ark UI or Park UI style headless components |
 | Desktop | Tauri |
 | Env validation | Zod |
+| Testing shape | colocated unit/component tests, app-level e2e tests |
+| Observability | logger, request logging, health/readiness, metrics/tracing boundary |
 
 Do not offer a full-stack single-repo layout by default. The preferred full-stack shape is a monorepo.
 
@@ -58,6 +71,17 @@ Apply this policy to every generated or refactored structure:
 
 Read `references/env-policy.md` when creating files, scripts, or package layout that touches environment variables.
 
+## GraphQL Codegen Contract
+
+When GraphQL is selected:
+
+- Each app that consumes or emits GraphQL owns `<app>/codegen.ts`.
+- API schema output or schema source stays under `apps/api/src/graphql/`, commonly `schema.graphql`.
+- Frontend or desktop operation documents stay near the owning feature in `src/features/<domain>/graphql`.
+- Generated TypeScript is imported through `<app>/src/graphql/autogen.ts`.
+- Choose one generated artifact policy per repo: ignored and reproducible, or committed and reviewed.
+- Wire `codegen` into app scripts and `turbo` tasks for monorepos.
+
 ## Structure Workflow
 
 1. Identify project kind with the numeric menu if unclear.
@@ -67,6 +91,7 @@ Read `references/env-policy.md` when creating files, scripts, or package layout 
    - `references/backend-nest.md` for NestJS APIs.
    - `references/monorepo.md` for full-stack monorepos.
    - `references/desktop-tauri.md` for Tauri apps.
+   - `references/structure-validation.md` before final verification.
 4. Produce a directory tree first.
 5. Explain the boundaries between app, feature/domain, provider, shared package, generated files, and scripts.
 6. Minimize duplicate folder roles. Do not create both global and domain folders for the same responsibility unless the boundary is explicit.
@@ -85,6 +110,8 @@ For Next.js apps, prefer a hybrid route plus domain layout:
 - `src/providers` owns app-wide provider composition.
 - `src/graphql` owns shared GraphQL client setup and the app-owned `autogen.ts` entrypoint.
 - `src/config/env.ts` owns app-local Zod env parsing.
+- `panda.config.ts`, app-wide tokens, recipes, reset, and generated style output must have explicit locations.
+- Unit and component tests should be colocated with the source they verify; browser e2e tests belong in the app-level `test/e2e` folder.
 
 Read `references/frontend-next.md` before generating a web structure.
 
@@ -105,8 +132,23 @@ For NestJS APIs, preserve the proven separation of common, modules, and provider
   - In monorepos, `packages/db/src/redis` owns Redis-specific client, key, and connection helpers.
   - In backend-only repos, `src/providers/cache/redis` is acceptable only when there is no shared DB package.
 - Validate logger and cache env values in `src/config/env.ts`; modules must not read logger/cache env directly.
+- Include `src/modules/health` when the API needs liveness/readiness checks.
+- Put metrics, tracing, and error reporting adapters in `src/providers/observability` when used.
+- Keep auth/security boundaries explicit: auth domain in `modules/auth`, guards/pipes/plugins in `common`, and JWT/cookie/password adapters in `providers`.
 
 Read `references/backend-nest.md` before generating a backend structure.
+
+## Verification Checklist
+
+Before calling a structure done, verify:
+
+- The final tree matches the selected project kind and does not include unused app types.
+- App env paths are consistent: `<app>/env/*` and `<app>/src/config/env.ts`.
+- GraphQL apps share `<app>/codegen.ts` and `<app>/src/graphql/autogen.ts`.
+- Drizzle migrations have one owner and do not duplicate between `drizzle/` and `src/migrations/`.
+- Redis is in `packages/db/src/redis` for monorepos and only wrapped by API cache providers.
+- Frontend UI/CSS, backend security, observability, health, and test folders are represented when selected.
+- Desktop apps include Tauri build env handling and the same env/codegen path shape when GraphQL is used.
 
 ## Output Shape
 

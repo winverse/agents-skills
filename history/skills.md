@@ -11,7 +11,7 @@
 | `karpathy-thinkings` | `active` | medium | 2026-05-12 | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬 |
 | `skill-update` | `active` | medium | 2026-05-11 | 기존 공유 스킬의 source, references, validator, visual guide, snippets, docs, history를 함께 맞추는 유지보수 스킬 |
 | `atomic-committer` | `active` | medium | 2026-05-11 | dirty git tree를 atomic commit 단위로 나눠 커밋하고 조건부 push를 수행하는 스킬 |
-| `project-structure` | `active` | medium | 2026-05-11 | frontend, backend, full-stack monorepo, desktop app 구조와 기본 stack/env 정책을 정하는 스킬 |
+| `project-structure` | `active` | medium | 2026-05-12 | frontend, backend, full-stack monorepo, desktop app 구조와 기본 stack/env/codegen/test/security 정책을 정하는 스킬 |
 | `sync-docs` | `active` | medium | 2026-05-11 | README, AGENTS, docs, snippets, history, skill 파일을 비교해 문서 최신화와 충돌 정리를 수행하는 스킬 |
 
 ## Event Log
@@ -25,6 +25,8 @@
 | 2026-05-11 | `changeset-committer` | Skill added | `none -> active` | 커밋 요청 시 변경사항을 changeset 단위로 분류하고, 영어 prefix + 한글 메시지로 커밋하며, remote가 있을 때만 push하도록 새 스킬을 추가했다. | repo TS validator, skill-specific validator | 실제 프로젝트 커밋에서 grouping 품질을 점검한다. |
 | 2026-05-11 | `atomic-committer` | Skill renamed | `active -> active` | 기존 `changeset-committer` slug와 표시 이름을 Git 관례에 더 가까운 `atomic-committer` / Atomic Committer로 변경했다. | repo TS validator, skill-specific validator, repo validator | none |
 | 2026-05-11 | `project-structure` | Skill added | `none -> active` | 프로젝트 종류를 숫자로 고르고 Bun, Turborepo, Next.js, NestJS Fastify, GraphQL, urql, Drizzle, Zod env, Tauri 기본값으로 일관된 구조를 만들도록 새 스킬을 추가했다. | repo TS validator, skill-specific validator, repo validator | 실제 신규 프로젝트 scaffold에서 구조 적합성을 점검한다. |
+| 2026-05-11 | `project-structure` | Backend and monorepo structure policy hardened | `active -> active` | app 공통 env/codegen/autogen 경로를 통일하고, API logger/cache provider 경계와 monorepo Redis DB boundary를 `packages/db/src/redis`로 정리했다. | project-structure validator, repo TS validator | 실제 scaffold에서 Redis/cache 경계가 과도하게 app으로 새지 않는지 점검한다. |
+| 2026-05-12 | `project-structure` | Structure verification workflow hardened | `active -> active` | numeric menu, desktop env/codegen tree, GraphQL generated artifact contract, Drizzle migration ownership, Panda CSS structure, test surface, auth/security, health/readiness, observability, 최종 tree 검증 reference를 보강했다. | project-structure validator, repo TS validator, repo validator | 실제 구조 생성에서 질문량과 HTML tree 가독성의 균형을 점검한다. |
 | 2026-05-11 | `sync-docs` | Skill added | `none -> active` | 문서끼리 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하고 source of truth가 불명확하면 사용자에게 묻는 문서 최신화 스킬을 추가했다. | repo TS validator, skill-specific validator, repo validator | 실제 문서 audit에서 질문 분기 품질을 점검한다. |
 | 2026-05-11 | repo | Lifecycle ledger added | `none -> active process` | inspector scratch와 영구 history를 분리하고, skill state를 관리하기 위한 기준을 추가했다. | docs review | 첫 archived skill이 생기면 archive 이동 절차를 실제 사례로 보강한다. |
 | 2026-05-11 | repo | Validator scripts moved to TypeScript | `active process -> active process` | Node 22+ 기준에서 validator는 특별한 런타임 제약이 없으면 `.ts`를 기본으로 쓰도록 정했다. | repo validator, skill-specific validators | Codex hook처럼 호환성이 중요한 파일은 `.mjs` 예외를 유지한다. |

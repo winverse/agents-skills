@@ -12,6 +12,11 @@ apps/
 packages/
   config/
   db/
+    drizzle/
+    scripts/
+    src/
+      schema/
+      redis/
   graphql/
   ui/
   tsconfig/
@@ -45,8 +50,11 @@ bun.lock
 - `apps/api` owns backend env parsing.
 - `packages/db` may expose tooling functions, relational DB helpers, and Redis helpers, but scripts must load env explicitly through config helpers.
 - Redis belongs in `packages/db/src/redis` for monorepos. API apps should wrap it through `apps/api/src/providers/cache`, not define Redis key/client conventions inside app modules.
+- Drizzle migration SQL and metadata belong in `packages/db/drizzle`; migration and seed commands belong in `packages/db/scripts`.
+- Do not duplicate migration files in both `packages/db/drizzle` and `packages/db/src/migrations`.
 - GraphQL Code Generator should be wired into `turbo` tasks.
 - Generated artifacts must have a clear policy: either committed and reviewed, or ignored and reproducible.
+- Web e2e, API e2e, DB migration checks, and GraphQL codegen should be independently runnable through `turbo`.
 
 ## Suggested Scripts
 
@@ -57,9 +65,18 @@ bun.lock
   "typecheck": "turbo typecheck",
   "lint": "turbo lint",
   "test": "turbo test",
+  "test:e2e": "turbo test:e2e",
   "codegen": "turbo codegen",
+  "db:check": "bun --cwd packages/db run check",
   "db:migrate": "bun --cwd packages/db run migrate"
 }
 ```
 
 Use exact commands from the actual repo when editing an existing project.
+
+## Generated Artifact Policy
+
+Pick one policy per repo and state it in the root README or agent instructions:
+
+- ignored and reproducible: generated GraphQL and Panda outputs are rebuilt by scripts and CI,
+- committed and reviewed: generated outputs are committed, reviewed, and refreshed whenever schema, document, or token sources change.

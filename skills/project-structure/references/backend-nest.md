@@ -24,10 +24,15 @@ apps/api/
       decorators/
       filters/
       guards/
+        auth.guard.ts
+        roles.guard.ts
       interceptors/
         request-logging.interceptor.ts
       pipes/
+        zod-validation.pipe.ts
       plugins/
+        cors.plugin.ts
+        rate-limit.plugin.ts
       scalars/
     graphql/
       context.ts
@@ -47,15 +52,24 @@ apps/api/
         users.repository.ts
         users.input.ts
         users.model.ts
+      health/
+        health.module.ts
+        health.resolver.ts
+        health.service.ts
     providers/
       cache/
         cache.module.ts
         cache.service.ts
+      cookie/
       jwt/
       logger/
         logger.module.ts
         logger.service.ts
       mail/
+      observability/
+        metrics.service.ts
+        tracing.service.ts
+      password/
       storage/
   test/
     app.e2e-spec.ts
@@ -77,6 +91,10 @@ apps/api/
 - App env files stay in app-root `env/`; the Zod schema stays in `src/config/env.ts`.
 - Keep the API-owned GraphQL generated entrypoint in `src/graphql/autogen.ts`, the same relative path used by the web app.
 - Unit tests may be colocated with source files; e2e tests belong in `apps/api/test`.
+- Put liveness/readiness checks in `modules/health` when the API needs deployment health checks.
+- Keep metrics, tracing, and error reporting adapters in `providers/observability`.
+- Keep auth domain logic in `modules/auth`; keep reusable guards, pipes, and Fastify plugins in `common`.
+- Keep JWT, cookie/session, password hashing, and external identity adapters in `providers`.
 
 ## Logger And Cache Policy
 
@@ -96,6 +114,11 @@ LOG_FORMAT
 REDIS_URL
 REDIS_TLS
 CACHE_TTL_SECONDS
+HEALTH_CHECK_TIMEOUT_MS
+METRICS_ENABLED
+TRACE_EXPORTER_URL
+CORS_ORIGIN
+RATE_LIMIT_MAX
 ```
 
 `REDIS_URL` and cache settings may be optional only when the selected project explicitly disables Redis-backed cache. `packages/db` must receive validated values from the app or tooling entrypoint; it should not read `process.env` directly.
@@ -108,6 +131,8 @@ From the user's existing NestJS REST API style, keep:
 - a domain module layer for auth, users, posts, and other business domains,
 - a provider layer for jwt, cookie, logger, cache, config, database, and utility integrations,
 - `main.ts` bootstrapping through Fastify,
+- health/readiness checks that do not leak domain logic,
+- explicit CORS/rate-limit/cookie plugins instead of hidden bootstrap code,
 - e2e tests separated from unit tests.
 
 Modernize these pieces for the default stack:
@@ -124,15 +149,29 @@ For monorepos, prefer:
 ```text
 packages/db/
   drizzle/
+    meta/
+    *.sql
   src/
     client.ts
     redis/
       client.ts
+      connection.ts
       keys.ts
     schema/
-    migrations/
+  scripts/
+    migrate.ts
+    seed.ts
 ```
 
 The API app imports the database package. It should not duplicate relational schema or Redis key/client definitions in `apps/api`.
 
+Use `drizzle/` for migration SQL output and metadata. Use `scripts/migrate.ts` or package scripts for migration execution. Do not also create a source-tree migrations folder for the same migration files.
+
 For a backend-only repo, `src/db` or `src/providers/cache/redis` is acceptable, but still keep DB/cache boundaries explicit and avoid scattering Redis access through domain modules.
+
+## GraphQL Codegen Policy
+
+- API schema output or schema source stays under `apps/api/src/graphql`, commonly `schema.graphql`.
+- API generated TypeScript should be reachable only through `src/graphql/autogen.ts`.
+- Resolver and model files stay in `src/modules/<domain>`.
+- Run API codegen after schema-affecting model, input, resolver, or scalar changes.

@@ -58,7 +58,7 @@ skills/skill-name/
 - `atomic-committer`: dirty git tree를 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
   - Source instruction: `skills/atomic-committer/SKILL.md`
   - Human visual guide: `skills/atomic-committer/skill.html`
-- `project-structure`: frontend, backend, full-stack monorepo, desktop app의 폴더 구조와 기본 stack/env 정책을 일관되게 잡는 스킬.
+- `project-structure`: frontend, backend, full-stack monorepo, desktop app의 폴더 구조와 기본 stack/env/codegen 정책, backend logger/cache/security/observability, Redis DB boundary, Drizzle migration, test surface를 일관되게 잡는 스킬.
   - Source instruction: `skills/project-structure/SKILL.md`
   - Human visual guide: `skills/project-structure/skill.html`
 - `sync-docs`: README, AGENTS, docs, snippets, history, skill 파일을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Structure"
-  short_description: "Consistent full-stack folder and stack layouts"
-  default_prompt: "Use $project-structure to choose a project kind, apply my default stack, and produce a consistent folder structure with env, GraphQL codegen, Drizzle, and build policies."
+  short_description: "Consistent app, monorepo, env, and tooling layouts"
+  default_prompt: "Use $project-structure to choose a project kind, apply my default stack, and produce a consistent folder structure with env, GraphQL codegen, Drizzle, Tauri, tests, security, and observability policies."

@@ -14,8 +14,10 @@
 - Use repo-linked custom skills before default/global Claude behavior when the behavior overlaps.
 - For implementation work, avoid silent assumptions, prefer simple code, make surgical changes, and verify success criteria before calling work done.
 - For skill updates, keep source instructions, references, validators, visual guides, snippets, docs, and history aligned.
+- For project structure work, include the selected project's test, security, health/readiness, observability, Panda CSS, GraphQL generated artifact, and Drizzle migration boundaries in the final tree.
 - Commit messages should use an English conventional prefix with a Korean summary, and push only when a remote exists and push was requested.
 - For project structure choices, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL, Drizzle, Panda CSS with headless UI, Tauri, and Zod env validation unless the project says otherwise.
+- For project structure choices, keep app env/codegen paths consistent and place monorepo Redis boundaries in `packages/db/src/redis`, with API cache wrappers under `apps/api/src/providers/cache`.
 - For documentation sync, compare current repo files first and ask before changing unclear rules.
 - If Claude cannot automatically load a linked `SKILL.md`, read or paste the relevant section from that skill into the current task context.
 - Keep project-specific rules here instead of changing the shared skill unless the rule should apply everywhere.

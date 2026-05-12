@@ -353,6 +353,37 @@
       line-height: 1.48;
     }
 
+    .contract-grid,
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .contract-card,
+    .check-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--surface);
+      min-height: 132px;
+    }
+
+    .contract-card strong,
+    .check-card strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .contract-card span,
+    .check-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.48;
+    }
+
     .map {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -572,6 +603,29 @@
       </section>
 
       <section>
+        <h2>Compact Menus</h2>
+        <p class="section-note">긴 architecture questionnaire 대신 tree가 바뀌는 선택지만 숫자로 묻는다.</p>
+        <div class="contract-grid">
+          <div class="contract-card">
+            <strong>API contract</strong>
+            <span>1 GraphQL default, 2 REST, 3 hybrid. REST를 고른 경우에만 controller 경계를 만든다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>DB</strong>
+            <span>1 PostgreSQL + Drizzle default, 2 no DB, 3 external DB. migration owner를 하나만 둔다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Cache</strong>
+            <span>1 Redis through cache boundary when needed, 2 no Redis. monorepo Redis는 <code>packages/db/src/redis</code>.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Generated artifacts</strong>
+            <span>1 ignored and reproducible default, 2 committed and reviewed. GraphQL/Panda 산출물 정책을 하나로 고른다.</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
         <h2>Default Stack</h2>
         <div class="stack-grid">
           <div class="bars" aria-label="Default stack confidence">
@@ -597,8 +651,13 @@
             </div>
             <div class="bar-row">
               <strong>Desktop</strong>
-              <span class="bar-track"><span class="bar-fill amber" style="width: 74%;"></span></span>
-              <span>Tauri, UI shell asked</span>
+              <span class="bar-track"><span class="bar-fill amber" style="width: 82%;"></span></span>
+              <span>Tauri + Vite React</span>
+            </div>
+            <div class="bar-row">
+              <strong>Ops</strong>
+              <span class="bar-track"><span class="bar-fill green" style="width: 84%;"></span></span>
+              <span>tests, health, logging</span>
             </div>
           </div>
           <div class="note-box">
@@ -610,7 +669,7 @@
 
       <section>
         <h2>Folder Structure Trees</h2>
-        <p class="section-note">처음 설치했을 때 바로 비교할 수 있도록 frontend와 backend 기본 구조를 tree 형태로 보여준다. Route는 얇게, domain과 provider 경계는 별도로 보이게 한다.</p>
+        <p class="section-note">처음 설치했을 때 바로 비교할 수 있도록 frontend, backend, desktop 기본 구조를 tree 형태로 보여준다. Route는 얇게, domain과 provider 경계는 별도로 보이게 한다.</p>
         <div class="tree-grid">
           <div class="tree-card">
             <div class="tree-head">
@@ -620,23 +679,32 @@
             <div class="tree" aria-label="Frontend web folder structure">
 <pre class="terminal-tree"><span class="tree-root">apps/web/</span>                           <span class="tree-role"># 배포되는 Next.js 앱</span>
 ├── <span class="tree-dir">env/</span>                            <span class="tree-role"># 앱별 env 파일 위치</span>
+│   ├── <span class="tree-file">.env.development</span>          <span class="tree-role"># local 개발</span>
+│   ├── <span class="tree-file">.env.test</span>                 <span class="tree-role"># test 실행</span>
+│   ├── <span class="tree-file">.env.stage</span>                <span class="tree-role"># staging 배포</span>
+│   └── <span class="tree-file">.env.production</span>           <span class="tree-role"># production 배포</span>
 ├── <span class="tree-file">codegen.ts</span>                      <span class="tree-role"># GraphQL 타입 생성 설정</span>
+├── <span class="tree-file">panda.config.ts</span>                 <span class="tree-role"># Panda token/recipe entry</span>
+├── <span class="tree-generated">styled-system/</span>              <span class="tree-role"># Panda generated output</span>
 ├── <span class="tree-dir">scripts/</span>                        <span class="tree-role"># 컴포넌트 생성 등 자동화</span>
-└── <span class="tree-dir">src/</span>                            <span class="tree-role"># 애플리케이션 source root</span>
-    ├── <span class="tree-dir">app/</span>                        <span class="tree-role"># route, layout, error만 얇게 담당</span>
-    ├── <span class="tree-dir">config/</span>                     <span class="tree-role"># 앱 env 검증과 노출 경계</span>
-    │   └── <span class="tree-file">env.ts</span>                 <span class="tree-role"># public/server env 분리</span>
-    ├── <span class="tree-dir">features/</span>                   <span class="tree-role"># 도메인 단위 기능 묶음</span>
-    │   └── <span class="tree-dir">posts/</span>                  <span class="tree-role"># posts 도메인</span>
-    │       ├── <span class="tree-dir">components/</span>        <span class="tree-role"># posts 전용 화면 조각</span>
-    │       ├── <span class="tree-dir">graphql/</span>           <span class="tree-role"># posts query/mutation 문서</span>
-    │       ├── <span class="tree-dir">hooks/</span>             <span class="tree-role"># posts 전용 client 로직</span>
-    │       └── <span class="tree-dir">prefetch/</span>          <span class="tree-role"># server prefetch 함수</span>
-    ├── <span class="tree-generated">graphql/</span>               <span class="tree-role"># urql client와 GraphQL autogen</span>
-    │   ├── <span class="tree-file">client.ts</span>             <span class="tree-role"># urql client 설정</span>
-    │   └── <span class="tree-generated">autogen.ts</span>         <span class="tree-role"># web GraphQL autogen entrypoint</span>
-    ├── <span class="tree-dir">providers/</span>                 <span class="tree-role"># 전역 provider 조합</span>
-    └── <span class="tree-dir">components/</span>                <span class="tree-role"># 도메인 없는 공용 UI만</span></pre>
+├── <span class="tree-dir">src/</span>                            <span class="tree-role"># 애플리케이션 source root</span>
+│   ├── <span class="tree-dir">app/</span>                        <span class="tree-role"># route, layout, error만 얇게 담당</span>
+│   ├── <span class="tree-dir">config/</span>                     <span class="tree-role"># 앱 env 검증과 노출 경계</span>
+│   │   └── <span class="tree-file">env.ts</span>                 <span class="tree-role"># public/server env 분리</span>
+│   ├── <span class="tree-dir">features/</span>                   <span class="tree-role"># 도메인 단위 기능 묶음</span>
+│   │   └── <span class="tree-dir">posts/</span>                  <span class="tree-role"># posts 도메인</span>
+│   │       ├── <span class="tree-dir">components/</span>        <span class="tree-role"># posts 전용 화면 조각</span>
+│   │       ├── <span class="tree-dir">graphql/</span>           <span class="tree-role"># posts query/mutation 문서</span>
+│   │       ├── <span class="tree-dir">hooks/</span>             <span class="tree-role"># posts 전용 client 로직</span>
+│   │       └── <span class="tree-dir">prefetch/</span>          <span class="tree-role"># server prefetch 함수</span>
+│   ├── <span class="tree-generated">graphql/</span>               <span class="tree-role"># urql client와 GraphQL autogen</span>
+│   │   ├── <span class="tree-file">client.ts</span>             <span class="tree-role"># urql client 설정</span>
+│   │   └── <span class="tree-generated">autogen.ts</span>         <span class="tree-role"># web GraphQL autogen entrypoint</span>
+│   ├── <span class="tree-dir">providers/</span>                 <span class="tree-role"># 전역 provider 조합</span>
+│   ├── <span class="tree-dir">styles/</span>                    <span class="tree-role"># tokens, recipes, reset</span>
+│   └── <span class="tree-dir">components/</span>                <span class="tree-role"># 도메인 없는 공용 UI만</span>
+└── <span class="tree-dir">test/</span>                           <span class="tree-role"># app-level test surface</span>
+    └── <span class="tree-dir">e2e/</span>                       <span class="tree-role"># Playwright browser e2e</span></pre>
             </div>
           </div>
 
@@ -648,6 +716,10 @@
             <div class="tree" aria-label="Backend API folder structure">
 <pre class="terminal-tree"><span class="tree-root">apps/api/</span>                           <span class="tree-role"># 배포되는 NestJS API 앱</span>
 ├── <span class="tree-dir">env/</span>                            <span class="tree-role"># API 전용 env 파일 위치</span>
+│   ├── <span class="tree-file">.env.development</span>          <span class="tree-role"># local 개발</span>
+│   ├── <span class="tree-file">.env.test</span>                 <span class="tree-role"># test 실행</span>
+│   ├── <span class="tree-file">.env.stage</span>                <span class="tree-role"># staging 배포</span>
+│   └── <span class="tree-file">.env.production</span>           <span class="tree-role"># production 배포</span>
 ├── <span class="tree-file">codegen.ts</span>                      <span class="tree-role"># GraphQL 타입 생성 설정</span>
 ├── <span class="tree-dir">src/</span>                            <span class="tree-role"># NestJS source root</span>
 │   ├── <span class="tree-file">main.ts</span>                    <span class="tree-role"># Fastify adapter 부트스트랩</span>
@@ -659,7 +731,8 @@
 │   │   ├── <span class="tree-dir">guards/</span>               <span class="tree-role"># 인증/인가 guard</span>
 │   │   ├── <span class="tree-dir">filters/</span>              <span class="tree-role"># 예외 변환</span>
 │   │   ├── <span class="tree-dir">interceptors/</span>         <span class="tree-role"># request logging 등 횡단 관심사</span>
-│   │   └── <span class="tree-dir">pipes/</span>                <span class="tree-role"># 입력 검증/변환</span>
+│   │   ├── <span class="tree-dir">pipes/</span>                <span class="tree-role"># 입력 검증/변환</span>
+│   │   └── <span class="tree-dir">plugins/</span>              <span class="tree-role"># CORS, rate limit, cookie</span>
 │   ├── <span class="tree-dir">graphql/</span>                   <span class="tree-role"># GraphQL module과 autogen</span>
 │   │   ├── <span class="tree-file">context.ts</span>           <span class="tree-role"># request context 구성</span>
 │   │   ├── <span class="tree-file">graphql.module.ts</span>    <span class="tree-role"># GraphQL bootstrap</span>
@@ -669,10 +742,14 @@
 │   │   │   ├── <span class="tree-file">auth.module.ts</span>   <span class="tree-role"># auth Nest module</span>
 │   │   │   ├── <span class="tree-file">auth.resolver.ts</span> <span class="tree-role"># GraphQL 요청 진입점</span>
 │   │   │   └── <span class="tree-file">auth.service.ts</span>  <span class="tree-role"># auth 비즈니스 로직</span>
-│   │   └── <span class="tree-dir">users/</span>               <span class="tree-role"># users 도메인</span>
+│   │   ├── <span class="tree-dir">users/</span>               <span class="tree-role"># users 도메인</span>
+│   │   └── <span class="tree-dir">health/</span>              <span class="tree-role"># liveness/readiness check</span>
 │   └── <span class="tree-dir">providers/</span>                 <span class="tree-role"># 외부 서비스 adapter</span>
 │       ├── <span class="tree-dir">jwt/</span>                   <span class="tree-role"># JWT 발급/검증</span>
+│       ├── <span class="tree-dir">cookie/</span>                <span class="tree-role"># cookie/session adapter</span>
+│       ├── <span class="tree-dir">password/</span>              <span class="tree-role"># password hashing</span>
 │       ├── <span class="tree-dir">logger/</span>                <span class="tree-role"># log level, formatter, request logger</span>
+│       ├── <span class="tree-dir">observability/</span>         <span class="tree-role"># metrics, tracing, error reporting</span>
 │       └── <span class="tree-dir">cache/</span>                 <span class="tree-role"># cache abstraction</span>
 │           └── <span class="tree-file">cache.service.ts</span>   <span class="tree-role"># packages/db Redis helper를 감싸서 사용</span>
 └── <span class="tree-dir">test/</span>                           <span class="tree-role"># API e2e 테스트</span></pre>
@@ -693,7 +770,8 @@
 ├── <span class="tree-dir">packages/</span>                       <span class="tree-role"># 앱들이 공유하는 source</span>
 │   ├── <span class="tree-tool">config/</span>                    <span class="tree-role"># env helper만 제공, schema 금지</span>
 │   ├── <span class="tree-dir">db/</span>                        <span class="tree-role"># Drizzle와 Redis DB boundary</span>
-│   │   ├── <span class="tree-dir">drizzle/</span>               <span class="tree-role"># migration 설정과 SQL 산출물</span>
+│   │   ├── <span class="tree-dir">drizzle/</span>               <span class="tree-role"># migration SQL과 metadata</span>
+│   │   ├── <span class="tree-dir">scripts/</span>               <span class="tree-role"># migrate, seed 실행 entry</span>
 │   │   └── <span class="tree-dir">src/</span>                   <span class="tree-role"># DB package source</span>
 │   │       ├── <span class="tree-dir">schema/</span>            <span class="tree-role"># relational schema</span>
 │   │       └── <span class="tree-dir">redis/</span>             <span class="tree-role"># Redis client, keys, connection helpers</span>
@@ -704,6 +782,37 @@
 ├── <span class="tree-file">turbo.json</span>                     <span class="tree-role"># task pipeline</span>
 ├── <span class="tree-file">package.json</span>                    <span class="tree-role"># workspace scripts</span>
 └── <span class="tree-file">bun.lock</span>                        <span class="tree-role"># dependency lockfile</span></pre>
+          </div>
+        </div>
+        <div class="tree-wide">
+          <div class="tree-head">
+            <strong>Desktop app tree</strong>
+            <span>Tauri + app-local env</span>
+          </div>
+          <div class="tree" aria-label="Desktop app folder structure">
+<pre class="terminal-tree"><span class="tree-root">apps/desktop/</span>                       <span class="tree-role"># 배포되는 Tauri desktop 앱</span>
+├── <span class="tree-dir">env/</span>                            <span class="tree-role"># desktop 전용 env 파일 위치</span>
+│   ├── <span class="tree-file">.env.development</span>          <span class="tree-role"># local 개발</span>
+│   ├── <span class="tree-file">.env.test</span>                 <span class="tree-role"># test 실행</span>
+│   ├── <span class="tree-file">.env.stage</span>                <span class="tree-role"># staging 배포</span>
+│   └── <span class="tree-file">.env.production</span>           <span class="tree-role"># production 배포</span>
+├── <span class="tree-file">codegen.ts</span>                      <span class="tree-role"># GraphQL 사용 시 타입 생성 설정</span>
+├── <span class="tree-dir">src/</span>                            <span class="tree-role"># frontend shell source</span>
+│   ├── <span class="tree-dir">app/</span>                        <span class="tree-role"># desktop app shell</span>
+│   ├── <span class="tree-dir">config/</span>                     <span class="tree-role"># app-local Zod env</span>
+│   │   └── <span class="tree-file">env.ts</span>                 <span class="tree-role"># build/runtime env 분리</span>
+│   ├── <span class="tree-dir">features/</span>                   <span class="tree-role"># desktop domain 기능</span>
+│   │   └── <span class="tree-dir">settings/</span>               <span class="tree-role"># settings 도메인 예시</span>
+│   │       └── <span class="tree-dir">graphql/</span>           <span class="tree-role"># desktop GraphQL documents</span>
+│   ├── <span class="tree-generated">graphql/</span>               <span class="tree-role"># client와 desktop GraphQL autogen</span>
+│   │   ├── <span class="tree-file">client.ts</span>             <span class="tree-role"># desktop GraphQL client</span>
+│   │   └── <span class="tree-generated">autogen.ts</span>         <span class="tree-role"># desktop GraphQL autogen entrypoint</span>
+│   └── <span class="tree-dir">providers/</span>                 <span class="tree-role"># app-wide provider 조합</span>
+├── <span class="tree-dir">src-tauri/</span>                      <span class="tree-role"># Rust commands, capabilities, config</span>
+├── <span class="tree-dir">scripts/</span>                        <span class="tree-role"># Tauri build env bridge</span>
+│   └── <span class="tree-file">tauri-env.ts</span>             <span class="tree-role"># packages/config helper 사용</span>
+└── <span class="tree-dir">test/</span>                           <span class="tree-role"># desktop smoke/e2e</span>
+    └── <span class="tree-dir">e2e/</span>                       <span class="tree-role"># desktop test automation</span></pre>
           </div>
         </div>
         <div class="legend">
@@ -718,7 +827,7 @@
         <div class="env-grid">
           <div class="env-card">
             <strong>App-local schema</strong>
-            <span><code>apps/web/src/config/env.ts</code>와 <code>apps/api/src/config/env.ts</code>가 각자 Zod schema를 가진다.</span>
+            <span><code>apps/web</code>, <code>apps/api</code>, <code>apps/desktop</code>가 각자 <code>src/config/env.ts</code> Zod schema를 가진다.</span>
           </div>
           <div class="env-card">
             <strong>Helper-only package</strong>
@@ -738,7 +847,37 @@
           </div>
           <div class="env-card">
             <strong>Per-app env files</strong>
-            <span><code>env/.env.development</code>, <code>.env.test</code>, <code>.env.production</code>을 app마다 둔다.</span>
+            <span><code>env/.env.development</code>, <code>.env.test</code>, <code>.env.stage</code>, <code>.env.production</code>을 app마다 둔다.</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>GraphQL Codegen Contract</h2>
+        <div class="contract-grid">
+          <div class="contract-card">
+            <strong>App-owned config</strong>
+            <span>GraphQL을 쓰는 각 app은 app root에 <code>codegen.ts</code>를 둔다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Schema owner</strong>
+            <span>API schema source/output은 <code>apps/api/src/graphql</code> 아래에 둔다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Document owner</strong>
+            <span>query/mutation 문서는 <code>src/features/&lt;domain&gt;/graphql</code>에 둔다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Autogen path</strong>
+            <span>web, API, desktop 모두 <code>&lt;app&gt;/src/graphql/autogen.ts</code>를 entrypoint로 쓴다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Artifact policy</strong>
+            <span>generated 파일은 ignored/reproducible 또는 committed/reviewed 중 하나로 통일한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Turbo task</strong>
+            <span>monorepo에서는 <code>codegen</code>을 app scripts와 <code>turbo</code> task에 연결한다.</span>
           </div>
         </div>
       </section>
@@ -758,6 +897,7 @@
             <div class="map-item"><code>backend-nest.md</code>: NestJS GraphQL layout</div>
             <div class="map-item"><code>monorepo.md</code>: Turborepo packages</div>
             <div class="map-item"><code>desktop-tauri.md</code>: Tauri layout</div>
+            <div class="map-item"><code>structure-validation.md</code>: final checklist</div>
           </div>
           <div class="map-col">
             <div class="map-title">Outputs</div>
@@ -774,12 +914,34 @@
         <div class="schema">
           <div class="schema-box">
             <h3>Input</h3>
-            <p>프로젝트 종류, 선택한 stack, 기존 repo 구조, env/GraphQL/DB/Desktop 요구사항.</p>
+            <p>프로젝트 종류, 선택한 stack, 기존 repo 구조, env/GraphQL/DB/Desktop, auth/cache/test 요구사항.</p>
           </div>
           <div class="arrow">→</div>
           <div class="schema-box">
             <h3>Output</h3>
-            <p>선택된 구조, 디렉터리 트리, app/package 경계, codegen/migration/build script 정책, 남은 질문.</p>
+            <p>선택된 구조, 디렉터리 트리, app/package 경계, codegen/migration/build/test 정책, 검증 결과.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Structure Verification</h2>
+        <div class="checklist-grid">
+          <div class="check-card">
+            <strong>Env parity</strong>
+            <span>모든 app은 <code>env/*</code>, <code>src/config/env.ts</code>, Zod schema를 같은 상대 경로로 가진다.</span>
+          </div>
+          <div class="check-card">
+            <strong>DB boundary</strong>
+            <span>Drizzle migration은 <code>packages/db/drizzle</code>, Redis는 <code>packages/db/src/redis</code>에 둔다.</span>
+          </div>
+          <div class="check-card">
+            <strong>API readiness</strong>
+            <span>logger, request logging, health/readiness, security plugins, observability 경계를 확인한다.</span>
+          </div>
+          <div class="check-card">
+            <strong>Test surface</strong>
+            <span>unit/component는 colocated, e2e는 app-level <code>test/e2e</code> 또는 API <code>test</code>에 둔다.</span>
           </div>
         </div>
       </section>
@@ -797,6 +959,7 @@
               <li>최종 tree가 선택한 folder 규칙을 지켰는지 검증한다.</li>
               <li>API logger는 provider에, Redis DB boundary는 monorepo의 <code>packages/db</code>에 둔다.</li>
               <li>env helper를 codegen, migration, build에도 재사용한다.</li>
+              <li>GraphQL, Panda, test, health, observability 위치를 tree에 표시한다.</li>
             </ul>
           </div>
           <div class="rule dont">
@@ -806,6 +969,7 @@
               <li>shared package에서 <code>process.env</code>를 읽지 않는다.</li>
               <li>GraphQL 기본 프로젝트에 REST controller를 기본 생성하지 않는다.</li>
               <li>기존 repo를 조사하지 않고 대량 이동하지 않는다.</li>
+              <li>migration 파일을 <code>drizzle/</code>와 <code>src/migrations/</code>에 중복해서 두지 않는다.</li>
             </ul>
           </div>
         </div>

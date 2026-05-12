@@ -22,6 +22,7 @@ const frontend = read("references/frontend-next.md");
 const backend = read("references/backend-nest.md");
 const monorepo = read("references/monorepo.md");
 const desktop = read("references/desktop-tauri.md");
+const structureValidation = read("references/structure-validation.md");
 read("agents/openai.yaml");
 
 const requiredSkillPhrases = [
@@ -39,6 +40,10 @@ const requiredSkillPhrases = [
   "`<app>/src/graphql/autogen.ts`",
   "`src/providers/logger`",
   "`packages/db/src/redis`",
+  "GraphQL Codegen Contract",
+  "Testing shape",
+  "health/readiness",
+  "Verification Checklist",
 ];
 
 for (const phrase of requiredSkillPhrases) {
@@ -53,6 +58,7 @@ const requiredReferences = [
   "references/backend-nest.md",
   "references/monorepo.md",
   "references/desktop-tauri.md",
+  "references/structure-validation.md",
 ];
 
 for (const reference of requiredReferences) {
@@ -71,6 +77,10 @@ const envRules = [
   "Tauri build",
   "LOG_LEVEL",
   "REDIS_URL",
+  "HEALTH_CHECK_TIMEOUT_MS",
+  "METRICS_ENABLED",
+  "CORS_ORIGIN",
+  "RATE_LIMIT_MAX",
 ];
 
 for (const rule of envRules) {
@@ -80,10 +90,11 @@ for (const rule of envRules) {
 }
 
 for (const [name, text, phrases] of [
-  ["frontend-next.md", frontend, ["src/features/<domain>", "urql", "codegen.ts", "providers"]],
-  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "providers/logger", "packages/db/src/redis"]],
-  ["monorepo.md", monorepo, ["packages/config", "packages/db", "packages/db/src/redis", "turbo", "codegen"]],
-  ["desktop-tauri.md", desktop, ["Tauri", "src-tauri", "tauri-env.ts"]],
+  ["frontend-next.md", frontend, ["src/features/<domain>", "urql", "codegen.ts", "providers", "panda.config.ts", "styled-system", "test/e2e"]],
+  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "providers/logger", "packages/db/src/redis", "modules/health", "providers/observability", "rate-limit.plugin.ts"]],
+  ["monorepo.md", monorepo, ["packages/config", "packages/db", "packages/db/src/redis", "turbo", "codegen", "packages/db/drizzle", "packages/db/scripts"]],
+  ["desktop-tauri.md", desktop, ["Tauri", "src-tauri", "tauri-env.ts", ".env.stage", "src/graphql/autogen.ts", "codegen.ts"]],
+  ["structure-validation.md", structureValidation, ["Final Tree Checklist", "GraphQL apps have", "Drizzle migration files have one owner", "Backend observability", "Desktop apps include"]],
 ] as const) {
   for (const phrase of phrases) {
     if (!text.includes(phrase)) {
@@ -95,12 +106,16 @@ for (const [name, text, phrases] of [
 const htmlRequired = [
   "Decision Matrix",
   "Wizard Flow",
+  "Compact Menus",
   "Default Stack",
   "Folder Structure Trees",
   "Frontend web tree",
   "Backend API tree",
   "Full-stack monorepo package boundary",
+  "Desktop app tree",
   "Env Contract",
+  "GraphQL Codegen Contract",
+  "Structure Verification",
   "Resource Map",
   "Do / Don't",
   "중복 folder 역할을 최소화",
@@ -113,27 +128,35 @@ for (const phrase of htmlRequired) {
   }
 }
 
-for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "modules/", "auth/", "packages/", "db/"]) {
+for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "modules/", "auth/", "apps/desktop", "src-tauri/", "packages/", "db/"]) {
   if (!html.includes(treePhrase)) {
     errors.push(`skill.html missing folder tree phrase: ${treePhrase}`);
   }
 }
 
-for (const apiInfraPhrase of ["logger/", "cache/", "redis/", "packages/db Redis helper", "request logging"]) {
+for (const apiInfraPhrase of ["logger/", "cache/", "redis/", "packages/db Redis helper", "request logging", "observability/", "health/", "rate limit"]) {
   if (!html.includes(apiInfraPhrase)) {
     errors.push(`skill.html missing API infra phrase: ${apiInfraPhrase}`);
   }
 }
 
 const graphQlAutogenPathCount = (html.match(/autogen\.ts/g) ?? []).length;
-if (graphQlAutogenPathCount < 2) {
-  errors.push("skill.html must show both web and api GraphQL autogen.ts paths");
+if (graphQlAutogenPathCount < 3) {
+  errors.push("skill.html must show web, api, and desktop GraphQL autogen.ts paths");
 }
 
-for (const unifiedPhrase of ["web GraphQL autogen", "API GraphQL autogen", "codegen.ts", "src/config/env.ts"]) {
+for (const unifiedPhrase of ["web GraphQL autogen", "API GraphQL autogen", "desktop GraphQL autogen", "codegen.ts", "src/config/env.ts", ".env.stage", "panda.config.ts", "styled-system", "packages/db/drizzle", "test/e2e"]) {
   if (!html.includes(unifiedPhrase)) {
     errors.push(`skill.html missing unified path phrase: ${unifiedPhrase}`);
   }
+}
+
+if (backend.includes("src/migrations/")) {
+  errors.push("backend-nest.md must not recommend src/migrations when packages/db/drizzle owns migration files");
+}
+
+if (!desktop.includes(".env.stage")) {
+  errors.push("desktop-tauri.md must include .env.stage");
 }
 
 if (/https?:\/\//.test(html)) {

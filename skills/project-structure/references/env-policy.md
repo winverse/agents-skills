@@ -41,6 +41,15 @@ apps/api/
     .env.stage
     .env.production
   src/config/env.ts
+
+apps/desktop/
+  env/
+    .env.example
+    .env.development
+    .env.test
+    .env.stage
+    .env.production
+  src/config/env.ts
 ```
 
 Do not move one app's env files under `src/` while another app keeps them at app root. The app root `env/` folder is the default for every deployable app.
@@ -107,6 +116,11 @@ LOG_FORMAT
 REDIS_URL
 REDIS_TLS
 CACHE_TTL_SECONDS
+HEALTH_CHECK_TIMEOUT_MS
+METRICS_ENABLED
+TRACE_EXPORTER_URL
+CORS_ORIGIN
+RATE_LIMIT_MAX
 ```
 
 Do not let `providers/logger`, `providers/cache`, or `packages/db/src/redis` read `process.env` directly. The app or tooling entrypoint loads env first, validates it, and passes the resulting Redis settings into the DB/cache helper.
@@ -116,3 +130,21 @@ Do not let `providers/logger`, `providers/cache`, or `packages/db/src/redis` rea
 Prefer `APP_ENV` or `DEPLOY_ENV` for new projects.
 
 `DOCKER_ENV` may be accepted as a compatibility alias in projects that already use it, but do not make it the primary name for new templates.
+
+## GraphQL And Generated Artifacts
+
+Every GraphQL app should use the same relative tooling shape:
+
+```text
+<app>/codegen.ts
+<app>/src/graphql/autogen.ts
+```
+
+API schema output or schema source should stay under `apps/api/src/graphql`, commonly `schema.graphql`. Operation documents should stay near the owning feature, such as `src/features/<domain>/graphql`.
+
+Choose one generated artifact policy per repo:
+
+- ignored and reproducible,
+- committed and reviewed.
+
+Do not mix policies per app unless an existing repo already has that constraint and the exception is documented.
