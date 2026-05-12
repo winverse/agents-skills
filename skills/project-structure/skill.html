@@ -510,11 +510,11 @@
     <header>
       <p class="eyebrow">스킬 시각 가이드</p>
       <h1>Project Structure</h1>
-      <p class="summary">프로젝트 종류를 숫자로 고르고, 기본 스택과 env 정책을 적용해 일관된 frontend, backend, full-stack monorepo, desktop 구조를 만든다.</p>
+      <p class="summary">프로젝트 종류를 숫자로 고르고, 기본 스택과 env/GraphQL/Drizzle/Tauri/infra 정책을 적용해 일관된 web, API, monorepo, desktop, deployment-aware 구조를 만든다.</p>
       <div class="file-pair">
         <span class="pill">SKILL.md: 에이전트 지시문</span>
         <span class="pill">skill.html: 설치용 시각 가이드</span>
-        <span class="pill">references/: 스택별 구조</span>
+        <span class="pill">references/: 스택별 구조와 검증</span>
       </div>
     </header>
 
@@ -529,6 +529,7 @@
               <li>Next.js web</li>
               <li>NestJS API</li>
               <li>Turborepo full-stack</li>
+              <li>Pulumi AWS infra</li>
             </ul>
           </div>
           <div class="cell ask">
@@ -575,7 +576,7 @@
           <line x1="190" y1="111" x2="264" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="270" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
           <text x="350" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">2. 기본 stack</text>
-          <text x="350" y="128" text-anchor="middle" font-size="12" fill="#6b7280">Bun, Next, Nest, Drizzle</text>
+          <text x="350" y="128" text-anchor="middle" font-size="12" fill="#6b7280">Bun, Next, Nest, Drizzle, AWS</text>
 
           <line x1="430" y1="111" x2="504" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="510" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
@@ -585,14 +586,14 @@
           <line x1="670" y1="111" x2="744" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="750" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
           <text x="830" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">4. tree 출력</text>
-          <text x="830" y="128" text-anchor="middle" font-size="12" fill="#6b7280">폴더와 경계</text>
+          <text x="830" y="128" text-anchor="middle" font-size="12" fill="#6b7280">폴더, 경계, infra</text>
 
           <line x1="830" y1="150" x2="830" y2="202" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="720" y="208" width="220" height="52" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
           <text x="830" y="238" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">가능한 검증 script 실행</text>
 
           <rect x="500" y="198" width="180" height="62" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
-          <text x="590" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">codegen / migrate</text>
+          <text x="590" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">codegen / migrate / deploy</text>
           <text x="590" y="244" text-anchor="middle" font-size="12" fill="#475569">env helper 사용</text>
           <line x1="680" y1="229" x2="720" y2="229" stroke="#1f7a52" stroke-width="2" marker-end="url(#arrow)"></line>
         </svg>
@@ -616,7 +617,19 @@
           </div>
           <div class="contract-card">
             <strong>DB</strong>
-            <span>1 PostgreSQL + Drizzle 기본, 2 DB 없음, 3 외부 DB. migration owner를 하나만 둔다.</span>
+            <span>1 PostgreSQL + Drizzle 기본, 2 MongoDB + Atlas, 3 Supabase Postgres, 4 DB 없음, 5 외부 DB. 선택한 DB만 tree에 넣는다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Postgres hosting</strong>
+            <span>1 app-managed Postgres 기본, 2 Supabase managed Postgres, 3 기존 Postgres. Supabase도 기본은 PostgreSQL/psql 호환 DB로 다룬다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Mongo hosting</strong>
+            <span>1 MongoDB Atlas 기본, 2 self-hosted MongoDB, 3 기존 MongoDB. Atlas network와 required secret names를 문서화한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>DB shell</strong>
+            <span>1 PostgreSQL/Supabase는 psql, 2 MongoDB는 mongosh, 3 shell script 없음. helper는 검증된 env를 사용한다.</span>
           </div>
           <div class="contract-card">
             <strong>캐시</strong>
@@ -633,6 +646,22 @@
           <div class="contract-card">
             <strong>데스크톱 shell</strong>
             <span>1 Tauri + Vite React 기본, 2 Tauri + 기존 frontend shell. GraphQL 사용 시 desktop autogen 경로를 맞춘다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>인프라</strong>
+            <span>1 요청 시 Pulumi AWS 기본, 2 infra 없음, 3 기존 infra tool. 배포/cloud/Docker 요청이 있을 때만 infra 폴더를 포함한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>컨테이너 registry</strong>
+            <span>1 Docker image를 AWS ECR로 push 기본, 2 registry 없음, 3 외부 registry. app Dockerfile은 각 app 옆에 둔다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>런타임 target</strong>
+            <span>1 신규 AWS container runtime은 ECS Fargate 기본, 2 VM 제어가 필요하면 EC2 Docker host, 3 cloud runtime 없음.</span>
+          </div>
+          <div class="contract-card">
+            <strong>공개 진입점</strong>
+            <span>1 public AWS service는 ALB 기본, 2 internal service, 3 기존 DNS/CDN. Route 53/ACM은 custom domain/TLS 요청 때만 포함한다.</span>
           </div>
         </div>
       </section>
@@ -659,7 +688,7 @@
             <div class="bar-row">
               <strong>데이터</strong>
               <span class="bar-track"><span class="bar-fill green" style="width: 86%;"></span></span>
-              <span>Postgres + Drizzle</span>
+              <span>Postgres + Drizzle, MongoDB Atlas 선택 가능</span>
             </div>
             <div class="bar-row">
               <strong>데스크톱</strong>
@@ -671,10 +700,42 @@
               <span class="bar-track"><span class="bar-fill green" style="width: 84%;"></span></span>
               <span>tests, health, logging</span>
             </div>
+            <div class="bar-row">
+              <strong>인프라</strong>
+              <span class="bar-track"><span class="bar-fill amber" style="width: 80%;"></span></span>
+              <span>Pulumi, Docker, ECR, ECS</span>
+            </div>
           </div>
           <div class="note-box">
             <h3>스택 원칙</h3>
-            <p>기본값은 빠르게 구조를 정하기 위한 출발점이다. 프로젝트 종류가 정해지면 관련 stack만 묻고, 나머지는 기본 정책으로 둔다. GraphQL codegen, Drizzle migration, Tauri build는 env helper를 반드시 거친다.</p>
+            <p>기본값은 빠르게 구조를 정하기 위한 출발점이다. 프로젝트 종류가 정해지면 관련 stack만 묻고, 나머지는 기본 정책으로 둔다. GraphQL codegen, Drizzle migration, psql/mongosh helper, Tauri build, deploy script는 env/helper와 선택된 DB/infra 경계를 반드시 거친다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>DB 옵션</h2>
+        <p class="section-note">기본은 PostgreSQL + Drizzle이다. MongoDB, Atlas, Supabase, psql, mongosh는 선택됐을 때만 tree와 env 정책에 포함한다.</p>
+        <div class="contract-grid">
+          <div class="contract-card">
+            <strong>PostgreSQL / Supabase Postgres</strong>
+            <span><code>packages/db/drizzle</code>, <code>packages/db/src/postgres</code>, <code>packages/db/scripts/psql.ts</code>를 둔다. runtime과 migration connection이 다르면 <code>DATABASE_DIRECT_URL</code>을 server-only로 분리한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>MongoDB Atlas</strong>
+            <span><code>packages/db/src/mongo</code>에 client, collections, indexes를 둔다. <code>MONGODB_URI</code>와 Atlas network access, private endpoint/IP allowlist, DB user를 문서화한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Supabase service role</strong>
+            <span><code>SUPABASE_SERVICE_ROLE_KEY</code>는 서버 전용 secret name으로만 문서화한다. frontend public env나 예제 값에 live secret을 넣지 않는다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>shell helper</strong>
+            <span>PostgreSQL/Supabase는 psql, MongoDB는 mongosh helper를 둔다. 두 helper 모두 app-local Zod env를 통과한 connection string만 사용한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>migration 구분</strong>
+            <span>MongoDB에는 Drizzle migration을 만들지 않는다. MongoDB는 seed와 index sync script를 쓰고, PostgreSQL/Supabase만 Drizzle migration owner를 가진다.</span>
           </div>
         </div>
       </section>
@@ -771,6 +832,37 @@
 
         <div class="tree-wide">
           <div class="tree-head">
+            <strong>인프라 포함 트리</strong>
+            <span>Pulumi AWS + Docker + ECR + 선택 runtime</span>
+          </div>
+          <div class="tree" aria-label="Infrastructure-aware folder structure">
+<pre class="terminal-tree"><span class="tree-root">repo-root/</span>                          <span class="tree-role"># infra가 요청된 프로젝트</span>
+├── <span class="tree-dir">apps/</span>                           <span class="tree-role"># 배포되는 app</span>
+│   ├── <span class="tree-dir">web/</span>                       <span class="tree-role"># Next.js app</span>
+│   │   ├── <span class="tree-file">Dockerfile</span>             <span class="tree-role"># web image build</span>
+│   │   └── <span class="tree-file">.dockerignore</span>          <span class="tree-role"># app-local build context</span>
+│   └── <span class="tree-dir">api/</span>                       <span class="tree-role"># NestJS app</span>
+│       ├── <span class="tree-file">Dockerfile</span>             <span class="tree-role"># API image build</span>
+│       └── <span class="tree-file">.dockerignore</span>          <span class="tree-role"># app-local build context</span>
+├── <span class="tree-dir">docker/</span>                         <span class="tree-role"># local-only service composition</span>
+│   └── <span class="tree-file">docker-compose.yml</span>        <span class="tree-role"># production runtime 아님</span>
+└── <span class="tree-dir">infra/</span>                          <span class="tree-role"># cloud IaC root</span>
+    └── <span class="tree-tool">pulumi/</span>                  <span class="tree-role"># Pulumi TypeScript AWS</span>
+        ├── <span class="tree-file">Pulumi.yaml</span>           <span class="tree-role"># project metadata</span>
+        ├── <span class="tree-file">Pulumi.dev.yaml.example</span> <span class="tree-role"># live secret 없는 config 예시</span>
+        ├── <span class="tree-file">README.md</span>             <span class="tree-role"># AWS account, region, secret names</span>
+        ├── <span class="tree-dir">src/</span>                   <span class="tree-role"># network, IAM, ECR, runtime wiring</span>
+        │   ├── <span class="tree-file">config.ts</span>          <span class="tree-role"># stack config와 image tag</span>
+        │   ├── <span class="tree-file">ecr.ts</span>             <span class="tree-role"># image repository ownership</span>
+        │   ├── <span class="tree-file">load-balancer.ts</span>   <span class="tree-role"># public entrypoint when selected</span>
+        │   └── <span class="tree-dir">runtime/</span>           <span class="tree-role"># active runtime path 하나만</span>
+        │       └── <span class="tree-file">ecs-fargate.ts</span> <span class="tree-role"># default, EC2 선택 시 ec2-docker.ts로 대체</span>
+        └── <span class="tree-dir">scripts/</span>               <span class="tree-role"># image tag와 pulumi up 연결</span></pre>
+          </div>
+        </div>
+
+        <div class="tree-wide">
+          <div class="tree-head">
             <strong>풀스택 모노레포 package 경계</strong>
             <span>Turborepo + Bun</span>
           </div>
@@ -781,11 +873,13 @@
 │   └── <span class="tree-dir">api/</span>                       <span class="tree-role"># NestJS GraphQL backend 앱</span>
 ├── <span class="tree-dir">packages/</span>                       <span class="tree-role"># 앱들이 공유하는 source</span>
 │   ├── <span class="tree-tool">config/</span>                    <span class="tree-role"># env helper만 제공, schema 금지</span>
-│   ├── <span class="tree-dir">db/</span>                        <span class="tree-role"># Drizzle와 Redis DB boundary</span>
-│   │   ├── <span class="tree-dir">drizzle/</span>               <span class="tree-role"># migration SQL과 metadata</span>
-│   │   ├── <span class="tree-dir">scripts/</span>               <span class="tree-role"># migrate, seed 실행 entry</span>
+│   ├── <span class="tree-dir">db/</span>                        <span class="tree-role"># selected DB와 Redis boundary</span>
+│   │   ├── <span class="tree-dir">drizzle/</span>               <span class="tree-role"># PostgreSQL migration SQL과 metadata</span>
+│   │   ├── <span class="tree-dir">scripts/</span>               <span class="tree-role"># migrate, seed, psql/mongosh entry</span>
 │   │   └── <span class="tree-dir">src/</span>                   <span class="tree-role"># DB package source</span>
-│   │       ├── <span class="tree-dir">schema/</span>            <span class="tree-role"># relational schema</span>
+│   │       ├── <span class="tree-dir">postgres/</span>          <span class="tree-role"># PostgreSQL/Supabase connection helpers</span>
+│   │       ├── <span class="tree-dir">mongo/</span>             <span class="tree-role"># MongoDB Atlas client, collections, indexes</span>
+│   │       ├── <span class="tree-dir">schema/</span>            <span class="tree-role"># PostgreSQL relational schema</span>
 │   │       └── <span class="tree-dir">redis/</span>             <span class="tree-role"># Redis client, keys, connection helpers</span>
 │   ├── <span class="tree-generated">graphql/</span>                  <span class="tree-role"># 공유 schema 또는 generated 타입</span>
 │   ├── <span class="tree-dir">ui/</span>                        <span class="tree-role"># 앱 중립 UI primitive</span>
@@ -858,6 +952,10 @@
             <span>codegen, migration, Tauri build script가 각자 env를 다시 파싱하지 않고 공용 helper를 호출한다.</span>
           </div>
           <div class="env-card">
+            <strong>infra config 분리</strong>
+            <span>app env schema는 application 변수를 소유하고, Pulumi stack config는 AWS region, account, image tag, domain, capacity, runtime target을 소유한다.</span>
+          </div>
+          <div class="env-card">
             <strong>앱별 env 파일</strong>
             <span><code>env/.env.development</code>, <code>.env.test</code>, <code>.env.stage</code>, <code>.env.production</code>을 app마다 둔다.</span>
           </div>
@@ -899,6 +997,41 @@
       </section>
 
       <section>
+        <h2>인프라 정책</h2>
+        <p class="section-note">deployment, cloud, Docker, Pulumi, AWS, ECR, ECS, EC2, CI/CD 배포 구조가 요청된 경우에만 추가한다.</p>
+        <div class="contract-grid">
+          <div class="contract-card">
+            <strong>Pulumi 소유</strong>
+            <span><code>infra/pulumi</code>가 network, IAM, ECR, ECS/EC2, load balancer, security group, logs, runtime wiring을 소유한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>Docker 위치</strong>
+            <span><code>&lt;app&gt;/Dockerfile</code>과 <code>&lt;app&gt;/.dockerignore</code>를 app 옆에 둔다. local Compose는 production runtime으로 보지 않는다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>ECR image</strong>
+            <span>CI/CD는 Docker image를 build하고 immutable tag를 AWS ECR에 push한 뒤, 선택한 image tag로 <code>pulumi up</code>을 실행한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>런타임 선택</strong>
+            <span>새 AWS container runtime은 ECS Fargate가 기본이다. SSH, host customization, 비컨테이너 host process가 필요할 때 EC2를 고른다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>진입점과 TLS</strong>
+            <span>public service는 ALB를 기본 진입점으로 둔다. Route 53과 ACM은 custom domain이나 TLS가 선택된 경우에만 tree에 넣는다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>비밀값 금지</strong>
+            <span>Pulumi stack file에 live secret을 쓰지 않는다. secret provider 또는 placeholder와 필요한 secret name만 문서화한다.</span>
+          </div>
+          <div class="contract-card">
+            <strong>배포 확인</strong>
+            <span>선택한 health endpoint로 post-deploy smoke check를 실행하고, immutable image tag와 Pulumi stack update를 배포 단위로 기록한다.</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
         <h2>파일 관계 지도</h2>
         <div class="map">
           <div class="map-col">
@@ -912,7 +1045,9 @@
             <div class="map-item"><code>frontend-next.md</code>: Next.js web 구조</div>
             <div class="map-item"><code>backend-nest.md</code>: NestJS GraphQL 구조</div>
             <div class="map-item"><code>monorepo.md</code>: Turborepo package 경계</div>
+            <div class="map-item"><code>db-options.md</code>: PostgreSQL, Supabase, MongoDB Atlas, shell helper 경계</div>
             <div class="map-item"><code>desktop-tauri.md</code>: Tauri 구조</div>
+            <div class="map-item"><code>infra-pulumi-aws.md</code>: SKILL.md가 infra 선택 시 요구하는 Pulumi/AWS/Docker 기준</div>
             <div class="map-item"><code>structure-validation.md</code>: 최종 checklist</div>
           </div>
           <div class="map-col">
@@ -920,7 +1055,7 @@
             <div class="map-item">숫자 선택지</div>
             <div class="map-item">directory tree</div>
             <div class="map-item">folder 경계 규칙</div>
-            <div class="map-item">env/codegen/migration/build/test/security 정책</div>
+            <div class="map-item">database, env, codegen, migration, build, infra, test, security 정책</div>
           </div>
         </div>
       </section>
@@ -930,12 +1065,12 @@
         <div class="schema">
           <div class="schema-box">
             <h3>입력</h3>
-            <p>프로젝트 종류, 선택한 stack, 기존 repo 구조, env/GraphQL/DB/Desktop, auth/cache/test 요구사항.</p>
+            <p>프로젝트 종류, 선택한 stack, 기존 repo 구조, env/GraphQL/DB/Desktop, auth/cache/test, deployment/cloud/Docker/AWS 요구사항.</p>
           </div>
           <div class="arrow">→</div>
           <div class="schema-box">
             <h3>출력</h3>
-            <p>선택된 project kind와 stack assumptions, 디렉터리 트리, app/package 경계, env/codegen/migration/build/test/security/observability 정책, folder rule 검증 결과.</p>
+            <p>선택된 project kind와 stack assumptions, 디렉터리 트리, app/package/infra 경계, env/codegen/migration/build/infra/test/security/observability 정책, folder rule 검증 결과.</p>
           </div>
         </div>
       </section>
@@ -953,7 +1088,7 @@
           </div>
           <div class="check-card">
             <strong>DB 경계</strong>
-            <span>Drizzle migration은 <code>packages/db/drizzle</code>, Redis는 <code>packages/db/src/redis</code>에 둔다.</span>
+            <span>PostgreSQL/Supabase는 <code>packages/db/drizzle</code>과 <code>postgres/</code>, MongoDB Atlas는 <code>mongo/</code>와 index sync, Redis는 <code>packages/db/src/redis</code>에 둔다.</span>
           </div>
           <div class="check-card">
             <strong>API 준비 상태</strong>
@@ -962,6 +1097,10 @@
           <div class="check-card">
             <strong>테스트 범위</strong>
             <span>unit/component는 colocated, e2e는 app-level <code>test/e2e</code> 또는 API <code>test</code>에 둔다.</span>
+          </div>
+          <div class="check-card">
+            <strong>인프라 범위</strong>
+            <span>infra-aware repo는 Pulumi AWS, app-local Dockerfile/.dockerignore, ECR image owner, public entrypoint, required secret names, smoke check, ECS Fargate 또는 EC2 중 정확히 하나의 runtime path를 표시한다.</span>
           </div>
         </div>
       </section>
@@ -980,6 +1119,8 @@
               <li>API logger는 provider에, Redis DB boundary는 monorepo의 <code>packages/db</code>에 둔다.</li>
               <li>env helper를 codegen, migration, build에도 재사용한다.</li>
               <li>GraphQL, Panda, test, health, observability 위치를 tree에 표시한다.</li>
+              <li>infra 요청이 있으면 Pulumi AWS, Docker, ECR, ECS/EC2 runtime 경계를 tree에 표시한다.</li>
+              <li>MongoDB Atlas와 Supabase Postgres를 선택한 경우 DB provider, shell helper, server-only secret 경계를 표시한다.</li>
             </ul>
           </div>
           <div class="rule dont">
@@ -988,14 +1129,17 @@
               <li>기본값으로 full-stack single repo를 제안하지 않는다.</li>
               <li>shared package에서 <code>process.env</code>를 읽지 않는다.</li>
               <li>GraphQL 기본 프로젝트에 REST controller를 기본 생성하지 않는다.</li>
+              <li>배포 요청이 없는데 <code>infra/</code>, Docker, Pulumi 구조를 기본 생성하지 않는다.</li>
+              <li>Pulumi stack file에 live secret을 쓰지 않는다.</li>
               <li>기존 repo를 조사하지 않고 대량 이동하지 않는다.</li>
               <li>migration 파일을 <code>drizzle/</code>와 <code>src/migrations/</code>에 중복해서 두지 않는다.</li>
+              <li>MongoDB 선택 시 Drizzle migration을 만들거나 Supabase service-role key를 frontend public env에 노출하지 않는다.</li>
             </ul>
           </div>
         </div>
         <pre class="snippet">Use $project-structure at &lt;skills-root&gt;/skills/project-structure/SKILL.md
 when choosing, creating, standardizing, or refactoring web, backend,
-full-stack monorepo, or desktop project folder structures.</pre>
+full-stack monorepo, desktop, database-aware, or infrastructure-aware project structures.</pre>
       </section>
     </main>
   </div>

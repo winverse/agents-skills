@@ -13,6 +13,9 @@ Use this reference before presenting the final project tree or before finishing 
 - GraphQL operation documents stay near the owning feature in `src/features/<domain>/graphql`.
 - Drizzle migration files have one owner, usually `packages/db/drizzle`.
 - Migration and seed execution scripts live in `packages/db/scripts` or an explicitly named app-local scripts folder.
+- PostgreSQL and Supabase Postgres structures include psql or migration helper boundaries when selected.
+- MongoDB structures include `packages/db/src/mongo`, collection/index helpers, seed/index sync scripts, and no Drizzle migration folder unless PostgreSQL is also selected.
+- Supabase service-role keys, MongoDB URIs, and direct database URLs are server-only and not exposed through frontend public env.
 - Monorepo Redis client, key, and connection helpers live in `packages/db/src/redis`.
 - API cache providers wrap Redis helpers and do not define Redis key conventions.
 - Frontend UI/CSS structure includes Panda config, token/recipe location, and generated style output policy when Panda is selected.
@@ -20,6 +23,8 @@ Use this reference before presenting the final project tree or before finishing 
 - Backend observability includes logger, request logging, health/readiness, and optional metrics/tracing boundaries when needed.
 - Unit and component tests are colocated; e2e tests live in each app's `test/e2e` or API `test` folder.
 - Desktop apps include `src-tauri`, `scripts/tauri-env.ts`, `.env.stage`, and the same GraphQL codegen paths when GraphQL is selected.
+- Infrastructure-aware repos include app-local Dockerfiles and `.dockerignore`, `infra/pulumi`, Pulumi stack files or examples, ECR image ownership, public entrypoint choice, CI/CD image tag handoff, documented required secret names, deployed smoke checks, and exactly one active AWS runtime path: ECS Fargate or EC2 Docker host.
+- Local Docker Compose, when present, is labeled local-only and not the production runtime.
 
 ## Validation Commands
 
@@ -33,6 +38,10 @@ bun run test:e2e
 bun run codegen
 bun run db:check
 bun run db:migrate
+bun run db:shell
+bun run infra:preview
+bun run infra:deploy
+bun run deploy:smoke
 ```
 
 Use the actual script names from the target repo. Do not invent commands as if they were already installed.

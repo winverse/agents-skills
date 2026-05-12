@@ -137,16 +137,16 @@ From the user's existing NestJS REST API style, keep:
 - explicit CORS/rate-limit/cookie plugins instead of hidden bootstrap code,
 - e2e tests separated from unit tests.
 
-Modernize these pieces for the default stack:
+Modernize these pieces for the selected stack:
 
 - `src/module` becomes `src/modules`.
 - REST `controller` becomes GraphQL `resolver` unless REST is selected.
-- Prisma-specific folders become Drizzle-aware DB boundaries.
+- Prisma-specific folders become selected database boundaries: Drizzle-aware PostgreSQL by default, or MongoDB repository boundaries when MongoDB is selected.
 - Joi/default config files become Zod app-local env parsing.
 
 ## Database Boundary
 
-For monorepos, prefer:
+For PostgreSQL monorepos, prefer:
 
 ```text
 packages/db/
@@ -155,6 +155,9 @@ packages/db/
     *.sql
   src/
     client.ts
+    postgres/
+      client.ts
+      connection.ts
     redis/
       client.ts
       connection.ts
@@ -163,11 +166,36 @@ packages/db/
   scripts/
     migrate.ts
     seed.ts
+    psql.ts
 ```
 
 The API app imports the database package. It should not duplicate relational schema or Redis key/client definitions in `apps/api`.
 
 Use `drizzle/` for migration SQL output and metadata. Use `scripts/migrate.ts` or package scripts for migration execution. Do not also create a source-tree migrations folder for the same migration files.
+
+For MongoDB monorepos, prefer:
+
+```text
+packages/db/
+  src/
+    mongo/
+      client.ts
+      connection.ts
+      collections/
+      indexes/
+    redis/
+      client.ts
+      connection.ts
+      keys.ts
+  scripts/
+    seed.ts
+    sync-indexes.ts
+    mongosh.ts
+```
+
+MongoDB projects should not create Drizzle migrations. Keep collection/index helpers inside `packages/db/src/mongo`, and keep domain-specific queries behind repositories or services instead of raw MongoDB clients in resolvers.
+
+For Supabase Postgres, keep the PostgreSQL + Drizzle boundary above. Add Supabase provider adapters only for selected Supabase features such as Auth, Storage, Realtime, Edge Functions, or server-side service-role operations. Keep `SUPABASE_SERVICE_ROLE_KEY` server-only and never expose it through frontend public env.
 
 For a backend-only repo, `src/db` or `src/providers/cache/redis` is acceptable, but still keep DB/cache boundaries explicit and avoid scattering Redis access through domain modules.
 

@@ -22,6 +22,8 @@ const frontend = read("references/frontend-next.md");
 const backend = read("references/backend-nest.md");
 const monorepo = read("references/monorepo.md");
 const desktop = read("references/desktop-tauri.md");
+const dbOptions = read("references/db-options.md");
+const infra = read("references/infra-pulumi-aws.md");
 const structureValidation = read("references/structure-validation.md");
 read("agents/openai.yaml");
 
@@ -41,7 +43,17 @@ const requiredSkillPhrases = [
   "`src/providers/logger`",
   "`packages/db/src/redis`",
   "GraphQL Codegen Contract",
+  "Database Policy",
+  "MongoDB Atlas",
+  "Supabase Postgres",
+  "psql",
   "Testing shape",
+  "Infrastructure Policy",
+  "Pulumi",
+  "Docker",
+  "AWS ECR",
+  "ECS Fargate",
+  "EC2",
   "health/readiness",
   "security",
   "observability",
@@ -60,6 +72,8 @@ const requiredReferences = [
   "references/backend-nest.md",
   "references/monorepo.md",
   "references/desktop-tauri.md",
+  "references/db-options.md",
+  "references/infra-pulumi-aws.md",
   "references/structure-validation.md",
 ];
 
@@ -76,7 +90,10 @@ const envRules = [
   "Shared packages never read `process.env` directly",
   "GraphQL codegen",
   "Drizzle migration",
+  "psql shell",
+  "mongosh shell",
   "Tauri build",
+  "Infrastructure deploy",
   "LOG_LEVEL",
   "REDIS_URL",
   "HEALTH_CHECK_TIMEOUT_MS",
@@ -93,10 +110,12 @@ for (const rule of envRules) {
 
 for (const [name, text, phrases] of [
   ["frontend-next.md", frontend, ["src/features/<domain>", "urql", "codegen.ts", "providers", "panda.config.ts", "styled-system", "test/e2e"]],
-  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "providers/logger", "packages/db/src/redis", "modules/health", "providers/observability", "rate-limit.plugin.ts"]],
-  ["monorepo.md", monorepo, ["packages/config", "packages/db", "packages/db/src/redis", "turbo", "codegen", "packages/db/drizzle", "packages/db/scripts"]],
+  ["backend-nest.md", backend, ["Fastify adapter", "resolver", "providers", "Drizzle", "MongoDB", "Supabase Postgres", "providers/logger", "packages/db/src/redis", "modules/health", "providers/observability", "rate-limit.plugin.ts"]],
+  ["monorepo.md", monorepo, ["packages/config", "packages/db", "packages/db/src/redis", "turbo", "codegen", "packages/db/drizzle", "packages/db/scripts", "packages/db/src/mongo", "db:shell", "infra/pulumi", "AWS ECR", "deploy:smoke"]],
   ["desktop-tauri.md", desktop, ["Tauri", "src-tauri", "tauri-env.ts", ".env.stage", "src/graphql/autogen.ts", "codegen.ts"]],
-  ["structure-validation.md", structureValidation, ["Final Tree Checklist", "GraphQL apps have", "Drizzle migration files have one owner", "Backend observability", "Desktop apps include"]],
+  ["db-options.md", dbOptions, ["Database Menu", "PostgreSQL + Drizzle", "MongoDB + Atlas", "Supabase Postgres", "psql", "mongosh", "MONGODB_URI", "SUPABASE_SERVICE_ROLE_KEY", "DATABASE_DIRECT_URL"]],
+  ["infra-pulumi-aws.md", infra, ["Infrastructure Menu", "Pulumi AWS", "Dockerfile", ".dockerignore", "AWS ECR", "ECS Fargate", "EC2 Docker host", "Public entrypoint", "Route 53", "ACM", "infra/pulumi", "Pulumi.<stack>.yaml.example", "smoke-check.ts", "Do not commit live secrets"]],
+  ["structure-validation.md", structureValidation, ["Final Tree Checklist", "GraphQL apps have", "Drizzle migration files have one owner", "MongoDB structures include", "Supabase service-role keys", "Backend observability", "Desktop apps include", "Infrastructure-aware repos include", "deploy:smoke"]],
 ] as const) {
   for (const phrase of phrases) {
     if (!text.includes(phrase)) {
@@ -115,6 +134,9 @@ const htmlRequired = [
   "백엔드 API 트리",
   "풀스택 모노레포 package 경계",
   "데스크톱 앱 트리",
+  "인프라 포함 트리",
+  "인프라 정책",
+  "DB 옵션",
   "env 계약",
   "GraphQL codegen 계약",
   "구조 검증",
@@ -130,19 +152,19 @@ for (const phrase of htmlRequired) {
   }
 }
 
-for (const menuPhrase of ["API contract", "DB", "Cache", "Auth", "Generated artifacts", "Desktop shell"]) {
+for (const menuPhrase of ["API contract", "DB", "Postgres hosting", "Mongo hosting", "DB shell", "Cache", "Auth", "Generated artifacts", "Desktop shell", "Infrastructure", "Container registry", "Runtime target", "Public entrypoint"]) {
   if (!skill.includes(menuPhrase)) {
     errors.push(`SKILL.md missing compact menu phrase: ${menuPhrase}`);
   }
 }
 
-for (const menuPhrase of ["API 계약", "DB", "캐시", "인증", "생성 산출물", "데스크톱 shell"]) {
+for (const menuPhrase of ["API 계약", "DB", "Postgres hosting", "Mongo hosting", "DB shell", "캐시", "인증", "생성 산출물", "데스크톱 shell", "인프라", "컨테이너 registry", "런타임 target", "공개 진입점"]) {
   if (!html.includes(menuPhrase)) {
     errors.push(`skill.html missing compact menu phrase: ${menuPhrase}`);
   }
 }
 
-for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "modules/", "auth/", "apps/desktop", "src-tauri/", "packages/", "db/"]) {
+for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "modules/", "auth/", "apps/desktop", "src-tauri/", "packages/", "db/", "mongo/", "postgres/", "infra/", "pulumi/", "Dockerfile", ".dockerignore", "runtime/", "Pulumi.dev.yaml.example"]) {
   if (!html.includes(treePhrase)) {
     errors.push(`skill.html missing folder tree phrase: ${treePhrase}`);
   }
@@ -151,6 +173,18 @@ for (const treePhrase of ["apps/web", "features/", "posts/", "apps/api", "module
 for (const apiInfraPhrase of ["logger/", "cache/", "redis/", "packages/db Redis helper", "request logging", "observability/", "health/", "rate limit"]) {
   if (!html.includes(apiInfraPhrase)) {
     errors.push(`skill.html missing API infra phrase: ${apiInfraPhrase}`);
+  }
+}
+
+for (const infraPhrase of ["Pulumi AWS", "Docker", "AWS ECR", "ECS Fargate", "EC2 Docker host", "infra/pulumi", "live secret", "public entrypoint", "Route 53", "ACM", "required secret names", "smoke check"]) {
+  if (!html.includes(infraPhrase)) {
+    errors.push(`skill.html missing infrastructure phrase: ${infraPhrase}`);
+  }
+}
+
+for (const dbPhrase of ["MongoDB Atlas", "Supabase Postgres", "psql", "mongosh", "MONGODB_URI", "DATABASE_DIRECT_URL", "SUPABASE_SERVICE_ROLE_KEY"]) {
+  if (!html.includes(dbPhrase)) {
+    errors.push(`skill.html missing database phrase: ${dbPhrase}`);
   }
 }
 

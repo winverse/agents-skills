@@ -1,16 +1,20 @@
 ## Project Skill: Project Structure
 
-- For choosing, creating, standardizing, or refactoring frontend, backend, full-stack monorepo, or desktop app folder structures, use the shared skill at `<skills-root>/skills/project-structure/SKILL.md`.
+- For choosing, creating, standardizing, or refactoring frontend, backend, full-stack monorepo, desktop app, or infrastructure-aware folder structures, use the shared skill at `<skills-root>/skills/project-structure/SKILL.md`.
 
 ## Project Structure Overrides
 
 - Prefer numeric choices when the project kind or stack is not clear.
-- Default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL, Drizzle, Panda CSS with headless UI, Tauri, and Zod env validation unless the project says otherwise.
+- Default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation, and Pulumi/Docker/AWS ECR/ECS Fargate when infrastructure is requested unless the project says otherwise.
+- Use MongoDB + Atlas when MongoDB/document DB is selected, and Supabase Postgres when the user wants managed psql-compatible Postgres. Keep Supabase service-role keys and MongoDB URIs server-only.
 - Use `apps/web` or `apps/api` by default even for standalone frontend/backend projects unless the existing repo or user explicitly wants a root-level app.
 - Use app-local env schemas and keep `packages/config` as helper-only. Shared packages must not read `process.env` directly.
 - Keep app-owned env/codegen paths consistent across web, API, and desktop where applicable: `<app>/env/*`, `<app>/src/config/env.ts`, `<app>/codegen.ts`, and `<app>/src/graphql/autogen.ts`.
 - In monorepos, keep Redis client, key, and connection helpers in `packages/db/src/redis`; API apps should wrap that boundary through `apps/api/src/providers/cache`.
 - Keep API structured logging in `apps/api/src/providers/logger` and request logging integration in `apps/api/src/common/interceptors`.
 - Keep Drizzle migration SQL and metadata in `packages/db/drizzle`; do not duplicate migration files under `src/migrations`.
+- For MongoDB, keep client/collection/index helpers in `packages/db/src/mongo` and use seed/index sync scripts instead of Drizzle migrations.
 - When GraphQL is selected, define the schema/document/autogen contract and choose one generated artifact policy: ignored and reproducible, or committed and reviewed.
 - Represent frontend Panda CSS tokens/recipes/generated output, backend health/security/observability, and app-level test surfaces in the final tree when those capabilities are selected.
+- Include `infra/pulumi`, app-local Dockerfiles, AWS ECR image ownership, and an ECS Fargate or EC2 Docker host runtime path only when deployment, cloud, Docker, Pulumi, AWS, ECR, ECS, EC2, or CI/CD structure is requested.
+- For infrastructure-aware structures, include the public entrypoint choice, required secret names, Pulumi stack config examples without live values, immutable image tag handoff, and a post-deploy smoke check.
