@@ -2,127 +2,627 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>show-skills</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>show-skills visual guide</title>
   <style>
-    :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#0f172a; }
-    html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
-    * { box-sizing:border-box; }
-    .shell { width:100%; max-width:1192px; margin:0 auto; padding:32px; }
-    header, section { margin-bottom:18px; padding:20px; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
-    header { display:grid; grid-template-columns:1fr 310px; gap:18px; align-items:start; }
-    h1 { margin:0 0 8px; font-size:28px; line-height:1.2; letter-spacing:0; }
-    h2 { margin:0 0 14px; font-size:18px; letter-spacing:0; }
-    h3 { margin:0 0 8px; font-size:15px; letter-spacing:0; }
-    p { margin:0; color:var(--muted); }
-    a { color:var(--accent); overflow-wrap:anywhere; }
-    code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; overflow-wrap:anywhere; }
-    pre { margin:0; padding:14px; background:var(--ink); color:#e5e7eb; border-radius:8px; overflow-x:auto; white-space:pre; }
-    .pair, .cell { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
-    .pair { display:grid; gap:8px; background:var(--muted-surface); }
-    .pair span { display:flex; justify-content:space-between; gap:14px; color:var(--muted); }
-    .matrix { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-    .tag { display:inline-block; margin-bottom:8px; padding:2px 8px; border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; }
-    .ok { color:var(--ok); } .warn { color:var(--warn); } .danger { color:var(--danger); } .accent { color:var(--accent); }
-    .flow { width:100%; height:220px; border:1px solid var(--border); border-radius:8px; background:var(--muted-surface); }
-    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-    ul { margin:8px 0 0; padding-left:18px; color:var(--muted); }
-    .tree { background:var(--ink); color:#e5e7eb; border-radius:8px; padding:14px; overflow-x:auto; white-space:pre; }
-    .bars { display:grid; gap:10px; }
-    .bar { display:grid; grid-template-columns:145px 1fr 110px; align-items:center; gap:10px; }
-    .track { height:18px; border:1px solid var(--border); border-radius:4px; background:var(--muted-surface); overflow:hidden; }
-    .fill { height:100%; background:var(--accent); }
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --border-strong: #94a3b8;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --ok: #1f7a52;
+      --ok-soft: #dcfce7;
+      --warn: #a16207;
+      --warn-soft: #fef3c7;
+      --danger: #b42318;
+      --danger-soft: #fee2e2;
+      --ink: #0f172a;
+      --ink-soft: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    body {
+      padding: 32px 0 48px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1192px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    main,
+    header,
+    section,
+    .matrix,
+    .grid2,
+    .grid3,
+    .split,
+    .schema,
+    .map,
+    .box,
+    .rule,
+    .cell,
+    .map-col {
+      min-width: 0;
+    }
+
+    header,
+    section {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 18px;
+      align-items: start;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+    }
+
+    section {
+      padding: 22px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin-bottom: 7px;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      overflow-wrap: anywhere;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #e5e7eb;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.55;
+    }
+
+    .purpose {
+      display: grid;
+      gap: 8px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .summary {
+      max-width: 790px;
+      font-size: 15px;
+    }
+
+    .pair {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+      padding: 14px;
+    }
+
+    .pair span {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .pair strong {
+      color: var(--text);
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .cell {
+      min-height: 132px;
+      padding: 15px;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .cell:last-child {
+      border-right: 0;
+    }
+
+    .cell.use {
+      border-top: 5px solid var(--ok);
+    }
+
+    .cell.combine {
+      border-top: 5px solid var(--accent);
+    }
+
+    .cell.ask {
+      border-top: 5px solid var(--warn);
+    }
+
+    .cell.skip {
+      border-top: 5px solid var(--danger);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      margin-bottom: 8px;
+      padding: 2px 8px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .warn {
+      color: var(--warn);
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    .flow {
+      display: block;
+      width: 100%;
+      height: 250px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    .swatch.ok {
+      background: var(--ok);
+    }
+
+    .swatch.warn {
+      background: var(--warn);
+    }
+
+    .grid2,
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .box,
+    .rule,
+    .map-col {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .box,
+    .rule {
+      padding: 15px;
+    }
+
+    .box.muted {
+      background: var(--surface-muted);
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .schema {
+      display: grid;
+      grid-template-columns: 1fr 70px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .bars {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 170px 1fr 150px;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .track {
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface-muted);
+      overflow: hidden;
+    }
+
+    .fill {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .fill.ok {
+      background: var(--ok);
+    }
+
+    .fill.warn {
+      background: var(--warn);
+    }
+
+    .map {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .map-col {
+      overflow: hidden;
+    }
+
+    .map-title {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-muted);
+      font-weight: 750;
+    }
+
+    .map-item {
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--ink-soft);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .map-item:last-child {
+      border-bottom: 0;
+    }
+
+    .rule.do {
+      background: var(--ok-soft);
+      border-color: #86efac;
+    }
+
+    .rule.dont {
+      background: var(--danger-soft);
+      border-color: #fca5a5;
+    }
   </style>
 </head>
 <body>
-  <main class="shell">
+  <div class="shell">
     <header>
-      <div>
+      <div class="purpose">
+        <p class="eyebrow">스킬 시각 가이드</p>
         <h1>show-skills</h1>
-        <p>파일을 직접 클릭하지 않아도 현재 skills root를 읽고, 카테고리별 목록과 추천 스킬 조합을 보여주는 portable 탐색 스킬.</p>
+        <p class="summary">현재 파일 시스템을 source of truth로 읽어 스킬 목록을 카테고리별로 보여주고, 작업에 맞는 주 스킬과 companion skill을 추천하는 catalog 탐색 스킬.</p>
       </div>
-      <div class="pair">
+      <div class="pair" aria-label="file pair">
         <span><strong>에이전트</strong><a href="SKILL.md">SKILL.md</a></span>
         <span><strong>사용자</strong><a href="skill.html">skill.html</a></span>
+        <span><strong>실행</strong><a href="scripts/show-skills.ts">scripts/show-skills.ts</a></span>
       </div>
     </header>
 
-    <section>
-      <h2>사용 판단 매트릭스</h2>
-      <div class="matrix">
-        <div class="cell"><span class="tag ok">사용</span><h3>목록 보기</h3><p>현재 스킬 전체, 카테고리, 경로, 상태를 빠르게 보고 싶을 때.</p></div>
-        <div class="cell"><span class="tag accent">추천</span><h3>무엇을 쓸지 모를 때</h3><p>사용자 작업에 맞는 주 스킬과 함께 쓸 스킬을 추천한다.</p></div>
-        <div class="cell"><span class="tag warn">문서</span><h3>문서로 훑을 때</h3><p><a href="../../docs/skill-catalog.md">docs/skill-catalog.md</a>가 있으면 정적 카탈로그로 연다.</p></div>
-        <div class="cell"><span class="tag danger">건너뜀</span><h3>스킬 실행이 목적일 때</h3><p>목록만 보여준다. 설치, global 등록, 실제 작업 실행은 하지 않는다.</p></div>
-      </div>
-    </section>
+    <main>
+      <section>
+        <h2>사용 판단 매트릭스</h2>
+        <div class="matrix" aria-label="show-skills use decision matrix">
+          <div class="cell use">
+            <span class="tag ok">사용</span>
+            <h3>목록과 경로</h3>
+            <p>현재 repo 또는 skills root의 스킬 이름, 설명, <code>SKILL.md</code>, <code>skill.html</code> 경로를 보여줄 때.</p>
+          </div>
+          <div class="cell combine">
+            <span class="tag accent">조합</span>
+            <h3>무엇을 쓸지 선택</h3>
+            <p>사용자 작업을 보고 primary skill과 함께 쓰면 좋은 companion skill을 짧게 추천한다.</p>
+          </div>
+          <div class="cell ask">
+            <span class="tag warn">확인</span>
+            <h3>다른 카탈로그 root</h3>
+            <p>현재 위치가 catalog가 아니면 <code>--root &lt;path&gt;</code> 또는 <code>SKILLS_ROOT</code>로 대상 root를 지정한다.</p>
+          </div>
+          <div class="cell skip">
+            <span class="tag danger">건너뜀</span>
+            <h3>실행이나 설치</h3>
+            <p>스킬을 자동 설치, global 등록, 실제 작업 수행으로 이어가지 않는다. 목록과 추천까지만 한다.</p>
+          </div>
+        </div>
+      </section>
 
-    <section>
-      <h2>목록 생성 흐름</h2>
-      <svg class="flow" viewBox="0 0 1080 220" role="img" aria-label="show skills workflow">
-        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
-        <rect x="28" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="100" y="99" text-anchor="middle" font-size="14" font-weight="700">스킬 읽기</text><text x="100" y="120" text-anchor="middle" font-size="12" fill="#6b7280">SKILL.md</text>
-        <line x1="173" y1="104" x2="243" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="246" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="318" y="99" text-anchor="middle" font-size="14" font-weight="700">상태 병합</text><text x="318" y="120" text-anchor="middle" font-size="12" fill="#6b7280">history 상태</text>
-        <line x1="391" y1="104" x2="461" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="464" y="68" width="160" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="544" y="99" text-anchor="middle" font-size="14" font-weight="700">묶기</text><text x="544" y="120" text-anchor="middle" font-size="12" fill="#6b7280">사용 목적</text>
-        <line x1="624" y1="104" x2="694" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="697" y="68" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="772" y="99" text-anchor="middle" font-size="14" font-weight="700">출력</text><text x="772" y="120" text-anchor="middle" font-size="12" fill="#6b7280">markdown/json</text>
-        <line x1="847" y1="104" x2="917" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="920" y="68" width="132" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="986" y="99" text-anchor="middle" font-size="14" font-weight="700">추천</text><text x="986" y="120" text-anchor="middle" font-size="12" fill="#6b7280">스킬 조합</text>
-      </svg>
-    </section>
+      <section>
+        <h2>목록 생성 흐름</h2>
+        <svg class="flow" viewBox="0 0 1100 250" role="img" aria-label="show-skills workflow">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"></path>
+            </marker>
+          </defs>
+          <rect x="30" y="74" width="150" height="76" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="105" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">1. root 찾기</text>
+          <text x="105" y="128" text-anchor="middle" font-size="12" fill="#6b7280">repo / 설치 layout</text>
+          <line x1="180" y1="112" x2="245" y2="112" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
 
-    <section>
-      <h2>입출력 스키마</h2>
-      <div class="grid3">
-        <div class="cell"><h3>입력</h3><ul><li>현재 스킬 보여줘</li><li>이 작업에 맞는 스킬은?</li><li>리뷰/QA 스킬만 보여줘</li></ul></div>
-        <div class="cell"><h3>읽는 파일</h3><ul><li>skills/*/SKILL.md</li><li>agents/openai.yaml</li><li>history/skills.md</li></ul></div>
-        <div class="cell"><h3>출력</h3><ul><li>카테고리별 목록</li><li>상태와 risk</li><li>SKILL.md / skill.html 경로</li></ul></div>
-      </div>
-    </section>
+          <rect x="252" y="74" width="150" height="76" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="327" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">2. SKILL.md 읽기</text>
+          <text x="327" y="128" text-anchor="middle" font-size="12" fill="#6b7280">frontmatter + 설명</text>
+          <line x1="402" y1="112" x2="467" y2="112" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
 
-    <section>
-      <h2>카테고리 차트</h2>
-      <div class="bars">
-        <div class="bar"><strong>탐색</strong><div class="track"><div class="fill" style="width:45%"></div></div><span>show/web</span></div>
-        <div class="bar"><strong>스킬 운영</strong><div class="track"><div class="fill" style="width:92%"></div></div><span>update/docs</span></div>
-        <div class="bar"><strong>구현과 구조</strong><div class="track"><div class="fill" style="width:68%"></div></div><span>code/build</span></div>
-        <div class="bar"><strong>리뷰와 QA</strong><div class="track"><div class="fill" style="width:70%"></div></div><span>review/test</span></div>
-      </div>
-    </section>
+          <rect x="474" y="74" width="162" height="76" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="555" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">3. 상태 보강</text>
+          <text x="555" y="128" text-anchor="middle" font-size="12" fill="#6b7280">history, yaml fallback</text>
+          <line x1="636" y1="112" x2="701" y2="112" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
 
-    <section>
-      <h2>파일 관계 지도</h2>
-      <div class="grid2">
-        <div class="tree">skills/show-skills/
-├── SKILL.md
-├── skill.html
-├── agents/openai.yaml
-└── scripts/
-    ├── show-skills.ts
-    └── validate-show-skills.ts</div>
-        <div class="cell"><h3>연결 문서</h3><p><a href="../../docs/skill-catalog.md">docs/skill-catalog.md</a>는 이 repo의 정적 카탈로그이고, <a href="../../project-snippets/show-skills.md">project-snippets/show-skills.md</a>는 프로젝트 연결 문구다. 독립 설치에서는 <code>--root</code>로 skills root를 지정한다.</p></div>
-      </div>
-    </section>
+          <rect x="708" y="74" width="150" height="76" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+          <text x="783" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">4. 묶기</text>
+          <text x="783" y="128" text-anchor="middle" font-size="12" fill="#6b7280">탐색 / 운영 / QA</text>
+          <line x1="858" y1="112" x2="923" y2="112" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
 
-    <section>
-      <h2>품질 게이트</h2>
-      <pre>node skills/show-skills/scripts/show-skills.ts --compact
-node skills/show-skills/scripts/show-skills.ts --root skills --compact
-node scripts/validate-skill.ts skills/show-skills
+          <rect x="930" y="74" width="140" height="76" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="1000" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">5. 출력</text>
+          <text x="1000" y="128" text-anchor="middle" font-size="12" fill="#475569">markdown / json</text>
+
+          <rect x="350" y="184" width="410" height="38" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
+          <text x="555" y="208" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">사용자 요청이 선택 질문이면 추천 블록을 덧붙인다</text>
+          <line x1="555" y1="150" x2="555" y2="184" stroke="#1f7a52" stroke-width="2" marker-end="url(#arrow)"></line>
+        </svg>
+        <div class="legend">
+          <span><i class="swatch"></i> catalog 탐색 경로</span>
+          <span><i class="swatch ok"></i> 추천 판단 보강</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>입출력 스키마</h2>
+        <div class="schema">
+          <div class="box muted">
+            <h3>입력</h3>
+            <ul>
+              <li>현재 스킬 보여줘</li>
+              <li>이 작업에는 어떤 스킬을 써?</li>
+              <li><code>--root skills</code>, <code>--compact</code>, <code>--format json</code></li>
+            </ul>
+          </div>
+          <div class="arrow">→</div>
+          <div class="box muted">
+            <h3>출력</h3>
+            <ul>
+              <li>카테고리별 스킬 목록</li>
+              <li>상태/risk와 간단 설명</li>
+              <li><code>SKILL.md</code> / <code>skill.html</code> 링크</li>
+              <li>주 스킬 / companion 추천</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>소스 우선순위 차트</h2>
+        <div class="split">
+          <div class="bars" aria-label="source priority chart">
+            <div class="bar"><strong>현재 파일 시스템</strong><span class="track"><span class="fill ok" style="width: 100%;"></span></span><span>항상 우선</span></div>
+            <div class="bar"><strong>show-skills 실행 스크립트</strong><span class="track"><span class="fill" style="width: 92%;"></span></span><span>기본 실행</span></div>
+            <div class="bar"><strong>history/skills.md</strong><span class="track"><span class="fill" style="width: 72%;"></span></span><span>상태 보강</span></div>
+            <div class="bar"><strong>docs/skill-catalog.md</strong><span class="track"><span class="fill warn" style="width: 58%;"></span></span><span>선택 자료</span></div>
+          </div>
+          <div class="box">
+            <h3>핵심 판단</h3>
+            <p>정적 문서가 있더라도 live listing(실시간 목록)을 먼저 신뢰한다. <code>docs/skill-catalog.md</code>는 사람이 훑는 보조 카탈로그이며, standalone install에는 없을 수 있다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>파일 관계 지도</h2>
+        <div class="map">
+          <div class="map-col">
+            <div class="map-title">소스</div>
+            <div class="map-item"><code>SKILL.md</code>: trigger와 workflow</div>
+            <div class="map-item"><code>agents/openai.yaml</code>: 표시 metadata fallback</div>
+          </div>
+          <div class="map-col">
+            <div class="map-title">스크립트</div>
+            <div class="map-item"><code>scripts/show-skills.ts</code>: 실시간 목록</div>
+            <div class="map-item"><code>scripts/validate-show-skills.ts</code>: skill validator</div>
+          </div>
+          <div class="map-col">
+            <div class="map-title">Repo 문서</div>
+            <div class="map-item"><code>docs/skill-catalog.md</code>: 선택적 static catalog</div>
+            <div class="map-item"><code>history/skills.md</code>: 상태/risk/reviewed</div>
+          </div>
+          <div class="map-col">
+            <div class="map-title">출력 경로</div>
+            <div class="map-item"><code>skills/&lt;name&gt;/SKILL.md</code></div>
+            <div class="map-item"><code>skills/&lt;name&gt;/skill.html</code></div>
+            <div class="map-item"><code>project-snippets/show-skills.md</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>프로젝트 연결 블록</h2>
+        <div class="grid2">
+          <div class="box">
+            <h3>repo 구조</h3>
+            <pre>Use $show-skills at &lt;skills-root&gt;/skills/show-skills/SKILL.md
+when asked to see, list, browse, summarize, choose, compare,
+or discover the current skills in this repository.</pre>
+          </div>
+          <div class="box">
+            <h3>설치 layout</h3>
+            <pre>node skills/show-skills/scripts/show-skills.ts --root .
+node skills/show-skills/scripts/show-skills.ts --root skills
+node skills/show-skills/scripts/show-skills.ts --format json</pre>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>품질 게이트</h2>
+        <div class="grid3">
+          <div class="box">
+            <h3>기본 목록</h3>
+            <pre>node skills/show-skills/scripts/show-skills.ts --compact</pre>
+          </div>
+          <div class="box">
+            <h3>portable root 지정</h3>
+            <pre>node skills/show-skills/scripts/show-skills.ts --root skills --compact</pre>
+          </div>
+          <div class="box">
+            <h3>검증</h3>
+            <pre>node scripts/validate-skill.ts skills/show-skills
 node skills/show-skills/scripts/validate-show-skills.ts skills/show-skills
-node scripts/validate-skill-html.ts .
-node scripts/validate-skill-repo.ts .</pre>
-    </section>
+node scripts/validate-skill-html.ts .</pre>
+          </div>
+        </div>
+      </section>
 
-    <section>
-      <h2>금지와 허용</h2>
-      <div class="grid2">
-        <div class="cell"><span class="tag ok">허용</span><ul><li>현재 filesystem에서 스킬을 읽는다.</li><li>필요하면 주 스킬과 함께 쓸 스킬을 추천한다.</li><li>상세 확인용 파일 경로를 제공한다.</li></ul></div>
-        <div class="cell"><span class="tag danger">금지</span><ul><li>스킬을 자동 설치하지 않는다.</li><li>오래된 수동 목록만 믿지 않는다.</li><li>목록 요청에서 실제 작업을 실행하지 않는다.</li></ul></div>
-      </div>
-    </section>
-  </main>
+      <section>
+        <h2>금지와 허용</h2>
+        <div class="grid2">
+          <div class="rule do">
+            <h3>허용</h3>
+            <ul>
+              <li>현재 파일 시스템에서 스킬을 읽고 stale 수동 목록을 보조 자료로만 본다.</li>
+              <li>repo layout과 installed layout 모두 지원한다.</li>
+              <li>간단 요청에는 compact output을 쓰고, 자동화에는 JSON output을 쓴다.</li>
+              <li>추천이 필요하면 primary skill, companion skill, 이유, exact paths를 함께 준다.</li>
+            </ul>
+          </div>
+          <div class="rule dont">
+            <h3>금지</h3>
+            <ul>
+              <li>목록 요청 중 스킬을 install, symlink, global register하지 않는다.</li>
+              <li>사용자가 실행을 요청하지 않았는데 추천한 스킬을 바로 수행하지 않는다.</li>
+              <li>downloaded 또는 standalone catalog에 <code>docs/skill-catalog.md</code>가 반드시 있다고 가정하지 않는다.</li>
+              <li>경로를 보여줄 때 local absolute path를 고정하지 않는다.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

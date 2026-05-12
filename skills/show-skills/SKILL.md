@@ -10,7 +10,7 @@ Use this skill to show the current skill catalog instead of making the user clic
 ## Core Contract
 
 - Treat the current filesystem as the source of truth.
-- Prefer running `scripts/show-skills.ts` to avoid stale hand-written lists.
+- Prefer running the bundled `show-skills` script to avoid stale hand-written lists.
 - Accept both layouts:
   - repo layout: `<repo>/skills/<skill-name>/SKILL.md`;
   - installed layout: `<skills-root>/<skill-name>/SKILL.md`.

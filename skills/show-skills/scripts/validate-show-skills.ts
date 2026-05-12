@@ -58,9 +58,12 @@ for (const file of [
 
 requireText("SKILL.md", "docs/skill-catalog.md", "catalog document reference");
 requireText("SKILL.md", "scripts/show-skills.ts", "listing script reference");
+requireText("SKILL.md", "bundled `show-skills` script", "bundled script guidance");
 requireText("SKILL.md", "current filesystem", "filesystem source of truth");
 requireText("SKILL.md", "--root <path>", "portable root option");
 requireText("SKILL.md", "installed layout", "installed layout support");
+requireText("scripts/show-skills.ts", 'rawValue === "|"', "block scalar frontmatter parsing");
+requireText("scripts/show-skills.ts", "No skills found under explicit root", "explicit invalid root error");
 requireText("skill.html", "사용 판단 매트릭스", "decision matrix");
 requireText("skill.html", "목록 생성 흐름", "workflow");
 requireText("skill.html", "파일 관계 지도", "resource map");
@@ -99,6 +102,21 @@ try {
   );
 } catch (error) {
   failures.push(`show-skills script failed: ${error instanceof Error ? error.message : String(error)}`);
+}
+
+try {
+  execFileSync(
+    "node",
+    ["skills/show-skills/scripts/show-skills.ts", "--root", "/tmp/definitely-not-a-skills-root", "--compact"],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
+  failures.push("show-skills script should fail for an explicit invalid root");
+} catch {
+  // Expected: explicit bad roots should not look like valid empty catalogs.
 }
 
 for (const skillName of skillNames()) {

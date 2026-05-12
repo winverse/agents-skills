@@ -64,7 +64,7 @@ const summaryBySkill: Record<string, string> = {
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
   "code-review": "findings-first 코드 리뷰와 회귀/테스트/보안 위험 점검",
-  "design-review": "Interline 기준 UI 위계, 밀도, 타이포그래피, 상태 리뷰",
+  "design-review": "제품 도메인과 디자인 시스템 우선 UI 리뷰",
 };
 
 function valueFor(flag: string): string | undefined {
@@ -119,13 +119,50 @@ function read(relativePath: string): string {
   return readFileSync(path.join(repoRoot, relativePath), "utf8");
 }
 
+function stripMatchingQuotes(value: string): string {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+
+function stripIndent(line: string): string {
+  return line.replace(/^\s{2}/, "");
+}
+
 function parseFrontmatter(text: string): Record<string, string> {
   const match = text.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return {};
   const fields: Record<string, string> = {};
-  for (const line of match[1].split(/\r?\n/)) {
-    const field = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-    if (field) fields[field[1]] = field[2].replace(/^["']|["']$/g, "");
+  const lines = match[1].split(/\r?\n/);
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!line.trim() || line.trimStart().startsWith("#")) continue;
+    if (/^\s/.test(line)) continue;
+
+    const field = line.match(/^([A-Za-z0-9_-]+):(?:\s*(.*))?$/);
+    if (!field) continue;
+
+    const key = field[1];
+    const rawValue = field[2] ?? "";
+
+    if (rawValue === "|" || rawValue === ">") {
+      const blockLines: string[] = [];
+      let cursor = index + 1;
+      while (cursor < lines.length && (/^\s/.test(lines[cursor]) || !lines[cursor].trim())) {
+        blockLines.push(stripIndent(lines[cursor]));
+        cursor += 1;
+      }
+      fields[key] = rawValue === ">" ? blockLines.join(" ").trim() : blockLines.join("\n").trim();
+      index = cursor - 1;
+      continue;
+    }
+
+    fields[key] = stripMatchingQuotes(rawValue.trim());
   }
   return fields;
 }
@@ -232,6 +269,11 @@ function escapePipes(value: string): string {
 }
 
 const skills = discoverSkills();
+
+if (explicitRoot && skills.length === 0) {
+  console.error(`No skills found under explicit root: ${path.resolve(explicitRoot)}`);
+  process.exit(1);
+}
 
 if (formatArg === "json") {
   process.stdout.write(`${JSON.stringify(skills, null, 2)}\n`);
