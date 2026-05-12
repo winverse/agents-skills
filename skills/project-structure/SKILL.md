@@ -20,6 +20,8 @@ If the project kind is not already clear, ask a compact numeric choice:
 
 Then ask only the stack choices that matter for that kind. Prefer defaults unless the user says otherwise.
 
+For standalone frontend or backend projects, still use the same app-root convention (`apps/web` or `apps/api`) by default so env, codegen, tests, and future monorepo migration stay consistent. Use a repo-root app layout only when the user or existing repo clearly prefers it.
+
 Use compact numeric menus, not long architecture questionnaires. Ask a menu only when the answer changes the tree:
 
 ```text

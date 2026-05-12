@@ -510,11 +510,11 @@
     <header>
       <p class="eyebrow">스킬 시각 가이드</p>
       <h1>Project Structure</h1>
-      <p class="summary">프로젝트 종류를 숫자로 고르고, 기본 스택과 env 정책을 적용해 일관된 frontend, backend, monorepo, desktop 구조를 만든다.</p>
+      <p class="summary">프로젝트 종류를 숫자로 고르고, 기본 스택과 env 정책을 적용해 일관된 frontend, backend, full-stack monorepo, desktop 구조를 만든다.</p>
       <div class="file-pair">
-        <span class="pill">SKILL.md: agent instruction</span>
-        <span class="pill">skill.html: install-time visual guide</span>
-        <span class="pill">references/: stack-specific layouts</span>
+        <span class="pill">SKILL.md: 에이전트 지시문</span>
+        <span class="pill">skill.html: 설치용 시각 가이드</span>
+        <span class="pill">references/: 스택별 구조</span>
       </div>
     </header>
 
@@ -533,12 +533,12 @@
           </div>
           <div class="cell ask">
             <h3>먼저 확인</h3>
-            <p>프로젝트 종류가 불분명하면 숫자 선택지를 먼저 묻는다.</p>
+            <p>프로젝트 종류가 불분명하면 숫자 선택지를 먼저 묻고, standalone web/API도 기본은 app root로 잡는다.</p>
             <ul>
-              <li>1 web</li>
-              <li>2 backend</li>
-              <li>3 monorepo</li>
-              <li>4 desktop</li>
+              <li>1 프론트엔드 web</li>
+              <li>2 백엔드 API</li>
+              <li>3 풀스택 monorepo</li>
+              <li>4 데스크톱 app</li>
             </ul>
           </div>
           <div class="cell skip">
@@ -574,61 +574,65 @@
 
           <line x1="190" y1="111" x2="264" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="270" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-          <text x="350" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">2. Stack defaults</text>
+          <text x="350" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">2. 기본 stack</text>
           <text x="350" y="128" text-anchor="middle" font-size="12" fill="#6b7280">Bun, Next, Nest, Drizzle</text>
 
           <line x1="430" y1="111" x2="504" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="510" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-          <text x="590" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">3. Env contract</text>
-          <text x="590" y="128" text-anchor="middle" font-size="12" fill="#6b7280">app-local Zod schemas</text>
+          <text x="590" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">3. env 계약</text>
+          <text x="590" y="128" text-anchor="middle" font-size="12" fill="#6b7280">앱별 Zod schema</text>
 
           <line x1="670" y1="111" x2="744" y2="111" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="750" y="72" width="160" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-          <text x="830" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">4. Tree output</text>
-          <text x="830" y="128" text-anchor="middle" font-size="12" fill="#6b7280">folders and boundaries</text>
+          <text x="830" y="103" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">4. tree 출력</text>
+          <text x="830" y="128" text-anchor="middle" font-size="12" fill="#6b7280">폴더와 경계</text>
 
           <line x1="830" y1="150" x2="830" y2="202" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
           <rect x="720" y="208" width="220" height="52" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
-          <text x="830" y="238" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">validate scripts when available</text>
+          <text x="830" y="238" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">가능한 검증 script 실행</text>
 
           <rect x="500" y="198" width="180" height="62" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
           <text x="590" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">codegen / migrate</text>
-          <text x="590" y="244" text-anchor="middle" font-size="12" fill="#475569">use env helpers</text>
+          <text x="590" y="244" text-anchor="middle" font-size="12" fill="#475569">env helper 사용</text>
           <line x1="680" y1="229" x2="720" y2="229" stroke="#1f7a52" stroke-width="2" marker-end="url(#arrow)"></line>
         </svg>
         <div class="legend">
-          <span><i class="swatch"></i> choice and structure flow</span>
-          <span><i class="swatch ok"></i> env-aware tooling</span>
+          <span><i class="swatch"></i> 선택과 구조 흐름</span>
+          <span><i class="swatch ok"></i> env 인식 도구</span>
         </div>
       </section>
 
       <section>
         <h2>선택 메뉴</h2>
-        <p class="section-note">긴 architecture questionnaire 대신 tree가 바뀌는 선택지만 숫자로 묻는다.</p>
+        <p class="section-note">긴 구조 질문지 대신 tree가 바뀌는 선택지만 숫자로 묻는다.</p>
         <div class="contract-grid">
           <div class="contract-card">
+            <strong>프로젝트 종류</strong>
+            <span>1 프론트엔드 web, 2 백엔드 API, 3 풀스택 monorepo, 4 데스크톱 app. 단독 web/API도 기본은 <code>apps/web</code>, <code>apps/api</code>.</span>
+          </div>
+          <div class="contract-card">
             <strong>API 계약</strong>
-            <span>1 GraphQL default, 2 REST, 3 hybrid. REST를 고른 경우에만 controller 경계를 만든다.</span>
+            <span>1 GraphQL 기본, 2 REST, 3 hybrid. REST를 고른 경우에만 controller 경계를 만든다.</span>
           </div>
           <div class="contract-card">
             <strong>DB</strong>
-            <span>1 PostgreSQL + Drizzle default, 2 no DB, 3 external DB. migration owner를 하나만 둔다.</span>
+            <span>1 PostgreSQL + Drizzle 기본, 2 DB 없음, 3 외부 DB. migration owner를 하나만 둔다.</span>
           </div>
           <div class="contract-card">
             <strong>캐시</strong>
-            <span>1 Redis through cache boundary when needed, 2 no Redis. monorepo Redis는 <code>packages/db/src/redis</code>.</span>
+            <span>1 필요 시 cache boundary로 Redis 사용, 2 Redis 없음. monorepo Redis는 <code>packages/db/src/redis</code>.</span>
           </div>
           <div class="contract-card">
             <strong>인증</strong>
-            <span>1 app-owned auth module when needed, 2 external auth, 3 no auth. security folder를 선택에 맞춘다.</span>
+            <span>1 필요 시 app 소유 auth module, 2 외부 auth, 3 auth 없음. security folder를 선택에 맞춘다.</span>
           </div>
           <div class="contract-card">
             <strong>생성 산출물</strong>
-            <span>1 ignored and reproducible default, 2 committed and reviewed. GraphQL/Panda 산출물 정책을 하나로 고른다.</span>
+            <span>1 ignored and reproducible 기본, 2 committed and reviewed. GraphQL/Panda 산출물 정책을 하나로 고른다.</span>
           </div>
           <div class="contract-card">
             <strong>데스크톱 shell</strong>
-            <span>1 Tauri + Vite React default, 2 Tauri + existing frontend shell. GraphQL 사용 시 desktop autogen 경로를 맞춘다.</span>
+            <span>1 Tauri + Vite React 기본, 2 Tauri + 기존 frontend shell. GraphQL 사용 시 desktop autogen 경로를 맞춘다.</span>
           </div>
         </div>
       </section>
@@ -857,6 +861,10 @@
             <strong>앱별 env 파일</strong>
             <span><code>env/.env.development</code>, <code>.env.test</code>, <code>.env.stage</code>, <code>.env.production</code>을 app마다 둔다.</span>
           </div>
+          <div class="env-card">
+            <strong>단독 앱도 같은 root</strong>
+            <span>standalone frontend/backend라도 기존 repo가 명확히 다르지 않으면 <code>apps/web</code>, <code>apps/api</code>를 써서 나중의 monorepo 전환 비용을 줄인다.</span>
+          </div>
         </div>
       </section>
 
@@ -894,25 +902,25 @@
         <h2>파일 관계 지도</h2>
         <div class="map">
           <div class="map-col">
-            <div class="map-title">Agent instruction</div>
-            <div class="map-item"><code>SKILL.md</code>: trigger, wizard, defaults</div>
+            <div class="map-title">에이전트 지시문</div>
+            <div class="map-item"><code>SKILL.md</code>: trigger, 선택 흐름, 기본값</div>
             <div class="map-item"><code>agents/openai.yaml</code>: 표시 metadata</div>
           </div>
           <div class="map-col">
-            <div class="map-title">References</div>
-            <div class="map-item"><code>env-policy.md</code>: Zod and helper boundary</div>
-            <div class="map-item"><code>frontend-next.md</code>: Next.js web layout</div>
-            <div class="map-item"><code>backend-nest.md</code>: NestJS GraphQL layout</div>
-            <div class="map-item"><code>monorepo.md</code>: Turborepo packages</div>
-            <div class="map-item"><code>desktop-tauri.md</code>: Tauri layout</div>
-            <div class="map-item"><code>structure-validation.md</code>: final checklist</div>
+            <div class="map-title">참조 문서</div>
+            <div class="map-item"><code>env-policy.md</code>: Zod와 helper 경계</div>
+            <div class="map-item"><code>frontend-next.md</code>: Next.js web 구조</div>
+            <div class="map-item"><code>backend-nest.md</code>: NestJS GraphQL 구조</div>
+            <div class="map-item"><code>monorepo.md</code>: Turborepo package 경계</div>
+            <div class="map-item"><code>desktop-tauri.md</code>: Tauri 구조</div>
+            <div class="map-item"><code>structure-validation.md</code>: 최종 checklist</div>
           </div>
           <div class="map-col">
             <div class="map-title">출력</div>
-            <div class="map-item">numeric choices</div>
+            <div class="map-item">숫자 선택지</div>
             <div class="map-item">directory tree</div>
-            <div class="map-item">folder boundary rules</div>
-            <div class="map-item">env/codegen/migration/build/test/security policy</div>
+            <div class="map-item">folder 경계 규칙</div>
+            <div class="map-item">env/codegen/migration/build/test/security 정책</div>
           </div>
         </div>
       </section>
@@ -927,7 +935,7 @@
           <div class="arrow">→</div>
           <div class="schema-box">
             <h3>출력</h3>
-            <p>선택된 구조, 디렉터리 트리, app/package 경계, codegen/migration/build/test 정책, 검증 결과.</p>
+            <p>선택된 project kind와 stack assumptions, 디렉터리 트리, app/package 경계, env/codegen/migration/build/test/security/observability 정책, folder rule 검증 결과.</p>
           </div>
         </div>
       </section>
@@ -938,6 +946,10 @@
           <div class="check-card">
             <strong>env 일치</strong>
             <span>모든 app은 <code>env/*</code>, <code>src/config/env.ts</code>, Zod schema를 같은 상대 경로로 가진다.</span>
+          </div>
+          <div class="check-card">
+            <strong>app root 일치</strong>
+            <span>단독 web/API 요청도 기본은 <code>apps/web</code> 또는 <code>apps/api</code>이며, repo-root layout은 사용자나 기존 구조가 분명할 때만 쓴다.</span>
           </div>
           <div class="check-card">
             <strong>DB 경계</strong>

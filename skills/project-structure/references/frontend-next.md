@@ -2,6 +2,8 @@
 
 Use this reference for `1. Frontend web` and the web app inside `3. Full-stack monorepo`.
 
+Even for a standalone frontend project, default to `apps/web` unless the user or existing repo clearly wants the Next.js app at the repository root.
+
 ## Default Tree
 
 ```text

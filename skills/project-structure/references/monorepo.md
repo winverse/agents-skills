@@ -17,7 +17,7 @@ packages/
     src/
       schema/
       redis/
-  graphql/
+  graphql/    # optional: shared generated artifacts for multiple consuming apps
   ui/
   tsconfig/
   eslint-config/

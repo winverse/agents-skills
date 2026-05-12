@@ -2,6 +2,8 @@
 
 Use this reference for `2. Backend API` and the API app inside `3. Full-stack monorepo`.
 
+Even for a standalone backend project, default to `apps/api` unless the user or existing repo clearly wants the NestJS app at the repository root.
+
 ## Default Tree
 
 ```text
