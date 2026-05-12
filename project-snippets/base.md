@@ -12,7 +12,7 @@
 - For using spare token or context budget productively, improving agent skill usage, making skills easier to invoke, adding or reviewing validators, aligning documentation, creating self-improvement loops, or raising repo quality through tests, hooks, docs, evals, and review automation, use the shared skill at `<skills-root>/skills/agent-improvement-loop/SKILL.md`.
 - For browser runtime verification, Playwright checks, screenshots, console or network inspection, accessibility snapshots, broken links, responsive layout checks, text overlap detection, or `skill.html` rendering QA, use the shared skill at `<skills-root>/skills/browser-qa/SKILL.md`.
 - For code review, PR review, diff review, implementation audit, regression risk review, missing test review, maintainability review, or JavaScript and TypeScript style review, use the shared skill at `<skills-root>/skills/code-review/SKILL.md`.
-- For design review, UI review, visual critique, layout critique, interaction critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, product surface polish, or Interline-style design judgment, use the shared skill at `<skills-root>/skills/design-review/SKILL.md`.
+- For design review, UI review, visual critique, layout critique, interaction critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, product surface polish, or product-aware design judgment, use the shared skill at `<skills-root>/skills/design-review/SKILL.md`.
 
 ## Project Skill Overrides
 
@@ -32,5 +32,5 @@
 - When using `agent-improvement-loop`, choose the skills-repo track for skill catalogs and the general-repo track for application or library repos; before any spend-down run, ask `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`; if the answer is yes, run safe backlog items in small multi-agent batches; if no, treat token budget as a ceiling and review one lane at a time; prefer durable artifacts such as docs, validators, tests, hooks, snippets, or eval cases over chat-only advice.
 - When using `browser-qa`, report URL, viewport, evidence, reproduction step, and severity; keep subjective design critique in `design-review`.
 - When using `code-review`, lead with findings and file/line references; for JS/TS prefer clear functional collection style where it improves clarity, without forcing it over simpler loops.
-- When using `design-review`, apply the Interline preference for quiet operational UI, restrained color, shallow borders, stable dimensions, 8px-or-less radius, no decorative orbs/gradients/bokeh, and no nested cards.
+- When using `design-review`, respect the target project's existing design system and product domain first; use quiet operational UI, restrained color, shallow borders, stable dimensions, 8px-or-less radius, no decorative orbs/gradients/bokeh, and no nested cards only as the shared fallback profile.
 - Add more project-specific rules here instead of changing the shared skill unless the rule should apply everywhere.

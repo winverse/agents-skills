@@ -32,7 +32,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.
 - `project-snippets/browser-qa.md`: only browser runtime evidence and Playwright QA.
 - `project-snippets/code-review.md`: only findings-first code review.
-- `project-snippets/design-review.md`: only Interline-style UI and design review.
+- `project-snippets/design-review.md`: only product-aware UI and design review.
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
 - `project-snippets/project-structure.md`: only project structure and default stack rules.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
@@ -62,8 +62,10 @@ The fork should keep the same pair:
 When a shared skill changes:
 
 - Update `README.md` if the skill's purpose changed.
+- Update `AGENTS.md`, `docs/skill-catalog.md`, `project-snippets/base.md`, and `project-snippets/claude-base.md` when the trigger, path, or project-facing behavior changed.
 - Use `skill-to-html` to update the skill's own `skill.html`.
 - Update the matching file in `project-snippets/`.
-- Update `history/skills.md` if trigger, workflow, validator, snippet, or lifecycle state changed.
+- Update `history/skills.md` if trigger, workflow, validator, eval prompt, snippet, inspector criteria, or lifecycle state changed.
 - Keep repo-owned validators in `.ts` and run them with Node 22+.
+- Run `node scripts/validate-skill-html.ts .` and `node scripts/validate-skill-repo.ts .` after shared skill or repo-level docs changes.
 - Revisit project instruction files only when the trigger or path changed.

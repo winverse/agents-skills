@@ -39,7 +39,7 @@ skills/skill-name/
 - `inspector/`: 아직 해결되지 않은 local-only 검사 메모만 둔다.
 - `archive/`: 더 이상 새 프로젝트에 권장하지 않는 archived skill을 보관하는 위치다.
 
-작은 오탈자나 색상 조정은 history에 남기지 않는다. trigger, workflow, validator, snippet, 생명주기 상태가 바뀌는 변경만 기록한다.
+작은 오탈자나 색상 조정은 history에 남기지 않는다. trigger, workflow, validator, eval prompt, snippet, inspector 기준, 생명주기 상태가 바뀌는 변경만 기록한다.
 
 ## 현재 스킬
 
@@ -70,7 +70,7 @@ skills/skill-name/
 - `cmux-automation`: cmux hook, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리하는 스킬.
   - Source instruction: `skills/cmux-automation/SKILL.md`
   - Human visual guide: `skills/cmux-automation/skill.html`
-- `agent-improvement-loop`: 소진형 실행 전 “남은 토큰을 최대한 사용할까요?”를 예/아니오로 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
+- `agent-improvement-loop`: 소진형 실행 전 `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`를 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
   - Source instruction: `skills/agent-improvement-loop/SKILL.md`
   - Human visual guide: `skills/agent-improvement-loop/skill.html`
 - `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하는 스킬.
@@ -79,7 +79,7 @@ skills/skill-name/
 - `code-review`: findings-first 코드/PR/diff 리뷰로 버그, 회귀, 테스트 누락, SRP/SOLID 경계, JS/TS 함수형 collection style 선호를 점검하는 스킬.
   - Source instruction: `skills/code-review/SKILL.md`
   - Human visual guide: `skills/code-review/skill.html`
-- `design-review`: Interline design 기준으로 UI hierarchy, layout density, typography, state, accessibility, responsive order, visual polish를 리뷰하는 스킬.
+- `design-review`: 제품 도메인과 기존 디자인 시스템을 우선해 UI hierarchy, layout density, typography, state, accessibility, responsive order, visual polish를 리뷰하는 스킬.
   - Source instruction: `skills/design-review/SKILL.md`
   - Human visual guide: `skills/design-review/skill.html`
 
@@ -223,6 +223,6 @@ Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skil
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
 - 문서 최신화, stale 설명, 문서 간 충돌 검토 요청은 `sync-docs`로 처리한다.
 - repo가 소유하는 validator는 TypeScript로 작성하고 `node <path>.ts`로 실행한다.
-- trigger, workflow, validator, snippet, 생명주기 상태가 바뀌면 `history/skills.md`를 업데이트한다.
+- trigger, workflow, validator, eval prompt, snippet, inspector 기준, 생명주기 상태가 바뀌면 `history/skills.md`를 업데이트한다.
 - 미해결 이슈만 local-only `inspector/`에 남기고, 해결된 검사 파일은 삭제한다.
 - 스킬을 추가하거나 이름을 바꾸면 `project-snippets/`도 같이 업데이트한다.

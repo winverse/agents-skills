@@ -26,7 +26,7 @@ These repo-local links make the skills usable for this project without installin
 - Use $agent-improvement-loop at `skills/agent-improvement-loop/SKILL.md` when asked to use spare token or context budget productively, improve agent skill usage, make skills easier to invoke, add or review validators, align documentation with source files, create self-improvement loops, or raise repo quality through tests, hooks, docs, evals, and review automation.
 - Use $browser-qa at `skills/browser-qa/SKILL.md` when asked to verify browser runtime behavior, Playwright checks, screenshots, console or network output, accessibility snapshots, broken links, responsive layout, text overlap, or `skill.html` rendering.
 - Use $code-review at `skills/code-review/SKILL.md` when asked for code review, PR review, diff review, implementation audit, regression risk review, missing test review, maintainability review, or JS/TS style review.
-- Use $design-review at `skills/design-review/SKILL.md` when asked for design review, UI review, visual critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, or Interline-style design judgment.
+- Use $design-review at `skills/design-review/SKILL.md` when asked for design review, UI review, visual critique, design-system fit, accessibility review, responsive design review, visual hierarchy review, or product-aware design judgment.
 
 ## Project Skill Overrides
 
@@ -44,7 +44,7 @@ These repo-local links make the skills usable for this project without installin
 - When using `agent-improvement-loop`, choose the skills-repo track for skill catalogs and the general-repo track for application or library repos; before any spend-down run, ask `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`; if the answer is yes, run safe backlog items in small multi-agent batches; if no, treat token budget as a ceiling and review one lane at a time; prefer durable artifacts such as docs, validators, tests, hooks, snippets, or eval cases over chat-only advice.
 - When using `browser-qa`, keep the review grounded in observed browser evidence and do not enter secrets, payment data, or destructive live actions.
 - When using `code-review`, lead with findings and file/line references; for JS/TS prefer clear functional collection style where it improves clarity, without forcing it over simpler loops.
-- When using `design-review`, apply the Interline preference for quiet operational UI, restrained color, shallow borders, stable dimensions, 8px-or-less radius, no decorative orbs/gradients/bokeh, and no nested cards.
+- When using `design-review`, respect the target project's existing design system and product domain first; use quiet operational UI, restrained color, shallow borders, stable dimensions, 8px-or-less radius, no decorative orbs/gradients/bokeh, and no nested cards only as the shared fallback profile.
 - When using `skill-creator`, run `skill-to-html` immediately afterward for the same skill folder.
 
 ## Structure
@@ -66,7 +66,7 @@ These repo-local links make the skills usable for this project without installin
 - Use `skills/skill-to-html/SKILL.md` when creating or revising a skill's `skill.html`.
 - Update that skill's `skill.html` when adding, removing, renaming, or materially changing a skill.
 - Make `skill.html` diagram-rich: include decision matrices, flowcharts, charts, resource maps, or input/output schemas instead of only splitting text into panels.
-- Validate changed skills with `node scripts/validate-skill.ts <skill-path>` and any skill-specific validator before calling them done.
+- Validate changed skills with `node scripts/validate-skill.ts <skill-path>`, any skill-specific validator, and `node scripts/validate-skill-html.ts .` before calling them done.
 - Use TypeScript for repo-owned validators and run them with Node 22+ as `node <file>.ts`; do not add Python validators to this repo. Keep `.mjs` only when a hook or external runtime specifically needs it.
 - Run `node scripts/validate-skill-repo.ts .` after lifecycle, history, snippet, or repo-level documentation changes.
 - Update `history/skills.md` when adding, deprecating, archiving, renaming, splitting, merging, or materially changing a skill's trigger, workflow, validators, evals, or snippets.

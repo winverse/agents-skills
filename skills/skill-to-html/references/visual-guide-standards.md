@@ -1,10 +1,10 @@
 # Visual Guide Standards For `skill.html`
 
-These rules adapt the local `skill-practice/design.md` reference used during initial design and a small set of external visualization/accessibility references.
+These rules adapt the shared quiet operational visual defaults used during initial design and a small set of external visualization/accessibility references.
 
 ## Local Design System
 
-Use the Interline-style defaults from `skill-practice/design.md`:
+Use these shared defaults:
 
 - Quiet operational UI, not a marketing page.
 - Fast scanning over decorative presentation.

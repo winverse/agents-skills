@@ -139,6 +139,7 @@ for (const skill of skills) {
   const skillName = path.basename(skill);
   requireFile(`${skill}/SKILL.md`);
   requireFile(`${skill}/skill.html`);
+  requireFile(`${skill}/agents/openai.yaml`);
   requireFile(`project-snippets/${skillName}.md`);
 
   requirePattern(
@@ -178,6 +179,26 @@ for (const skill of skills) {
   const validatorPath = `${skill}/scripts/validate-${skillName}.ts`;
   if (existsSync(path.join(root, validatorPath))) {
     requireText("README.md", `node ${validatorPath} ${skill}`, `validator command for ${skillName}`);
+  }
+
+  const agentMetadataPath = `${skill}/agents/openai.yaml`;
+  if (existsSync(path.join(root, agentMetadataPath))) {
+    requireText(agentMetadataPath, "interface:", `OpenAI metadata interface for ${skillName}`);
+    requirePattern(
+      agentMetadataPath,
+      /^\s*display_name:\s*["'][^"']+["']\s*$/m,
+      `non-empty display_name for ${skillName}`,
+    );
+    requirePattern(
+      agentMetadataPath,
+      /^\s*short_description:\s*["'][^"']+["']\s*$/m,
+      `non-empty short_description for ${skillName}`,
+    );
+    requirePattern(
+      agentMetadataPath,
+      new RegExp("^\\s*default_prompt:\\s*[\"'][^\"']*\\$" + escapeRegExp(skillName) + "[^\"']*[\"']\\s*$", "m"),
+      `default_prompt mentioning $${skillName}`,
+    );
   }
 }
 

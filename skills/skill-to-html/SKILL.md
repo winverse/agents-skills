@@ -57,7 +57,7 @@ Do not make `skill.html` a partitioned article. Use visual structure to reduce r
 - Avoid decorative gradients, orbs, bokeh, oversized hero sections, and nested cards.
 - Use restrained colors and enough contrast for text and non-text marks.
 - Target PC desktop screens only. Do not spend effort on mobile-specific layout support.
-- Use the local Interline design principles: quiet operational UI, fast scanning, shallow borders, minimal shadows, stable grid dimensions, and no decorative hero treatment.
+- Use the shared quiet operational visual defaults: fast scanning, shallow borders, minimal shadows, stable grid dimensions, and no decorative hero treatment.
 - Dark surfaces only for code, terminal trees, or literal snippets. Do not use dark panels as general visual decoration.
 
 ## Visual Pattern Selection
