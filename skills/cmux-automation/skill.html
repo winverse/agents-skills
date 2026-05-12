@@ -4,30 +4,241 @@
   <meta charset="utf-8">
   <title>cmux-automation</title>
   <style>
-    :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#0f172a; }
-    html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
-    * { box-sizing:border-box; }
-    .shell { width:100%; max-width:1192px; margin:0 auto; padding:32px; }
-    header, section { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:18px; }
-    header { display:grid; grid-template-columns:1fr 320px; gap:18px; align-items:start; }
-    h1 { margin:0 0 8px; font-size:28px; line-height:1.2; letter-spacing:0; }
-    h2 { margin:0 0 14px; font-size:18px; letter-spacing:0; }
-    h3 { margin:0 0 8px; font-size:15px; letter-spacing:0; }
-    p { margin:0; color:var(--muted); }
-    a { color:var(--accent); overflow-wrap:anywhere; }
-    code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; overflow-wrap:anywhere; }
-    pre { margin:0; padding:14px; color:#e5e7eb; background:var(--ink); border-radius:8px; overflow-x:auto; white-space:pre; }
-    .pair, .cell { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
-    .pair { background:var(--muted-surface); display:grid; gap:8px; }
-    .pair span { display:flex; justify-content:space-between; gap:14px; color:var(--muted); }
-    .matrix { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-    .tag { display:inline-block; margin-bottom:8px; padding:2px 8px; border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; }
-    .ok { color:var(--ok); } .warn { color:var(--warn); } .danger { color:var(--danger); } .accent { color:var(--accent); }
-    .flow, .map { width:100%; height:230px; border:1px solid var(--border); border-radius:8px; background:var(--muted-surface); }
-    ul { margin:8px 0 0; padding-left:18px; color:var(--muted); }
-    .tree { background:var(--ink); color:#e5e7eb; border-radius:8px; padding:14px; overflow-x:auto; white-space:pre; }
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --accent: #2563eb;
+      --focus: #1d4ed8;
+      --ok: #1f7a52;
+      --warn: #a16207;
+      --danger: #b42318;
+      --ink: #0f172a;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1192px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    header,
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 18px;
+      padding: 20px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin-bottom: 7px;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    pre,
+    .tree {
+      margin: 0;
+      padding: 14px;
+      color: #e5e7eb;
+      background: var(--ink);
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .pair {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .pair span {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .cell,
+    .metric {
+      min-width: 0;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .tag,
+    .chip {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 2px 8px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .warn {
+      color: var(--warn);
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .flow,
+    .map,
+    .bars {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+    }
+
+    .flow {
+      height: 248px;
+    }
+
+    .map {
+      height: 250px;
+    }
+
+    .bars {
+      height: 214px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .key {
+      width: 12px;
+      height: 12px;
+      border: 1px solid currentColor;
+      border-radius: 3px;
+      background: currentColor;
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -35,63 +246,155 @@
     <header>
       <div>
         <h1>cmux-automation</h1>
-        <p>cmux 탭, 상태, markdown board, Codex hook을 연결해 현재 탭에는 짧은 작업 라벨을, status에는 원문 맥락을 남기는 자동화 스킬.</p>
+        <p>cmux 탭, status, markdown board, Codex hook을 연결해 현재 작업 질문을 짧게 보이게 하고 원문 맥락은 잃지 않게 유지하는 자동화 스킬.</p>
       </div>
-      <div class="pair">
+      <div class="pair" aria-label="필수 파일 쌍">
         <span><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></span>
         <span><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></span>
-        <span><strong>상세 레시피</strong><a href="references/hook-recipes.md">hook-recipes.md</a></span>
+        <span><strong>hook 레시피</strong><a href="references/hook-recipes.md">references/hook-recipes.md</a></span>
+        <span><strong>프로젝트 연결</strong><a href="../../project-snippets/cmux-automation.md">project-snippets/cmux-automation.md</a></span>
       </div>
     </header>
 
     <section>
       <h2>사용 판단 매트릭스</h2>
       <div class="matrix">
-        <div class="cell"><span class="tag ok">사용</span><h3>질문 고정</h3><p>Codex에 제출한 질문을 짧은 작업 라벨과 전체 status에 자동 반영하고 싶을 때.</p></div>
-        <div class="cell"><span class="tag accent">함께 사용</span><h3>세션 보드</h3><p>여러 agent/pane의 질문, 성공 조건, 상태를 markdown panel로 유지할 때.</p></div>
-        <div class="cell"><span class="tag warn">확인</span><h3>전역 설정</h3><p>global cmux 설정, hook 설치/삭제, socket auth 변경은 사용자 확인을 먼저 받는다.</p></div>
-        <div class="cell"><span class="tag danger">건너뜀</span><h3>파괴 조작</h3><p>pane close, history clear, send-key 같은 조작은 명시 요청 없이는 하지 않는다.</p></div>
+        <div class="cell">
+          <span class="tag ok">사용</span>
+          <h3>질문 고정(prompt pinning)</h3>
+          <p>Codex에 제출한 질문을 cmux tab title과 `current-question` status에 자동 반영해야 할 때.</p>
+        </div>
+        <div class="cell">
+          <span class="tag accent">함께 사용</span>
+          <h3>세션 작업판</h3>
+          <p>여러 agent, pane, workspace의 질문과 완료 조건을 `cmux markdown open`으로 추적할 때.</p>
+        </div>
+        <div class="cell">
+          <span class="tag warn">먼저 확인</span>
+          <h3>전역 변경</h3>
+          <p>global hook, global cmux settings, socket auth, 다른 pane 입력은 사용자 승인이 필요하다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag danger">건너뜀</span>
+          <h3>파괴적 UI 조작</h3>
+          <p>pane 닫기, workspace 이동, history 삭제, send-key 실행은 명시 요청 없이는 하지 않는다.</p>
+        </div>
       </div>
     </section>
 
     <section>
       <h2>자동화 흐름</h2>
-      <svg class="flow" viewBox="0 0 1080 230" role="img" aria-label="Codex prompt hook에서 cmux tab과 status를 갱신하는 흐름">
-        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
-        <rect x="28" y="72" width="150" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="103" y="105" text-anchor="middle" font-size="14" font-weight="700">질문 제출</text><text x="103" y="126" text-anchor="middle" font-size="12" fill="#6b7280">UserPromptSubmit</text>
-        <line x1="178" y1="110" x2="248" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="251" y="72" width="150" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="326" y="105" text-anchor="middle" font-size="14" font-weight="700">payload 읽기</text><text x="326" y="126" text-anchor="middle" font-size="12" fill="#6b7280">fast wrapper</text>
-        <line x1="401" y1="110" x2="471" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="474" y="72" width="150" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="549" y="105" text-anchor="middle" font-size="14" font-weight="700">대상 지정</text><text x="549" y="126" text-anchor="middle" font-size="12" fill="#6b7280">surface / workspace</text>
-        <line x1="624" y1="110" x2="694" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="697" y="72" width="160" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="777" y="105" text-anchor="middle" font-size="14" font-weight="700">작업 라벨/원문</text><text x="777" y="126" text-anchor="middle" font-size="12" fill="#6b7280">tab / status</text>
-        <line x1="857" y1="110" x2="927" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="930" y="72" width="125" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="992" y="105" text-anchor="middle" font-size="14" font-weight="700">조용히 종료</text><text x="992" y="126" text-anchor="middle" font-size="12" fill="#6b7280">non-blocking</text>
+      <svg class="flow" viewBox="0 0 1080 248" role="img" aria-label="cmux prompt pinning 자동화 흐름">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+          </marker>
+        </defs>
+        <rect x="24" y="74" width="145" height="82" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="96" y="108" text-anchor="middle" font-size="14" font-weight="700">질문 제출</text>
+        <text x="96" y="130" text-anchor="middle" font-size="12" fill="#6b7280">UserPromptSubmit</text>
+
+        <line x1="169" y1="115" x2="223" y2="115" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="226" y="74" width="145" height="82" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="298" y="101" text-anchor="middle" font-size="14" font-weight="700">payload 읽기</text>
+        <text x="298" y="123" text-anchor="middle" font-size="12" fill="#6b7280">stdin 또는 base64</text>
+        <text x="298" y="143" text-anchor="middle" font-size="12" fill="#6b7280">키만 임시 기록</text>
+
+        <line x1="371" y1="115" x2="425" y2="115" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="428" y="74" width="145" height="82" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="500" y="101" text-anchor="middle" font-size="14" font-weight="700">문구 정리</text>
+        <text x="500" y="123" text-anchor="middle" font-size="12" fill="#6b7280">공백 정규화</text>
+        <text x="500" y="143" text-anchor="middle" font-size="12" fill="#6b7280">filler 제거</text>
+
+        <line x1="573" y1="115" x2="627" y2="115" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="630" y="74" width="155" height="82" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="707" y="101" text-anchor="middle" font-size="14" font-weight="700">대상 선택</text>
+        <text x="707" y="123" text-anchor="middle" font-size="12" fill="#6b7280">surface 우선</text>
+        <text x="707" y="143" text-anchor="middle" font-size="12" fill="#6b7280">identify fallback</text>
+
+        <line x1="785" y1="115" x2="839" y2="115" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="842" y="74" width="206" height="82" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="945" y="101" text-anchor="middle" font-size="14" font-weight="700">tab/status 갱신</text>
+        <text x="945" y="123" text-anchor="middle" font-size="12" fill="#6b7280">짧은 fallback 라벨</text>
+        <text x="945" y="143" text-anchor="middle" font-size="12" fill="#6b7280">원문은 status 보존</text>
+
+        <path d="M707 156 V205 H96 V159" fill="none" stroke="#a16207" stroke-width="2" stroke-dasharray="5 4"></path>
+        <text x="398" y="229" text-anchor="middle" font-size="12" fill="#6b7280">cmux 밖이면 조용히 성공 종료, broad scan이나 validator는 hook 안에서 실행하지 않음</text>
       </svg>
+      <div class="legend">
+        <span><i class="key accent"></i>기본 경로</span>
+        <span><i class="key warn"></i>조용한 fallback</span>
+      </div>
     </section>
 
     <section>
       <h2>입출력 스키마</h2>
       <div class="grid3">
-        <div class="cell"><h3>입력</h3><ul><li>cmux 작업 요청</li><li>Codex hook payload</li><li>workspace/tab/pane 목표</li></ul></div>
-        <div class="cell"><h3>처리</h3><ul><li>UserPromptSubmit은 짧게 유지</li><li>CMUX_SURFACE_ID로 현재 surface 우선 지정</li><li>tab에는 규칙 기반 작업 라벨 표시</li><li>원문은 current-question status에 보존</li></ul></div>
-        <div class="cell"><h3>출력</h3><ul><li>짧은 작업 라벨</li><li>전체 질문 status</li><li>hook script 또는 config</li></ul></div>
+        <div class="cell">
+          <h3>입력</h3>
+          <ul>
+            <li>cmux 자동화 요청</li>
+            <li>Codex `UserPromptSubmit` JSON payload</li>
+            <li>`CMUX_WORKSPACE_ID`, `CMUX_SURFACE_ID`, `CMUX_TAB_ID`</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>처리 규칙</h3>
+          <ul>
+            <li>`오케이`, `okay`, `ㅇㅇ`, `그리고`, `이제`, `좋아` 같은 filler 제거</li>
+            <li>반복되는 작업은 빠른 fallback 라벨로 축약</li>
+            <li>`CMUX_SURFACE_ID`를 먼저 쓰고 `cmux identify`는 fallback으로만 사용</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>출력</h3>
+          <ul>
+            <li>`cmux rename-tab --surface ...` 또는 `--tab ...`</li>
+            <li>`cmux set-status current-question ... --icon pin`</li>
+            <li>승인이 필요한 Codex `/hooks` 안내</li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section>
-      <h2>cmux 명령 지도</h2>
-      <svg class="map" viewBox="0 0 1080 230" role="img" aria-label="질문 기억 자동화에 쓰는 cmux 명령 지도">
-        <rect x="430" y="82" width="220" height="68" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="540" y="112" text-anchor="middle" font-size="14" font-weight="700">현재 질문 기억</text><text x="540" y="133" text-anchor="middle" font-size="12" fill="#6b7280">prompt context</text>
-        <rect x="60" y="34" width="190" height="54" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="155" y="66" text-anchor="middle" font-size="13" font-weight="700">rename-tab --surface</text>
-        <rect x="60" y="142" width="190" height="54" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="155" y="174" text-anchor="middle" font-size="13" font-weight="700">set-status</text>
-        <rect x="830" y="34" width="190" height="54" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="925" y="66" text-anchor="middle" font-size="13" font-weight="700">markdown open</text>
-        <rect x="830" y="142" width="190" height="54" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="925" y="174" text-anchor="middle" font-size="13" font-weight="700">hooks / feed</text>
-        <line x1="250" y1="61" x2="427" y2="100" stroke="#2563eb" stroke-width="2"></line>
-        <line x1="250" y1="169" x2="427" y2="132" stroke="#2563eb" stroke-width="2"></line>
-        <line x1="653" y1="100" x2="830" y2="61" stroke="#2563eb" stroke-width="2"></line>
-        <line x1="653" y1="132" x2="830" y2="169" stroke="#2563eb" stroke-width="2"></line>
+      <h2>의미 요약 분리</h2>
+      <div class="grid2">
+        <div class="cell">
+          <span class="tag warn">hook 단계</span>
+          <h3>빠른 fallback 라벨</h3>
+          <p>`UserPromptSubmit`은 agent가 prompt 의미를 이해하기 전에 실행된다. 그래서 hook은 진짜 요약이 아니라 빠른 규칙 라벨과 원문 status만 만든다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag ok">agent 단계</span>
+          <h3>의미 기반 tab title</h3>
+          <p>agent가 요청을 읽은 뒤 `cmux rename-tab`으로 `hook 요약 구조 검토`처럼 더 정확한 짧은 제목을 덮어쓴다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>우선순위 차트</h2>
+      <svg class="bars" viewBox="0 0 1080 214" role="img" aria-label="cmux 자동화 구현에서 우선할 판단 기준">
+        <line x1="260" y1="38" x2="260" y2="176" stroke="#d1d5db"></line>
+        <line x1="260" y1="176" x2="1018" y2="176" stroke="#d1d5db"></line>
+        <text x="36" y="64" font-size="13" font-weight="700">local CLI와 docs</text>
+        <rect x="260" y="46" width="688" height="24" fill="#2563eb"></rect>
+        <text x="962" y="64" font-size="12" fill="#111827">1순위</text>
+
+        <text x="36" y="102" font-size="13" font-weight="700">surface 직접 targeting</text>
+        <rect x="260" y="84" width="610" height="24" fill="#1f7a52"></rect>
+        <text x="884" y="102" font-size="12" fill="#111827">빠름</text>
+
+        <text x="36" y="140" font-size="13" font-weight="700">workspace fan-out</text>
+        <rect x="260" y="122" width="420" height="24" fill="#a16207"></rect>
+        <text x="694" y="140" font-size="12" fill="#111827">필요할 때만</text>
+
+        <text x="36" y="178" font-size="13" font-weight="700">강한 UI 조작</text>
+        <rect x="260" y="160" width="190" height="24" fill="#b42318"></rect>
+        <text x="464" y="178" font-size="12" fill="#111827">승인 후</text>
       </svg>
+      <p class="note">기본 구현은 current surface를 빠르게 갱신한다. Codex hook 실행 surface와 agent command surface가 갈라지는 경우에만 `CMUX_PIN_PROMPT_SCOPE=workspace`를 사용한다.</p>
     </section>
 
     <section>
@@ -100,29 +403,87 @@
         <div class="tree">skills/cmux-automation/
 ├── SKILL.md
 ├── skill.html
-├── agents/openai.yaml
-├── references/hook-recipes.md
+├── agents/
+│   └── openai.yaml
+├── references/
+│   └── hook-recipes.md
 └── scripts/
     ├── cmux-pin-prompt.mjs
     └── validate-cmux-automation.ts</div>
-        <div class="cell"><h3>프로젝트 연결 조각</h3><p><a href="../../project-snippets/cmux-automation.md">project-snippets/cmux-automation.md</a>가 cmux 자동화 작업을 프로젝트 instruction에 연결한다.</p></div>
+        <svg class="map" viewBox="0 0 520 250" role="img" aria-label="cmux-automation 파일과 프로젝트 연결 관계">
+          <rect x="30" y="24" width="160" height="52" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="110" y="55" text-anchor="middle" font-size="13" font-weight="700">SKILL.md</text>
+
+          <rect x="30" y="100" width="160" height="52" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="110" y="131" text-anchor="middle" font-size="13" font-weight="700">hook-recipes.md</text>
+
+          <rect x="30" y="176" width="160" height="52" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="110" y="207" text-anchor="middle" font-size="13" font-weight="700">cmux-pin-prompt.mjs</text>
+
+          <rect x="314" y="24" width="176" height="52" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="402" y="55" text-anchor="middle" font-size="13" font-weight="700">프로젝트 instruction</text>
+
+          <rect x="314" y="100" width="176" height="52" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="402" y="131" text-anchor="middle" font-size="13" font-weight="700">Codex hook 설정</text>
+
+          <rect x="314" y="176" width="176" height="52" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="402" y="207" text-anchor="middle" font-size="13" font-weight="700">cmux tab/status</text>
+
+          <line x1="190" y1="50" x2="314" y2="50" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="190" y1="126" x2="314" y2="126" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="190" y1="202" x2="314" y2="202" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="110" y1="76" x2="110" y2="100" stroke="#6b7280" stroke-width="2"></line>
+          <line x1="110" y1="152" x2="110" y2="176" stroke="#6b7280" stroke-width="2"></line>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>프로젝트 연결 블록</h2>
+      <div class="grid2">
+        <div class="cell">
+          <h3>instruction에 넣을 링크</h3>
+          <p>`project-snippets/cmux-automation.md`는 프로젝트별 `AGENTS.md`, `CLAUDE.md`, 또는 동등한 instruction 파일에서 이 스킬을 연결할 때 쓰는 조각이다.</p>
+        </div>
+        <pre>Use $cmux-automation at &lt;skills-root&gt;/skills/cmux-automation/SKILL.md
+when automating cmux tabs, status, hooks, feeds, or prompt pinning.</pre>
       </div>
     </section>
 
     <section>
       <h2>품질 게이트</h2>
-      <pre>node scripts/validate-skill.ts skills/cmux-automation
+      <div class="grid2">
+        <pre>node scripts/validate-skill.ts skills/cmux-automation
 node skills/cmux-automation/scripts/validate-cmux-automation.ts skills/cmux-automation
-printf '{"prompt":"cmux hook test"}' | node skills/cmux-automation/scripts/cmux-pin-prompt.mjs
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .</pre>
+        <pre>printf '{"prompt":"오케이 그리고 workflow 스킬을 만들어줘"}' \
+  | CMUX_PIN_PROMPT_DRY_RUN=1 \
+    node skills/cmux-automation/scripts/cmux-pin-prompt.mjs</pre>
+      </div>
+      <p class="note">실제 hook 구현에서는 dry-run으로 title 규칙을 먼저 확인하고, cmux 안에서 tab/status 변경과 지연 시간을 별도로 확인한다.</p>
     </section>
 
     <section>
       <h2>금지와 허용</h2>
       <div class="grid2">
-        <div class="cell"><span class="tag ok">허용</span><ul><li>작업 라벨을 tab title에 고정한다.</li><li>질문 원문은 status나 local markdown으로 유지한다.</li><li>cmux 밖에서는 조용히 no-op 처리한다.</li></ul></div>
-        <div class="cell"><span class="tag danger">금지</span><ul><li>요청 없이 global hook을 설치하지 않는다.</li><li>socket password나 secret을 파일에 저장하지 않는다.</li><li>pane close, clear-history, send-key를 임의 실행하지 않는다.</li></ul></div>
+        <div class="cell">
+          <span class="tag ok">허용</span>
+          <ul>
+            <li>project-local hook script와 hook config를 백업 후 갱신한다.</li>
+            <li>tab에는 빠른 fallback 라벨, status에는 원문 질문을 보존한다.</li>
+            <li>agent가 의미를 이해한 뒤 더 나은 제목으로 tab을 덮어쓴다.</li>
+            <li>cmux가 없거나 cmux 밖이면 ergonomic hook은 조용히 no-op 처리한다.</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <span class="tag danger">금지</span>
+          <ul>
+            <li>요청 없이 global hook 또는 global cmux settings를 바꾸지 않는다.</li>
+            <li>socket password, token, secret을 hook script나 로그에 저장하지 않는다.</li>
+            <li>`UserPromptSubmit` 안에서 validator, `codex exec`, broad repo scan을 실행하지 않는다.</li>
+          </ul>
+        </div>
       </div>
     </section>
   </main>

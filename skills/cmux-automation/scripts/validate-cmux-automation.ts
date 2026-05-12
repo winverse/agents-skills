@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
 
@@ -33,6 +34,29 @@ function requireRepoText(file: string, needle: string, label: string): void {
   if (!text.includes(needle)) errors.push(`${file} is missing ${label}: ${needle}`);
 }
 
+function requireDryRunTitle(prompt: string, expectedTitle: string, label: string): void {
+  const script = path.join(skillRoot, "scripts/cmux-pin-prompt.mjs");
+  try {
+    const output = execFileSync(process.execPath, [script], {
+      input: JSON.stringify({ prompt }),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        CMUX_PIN_PROMPT_DRY_RUN: "1",
+        CMUX_PIN_PROMPT_TITLE_CHARS: "24",
+      },
+      stdio: ["pipe", "pipe", "pipe"],
+      timeout: 2000,
+    });
+    const parsed = JSON.parse(output);
+    if (parsed.title !== expectedTitle) {
+      errors.push(`${label}: expected "${expectedTitle}", got "${parsed.title}"`);
+    }
+  } catch (error) {
+    errors.push(`${label}: dry-run title check failed (${String(error)})`);
+  }
+}
+
 for (const file of [
   "SKILL.md",
   "skill.html",
@@ -50,7 +74,9 @@ requireText("SKILL.md", "CMUX_WORKSPACE_ID", "cmux environment detection");
 requireText("SKILL.md", "cmux rename-tab", "tab title command");
 requireText("SKILL.md", "cmux set-status", "status command");
 requireText("SKILL.md", "Do not stop at a recipe", "actual setup requirement");
-requireText("SKILL.md", "rule-based task label", "rule-based tab label rule");
+requireText("SKILL.md", "rule-based fallback label", "rule-based tab label rule");
+requireText("SKILL.md", "Semantic Title Pattern", "agent semantic title pattern");
+requireText("SKILL.md", "Do not call the hook label a semantic summary", "hook is not semantic summary warning");
 requireText("SKILL.md", "original full prompt", "full prompt status rule");
 requireText("SKILL.md", "Ask before", "safety escalation rule");
 requireText("scripts/cmux-pin-prompt.mjs", "CMUX_SURFACE_ID", "surface env targeting");
@@ -59,15 +85,25 @@ requireText("scripts/cmux-pin-prompt.mjs", "compactTitle", "compact title helper
 requireText("scripts/cmux-pin-prompt.mjs", "ruleBasedTitle", "rule-based title helper");
 requireText("scripts/cmux-pin-prompt.mjs", "CMUX_PIN_PROMPT_TITLE_CHARS", "title length option");
 requireText("scripts/cmux-pin-prompt.mjs", "CMUX_PIN_PROMPT_SCOPE", "workspace scope option");
+requireText("scripts/cmux-pin-prompt.mjs", "CMUX_PIN_PROMPT_DRY_RUN", "dry-run title test option");
 requireText("scripts/cmux-pin-prompt.mjs", "workspaceSurfaceTargets", "workspace target fan-out");
 requireText("scripts/cmux-pin-prompt.mjs", "cmux identify", "tab ref fallback discovery");
 requireText("scripts/cmux-pin-prompt.mjs", "rename-tab", "rename command");
 requireText("scripts/cmux-pin-prompt.mjs", "set-status", "status command");
 requireText("scripts/cmux-pin-prompt.mjs", "const title = compactTitle(prompt)", "compact title use");
 requireText("scripts/cmux-pin-prompt.mjs", "truncate(prompt, 500)", "long status limit");
+requireDryRunTitle(
+  "오케이 그리고 이제 필요 스킬 중에 workflow라는 스킬이 필요한데 workflow-skill을 만들어봐",
+  "workflow 스킬 생성",
+  "workflow skill prompt title",
+);
+requireDryRunTitle("오늘 수원 날씨 내일도", "수원 날씨", "location weather prompt title");
+requireDryRunTitle("오케이 그리고 테스트", "동작 테스트", "leading filler prompt title");
 requireText("references/hook-recipes.md", "Prompt Pinning Recipe", "prompt pinning recipe");
 requireText("references/hook-recipes.md", "CMUX_PIN_PROMPT_SCOPE=workspace", "workspace scope recipe");
-requireText("references/hook-recipes.md", "rule-based task label", "rule-based title recipe");
+requireText("references/hook-recipes.md", "rule-based fallback label", "rule-based title recipe");
+requireText("references/hook-recipes.md", "Agent Semantic Title Recipe", "agent semantic title recipe");
+requireText("references/hook-recipes.md", "This hook does not produce a semantic summary", "semantic summary boundary");
 requireText("references/hook-recipes.md", "Payload Discovery", "payload discovery guidance");
 requireText("references/hook-recipes.md", "Safety Rules", "safety rules");
 requireText("skill.html", "사용 판단 매트릭스", "decision matrix");

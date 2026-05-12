@@ -87,15 +87,33 @@ function trimKoreanParticle(word) {
   return trimmed.length >= 2 ? trimmed : word;
 }
 
+function stripLeadingFillers(text) {
+  let current = text;
+  const fillers = [
+    /^(?:오케이|okay|ok|ㅇㅋ|ㅇㅇ+)(?:[,\s.!?。！？]+|$)/iu,
+    /^(?:아니|근데|그리고|음|좋아|이제|그럼|저기)(?:[,\s.!?。！？]+|$)/iu,
+    /^(?:오)(?:[,\s.!?。！？]+|$)/iu,
+  ];
+
+  for (let i = 0; i < 6; i += 1) {
+    const next = fillers.reduce((value, filler) => value.replace(filler, ""), current).trim();
+    if (next === current) return current;
+    current = next;
+  }
+
+  return current;
+}
+
 function normalizedPrompt(prompt) {
-  return prompt
+  const cleaned = prompt
     .replace(/https?:\/\/\S+/g, "link")
     .replace(/[`"'“”‘’]/g, "")
     .replace(/\s+/g, " ")
     .trim()
     .replace(/^[?!.,。！？\s]+/u, "")
-    .replace(/^(아니|근데|그리고|음|오|ㅇㅇ+|좋아|이제|그럼|저기)\s*/iu, "")
     .replace(/[?!.,。！？]+$/u, "");
+
+  return stripLeadingFillers(cleaned);
 }
 
 function ruleBasedTitle(text) {
@@ -106,8 +124,14 @@ function ruleBasedTitle(text) {
   const rules = [
     { match: /요약.*그대로|그대로.*요약|질문한\s*내용\s*그대로/u, title: "요약 규칙 수정" },
     { match: /\bq\b.*(필요|제거|빼|없애)|prefix|프리픽스/u, title: "Q 표시 제거" },
+    {
+      match:
+        /(workflow|워크플로우|작업\s*흐름).*(스킬|skill).*(만들|생성|추가|작성|구성)|(?:스킬|skill).*(workflow|워크플로우).*(만들|생성|추가|작성|구성)/u,
+      title: "workflow 스킬 생성",
+    },
     { match: /(탭|tab).*(길이|폭|가로|ellipsis|말줄임)|가로.*탭/u, title: "탭 폭 확인" },
     { match: /(탭|tab).*(안.?바뀌|왜|이름)|이름.*안.?바뀌/u, title: "탭 변경 디버그" },
+    { match: /(cmux-automation|cmux automation|cmux).*(검토|확인|디버그|왜)/u, title: "cmux 자동화 검토" },
     { match: /(cmux-automation|cmux automation).*(변경|수정|고치)|cmux.*자동화.*(변경|수정|고치)/u, title: "cmux 자동화 수정" },
     { match: /hook|훅|userpromptsubmit/u, title: "hook 설정 확인" },
     { match: /(스킬|skill).*(검토|검증|확인)/u, title: "스킬 검토" },
@@ -258,13 +282,19 @@ try {
   process.exit(0);
 }
 
-if (!inCmux()) process.exit(0);
-
 const prompt = promptFromPayload(payload).replace(/\s+/g, " ").trim();
 if (!prompt) process.exit(0);
 
 const title = compactTitle(prompt);
 const status = truncate(prompt, 500);
+
+if (process.env.CMUX_PIN_PROMPT_DRY_RUN === "1") {
+  console.log(JSON.stringify({ title, status }));
+  process.exit(0);
+}
+
+if (!inCmux()) process.exit(0);
+
 const info = canUseFastEnvTarget() ? {} : readIdentify();
 
 try {

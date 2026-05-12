@@ -19,7 +19,25 @@ Use docs output or printed raw documentation URLs only when needed. Prefer local
 
 ## Prompt Pinning Recipe
 
-Goal: after a Codex prompt is submitted, show a short rule-based task label in the cmux tab and preserve the user's original prompt text in the status area. Normalize whitespace for one-line display. The tab should stay short because cmux truncates narrow tab labels.
+Goal: after a Codex prompt is submitted, show a short rule-based fallback label in the cmux tab and preserve the user's original prompt text in the status area. Normalize whitespace for one-line display. The tab should stay short because cmux truncates narrow tab labels.
+
+This hook does not produce a semantic summary. `UserPromptSubmit` runs before the agent has reasoned about the prompt. If the user wants the tab title to be the agent's actual summary, use the two-stage pattern: hook writes a fast fallback label, then the agent updates the tab title after it understands the task.
+
+Leading filler such as `오케이`, `okay`, `ㅇㅇ`, `그리고`, `이제`, and `좋아` should not become the tab title. Strip full filler words before fallback truncation, and keep rules for recurring task shapes such as `workflow 스킬 생성`, `cmux 자동화 검토`, and `날씨 확인`.
+
+## Agent Semantic Title Recipe
+
+When the agent has read the prompt and can name the task better than the hook:
+
+```bash
+cmux rename-tab --surface "$CMUX_SURFACE_ID" "hook 요약 구조 검토"
+cmux set-status current-question "hook fallback label과 agent semantic title의 역할을 분리" \
+  --workspace "$CMUX_WORKSPACE_ID" \
+  --icon pin \
+  --color "#2563eb"
+```
+
+Use this from the agent turn, not from `UserPromptSubmit`. Do not call nested `codex exec`, validators, or web research from the prompt-submit hook just to create a nicer title.
 
 Use the bundled script as the source implementation:
 
@@ -82,7 +100,7 @@ const inCmux =
 
 if (!prompt.trim() || !inCmux) process.exit(0);
 
-function summarizeWithFastRules(text) {
+function fallbackLabelWithFastRules(text) {
   if (/요약.*그대로|그대로.*요약|질문한\s*내용\s*그대로/u.test(text)) {
     return "요약 규칙 수정";
   }
@@ -96,7 +114,7 @@ function summarizeWithFastRules(text) {
 }
 
 const oneLine = prompt.replace(/\s+/g, " ").trim();
-const taskLabel = summarizeWithFastRules(oneLine).slice(0, 16);
+const taskLabel = fallbackLabelWithFastRules(oneLine).slice(0, 16);
 const title = taskLabel;
 
 function currentTabArgs() {
@@ -135,6 +153,13 @@ try {
 } catch {
   process.exit(0);
 }
+```
+
+Dry-run title checks should not require a live cmux surface:
+
+```bash
+printf '{"prompt":"오케이 그리고 workflow 스킬을 만들어줘"}' \
+  | CMUX_PIN_PROMPT_DRY_RUN=1 node skills/cmux-automation/scripts/cmux-pin-prompt.mjs
 ```
 
 ## Payload Discovery
