@@ -87,8 +87,8 @@ function trimKoreanParticle(word) {
   return trimmed.length >= 2 ? trimmed : word;
 }
 
-function compactTitle(prompt) {
-  const normalized = prompt
+function normalizedPrompt(prompt) {
+  return prompt
     .replace(/https?:\/\/\S+/g, "link")
     .replace(/[`"'“”‘’]/g, "")
     .replace(/\s+/g, " ")
@@ -96,18 +96,57 @@ function compactTitle(prompt) {
     .replace(/^[?!.,。！？\s]+/u, "")
     .replace(/^(아니|근데|그리고|음|오|ㅇㅇ+|좋아|이제|그럼|저기)\s*/iu, "")
     .replace(/[?!.,。！？]+$/u, "");
+}
 
-  const firstClause = normalized
+function ruleBasedTitle(text) {
+  const lower = text.toLowerCase();
+  const locationWeather = text.match(/([가-힣A-Za-z0-9_-]{2,})\s*(?:의\s*)?(기온|날씨|온도)/u);
+  if (locationWeather) return `${locationWeather[1]} ${locationWeather[2]}`;
+
+  const rules = [
+    { match: /요약.*그대로|그대로.*요약|질문한\s*내용\s*그대로/u, title: "요약 규칙 수정" },
+    { match: /\bq\b.*(필요|제거|빼|없애)|prefix|프리픽스/u, title: "Q 표시 제거" },
+    { match: /(탭|tab).*(길이|폭|가로|ellipsis|말줄임)|가로.*탭/u, title: "탭 폭 확인" },
+    { match: /(탭|tab).*(안.?바뀌|왜|이름)|이름.*안.?바뀌/u, title: "탭 변경 디버그" },
+    { match: /(cmux-automation|cmux automation).*(변경|수정|고치)|cmux.*자동화.*(변경|수정|고치)/u, title: "cmux 자동화 수정" },
+    { match: /hook|훅|userpromptsubmit/u, title: "hook 설정 확인" },
+    { match: /(스킬|skill).*(검토|검증|확인)/u, title: "스킬 검토" },
+    { match: /(html).*(검토|검증|수정|갱신|업데이트)|검토.*html/u, title: "HTML 검토" },
+    { match: /(디자인|design).*(검토|수정|개선|확인)/u, title: "디자인 검토" },
+    { match: /(커밋|commit).*(푸시|push)|커밋|commit/u, title: "커밋 처리" },
+    { match: /(날씨|기온|온도)/u, title: "날씨 확인" },
+    { match: /테스트|test/u, title: "동작 테스트" },
+  ];
+
+  const hit = rules.find((rule) => rule.match.test(lower));
+  if (hit) return hit.title;
+
+  return "";
+}
+
+function fallbackTitle(text) {
+  const firstClause = text
     .split(/(?:[?!.,。！？])|(?:\s+그리고\s+)|(?:\s+근데\s+)/u)[0]
     ?.trim();
 
-  const words = (firstClause || normalized)
+  const words = (firstClause || text)
     .split(/\s+/)
     .map(trimKoreanParticle)
-    .filter((word) => word && !/^(좀|왜|어떻게|무엇|뭐|이거|그거|저거|내가|네가|제가)$/u.test(word));
+    .filter(
+      (word) =>
+        word &&
+        !/^(좀|왜|어떻게|무엇|뭐|이거|그거|저거|내가|네가|제가|그냥|굳이|부분|내용|들어가는데|해야|할께|할까|낫지|않겠어)$/u.test(
+          word,
+        ),
+    );
 
-  const candidate = words.length > 1 ? words.slice(0, 4).join(" ") : firstClause || normalized;
+  const candidate = words.length > 1 ? words.slice(0, 4).join(" ") : firstClause || text;
   return truncateGraphemes(candidate || "질문", titleLimit());
+}
+
+function compactTitle(prompt) {
+  const normalized = normalizedPrompt(prompt);
+  return truncateGraphemes(ruleBasedTitle(normalized) || fallbackTitle(normalized), titleLimit());
 }
 
 function inCmux() {
