@@ -35,7 +35,7 @@
     <header>
       <div>
         <h1>cmux-automation</h1>
-        <p>cmux 탭, 상태, markdown board, Codex hook을 연결해 현재 탭에는 짧은 질문 제목을, status에는 원문 맥락을 남기는 자동화 스킬.</p>
+        <p>cmux 탭, 상태, markdown board, Codex hook을 연결해 현재 탭에는 짧은 작업 라벨을, status에는 원문 맥락을 남기는 자동화 스킬.</p>
       </div>
       <div class="pair">
         <span><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></span>
@@ -47,7 +47,7 @@
     <section>
       <h2>사용 판단 매트릭스</h2>
       <div class="matrix">
-        <div class="cell"><span class="tag ok">사용</span><h3>질문 고정</h3><p>Codex에 제출한 질문을 짧은 cmux tab title과 전체 status에 자동 반영하고 싶을 때.</p></div>
+        <div class="cell"><span class="tag ok">사용</span><h3>질문 고정</h3><p>Codex에 제출한 질문을 짧은 작업 라벨과 전체 status에 자동 반영하고 싶을 때.</p></div>
         <div class="cell"><span class="tag accent">함께 사용</span><h3>세션 보드</h3><p>여러 agent/pane의 질문, 성공 조건, 상태를 markdown panel로 유지할 때.</p></div>
         <div class="cell"><span class="tag warn">확인</span><h3>전역 설정</h3><p>global cmux 설정, hook 설치/삭제, socket auth 변경은 사용자 확인을 먼저 받는다.</p></div>
         <div class="cell"><span class="tag danger">건너뜀</span><h3>파괴 조작</h3><p>pane close, history clear, send-key 같은 조작은 명시 요청 없이는 하지 않는다.</p></div>
@@ -64,7 +64,7 @@
         <line x1="401" y1="110" x2="471" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
         <rect x="474" y="72" width="150" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="549" y="105" text-anchor="middle" font-size="14" font-weight="700">대상 지정</text><text x="549" y="126" text-anchor="middle" font-size="12" fill="#6b7280">surface / workspace</text>
         <line x1="624" y1="110" x2="694" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="697" y="72" width="160" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="777" y="105" text-anchor="middle" font-size="14" font-weight="700">짧은 제목/원문</text><text x="777" y="126" text-anchor="middle" font-size="12" fill="#6b7280">tab / status</text>
+        <rect x="697" y="72" width="160" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="777" y="105" text-anchor="middle" font-size="14" font-weight="700">작업 라벨/원문</text><text x="777" y="126" text-anchor="middle" font-size="12" fill="#6b7280">tab / status</text>
         <line x1="857" y1="110" x2="927" y2="110" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
         <rect x="930" y="72" width="125" height="76" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="992" y="105" text-anchor="middle" font-size="14" font-weight="700">조용히 종료</text><text x="992" y="126" text-anchor="middle" font-size="12" fill="#6b7280">non-blocking</text>
       </svg>
@@ -74,8 +74,8 @@
       <h2>입출력 스키마</h2>
       <div class="grid3">
         <div class="cell"><h3>입력</h3><ul><li>cmux 작업 요청</li><li>Codex hook payload</li><li>workspace/tab/pane 목표</li></ul></div>
-        <div class="cell"><h3>처리</h3><ul><li>UserPromptSubmit은 짧게 유지</li><li>CMUX_SURFACE_ID로 현재 surface 우선 지정</li><li>tab 제목은 16자 안팎으로 축약</li><li>원문은 current-question status에 보존</li></ul></div>
-        <div class="cell"><h3>출력</h3><ul><li>짧은 tab title</li><li>전체 질문 status</li><li>hook script 또는 config</li></ul></div>
+        <div class="cell"><h3>처리</h3><ul><li>UserPromptSubmit은 짧게 유지</li><li>CMUX_SURFACE_ID로 현재 surface 우선 지정</li><li>tab에는 규칙 기반 작업 라벨 표시</li><li>원문은 current-question status에 보존</li></ul></div>
+        <div class="cell"><h3>출력</h3><ul><li>짧은 작업 라벨</li><li>전체 질문 status</li><li>hook script 또는 config</li></ul></div>
       </div>
     </section>
 
@@ -121,7 +121,7 @@ node scripts/validate-skill-repo.ts .</pre>
     <section>
       <h2>금지와 허용</h2>
       <div class="grid2">
-        <div class="cell"><span class="tag ok">허용</span><ul><li>질문 요약을 tab title에 고정한다.</li><li>질문 원문은 status나 local markdown으로 유지한다.</li><li>cmux 밖에서는 조용히 no-op 처리한다.</li></ul></div>
+        <div class="cell"><span class="tag ok">허용</span><ul><li>작업 라벨을 tab title에 고정한다.</li><li>질문 원문은 status나 local markdown으로 유지한다.</li><li>cmux 밖에서는 조용히 no-op 처리한다.</li></ul></div>
         <div class="cell"><span class="tag danger">금지</span><ul><li>요청 없이 global hook을 설치하지 않는다.</li><li>socket password나 secret을 파일에 저장하지 않는다.</li><li>pane close, clear-history, send-key를 임의 실행하지 않는다.</li></ul></div>
       </div>
     </section>

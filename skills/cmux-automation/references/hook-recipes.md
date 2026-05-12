@@ -19,7 +19,7 @@ Use docs output or printed raw documentation URLs only when needed. Prefer local
 
 ## Prompt Pinning Recipe
 
-Goal: after a Codex prompt is submitted, show a compact prompt title in the cmux tab and preserve the user's original prompt text in the status area. Normalize whitespace for one-line display. The tab should stay short because cmux truncates narrow tab labels.
+Goal: after a Codex prompt is submitted, show a short rule-based task label in the cmux tab and preserve the user's original prompt text in the status area. Normalize whitespace for one-line display. The tab should stay short because cmux truncates narrow tab labels.
 
 Use the bundled script as the source implementation:
 
@@ -82,9 +82,22 @@ const inCmux =
 
 if (!prompt.trim() || !inCmux) process.exit(0);
 
+function summarizeWithFastRules(text) {
+  if (/요약.*그대로|그대로.*요약|질문한\s*내용\s*그대로/u.test(text)) {
+    return "요약 규칙 수정";
+  }
+  if (/(탭|tab).*(길이|폭|가로|ellipsis|말줄임)|가로.*탭/u.test(text)) {
+    return "탭 폭 확인";
+  }
+  if (/(탭|tab).*(안.?바뀌|왜|이름)|이름.*안.?바뀌/u.test(text)) {
+    return "탭 변경 디버그";
+  }
+  return text.split(/[?!.,。！？]/u)[0];
+}
+
 const oneLine = prompt.replace(/\s+/g, " ").trim();
-const compactTitle = oneLine.split(/[?!.,。！？]/u)[0].slice(0, 16);
-const title = compactTitle;
+const taskLabel = summarizeWithFastRules(oneLine).slice(0, 16);
+const title = taskLabel;
 
 function currentTabArgs() {
   if (process.env.CMUX_SURFACE_ID) {

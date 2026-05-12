@@ -19,7 +19,7 @@ Load `references/hook-recipes.md` when implementing or modifying a hook script, 
 - Keep project-local hook changes project-local unless the user explicitly asks for global cmux or global Codex configuration changes.
 - Back up existing cmux or agent config files before editing them.
 - Use `cmux rename-tab`, `cmux set-status`, and `cmux markdown open` for lightweight session memory before building heavier tooling.
-- Keep tab titles short because cmux truncates narrow tab labels. Store the compact prompt title in the tab and the original full prompt in `current-question` status.
+- Keep tab titles short because cmux truncates narrow tab labels. Store a rule-based task label in the tab and the original full prompt in `current-question` status.
 - Fail quietly for ergonomics hooks when cmux is not available or the terminal is outside cmux.
 - Ask before installing/uninstalling hooks, changing global cmux settings, editing socket auth, closing panes/workspaces, clearing history, or sending text into another pane.
 
@@ -27,7 +27,7 @@ Load `references/hook-recipes.md` when implementing or modifying a hook script, 
 
 | Job | Preferred cmux surface |
 | --- | --- |
-| Show the current user question in the tab header | `cmux rename-tab` with a compact prompt title |
+| Show the current user question in the tab header | `cmux rename-tab` with a rule-based task label |
 | Keep the longer original question visible | `cmux set-status current-question ...` |
 | Keep a multi-agent work board | `cmux markdown open <board.md>` |
 | Route agent events into a queue | `cmux feed tui` or `cmux hooks feed` |
@@ -42,12 +42,12 @@ When the user wants each submitted question to appear in the current cmux tab:
 2. Use the bundled `scripts/cmux-pin-prompt.mjs` as the implementation source. A project-local hook can be a tiny wrapper that imports this script, or it can copy the script when the target project needs a self-contained hook.
 3. Parse the hook JSON from stdin.
 4. Extract the submitted prompt from known payload fields, and log only temporary payload keys during discovery if the field name is unknown.
-5. Normalize whitespace, derive a short tab title, and keep the user's original wording in `current-question` status. Do not lose the full prompt.
+5. Normalize whitespace, derive a short rule-based task label, and keep the user's original wording in `current-question` status. Do not lose the full prompt.
 6. If `CMUX_SURFACE_ID` exists, target the current session with `cmux rename-tab --surface "$CMUX_SURFACE_ID" ...`; use `cmux identify` only as a fallback when the surface env var is missing. Raw `CMUX_TAB_ID` may not be accepted by every `rename-tab` path.
    - If Codex hook execution and agent command execution land in different cmux surfaces, set `CMUX_PIN_PROMPT_SCOPE=workspace` for the hook command so terminal surfaces in the same workspace receive the same prompt title.
 7. Call:
-   - `cmux rename-tab --surface "$CMUX_SURFACE_ID" "<compact title>"`
-   - or `cmux rename-tab --tab <tab-ref> "<compact title>"` when falling back to `cmux identify`
+   - `cmux rename-tab --surface "$CMUX_SURFACE_ID" "<task label>"`
+   - or `cmux rename-tab --tab <tab-ref> "<task label>"` when falling back to `cmux identify`
    - `cmux set-status current-question "<original prompt>" --icon pin --color "#2563eb"` so the full prompt remains available outside the narrow tab label
 8. Test with a sample stdin payload, confirm the tab/status changes, and measure foreground wrapper latency if the hook feels slow.
 9. Tell the user to approve the new or changed Codex hook in `/hooks` when required.
