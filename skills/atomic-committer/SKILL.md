@@ -1,134 +1,55 @@
 ---
 name: atomic-committer
-description: Use when the user asks to commit, split work into commits, create git commits, or commit and push. This skill inspects changed files, blocks forbidden secret-bearing content, updates `.gitignore` for repeatable local or secret-bearing artifacts that should never be committed, groups safe changes into atomic commit units, commits each group with an English conventional prefix and Korean message body, and pushes only when a git remote exists and push was requested.
+description: "변경 파일을 secret guard로 검사하고 logical changeset별로 stage/commit하며, 사용자가 요청한 경우 remote와 branch를 확인한 뒤 push할 때 사용한다."
 ---
 
-# Atomic Committer
+# 원자적 커밋
 
-Use this skill when the user asks for committing work, splitting changes into commits, or committing and pushing.
+이 스킬은 dirty git tree를 의미 단위로 나누어 안전하게 commit/push한다. 핵심은 user change 보존, secret 차단, logical changeset 분리다.
 
-Detailed grouping heuristics live in `references/grouping-rules.md`; read it when the dirty tree has more than one concern, staged changes already exist, or the commit grouping is not obvious.
+## 핵심 계약
 
-## Core Contract
+- 모든 변경을 한 번에 묶지 말고 logical changeset별로 commit한다.
+- staging 전후에 candidate diff를 secret-bearing content 기준으로 검사한다.
+- live-looking credential assignment나 private key material은 hard-block한다.
+- 반복 생성되는 local artifact나 secret-bearing untracked file은 가장 좁은 `.gitignore` rule로 예방한다.
+- 이미 tracked된 secret은 `.gitignore`로 우회하지 않는다.
+- commit message는 English conventional prefix와 Korean summary 형식으로 쓴다.
+- push는 사용자가 요청했고 remote와 branch가 확인될 때만 한다.
 
-- Commit by logical changeset, not by every dirty file at once.
-- Stage only the files or hunks that belong to the current changeset.
-- Preserve unrelated user changes. Do not revert, discard, or silently include them.
-- Before staging and before committing, scan the candidate changeset for forbidden content and warn about risky content.
-- Hard-block credential-like assignments only when the value looks live rather than placeholder text. This applies across cloud, source control, AI API, payment, messaging, package registry, database, and private-key secrets.
-- When a warned or blocked untracked file is a repeatable local artifact, cache, log, raw tool output, machine-local config, credential path, or secret-bearing file that should never be committed, update the project `.gitignore` with the narrowest safe pattern before committing other changes.
-- Do not use `.gitignore` as a workaround for hard-blocked content already present in tracked files or staged hunks. Ask the user to redact or remove tracked secret-bearing content first; ask before `git rm --cached`.
-- Use commit messages with an English conventional prefix and a Korean summary.
-- Push only when the current directory is a git repo, at least one commit was created or already requested, a remote exists, and the user asked to push.
-
-## Message Format
-
-Use this format:
+## 메시지 형식
 
 ```text
 <type>: <한글 요약>
-```
-
-Scope is allowed when it improves clarity:
-
-```text
 <type>(<scope>): <한글 요약>
 ```
 
-Preferred types:
+권장 type은 `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `build`, `ci`, `style`, `perf`, `revert`다.
 
-```text
-feat, fix, docs, refactor, test, chore, build, ci, style, perf, revert
-```
+## workflow
 
-Examples:
+1. `git rev-parse --show-toplevel`로 worktree를 확인한다.
+2. `git status --short`, `git diff --stat`, `git diff`, 필요하면 `git diff --cached`를 본다.
+3. candidate diff와 untracked file을 forbidden content guard로 검사한다.
+4. changeset을 논리 단위로 나누고 필요한 파일만 stage한다.
+5. staged diff를 다시 검사한다.
+6. 관련 validator/test를 실행한다.
+7. commit 후 push 조건을 확인한다.
 
-```text
-feat: 변경사항 단위 커밋 스킬 추가
-fix(web-research): HTML validator 링크 수정
-docs: 프로젝트 스킬 연결 방법 정리
-chore: 스킬 repo 검증 스크립트 갱신
-```
+## forbidden content guard 기준
 
-## Workflow
+다음은 commit을 중단한다.
 
-1. Confirm the current directory is inside a git worktree with `git rev-parse --show-toplevel`.
-2. Inspect state with `git status --short`, `git diff --stat`, `git diff`, and `git diff --cached` when staged changes exist.
-3. Run forbidden-content triage over the working diff, staged diff, and untracked candidate files before deciding commit groups.
-4. If triage finds untracked files that should never be committed, inspect existing ignore rules with `git check-ignore -v <path>` when useful, then add the narrowest safe `.gitignore` pattern as its own housekeeping changeset or with the relevant tooling changeset.
-5. Identify logical changesets from file paths, diffs, tests, generated files, docs, and user intent.
-6. If a file mixes unrelated concerns, split by hunk when practical; otherwise ask before committing that file.
-7. For each changeset:
-   - Warn about risky but not strictly forbidden content before staging.
-   - Stage only that changeset.
-   - Re-scan `git diff --cached -U0 --no-ext-diff` for live-looking credential assignments and private-key material.
-   - Run targeted validation when practical and relevant.
-   - Commit with the required message format only if the staged diff passes the guard.
-8. After commits, push only if:
-   - the user requested push,
-   - `git remote` has at least one remote,
-   - the branch is not detached,
-   - and local commits need to be published.
-9. If no remote exists, do not push. Report the commit hashes and say push was skipped because no remote is configured.
+- `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`, `AWS_SECRET_ACCESS_KEY`, `DATABASE_URL`, `MONGODB_URI` 같은 이름에 live-looking value가 할당된 줄
+- `AKIA...`, `ASIA...` 형태의 AWS key
+- `-----BEGIN PRIVATE KEY-----`, `-----BEGIN OPENSSH PRIVATE KEY-----` 같은 private key material
+- username/password가 들어간 connection string
 
-## Forbidden Content Guard
+placeholder, example, dummy, fake, redacted value는 허용될 수 있지만 먼저 확인한다.
 
-Treat this guard as non-optional. A user can ask to include a risky generated file after review, but cannot override a hard-blocked live-looking credential-bearing line.
+## final report 기준
 
-Hard-block the commit when the candidate staged diff adds any of these:
-
-- Credential-like names followed by assignment syntax and a live-looking value. Assignment syntax includes `.env` style `NAME=value`, shell `export NAME=value`, YAML `name: value`, JSON `"name": "value"`, and TOML `name = "value"`.
-- Cloud credentials such as AWS, GCP, Azure, Supabase, Firebase, or Vercel tokens when the assigned value is not a placeholder. AWS examples include `AWS_ACCESS_KEY=...`, `AWS_ACCESS_KEY_ID=...`, `AWS_SECRET_ACCESS_KEY=...`, and `AWS_SESSION_TOKEN=...`.
-- Source control, AI API, payment, messaging, and package registry tokens such as `GITHUB_TOKEN`, `GH_TOKEN`, `GITLAB_TOKEN`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `SLACK_BOT_TOKEN`, `STRIPE_SECRET_KEY`, `NPM_TOKEN`, or `SENDGRID_API_KEY` when the value looks real.
-- Connection strings such as `DATABASE_URL`, `REDIS_URL`, `MONGODB_URI`, or `POSTGRES_URL` when the URL includes a real-looking username/password or token.
-- AWS access key ID values matching `AKIA[0-9A-Z]{16}` or `ASIA[0-9A-Z]{16}`.
-- Private key material such as `-----BEGIN PRIVATE KEY-----`, `-----BEGIN RSA PRIVATE KEY-----`, or `-----BEGIN OPENSSH PRIVATE KEY-----`.
-- Obvious live token assignments such as `api_key=`, `client_secret=`, `secret=`, `password=`, `token=`, or `github_token=` with a non-placeholder value.
-
-A value is live-looking when it is long, high-entropy, provider-shaped, base64/hex-like, JWT-shaped, URL credential-shaped, or otherwise not clearly fake. Treat these as placeholders unless the surrounding diff proves otherwise: empty values, `example`, `placeholder`, `changeme`, `dummy`, `fake`, `test`, `xxx`, `your_key_here`, `<...>`, `${...}`, `REPLACE_ME`, and obviously redacted values such as `sk-...REDACTED`.
-
-Warn and ask before committing, but allow after explicit confirmation when the content is explainable and not a live secret:
-
-- `.env.example`, docs, or tests that show placeholder values.
-- Secret variable names without assigned values, or with clear placeholder values.
-- Large generated files whose source is unclear.
-- Machine-local paths, local screenshots, caches, or tool state.
-- Files under credential-like paths such as `.aws/`, `.ssh/`, `credentials`, or `secrets`.
-
-If hard-blocked content appears, stop before commit. Report the file or diff line category, ask the user to remove or redact it, and do not commit or push that changeset.
-
-## Gitignore Hygiene
-
-Use `.gitignore` as prevention, not as a bypass.
-
-Add or propose the narrowest safe `.gitignore` pattern when triage finds untracked content that is not meant to be reviewed or committed, such as:
-
-- `.env`, `.env.local`, and environment files with live local values, while keeping `.env.example` or documented placeholders trackable.
-- Machine-local caches, logs, coverage temp output, editor or tool state, raw screenshots, downloaded exports, scratch files, and local database files.
-- Credential directories or files such as `.aws/`, `.ssh/`, `credentials`, `secrets`, service-account JSON files, and private key files when they are project-local accidental artifacts.
-
-Before editing `.gitignore`:
-
-- Check whether a matching ignore rule already exists when practical.
-- Prefer specific path patterns over broad globs that could hide source files.
-- Ask before ignoring generated artifacts that may be intentionally reviewed, fixtures, examples, docs, or any path pattern that would hide real source.
-- If the sensitive file is already tracked, `.gitignore` alone is not enough. Ask before `git rm --cached`, and never remove tracked content silently.
-
-## Safety Rules
-
-- Do not use destructive commands such as `git reset --hard`, `git checkout --`, or file deletion to make the tree cleaner.
-- Do not stage ignored build artifacts unless the diff clearly shows they are intentional source artifacts.
-- Do not commit secrets, personal absolute paths, credentials, `.env` files, or machine-local caches.
-- Do update `.gitignore` for repeatable untracked local/secret artifacts that should never be committed, but keep placeholder examples and intentional fixtures visible.
-- Do not bypass the forbidden-content guard with `--no-verify`, force options, manual staging, or a user request to "commit anyway".
-- Do not amend, rebase, squash, force-push, or rewrite history unless the user explicitly asks.
-- If validation fails, stop before push and report which commit or changeset is blocked.
-
-## Final Report
-
-Summarize:
-
-- commits created, with hashes and messages,
-- skipped dirty files, if any,
-- validation run and result,
-- whether push happened, and to which remote/branch.
+- 생성한 commit hash와 message
+- stage하지 않은 dirty file
+- 실행한 validation
+- push 여부와 remote/branch

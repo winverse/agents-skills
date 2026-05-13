@@ -33,6 +33,7 @@
         <div>
           <h1>web-research</h1>
           <p class="sub">최신성, 출처, 비교, 추천을 조사 범위 결정, 하위 질문 분기, 병렬 하위 에이전트, 출처 기록으로 처리하는 출처 우선 스킬</p>
+          <p class="sub"><code>web-search</code>, <code>web search</code>, <code>웹서치</code>, <code>웹 검색</code>은 이 repo에서 <code>web-research</code> alias입니다.</p>
         </div>
       </div>
       <div class="pair"><strong>스킬 파일 쌍</strong><code>SKILL.md</code><code>skill.html</code></div>
@@ -139,7 +140,8 @@
             <div class="rule"><strong>runtime이 허용하면 기본 사용</strong><p>web-research가 활성화되면 추가 확인 없이 독립 조사 경로를 하위 에이전트에 병렬 배정합니다.</p></div>
             <div class="rule"><strong>조사 경로 독립 유지</strong><p>primary-source, market, counterexample, extraction처럼 서로 막지 않는 query lane만 위임합니다.</p></div>
             <div class="rule"><strong>main agent가 병합</strong><p>최종 답변은 main agent가 출처 기록(source ledger)을 병합하고 충돌을 해소한 뒤 작성합니다.</p></div>
-            <div class="rule"><strong>안전하게 단순화</strong><p>quick check, private data, runtime 제한이 있으면 같은 lane 계획을 main agent가 직접 수행합니다.</p></div>
+            <div class="rule"><strong>단일 에이전트는 예외</strong><p>사용자가 단일 조사를 요구했거나 private data, runtime 제한, tiny official quick check일 때만 main agent가 직접 수행하고 skip reason을 남깁니다.</p></div>
+            <div class="rule"><strong>downstream artifact는 verified search</strong><p>PR, architecture note, skill update, product decision의 입력 조사는 한 official source로 끝나지 않으면 병렬 lane을 먼저 고려합니다.</p></div>
           </div>
         </div>
       </article>
@@ -205,7 +207,7 @@
         <div class="head"><h2>프로젝트 연결 블록</h2><p class="note">필요한 프로젝트의 AGENTS.md에만 넣습니다.</p></div>
         <div class="body"><div class="code">## Project Skills
 
-- Use $web-research at &lt;skills-root&gt;/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords. For verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation.</div></div>
+- Use $web-research at &lt;skills-root&gt;/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords. For web-research, automatically use parallel sub-agent fan-out by default when the runtime permits delegation. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.</div></div>
       </article>
 
       <article class="panel wide">

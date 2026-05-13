@@ -20,12 +20,27 @@
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
-        "value": "current facts"
+        "value": "현재 사실"
       },
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
         "value": "parallel sub-agent fan-out"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
+        "value": "단일 에이전트는 사용자가 명시적으로 요구"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
+        "value": "web-search"
+      },
+      {
+        "type": "required_text",
+        "file": "project-snippets/base.md",
+        "value": "aliases for `web-research`"
       }
     ]
   },
@@ -56,6 +71,51 @@
         "type": "required_text",
         "file": "skills/browser-qa/SKILL.md",
         "value": "console"
+      }
+    ]
+  },
+  {
+    "id": "route-pr-create-to-pull-request",
+    "title": "GitHub PR creation uses pull-request",
+    "prompt": "현재 브랜치로 PR 제목과 본문을 만들고 GitHub PR을 생성해줘",
+    "scope": "skill_invocation",
+    "expectedSkills": ["pull-request"],
+    "forbiddenSkills": ["atomic-committer", "code-review"],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-13",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "pull-request",
+        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/pull-request/SKILL.md",
+        "value": "gh pr create"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/pull-request/SKILL.md",
+        "value": "사용자가 PR 생성을 요청했을 때만"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/pull-request/SKILL.md",
+        "value": "PR title과 body는 한국어로 작성"
+      },
+      {
+        "type": "required_text",
+        "file": ".github/pull_request_template.md",
+        "value": "skills/**/*.md"
+      },
+      {
+        "type": "required_text",
+        "file": ".github/pull_request_template.md",
+        "value": "node scripts/validate-korean-markdown.ts ."
       }
     ]
   },
@@ -115,7 +175,7 @@
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/references/harness-blueprint.md",
-        "value": "Saved-output mode"
+        "value": "scrubbed artifact"
       }
     ]
   }

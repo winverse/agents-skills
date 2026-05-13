@@ -1,7 +1,7 @@
 [
   {
     "id": "portability-cross-agent-surfaces",
-    "title": "Harness checks portable instruction surfaces without treating them as equivalent",
+    "title": "평가 범위 checks portable instruction surfaces without treating them as equivalent",
     "prompt": "Codex, Claude, Copilot, Cursor, Windsurf에서 스킬 연결이 잘 되는지 eval로 확인해줘",
     "scope": "cross_agent_portability",
     "expectedSkills": ["agent-eval-harness"],
@@ -15,17 +15,17 @@
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/SKILL.md",
-        "value": "Cross-agent portability"
+        "value": "cross-agent portability"
       },
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/references/harness-blueprint.md",
-        "value": ".github/copilot-instructions.md"
+        "value": "agentSurfaces"
       },
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/references/harness-blueprint.md",
-        "value": ".cursor/rules"
+        "value": "agentSurfaces"
       },
       {
         "type": "required_text",
@@ -50,12 +50,12 @@
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/SKILL.md",
-        "value": "positive, near-miss, and forbidden-skill prompts"
+        "value": "near-miss prompt"
       },
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/references/harness-blueprint.md",
-        "value": "shortened-description cases"
+        "value": "trigger_quality"
       },
       {
         "type": "required_text",

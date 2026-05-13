@@ -46,7 +46,7 @@ skills/skill-name/
 - `show-skills`: 현재 repo의 스킬 목록을 파일 시스템과 history에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천하는 탐색 스킬.
   - Source instruction: `skills/show-skills/SKILL.md`
   - Human visual guide: `skills/show-skills/skill.html`
-- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, runtime이 허용할 때 기본 병렬 sub-agent fan-out, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
+- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, runtime이 허용하면 자동 병렬 sub-agent fan-out, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
 - `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 우선 diagram-rich `skill.html`을 만들거나 고치는 스킬.
@@ -61,6 +61,9 @@ skills/skill-name/
 - `atomic-committer`: dirty git tree를 secret guard로 검사하고 반복적으로 올라가면 안 되는 local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
   - Source instruction: `skills/atomic-committer/SKILL.md`
   - Human visual guide: `skills/atomic-committer/skill.html`
+- `pull-request`: GitHub pull request의 branch/base/head 상태, title/body, reviewer/label/milestone/project, linked issue, `gh pr create` 실행 경계를 관리하는 스킬.
+  - Source instruction: `skills/pull-request/SKILL.md`
+  - Human visual guide: `skills/pull-request/skill.html`
 - `project-structure`: frontend, backend, full-stack monorepo, desktop app, infrastructure-aware 구조의 폴더 구조와 기본 stack/env/codegen 정책, folder-local `AGENTS.md` 목차, PostgreSQL/Drizzle, MongoDB Atlas, Supabase Postgres, psql/mongosh helper, Pulumi/Docker/AWS ECR/ECS/EC2 infra, backend logger/cache/security/observability, agent tool/MCP/API boundary, Redis DB boundary, migration/index sync, test surface를 일관되게 잡는 스킬.
   - Source instruction: `skills/project-structure/SKILL.md`
   - Human visual guide: `skills/project-structure/skill.html`
@@ -99,7 +102,8 @@ Codex 프로젝트 예시:
 ## Project Skills
 
 - Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
-- For verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation.
+- Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
+- For web-research, automatically use parallel sub-agent fan-out by default when the runtime permits delegation. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
 ```
 
 Claude 프로젝트 예시:
@@ -108,7 +112,8 @@ Claude 프로젝트 예시:
 ## Project Skills
 
 - For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
-- For verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation.
+- Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
+- For web-research, automatically use parallel sub-agent fan-out by default when the runtime permits delegation. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
 ```
 
 `<skills-root>`는 이 repo를 clone한 실제 위치로 바꾼다. 컴퓨터를 바꾸면 새 컴퓨터에서 이 repo를 clone한 경로만 다시 지정하면 된다. `<codex-home>`은 보통 `$HOME/.codex`이고, `CODEX_HOME`을 따로 설정했다면 그 값을 쓴다.
@@ -160,6 +165,19 @@ export SKILLS_ROOT="$PWD"
 
 기존 스킬을 업데이트할 때는 `skill-update`를 사용해 source instruction, references, validator, visual guide, snippets, docs, history를 하나의 패키지로 맞춘다.
 
+`skills/**/*.md`는 한국어 우선으로 작성한다. `SKILL.md`와 `references/*.md`의 설명, 절차, 표 라벨은 한국어로 쓰고, 코드 식별자, 명령, 파일 경로, 제품명, 프로토콜명, upstream skill 이름처럼 원문 표기가 더 정확한 용어만 영어로 남긴다.
+
+## PR 작성 규칙
+
+이 repo에 PR을 남길 때는 `.github/pull_request_template.md`를 기준으로 한국어 제목과 본문을 작성한다. PR 본문에는 요약, 변경 범위, 검증, 위험/rollback, 관련 이슈를 항상 남긴다.
+
+스킬 변경 PR은 다음을 추가로 지킨다.
+
+- `skills/**/*.md`는 한국어 우선 문서여야 한다.
+- `SKILL.md`, `references/*.md`, `skill.html`, `project-snippets/`, `history/skills.md`, eval case, validator가 behavior change와 맞는지 확인한다.
+- 검증 항목에 `node scripts/validate-korean-markdown.ts .`를 포함한다.
+- `skill.html`의 한국어 라벨과 Markdown 문서가 서로 다른 규칙을 말하지 않는지 확인한다.
+
 새 스킬을 만들거나 기존 스킬을 크게 바꿀 때의 기본 흐름:
 
 ```text
@@ -170,6 +188,7 @@ skill-creator 또는 SKILL.md 작성
 -> sync-docs로 README/AGENTS/docs/snippets/history 정합성 확인
 -> node scripts/validate-skill.ts skills/<skill-name>
 -> 스킬별 validator 실행
+-> node scripts/validate-korean-markdown.ts .
 -> node scripts/validate-skill-html.ts .
 -> node scripts/validate-skill-repo.ts .
 -> node scripts/run-agent-evals.ts
@@ -204,6 +223,7 @@ node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
 node skills/karpathy-thinkings/scripts/validate-karpathy-thinkings.ts skills/karpathy-thinkings
 node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
+node skills/pull-request/scripts/validate-pull-request.ts skills/pull-request
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
 node skills/workflow/scripts/validate-workflow.ts skills/workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
@@ -218,12 +238,13 @@ node skills/design-review/scripts/validate-design-review.ts skills/design-review
 repo 운영 기준과 문서 정합성도 함께 확인한다.
 
 ```bash
+node scripts/validate-korean-markdown.ts .
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
 
 Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 

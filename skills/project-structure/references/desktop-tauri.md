@@ -1,76 +1,21 @@
-# Desktop Tauri Structure
+# Tauri desktop 구조
 
-Use this reference for `4. Desktop app`.
-
-## Default Tree
+## 기본 tree
 
 ```text
 apps/desktop/
-  codegen.ts
-  env/
-    .env.example
-    .env.development
-    .env.test
-    .env.stage
-    .env.production
   src/
-    app/
-    components/
-    config/
-      env.ts
-    features/
-      settings/
-        components/
-        graphql/
-        hooks/
-    graphql/
-      client.ts
-      autogen.ts
-    lib/
-    providers/
   src-tauri/
-    capabilities/
-    icons/
     src/
-      main.rs
     tauri.conf.json
-  scripts/
-    tauri-env.ts
-  test/
-    e2e/
+  package.json
 ```
 
-## Rules
+## boundary
 
-- Use Tauri by default for desktop apps.
-- Ask whether the UI shell is Vite React or another supported frontend if it is not specified.
-- Keep frontend env parsing in `src/config/env.ts`.
-- Keep Tauri build-time env loading in `scripts/tauri-env.ts` or an equivalent explicit build script.
-- If the desktop app consumes GraphQL, keep `codegen.ts` at the app root and generated TypeScript behind `src/graphql/autogen.ts`.
-- Keep desktop feature GraphQL documents near the feature, such as `src/features/<domain>/graphql`.
-- Do not let Rust-side config and frontend config drift silently.
-- Shared packages used by desktop apps still must not read `process.env` directly.
-- Keep desktop e2e or smoke tests in `apps/desktop/test/e2e` when the project has desktop test automation.
+- UI는 web app convention을 따른다.
+- native capability는 `src-tauri`에 격리한다.
+- file system, shell, network permission은 최소 권한으로 적는다.
+- build artifact와 signing secret은 source tree와 분리한다.
 
-## Build Policy
-
-Tauri build scripts should go through `packages/config` helpers, then pass only the required build-time values to Tauri.
-
-Runtime secrets should not be bundled into frontend assets.
-
-Use the same env modes as web and API apps:
-
-```text
-.env.example
-.env.development
-.env.test
-.env.stage
-.env.production
-```
-
-## Desktop Boundary
-
-- `src/` owns the frontend app shell and app-local env parsing.
-- `src-tauri/` owns Rust commands, capabilities, icons, and Tauri config.
-- `scripts/tauri-env.ts` bridges validated build-time env into the Tauri build.
-- Shared packages receive validated values from the app or build script; they do not read `process.env`.
+이 파일은 desktop app 구조를 정할 때 agent가 어느 영역을 web code로 보고 어느 영역을 native 권한 경계로 볼지 판단하게 돕는다. 권한과 빌드 산출물은 반드시 별도 경계로 설명한다.

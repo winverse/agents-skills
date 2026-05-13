@@ -12,7 +12,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 상황 | 먼저 쓸 스킬 | 같이 쓰면 좋은 스킬 |
 | --- | --- | --- |
 | 현재 스킬 목록을 보고 싶다 | `show-skills` | `sync-docs` |
-| 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다 | `web-research` | `agent-improvement-loop` |
+| 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다. `web-search`라고 말해도 이 스킬로 해석한다. | `web-research` | `agent-improvement-loop` |
 | 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | `browser-qa`, `design-review` |
 | 기존 스킬을 수정한다 | `skill-update` | `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
@@ -23,6 +23,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 구현, 디버깅, 리팩터링을 신중하게 한다 | `karpathy-thinkings` | `code-review` |
 | 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
 | 커밋을 논리 단위로 나누고 push한다 | `atomic-committer` | `code-review` |
+| GitHub PR을 준비하거나 생성한다 | `pull-request` | `atomic-committer`, `code-review` |
 | 브라우저 렌더링과 console/network를 확인한다 | `browser-qa` | `design-review` |
 | 코드 리뷰와 회귀 위험을 본다 | `code-review` | `browser-qa` |
 | UI 위계, 밀도, 타이포그래피, 취향을 본다 | `design-review` | `browser-qa` |
@@ -46,7 +47,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `show-skills` | 현재 repo의 스킬을 파일 시스템에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천한다. | [SKILL.md](../skills/show-skills/SKILL.md) · [skill.html](../skills/show-skills/skill.html) |
-| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
+| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰며 `web-search` alias와 자동 병렬 sub-agent fan-out을 지원하는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
 
 ### 스킬 운영
 
@@ -72,6 +73,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `atomic-committer` | dirty git tree를 secret guard로 검사하고, 반복 untracked local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나눠 조건부 push를 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
+| `pull-request` | GitHub PR의 branch/base/head, 한국어 title/body, template, issue link, reviewer/label/draft 옵션과 `gh pr create` 실행 경계를 관리한다. | [SKILL.md](../skills/pull-request/SKILL.md) · [skill.html](../skills/pull-request/skill.html) |
 
 ### 리뷰와 QA
 

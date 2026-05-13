@@ -1,72 +1,42 @@
 ---
 name: code-review
-description: Use when the user asks for code review, PR review, diff review, implementation audit, regression risk review, bug finding, missing test review, maintainability review, JavaScript and TypeScript style review, or review of agent/tool-call boundaries. This skill produces findings first with file and line references, checks SRP and SOLID boundaries, security/tool surfaces, and clear functional collection style in JS and TS without over-engineering.
+description: "code review, PR review, diff review, implementation audit, regression risk, missing test, maintainability, JS/TS style, agent/tool-call boundary를 findings-first로 검토할 때 사용한다."
 ---
 
-# Code Review
+# 코드 리뷰
 
-Use this skill when the task is review, not implementation. The goal is to find bugs, regressions, missing tests, unclear ownership boundaries, unsafe behavior, and maintainability risks before code ships.
+리뷰는 칭찬보다 문제 발견이 목적이다. findings를 먼저 쓰고, severity 순서로 file/line reference와 함께 제시한다.
 
-Read `references/review-checklist.md` for broad reviews. Read `references/js-ts-style.md` when reviewing JavaScript or TypeScript.
+## review stance 기준
 
-## Review Stance
+- bug, behavioral regression, missing test, security risk를 우선한다.
+- 추측은 추측이라고 표시한다.
+- 문제가 없으면 그렇게 말하고 residual risk나 test gap만 남긴다.
+- 단순 취향 변경은 blocking finding으로 만들지 않는다.
 
-- Findings lead. Put bugs and risks before summary.
-- Ground every finding in a file and line when possible.
-- Prioritize correctness, user-visible behavior, data loss, security, regression risk, and missing tests.
-- Do not rewrite code during a review unless the user explicitly asks for fixes.
-- If there are no findings, say so and name residual risk or test gaps.
+## 확인할 것
 
-## What To Check
+- 입력 validation, error path, async race, state mismatch
+- SRP/SOLID boundary와 over-coupling
+- JS/TS에서 type soundness, nullable handling, collection logic
+- agent/tool-call boundary, prompt injection, destructive side effect
+- secret/private data scrubbing과 least privilege
 
-1. Behavior and regression risk.
-   - Does the change satisfy the requested behavior?
-   - Are edge cases, loading/error states, empty data, and concurrency handled?
-   - Is there a path to data loss, stale state, inconsistent cache, or broken user flow?
-
-2. Boundaries and design.
-   - Each unit should have one clear responsibility.
-   - Dependencies should point in the expected direction.
-   - Domain logic should not leak into UI, transport, persistence, or framework glue without reason.
-   - SOLID principles matter, especially SRP, dependency inversion at boundaries, and open/closed extensibility without speculative abstraction.
-
-3. JavaScript and TypeScript style.
-   - Prefer expressive functional collection transforms such as `map`, `filter`, `flatMap`, `reduce`, `some`, `every`, `find`, `Object.entries`, generator functions, and `Iterable` helpers when they make data flow clearer.
-   - Avoid defaulting to `if` and `for` for simple collection transformations.
-   - Keep this preference pragmatic: loops and early returns are fine for complex branching, async sequencing, mutation-heavy code, performance-sensitive hot paths, and when functional chaining would obscure intent.
-   - Types should describe contracts, not silence the compiler.
-
-4. Tests and verification.
-   - Changed behavior should have a focused test or a clear reason tests are not practical.
-   - Tests should assert behavior, not implementation trivia.
-   - Missing tests are findings when they would catch a likely regression.
-
-5. Security and operations.
-   - Watch for secrets, injection, unsafe parsing, auth bypass, SSRF, XSS, CSRF, path traversal, broken rate limits, and logging sensitive data.
-   - Review agent/tool surfaces when relevant: MCP or tool-call boundaries, untrusted tool output, prompt-injection exposure, destructive side effects, least privilege, and approval requirements.
-   - Check observability, error messages, rollback safety, and operational failure modes when relevant.
-
-## Output Shape
+## output shape 기준
 
 ```text
 Findings
-- [Severity] file:line - Issue, impact, and concrete fix direction.
+- [severity] path:line - 문제와 영향
 
 Open Questions
-- <only if needed>
+- <있을 때만>
 
 Summary
-- <short change summary or "No findings">
-
-Tests
-- <what was reviewed or what is missing>
+- <짧게>
 ```
 
-Severity order: `Blocker`, `High`, `Medium`, `Low`, `Note`.
+## 하지 말 것
 
-## Do Not
-
-- Do not bury findings after praise or a long summary.
-- Do not nitpick style when behavior, tests, or architecture risks are present.
-- Do not demand functional style when a loop is clearer.
-- Do not apply SOLID as ceremony; use it to expose real responsibility or dependency problems.
+- findings 전에 긴 요약을 쓰지 않는다.
+- file/line 없는 일반론만 말하지 않는다.
+- unrelated refactor를 리뷰 요구로 둔갑시키지 않는다.

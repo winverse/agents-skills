@@ -80,7 +80,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "Do not use `project-structure` during raw idea discovery"
+        "value": "raw idea discovery 중에는 호출하지 않는다"
       },
       {
         "type": "required_text",
@@ -125,7 +125,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "Prior Gate Check"
+        "value": "CONTEXT.md or ADR"
       }
     ]
   },
@@ -205,7 +205,7 @@
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/SKILL.md",
-        "value": "Workflow Handoff Seed Cases"
+        "value": "workflow handoff seed case 기준"
       },
       {
         "type": "required_text",
@@ -235,7 +235,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "Local Implementation Fallback Lane"
+        "value": "local implementation fallback lane 기준"
       },
       {
         "type": "required_text",
@@ -305,7 +305,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "Existing Backend/API Structure Cleanup"
+        "value": "existing backend/API cleanup 기준"
       },
       {
         "type": "required_text",
@@ -340,7 +340,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "CLI / No-Browser Lane"
+        "value": "CLI/no-browser"
       },
       {
         "type": "required_text",
@@ -400,7 +400,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "Completion / Ship Procedure"
+        "value": "completion/ship 기준"
       },
       {
         "type": "required_text",
@@ -430,7 +430,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "New Service With Docker/AWS/Pulumi"
+        "value": "Docker/AWS/Pulumi"
       },
       {
         "type": "required_text",
@@ -460,7 +460,7 @@
       {
         "type": "required_text",
         "file": "skills/workflow/references/project-workflow-playbook.md",
-        "value": "Decision: approved | dev-only | needs-info | blocked"
+        "value": "Agent Tool And Security Risk Gate"
       },
       {
         "type": "required_text",

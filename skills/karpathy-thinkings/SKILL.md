@@ -1,91 +1,52 @@
 ---
 name: karpathy-thinkings
-description: "Use when coding, reviewing, refactoring, debugging, or planning implementation work where the agent should follow Andrej Karpathy-style coding agent discipline: think before coding, avoid silent assumptions, prefer simple solutions, make surgical changes, and define verifiable success criteria before calling work done."
+description: "코딩, 리뷰, 리팩터링, 디버깅, 구현 계획에서 Karpathy식 coding agent discipline을 적용해 추측, 과설계, 주변 변경, 약한 검증을 줄일 때 사용한다."
 ---
 
-# Karpathy Thinkings
+# Karpathy식 사고
 
-Use this skill to apply the Karpathy-style coding agent mindset directly during implementation work. The goal is not generic code style. The goal is to prevent the failure modes Karpathy called out in AI coding agents: silent assumptions, hidden confusion, overbuilt abstractions, unrelated edits, and weak verification.
+이 스킬은 코드 스타일 규칙이 아니라 coding agent의 실패 모드를 줄이는 실행 태도다. 조용한 추측, 숨은 혼란, 과한 abstraction, unrelated edit, 약한 verification을 막는다.
 
-This is an unofficial local adaptation for this skills repo. It is inspired by public Karpathy coding-agent guidance and the community `andrej-karpathy-skills` package, but this repo keeps its own wording and validation.
+## 핵심 원칙
 
-Read `references/source-notes.md` when updating this skill, explaining its origin, or deciding how close to the public wording it should stay.
+### 1. 코딩 전 생각하기
 
-## Core Principles
+- 요청이 모호하면 조용히 해석하지 않는다.
+- 편집 전에 관련 assumption을 말한다.
+- 여러 경로가 합리적이면 tradeoff를 드러낸다.
+- 빠진 정보가 구현을 바꾸면 짧게 질문한다.
 
-### 1. Think Before Coding
+### 2. 단순성 우선
 
-- Do not silently choose an interpretation when the request is ambiguous.
-- State relevant assumptions before editing.
-- Surface tradeoffs when there are multiple reasonable paths.
-- Push back when the requested path is needlessly complex or risky.
-- Ask a focused question when the missing detail changes the implementation.
+- 실제 목표를 만족하는 가장 작은 해결책을 고른다.
+- speculative feature, config, extension point를 추가하지 않는다.
+- 기존 project style을 따른다.
+- 구현이 문제보다 커지면 멈추고 줄인다.
 
-### 2. Simplicity First
+### 3. 외과적 변경
 
-- Implement the smallest solution that satisfies the user's actual goal.
-- Do not add speculative features, configuration, extension points, or abstractions.
-- Do not turn one-off logic into framework-shaped machinery.
-- Prefer boring code that fits the existing project.
-- If the implementation becomes much larger than the problem, stop and simplify.
+- 작업과 연결된 파일과 줄만 건드린다.
+- 주변 refactor를 몰래 끼워 넣지 않는다.
+- 내 변경이 만든 unused import, 변수, 주석만 정리한다.
+- unrelated issue는 별도로 언급한다.
 
-### 3. Surgical Changes
+### 4. 목표 기반 실행
 
-- Touch only files and lines that connect to the task.
-- Do not refactor adjacent code just because it looks improvable.
-- Match the existing style even when you would normally choose another style.
-- Clean up only the unused imports, variables, files, or comments created by your own change.
-- Mention unrelated issues separately instead of fixing them silently.
+- 완료 전에 success criteria를 구체화한다.
+- bug는 가능하면 재현하거나 failure shape를 먼저 파악한다.
+- refactor는 유지해야 할 behavior를 먼저 정한다.
+- 가장 작은 의미 있는 verification loop를 실행한다.
 
-### 4. Goal-Driven Execution
+## 질문해야 할 때
 
-- Convert the task into concrete success criteria before declaring completion.
-- For bugs, reproduce or characterize the failure before fixing when practical.
-- For validation work, define the failing case first, then make it pass.
-- For refactors, identify the behavior that must stay unchanged.
-- Run the smallest meaningful verification loop and report what passed or could not be run.
+- 두 해석이 다른 코드를 만든다.
+- 안전한 fix가 요청 범위 밖 behavior를 바꾼다.
+- rewrite, dependency, migration이 필요해 보인다.
+- success criteria를 작업에서 추론할 수 없다.
 
-## Workflow
+## 다른 스킬과의 관계
 
-1. Restate the task as behavior and success criteria.
-2. Identify ambiguity, assumptions, and the simplest credible approach.
-3. Inspect the relevant code before editing.
-4. Make the smallest surgical change.
-5. Verify against the success criteria.
-6. If verification fails, narrow the cause before expanding the solution.
-7. Report the change, validation, and any unresolved uncertainty.
-
-## When To Ask
-
-Ask before coding when:
-
-- two interpretations produce different code,
-- the requested change conflicts with existing architecture or tests,
-- the safest fix requires changing behavior outside the requested scope,
-- the success criteria cannot be inferred from the task,
-- a rewrite, abstraction, dependency, or migration seems necessary.
-
-## Interaction With Other Skills
-
-- Use `project-structure` when the task is mainly about choosing or changing project layout.
-- Use `atomic-committer` only when the user asks to commit or push.
-- Use `skill-update` when the thing being changed is an existing skill.
-- Use `sync-docs` when the main issue is stale or conflicting documentation.
-- Use `web-research` only when current external facts are needed.
-
-## Final Report
-
-Keep the final answer compact:
-
-```text
-Changed
-- <what changed and why>
-
-Validation
-- <command or check>: <result>
-
-Notes
-- <assumption, tradeoff, or unresolved issue if relevant>
-```
-
-Do not narrate every internal thought. Surface only the assumptions, tradeoffs, and validation that matter to the user.
+- 기존 스킬을 바꾸면 `skill-update`를 쓴다.
+- commit/push 요청이 있으면 `atomic-committer`를 쓴다.
+- 구조 선택이 핵심이면 `project-structure`를 쓴다.
+- 문서 drift가 핵심이면 `sync-docs`를 쓴다.

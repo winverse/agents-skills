@@ -20,6 +20,7 @@ These repo-local links make the skills usable for this project without installin
 - Use $karpathy-thinkings at `skills/karpathy-thinkings/SKILL.md` when coding, reviewing, refactoring, debugging, or planning implementation work that should follow Karpathy-style agent discipline.
 - Use $skill-update at `skills/skill-update/SKILL.md` when asked to update, revise, improve, maintain, rename, split, deprecate, or otherwise change an existing shared skill.
 - Use $atomic-committer at `skills/atomic-committer/SKILL.md` when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
+- Use $pull-request at `skills/pull-request/SKILL.md` when asked to prepare, create, update, draft, or manage a GitHub pull request, including PR title/body, base/head branch, reviewers, labels, milestones, linked issues, or `gh pr create`.
 - Use $project-structure at `skills/project-structure/SKILL.md` when asked to choose, create, standardize, or refactor frontend, backend, full-stack monorepo, desktop app, infrastructure-aware folder structures, or folder-local `AGENTS.md` indexes.
 - Use $workflow at `skills/workflow/SKILL.md` when asked to design, run, review, or document a project workflow; start a new project or feature; decide the next workflow step; turn ideas into domain docs, ADRs, PRDs, issues, plans, TDD cycles, QA, document sync, or shipping steps; or prevent agents from coding before product and architecture boundaries are clear.
 - Use $sync-docs at `skills/sync-docs/SKILL.md` when asked to review, refresh, reconcile, or update documentation by comparing existing docs, snippets, history, skills, root or folder-local `AGENTS.md` indexes, and repo instruction files.
@@ -34,9 +35,12 @@ These repo-local links make the skills usable for this project without installin
 
 - Use repo-linked custom skills before default/global agent behavior when the behavior overlaps.
 - When using `show-skills`, prefer `node skills/show-skills/scripts/show-skills.ts` for the live list and `docs/skill-catalog.md` for the static human catalog; keep `skills/show-skills/skill.html`'s generated catalog block in sync with `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills`; do not install or globally register skills while listing them.
-- When using `web-research` for verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation. Fall back to main-agent query fan-out for quick checks, private data, or runtime/tool policy limits.
+- Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
+- When using `web-research`, automatically use parallel sub-agent fan-out by default whenever the runtime permits delegation. Use a single-agent research path only when the user explicitly asks for single-agent research, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
 - When using `karpathy-thinkings`, think before coding, avoid silent assumptions, prefer simple implementations, make surgical changes, and verify success criteria.
 - When using `atomic-committer`, scan candidate commits for forbidden secret-bearing content, hard-block live-looking credential assignments and private-key material across common providers, update `.gitignore` for repeatable untracked local or secret-bearing artifacts that should never be committed, group dirty files by logical changeset, write commit messages with an English conventional prefix and Korean summary, and push only when a remote exists and push was requested.
+- When using `pull-request`, check branch/base/head/remote state, `gh auth status`, and existing PR state before creating or updating a PR; run `gh pr create` only when the user explicitly asks to create a PR, and never merge, close, reopen, delete branches, enable auto-merge, or force-push without an explicit request.
+- When leaving a PR in this repo, use `.github/pull_request_template.md` or the same shape: Korean title/body, summary, changed files or scope, validation commands, risk/rollback notes, and linked issues. For skill changes, state that repo-owned Markdown skill documents under `skills/**/*.md` are Korean-first and list `node scripts/validate-korean-markdown.ts .` in validation.
 - When using `skill-update`, keep `SKILL.md`, references, validators, `agents/openai.yaml`, `skill.html`, snippets, docs, and history aligned when behavior changes, and regenerate the `show-skills` HTML catalog after skill add/remove/rename/archive/restore operations.
 - When using `project-structure`, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation, and Pulumi/Docker/AWS ECR/ECS Fargate when infrastructure is requested unless the project says otherwise.
 - When using `project-structure`, use MongoDB + Atlas when MongoDB/document DB is selected, and Supabase Postgres when managed psql-compatible Postgres is selected. Keep Supabase service-role keys and MongoDB URIs server-only.
@@ -75,12 +79,13 @@ These repo-local links make the skills usable for this project without installin
 ## Editing Skills
 
 - Use the system `skill-creator` for skill scaffolding guidance when helpful.
+- Write repo-owned Markdown skill documents in Korean by default. This applies to `skills/**/*.md`, including `SKILL.md` and `references/*.md`; keep code identifiers, command names, file paths, product names, protocol names, and quoted upstream skill names in their original spelling when translation would reduce precision.
 - Keep `SKILL.md` concise and trigger-focused.
 - Put long preferences, source rules, examples, and project-specific variants in references or snippets.
 - Use `skills/skill-to-html/SKILL.md` when creating or revising a skill's `skill.html`.
 - Update that skill's `skill.html` when adding, removing, renaming, or materially changing a skill.
 - Make `skill.html` diagram-rich: include decision matrices, flowcharts, charts, resource maps, or input/output schemas instead of only splitting text into panels.
-- Validate changed skills with `node scripts/validate-skill.ts <skill-path>`, any skill-specific validator, `node scripts/validate-skill-html.ts .`, and `node scripts/run-agent-evals.ts` before calling them done.
+- Validate changed skills with `node scripts/validate-skill.ts <skill-path>`, any skill-specific validator, `node scripts/validate-korean-markdown.ts .`, `node scripts/validate-skill-html.ts .`, and `node scripts/run-agent-evals.ts` before calling them done.
 - Use TypeScript for repo-owned validators and run them with Node 22+ as `node <file>.ts`; do not add Python validators to this repo. Keep `.mjs` only when a hook or external runtime specifically needs it.
 - Run `node scripts/validate-skill-repo.ts .` after lifecycle, history, snippet, or repo-level documentation changes.
 - Update `history/skills.md` when adding, deprecating, archiving, renaming, splitting, merging, or materially changing a skill's trigger, workflow, validators, evals, or snippets.

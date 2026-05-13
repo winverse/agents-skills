@@ -1,150 +1,59 @@
 ---
 name: agent-eval-harness
-description: Use when asked to set up, scaffold, configure, or improve an evaluation harness for agent skills, agent instructions, prompt routing, cross-agent portability, tool choice, guardrails, artifact hygiene, deterministic file/link/schema checks, or repeatable AI-agent workflows. This skill helps create the initial eval dataset, fixture layout, local runner, grader checklist, CI gate, and regression capture process before a repo has mature agent evaluation infrastructure.
+description: "에이전트 스킬 라우팅, 프롬프트 경계, cross-agent portability, guardrails, artifact hygiene, 반복 가능한 AI-agent workflow를 검증하는 repo-local eval harness를 설계하고 개선할 때 사용한다."
 ---
 
-# Agent Eval Harness
+# 에이전트 평가 하네스
 
-Use this skill to set up the first practical evaluation harness for agent behavior. The goal is not to build a full eval platform. The goal is to create a small, repeatable loop that catches regressions in skill selection, instruction following, cross-agent instruction portability, tool routing, safety gates, and final-answer shape.
+이 스킬은 스킬 설명이 실제 에이전트 행동으로 이어지는지 반복 검증하는 작은 평가 체계를 만든다. 목적은 모델별 문구에 과적합하지 않고, routing, safety boundary, output shape, artifact hygiene 같은 행동 계약을 deterministic case로 확인하는 것이다.
 
-Load `references/harness-blueprint.md` when choosing folder layout, case schema, grader shape, or CI integration details.
+## 핵심 계약
 
-## Core Contract
+- 먼저 성공 기준을 정의하고 그 기준을 case schema에 반영한다.
+- 초기 구조는 repo-local `evals/agent/` 아래에 작게 둔다.
+- case는 `typical`, `edge`, `adversarial` 입력을 섞는다.
+- `required_link_count`, `required_file_reference`, `json_schema`, `forbidden_text`처럼 결정적으로 확인 가능한 check를 우선한다.
+- live model/API 평가는 예산과 flake 정책이 명확해질 때까지 advisory로 둔다.
+- 저장되는 출력은 scrubbed artifact만 남기고, 비밀값·개인 경로·원본 사용자 데이터는 보존하지 않는다.
 
-- Start small: create a local harness that can run 5-20 representative cases before adding dashboards or vendor-specific trace tooling.
-- Define success criteria and metrics before writing cases. Initial suites should include typical, edge, and adversarial examples.
-- Treat eval cases as source-controlled product artifacts. Do not leave them only in chat transcripts.
-- Treat agent-system assumptions as dated and surface-specific. `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `.cursor/rules`, `.windsurf/rules`, `SKILL.md`, `.agents/skills`, and `.claude/skills` have different scoping and precedence rules.
-- Test behavior that matters:
-  - which skill or instruction should trigger;
-  - which positive, near-miss, and forbidden-skill prompts should route correctly;
-  - which tools are allowed, avoided, or required;
-  - what output shape is expected;
-  - what safety or approval boundary must hold;
-  - what evidence proves the task was handled.
-- Prefer deterministic checks first: required phrases, forbidden actions, file/path expectations, schema validation, and validator command results.
-- Use model or human grading only for judgment-heavy criteria such as review quality, design critique, research synthesis, or prioritization.
-- Keep the harness runner boring and repo-local. Use the repo's existing runtime; in this skills repo, use Node 22+ and TypeScript.
-- Never put real secrets, private customer data, or production credentials in eval fixtures. Use placeholders and scrubbed traces.
-- Scrub saved outputs, traces, screenshots, logs, and exported reports before committing them. Full artifacts should be gitignored unless they are intentional golden fixtures.
-- Require a minimum safety case pack when agents can use tools: approval gates, destructive commands, prompt injection or tool misuse, secret/private-data redaction, least privilege, and high-risk blocking promotion.
-- Make failures easy to promote: when an agent makes a real mistake, turn the smallest reproducing prompt into a new eval case.
-- Add CI only after the local command is stable. CI should block only high-confidence deterministic failures at first.
-- Calibrate model-graded or live-agent cases against human review, edge cases, and repeat/variance evidence before making them blocking.
+## 설정 절차
 
-## Setup Workflow
+1. 평가 대상 행동을 한 문장으로 적는다.
+2. `evals/agent/cases/*.json`에 최소 case를 추가한다.
+3. `scripts/run-agent-evals.ts`가 case를 읽고 check를 실행하게 한다.
+4. 실패한 실제 agent run은 가장 작은 regression case로 줄여 추가한다.
+5. CI gate가 필요하면 deterministic case만 blocking으로 연결한다.
 
-1. Inspect the target repo for existing tests, scripts, instructions, skills, prompts, validators, CI, and agent logs.
-2. Define the success criteria, failure modes, and metrics the harness will protect.
-3. Choose harness scope:
-   - **Skill invocation**: prompt should select the right skill or instruction.
-   - **Workflow behavior**: agent should follow steps, ask when blocked, and run expected checks.
-   - **Safety boundary**: agent should refuse, ask approval, avoid secrets, or avoid destructive actions.
-   - **Cross-agent portability**: instruction files, skill packages, scope, precedence, and trigger descriptions should work per target agent surface.
-   - **Output quality**: final answer should include required sections, citations, evidence, or file references.
-   - **Artifact hygiene**: saved outputs, traces, logs, reports, screenshots, and fixtures should be intentionally stored and scrubbed.
-4. Create the smallest durable structure:
-   - `evals/agent/cases/*.json`
-   - `evals/agent/fixtures/`
-   - `evals/agent/artifacts/`
-   - `evals/agent/README.md`
-   - `scripts/run-agent-evals.ts` or the repo's equivalent runner
-5. Define each case with an id, prompt, expected skill or workflow, checks, fixtures, risk tier, example type, assumption date, and agent surfaces where relevant.
-6. Implement deterministic checks before model-graded checks.
-7. Add a command to package scripts or repo docs, for example `node scripts/run-agent-evals.ts`.
-8. Run the harness locally and fix either the case or the agent instruction until the baseline is meaningful.
-9. Add CI only for stable checks. Mark judgment-heavy, live-routing, or flaky evals as advisory until they are calibrated.
-10. Document how to add a failure case, how to scrub artifacts, and how to update expected behavior after an intentional skill change.
-11. Report the harness path, command, baseline result, blocked cases, artifact policy, assumptions, and the next eval cases worth adding.
+## 기본 lane
 
-## Workflow Handoff Seed Cases
+| lane | 확인 대상 |
+| --- | --- |
+| 스킬 호출 | 올바른 skill selection, near-miss prompt, forbidden skill |
+| workflow behavior | 단계 순서, handoff, project-structure timing |
+| safety boundary | prompt injection, destructive action, least privilege |
+| output quality | file reference, source link, schema, concise report |
+| artifact hygiene | scrubbed fixture, no local secret, no raw transcript leak |
 
-When this skill is called from `workflow`, keep the harness separate but seed cases that protect the workflow contract. A bootstrap harness may run before `workflow` only to check routing, safety, and artifact policy; full workflow regression cases should be added after `workflow` has identified domain, architecture, PRD, issue, design, and verification artifacts.
+## workflow handoff seed case 기준
 
-Workflow cases must check at least one scrubbed saved output fixture under `evals/agent/fixtures/workflow/`. Static source phrase checks are allowed as support, but they are not enough to prove the workflow handoff.
+`workflow`와 함께 쓸 때는 dependency inventory, `project-structure` 호출 시점, PRD settings, UI mockup selection, CLI/no-browser evidence, MCP/API gate, fallback lane, project setup verification, completion/ship mapping, document sync, artifact hygiene를 seed case로 둔다.
 
-Create or adapt cases for:
+## 완료 기준
 
-- **workflow routing**: new project and feature prompts select `workflow` instead of jumping straight to coding or `project-structure`;
-- **dependency inventory**: Matt Pocock-style, GStack-style, Superpowers-style, design-direction, and repo-local helper skills are recorded as `available`, `missing`, or `fallback`;
-- **project-structure timing**: `project-structure` is used after domain language and concrete architecture questions, before ADR lock and PRD, not during raw idea discovery;
-- **PRD settings**: PRD path, inputs, language, scope lock, architecture lock, and data source of truth are fixed before `to-prd`;
-- **mockup selection**: substantial UI work requires two or three mock directions and a user-selected direction before implementation;
-- **CLI/no-browser evidence**: CLI, service, library, and automation projects use command, API, runtime, report, or log evidence instead of browser screenshots;
-- **MCP/API gate decisions**: tool-connected automation records `approved`, `dev-only`, `needs-info`, or `blocked` before implementation planning;
-- **project setup verification**: cross-agent setup checks target instruction files, valid skill links, `skill.html`, selected snippets, no global install drift, and eval seed status;
-- **completion/ship mapping**: source workflow stages map to repo-local skills and release prep stays separate from publishing;
-- **document sync and artifact hygiene**: completion calls doc sync, preserves historical plans/specs, and stores workflow logs, screenshots, traces, and QA artifacts under the project workflow area.
+- case마다 success criteria와 metrics가 분명하다.
+- 최소 safety case pack이 있다.
+- cross-agent portability가 필요한 표면을 `agentSurfaces`와 `assumptionDate`로 기록한다.
+- 검증 명령과 실패 예시가 README 또는 관련 skill 문서에 연결되어 있다.
 
-## Case Design
-
-Good initial cases are small and named after the behavior they protect:
-
-```json
-{
-  "id": "skill-routing-web-research-current-facts",
-  "prompt": "Use web search to compare the latest MCP security guidance.",
-  "expectedSkills": ["web-research"],
-  "forbiddenSkills": ["browser-qa"],
-  "agentSurfaces": ["codex"],
-  "assumptionDate": "2026-05-12",
-  "exampleType": "typical",
-  "checks": [
-    {"type": "required_text", "file": "evals/agent/fixtures/output/web-research-answer.md", "value": "date checked"},
-    {"type": "required_link_count", "file": "evals/agent/fixtures/output/web-research-answer.md", "min": 3}
-  ],
-  "risk": "medium"
-}
-```
-
-This repo's local runner supports deterministic file checks such as `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, and `command_passed`. Prefer those before adding model-graded checks.
-
-Do not overfit to one model's wording. Check the observable contract, not private reasoning.
-
-## Harness Lanes
-
-- **Routing lane**: maps user prompts to expected skills, tools, or instruction files.
-- **Trigger quality lane**: includes positive trigger prompts, near-miss prompts, forbidden-skill prompts, and shortened-description behavior.
-- **Procedure lane**: verifies required steps such as inspect -> patch -> validate -> report.
-- **Cross-agent portability lane**: checks `SKILL.md`, `.agents/skills`, `.claude/skills`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `.cursor/rules`, and `.windsurf/rules` without assuming identical semantics.
-- **Safety lane**: checks the minimum safety case pack: approval gates, destructive command avoidance, least privilege, prompt injection/tool misuse, secret handling, and private-data scrubbing.
-- **Artifact lane**: checks saved outputs, traces, screenshots, logs, JSONL/results exports, compact CI reports, and golden fixtures for scrubbed storage.
-- **Evidence lane**: checks citations, browser evidence, validator outputs, screenshots, or file references.
-- **Regression lane**: captures real failures from recent work and turns them into cases.
-
-## Done Criteria
-
-An initial harness is done when:
-
-- a repo-local command runs the cases from a clean checkout;
-- at least five representative cases pass or have explicit advisory status;
-- success criteria, metrics, assumption dates, and target agent surfaces are documented for cases that depend on fast-changing agent behavior;
-- the minimum safety case pack exists when the agent can use tools or external context;
-- failures print the case id, prompt, failed check, and remediation hint;
-- docs explain how to add a new case;
-- saved outputs and traces have an explicit scrub/review policy;
-- CI wiring is present, or a clear reason is documented for keeping the new harness local-only until the runner stabilizes.
-
-## Output Shape
+## 출력 형식
 
 ```text
-Harness
-- Scope: skill invocation | workflow | safety | output quality
-- Path: <eval harness path>
-- Command: <local command>
-- CI: blocking | advisory | not added
-- Assumptions: <agent surfaces and dates>
-- Artifacts: <scrubbed/golden/gitignored policy>
+평가 범위
+- <행동 계약>
 
-Baseline
-- Cases: <count>
-- Passing: <count>
-- Advisory: <count>
-- Failing: <count and reason>
+추가한 case
+- <case id>: <검증 목적>
 
-Changed
-- <file>: <why it exists>
-
-Next Cases
-- <highest-value missing eval case>
+검증
+- <명령>: <결과>
 ```

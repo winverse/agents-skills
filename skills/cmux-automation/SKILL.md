@@ -1,109 +1,40 @@
 ---
 name: cmux-automation
-description: Use when the user asks to automate, configure, debug, or document cmux workflows, especially cmux hooks, Codex/Claude/OpenCode integrations, prompt-to-tab or prompt-to-status pinning, workspace/tab/pane/status automation, feed workflows, browser surfaces, or cmux CLI-driven session ergonomics.
+description: "cmux hook, Codex/Claude/OpenCode integration, prompt-to-tab/status pinning, workspace/tab/pane/status automation, feed workflow, browser surface, cmux CLI 세션 ergonomics를 자동화하거나 디버그할 때 사용한다."
 ---
 
-# Cmux Automation
+# cmux 자동화
 
-Use this skill for cmux-related automation and integration work. It is the home for future cmux hook recipes, prompt pinning, workspace labeling, and cmux CLI workflows.
+이 스킬은 cmux CLI와 hook을 실제 환경에서 확인하며 설정한다. recipe만 제시하지 않고, 가능한 경우 local cmux output으로 동작 여부를 검증한다.
 
-Load `references/hook-recipes.md` when implementing or modifying a hook script, Codex hook config, cmux status/tab automation, or a reusable cmux workflow.
+## 핵심 계약
 
-## Core Contract
+- local cmux CLI와 `cmux docs ...`를 먼저 확인한다.
+- hook 변경은 project-local로 유지하고, global setup은 사용자가 명시할 때만 한다.
+- `UserPromptSubmit` hook은 빠르게 끝나야 한다.
+- prompt pinning은 사용자의 원문 prompt를 보존한다.
+- socket auth, pane text 전송, surface close, history clear는 사용자 확인을 받는다.
 
-- Prefer the local cmux CLI and docs as the first source of truth: `cmux --help`, `cmux docs agents`, `cmux docs settings`, `cmux docs api`, and `cmux capabilities`.
-- Detect cmux terminals with `CMUX_WORKSPACE_ID`, `CMUX_SURFACE_ID`, or `CMUX_TAB_ID` before calling cmux UI commands.
-- For Codex prompt automation, use `UserPromptSubmit` when the desired behavior should run after the user submits a prompt.
-- When the user asks to run, enable, install, or test prompt pinning, create or update the project-local hook script and hook config. Do not stop at a recipe.
-- Keep prompt hooks fast. Do not run validators, `codex exec`, or broad repo scans from `UserPromptSubmit`; use direct `CMUX_SURFACE_ID`/`CMUX_WORKSPACE_ID` targeting first and reserve `cmux identify` for fallback discovery.
-- Keep project-local hook changes project-local unless the user explicitly asks for global cmux or global Codex configuration changes.
-- Back up existing cmux or agent config files before editing them.
-- Use `cmux rename-tab`, `cmux set-status`, and `cmux markdown open` for lightweight session memory before building heavier tooling.
-- For prompt pinning, put the submitted question text directly into the cmux tab title after only one-line whitespace normalization. Do not summarize, rule-map, strip filler words, or truncate it by default; cmux may visually shorten narrow tabs, but hover can reveal the full title.
-- Mirror the same original prompt in `current-question` status so the tab title and status agree.
-- Do not call the hook label a semantic summary. `UserPromptSubmit` runs before the agent reasons about the prompt, so semantic tab summaries must be explicit opt-in actions written by the agent after the turn starts, or by an explicitly approved model-backed hook.
-- Fail quietly for ergonomics hooks when cmux is not available or the terminal is outside cmux.
-- Ask before installing/uninstalling hooks, changing global cmux settings, editing socket auth, closing panes/workspaces, clearing history, or sending text into another pane.
+## common jobs 기준
 
-## Common Jobs
+- prompt를 현재 tab title이나 status에 pinning
+- `CMUX_SURFACE_ID` 기반 current surface targeting
+- `cmux rename-tab --surface`, `cmux set-status` 사용
+- session board나 feed workflow 작성
+- hook latency와 payload shape 조사
 
-| Job | Preferred cmux surface |
-| --- | --- |
-| Show the current user question in the tab header | `cmux rename-tab` with the original prompt text |
-| Keep the same original question visible outside the tab | `cmux set-status current-question ...` |
-| Keep a multi-agent work board | `cmux markdown open <board.md>` |
-| Route agent events into a queue | `cmux feed tui` or `cmux hooks feed` |
-| Debug whether cmux is available | environment variables, `cmux identify`, `cmux capabilities` |
-| Modify cmux settings | `cmux docs settings`, `cmux settings path`, backup first |
+## prompt pinning pattern 기준
 
-## Prompt Pinning Pattern
+원문 prompt를 요약하지 않는다. filler word를 제거하거나 rule-map으로 바꾸지 않는다. hook label을 semantic summary라고 부르지 않는다.
 
-When the user wants each submitted question to appear in the current cmux tab:
+## semantic title pattern 기준
 
-1. Add or update a project-local Codex `UserPromptSubmit` hook.
-2. Use the bundled `scripts/cmux-pin-prompt.mjs` as the implementation source. A project-local hook can be a tiny wrapper that imports this script, or it can copy the script when the target project needs a self-contained hook.
-3. Parse the hook JSON from stdin.
-4. Extract the submitted prompt from known payload fields, and log only temporary payload keys during discovery if the field name is unknown.
-5. Normalize whitespace to one line and use that original prompt text as both the tab title and `current-question` status. Do not summarize, rule-map, strip filler words, or truncate the title by default.
-6. If `CMUX_SURFACE_ID` exists, target the current session with `cmux rename-tab --surface "$CMUX_SURFACE_ID" ...`; use `cmux identify` only as a fallback when the surface env var is missing. Raw `CMUX_TAB_ID` may not be accepted by every `rename-tab` path.
-   - If Codex hook execution and agent command execution land in different cmux surfaces, set `CMUX_PIN_PROMPT_SCOPE=workspace` for the hook command so terminal surfaces in the same workspace receive the same prompt title.
-7. Call:
-   - `cmux rename-tab --surface "$CMUX_SURFACE_ID" "<original prompt>"`
-   - or `cmux rename-tab --tab <tab-ref> "<original prompt>"` when falling back to `cmux identify`
-   - `cmux set-status current-question "<original prompt>" --icon pin --color "#2563eb"` so the full prompt remains available outside the tab
-8. Test with a sample stdin payload, confirm the tab/status changes, and measure foreground wrapper latency if the hook feels slow.
-9. Tell the user to approve the new or changed Codex hook in `/hooks` when required.
-10. Do not block Codex if cmux is unavailable. Ergonomic hooks should return success unless a requested setup action clearly failed.
+agent가 별도로 의미 있는 title을 만들 때는 prompt pinning과 분리한다. semantic title은 agent output이고, prompt pinning은 user input 보존이다.
 
-## Semantic Title Pattern
+## ask before changing 기준
 
-If the user explicitly asks for a short or semantic tab title instead of the original question, the agent should update it after reading the prompt:
-
-```bash
-cmux rename-tab --surface "$CMUX_SURFACE_ID" "<agent-written semantic title>"
-cmux set-status current-question "<short explanation or original prompt>" --workspace "$CMUX_WORKSPACE_ID" --icon pin --color "#2563eb"
-```
-
-Use this only for opt-in meaning-sensitive titles such as `workflow 스킬 생성`, `hook 요약 구조 검토`, or `문서 최신화 전략`. Otherwise leave the original submitted question in the tab title.
-
-Avoid model-backed `UserPromptSubmit` hooks by default. They would call another agent or API before every prompt, add latency, may need credentials, and can make prompt submission fragile.
-
-## Workflow
-
-1. Identify whether the task is a one-off cmux command, a reusable hook, a prompt-pinning setup, or a documented workflow.
-2. Inspect local support with `command -v cmux`, `cmux --help`, and targeted `cmux docs ...` commands.
-3. If editing hooks or config, locate the relevant config file and make a timestamped backup.
-4. Implement the smallest useful automation:
-   - tab title for the current question,
-   - status for the longer original prompt context,
-   - markdown panel for multi-agent boards,
-   - feed integration for event queues.
-5. For prompt pinning, install or update the actual hook script/config when the user asked to enable or test it.
-6. Keep `UserPromptSubmit` hooks lightweight; avoid validation, `codex exec`, and broad git scans on every prompt unless the user explicitly wants blocking validation.
-7. Keep scripts portable: no machine-specific absolute paths, no secrets, no socket password in source.
-8. Test with dry-run payloads when possible before relying on live hooks.
-9. Document user-facing commands and any manual approval step such as Codex `/hooks` review.
-
-## Ask Before Changing
-
-Ask the user before:
-
-- installing or uninstalling cmux hooks globally,
-- editing global cmux settings or socket authentication,
-- sending text or keypresses to another pane,
-- closing, moving, or clearing surfaces, panes, tabs, workspaces, logs, or history,
-- changing a hook that affects every Codex session rather than one project.
-
-## Validation
-
-For this repo, run:
-
-```bash
-node scripts/validate-skill.ts skills/cmux-automation
-node skills/cmux-automation/scripts/validate-cmux-automation.ts skills/cmux-automation
-node scripts/validate-skill-html.ts .
-node scripts/validate-skill-repo.ts .
-```
-
-For a real hook implementation, also run the prompt pin script with a sample stdin payload and confirm the cmux command updates the current tab/status inside cmux and degrades gracefully outside cmux.
-Use `CMUX_PIN_PROMPT_DRY_RUN=1` for deterministic title checks that should not call cmux.
+- hook 설치 또는 제거
+- socket auth 변경
+- pane에 text 전송
+- surface 종료
+- history 삭제

@@ -6,6 +6,7 @@
 - For coding, reviewing, refactoring, debugging, or implementation planning that should follow Karpathy-style agent discipline, use the shared skill at `<skills-root>/skills/karpathy-thinkings/SKILL.md`.
 - For updating, revising, maintaining, renaming, splitting, deprecating, or otherwise changing an existing shared skill, use the shared skill at `<skills-root>/skills/skill-update/SKILL.md`.
 - For commit requests, split dirty files into logical changesets and use the shared skill at `<skills-root>/skills/atomic-committer/SKILL.md`.
+- For GitHub pull request preparation, creation, updates, drafts, reviewers, labels, milestones, linked issues, or `gh pr create`, use the shared skill at `<skills-root>/skills/pull-request/SKILL.md`.
 - For choosing, creating, standardizing, or refactoring frontend, backend, full-stack monorepo, desktop app, infrastructure-aware folder structures, or folder-local `AGENTS.md` indexes, use the shared skill at `<skills-root>/skills/project-structure/SKILL.md`.
 - For designing, running, reviewing, or documenting a project workflow; starting a new project or feature; deciding the next workflow step; or turning ideas into domain docs, ADRs, PRDs, issues, plans, TDD cycles, QA, document sync, or shipping steps, use the shared skill at `<skills-root>/skills/workflow/SKILL.md`.
 - For documentation refresh, stale-doc review, conflicting repo instructions, or stale folder-local `AGENTS.md` indexes, use the shared skill at `<skills-root>/skills/sync-docs/SKILL.md`.
@@ -21,12 +22,16 @@
 - Prefer this project's local docs, source code, and logs before general web results.
 - Use repo-linked custom skills before default/global Claude behavior when the behavior overlaps.
 - For skill discovery, prefer the live `show-skills` listing script and `docs/skill-catalog.md`; do not install or globally register skills while listing them.
-- For verified or deeper web research, default to parallel sub-agent fan-out when the runtime permits delegation. Fall back to main-agent query fan-out for quick checks, private data, or runtime/tool policy limits.
+- Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
+- For web-research, automatically use parallel sub-agent fan-out by default when the runtime permits delegation. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check; state the skip reason when using this exception.
+- Treat web research that feeds a recommendation, comparison, implementation plan, skill update, PR, architecture note, or product decision as verified search unless one official source fully settles it.
 - For implementation work, avoid silent assumptions, prefer simple code, make surgical changes, and verify success criteria before calling work done.
 - For skill updates, keep source instructions, references, validators, visual guides, snippets, docs, and history aligned.
 - For project structure work, include the selected project's test, security, health/readiness, observability, Panda CSS, GraphQL generated artifact, and Drizzle migration boundaries in the final tree.
 - For project structure work, document agent tool, MCP, external API, DB shell, migration, deploy script, destructive command, secret, and scrubbed artifact boundaries when they are part of the structure.
 - Commit messages should use an English conventional prefix with a Korean summary. Before committing, scan candidate changes for forbidden secret-bearing content, hard-block live-looking credential assignments and private-key material across common providers, update `.gitignore` for repeatable untracked local or secret-bearing artifacts that should never be committed, and push only when a remote exists and push was requested.
+- For pull requests, check branch/base/head/remote state, `gh auth status`, and existing PR state before creating or updating a PR; run `gh pr create` only when the user explicitly asks to create a PR, and do not merge, close, reopen, delete branches, enable auto-merge, or force-push without an explicit request.
+- For this skills repo, write Korean PR title/body and follow `.github/pull_request_template.md`; skill-change PRs must mention the Korean-first `skills/**/*.md` rule and include `node scripts/validate-korean-markdown.ts .` in validation.
 - For project structure choices, default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation, and Pulumi/Docker/AWS ECR/ECS Fargate when infrastructure is requested unless the project says otherwise.
 - For project structure choices, use MongoDB + Atlas when MongoDB/document DB is selected, and Supabase Postgres when managed psql-compatible Postgres is selected. Keep Supabase service-role keys and MongoDB URIs server-only.
 - For project structure choices, keep app env/codegen paths consistent and place monorepo Redis boundaries in `packages/db/src/redis`, with API cache wrappers under `apps/api/src/providers/cache`.

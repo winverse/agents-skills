@@ -60,6 +60,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/code-review.md`: only findings-first code review.
 - `project-snippets/design-review.md`: only product-aware UI and design review.
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
+- `project-snippets/pull-request.md`: only GitHub PR preparation and creation rules.
 - `project-snippets/project-structure.md`: only project structure, default stack rules, selected DB provider options, and requested infra/deployment boundaries.
 - `project-snippets/workflow.md`: only project and feature workflow sequencing, domain/ADR/PRD/issue/planning/TDD/QA/document-sync flow, and workflow artifact placement.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.

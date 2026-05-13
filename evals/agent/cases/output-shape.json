@@ -15,17 +15,17 @@
       {
         "type": "required_text",
         "file": "skills/code-review/SKILL.md",
-        "value": "Findings lead"
+        "value": "findings를 먼저"
       },
       {
         "type": "required_text",
         "file": "skills/code-review/SKILL.md",
-        "value": "file and line"
+        "value": "file/line reference"
       },
       {
         "type": "required_text",
         "file": "skills/code-review/SKILL.md",
-        "value": "If there are no findings"
+        "value": "문제가 없으면 그렇게 말하고"
       }
     ]
   },
@@ -45,23 +45,23 @@
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
-        "value": "Include links to sources used"
+        "value": "source link를 제공한다"
       },
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
-        "value": "Use exact dates"
+        "value": "absolute date를 쓴다"
       },
       {
         "type": "required_text",
         "file": "skills/web-research/references/structured-search.md",
-        "value": "Source Ledger"
+        "value": "source ledger 기준"
       }
     ]
   },
   {
     "id": "output-agent-eval-harness-baseline-report",
-    "title": "Harness setup reports path, command, CI mode, and baseline",
+    "title": "평가 범위 setup reports path, command, CI mode, and baseline",
     "prompt": "초기 에이전트 eval harness를 깔고 결과를 요약해줘",
     "scope": "output_quality",
     "expectedSkills": ["agent-eval-harness"],
@@ -75,17 +75,17 @@
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/SKILL.md",
-        "value": "Harness"
+        "value": "평가 범위"
       },
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/SKILL.md",
-        "value": "Baseline"
+        "value": "검증"
       },
       {
         "type": "required_text",
         "file": "skills/agent-eval-harness/SKILL.md",
-        "value": "Next Cases"
+        "value": "추가한 case"
       }
     ]
   }

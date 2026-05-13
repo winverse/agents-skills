@@ -1,100 +1,33 @@
 ---
 name: skill-to-html
-description: Create or revise the human-facing `skill.html` that sits beside an agent-readable `SKILL.md`. Use when an agent creates, installs, forks, or updates a shared skill and needs a visual install-time guide with diagrams, charts, matrices, maps, flows, and quick human-readable structure instead of a text-only or card-partitioned summary.
+description: "SKILL.md 옆에 사람이 빠르게 이해할 수 있는 diagram-rich skill.html을 만들거나 갱신할 때 사용한다."
 ---
 
-# Skill To HTML
+# 스킬 HTML 만들기
 
-Use this skill immediately after `skill-creator` or another agent initializes, forks, installs, or materially updates a shared skill. The output is a static `skill.html` file inside the same skill folder as `SKILL.md`.
+이 스킬은 agent-readable `SKILL.md`를 human-readable `skill.html`로 변환한다. 단순 카드 요약이 아니라 decision matrix, flowchart, chart, resource map, input/output schema처럼 한눈에 판단 가능한 구조를 만든다.
 
-Read `references/visual-guide-standards.md` before designing or revising a `skill.html`. Treat that file as the shared design system for all skill explanation pages.
+## required outcome 기준
 
-## Required Outcome
+- 각 skill folder에는 `SKILL.md`와 `skill.html`이 함께 있어야 한다.
+- visible copy는 한국어 우선으로 작성한다.
+- 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다.
+- desktop에서 빠르게 읽히고 mobile에서도 text overflow가 없어야 한다.
 
-Every skill folder should contain:
+## design contract 기준
 
-```text
-skill-name/
-├── SKILL.md
-└── skill.html
-```
+- visual guide는 설명 문단보다 구조를 우선한다.
+- 색상은 절제하고, nested card와 decorative orb를 피한다.
+- code term, file path, command는 원문을 유지한다.
 
-Inside this repo, the same pair lives under `skills/<skill-name>/`:
+## creation workflow 기준
 
-```text
-skills/<skill-name>/
-├── SKILL.md
-└── skill.html
-```
+1. 대상 `SKILL.md`와 필요한 `references/`만 읽는다.
+2. trigger, workflow, guardrail, output shape를 추출한다.
+3. 최소 4개 이상의 visual structure를 설계한다.
+4. `skill.html`을 self-contained static HTML로 작성한다.
+5. `node scripts/validate-skill-html.ts .`를 실행한다.
 
-`SKILL.md` is the source instruction for agents. `skill.html` is for the user who wants to understand the skill quickly after installing it.
+## quality bar 기준
 
-## Design Contract
-
-Do not make `skill.html` a partitioned article. Use visual structure to reduce reading:
-
-- Use a flowchart for the skill's workflow.
-- Use a decision matrix for when to use, skip, or combine the skill.
-- Use a source/file map for bundled resources.
-- Use a compact chart for priorities, risk, confidence, or coverage.
-- Use the same explanation grammar across skills: purpose, use/skip, workflow, inputs/outputs, resources, validation, and misuse prevention.
-- Use labels and legends directly in diagrams.
-- Keep all visuals understandable without color alone.
-- Keep text short, Korean-friendly, and scannable.
-- Use Korean-first visible copy. Section titles, chart labels, matrix cells, legends, and guardrail labels should be Korean unless the word is a normal coding term, file name, command, library, protocol, or product name such as `commit`, `push`, `repo`, `diff`, `SKILL.md`, `HTML`, `GraphQL`, `TypeScript`, or `Playwright`.
-- When an English technical term is useful but not universally obvious, pair it with Korean once, for example `source ledger(출처 기록)` or `fan-out(분기 검색)`.
-
-## HTML Rules
-
-- Produce one static HTML file with embedded CSS and inline SVG when useful.
-- Do not depend on external CDNs, fonts, scripts, images, or build tools.
-- Use semantic HTML sections with readable headings.
-- Use CSS grid and SVG for diagrams, charts, maps, timelines, funnels, and matrices.
-- Paint the page background on both `html` and `body`.
-- Center the main shell with `width: 100%`, `max-width`, `margin: 0 auto`, and horizontal padding.
-- Use stable dimensions so diagrams do not jump between states or viewport sizes.
-- Keep border radius at `8px` or less.
-- Avoid decorative gradients, orbs, bokeh, oversized hero sections, and nested cards.
-- Use restrained colors and enough contrast for text and non-text marks.
-- Target PC desktop screens only. Do not spend effort on mobile-specific layout support.
-- Use the shared quiet operational visual defaults: fast scanning, shallow borders, minimal shadows, stable grid dimensions, and no decorative hero treatment.
-- Dark surfaces only for code, terminal trees, or literal snippets. Do not use dark panels as general visual decoration.
-
-## Visual Pattern Selection
-
-Choose visuals based on the skill contents:
-
-| Skill content | Preferred visual |
-| --- | --- |
-| Sequential workflow | Flowchart or timeline |
-| Trigger conditions | 2x2 decision matrix or checklist map |
-| Source priorities | Funnel, ranked stack, or bar chart |
-| File/resource structure | Node map or directory diagram |
-| Risk and confidence | Meter, heatmap, or small multiple bars |
-| Inputs and outputs | Sankey-like flow or input/output schema |
-| Do and do-not rules | Contrast table or split matrix |
-
-## Creation Workflow
-
-1. Read the target skill's `SKILL.md`.
-2. Read the existing `skill.html` if it exists, and preserve useful diagrams or layout ideas while removing stale or weak parts.
-3. Read only the relevant reference files named from `SKILL.md`.
-4. Extract the skill's trigger, workflow, resources, output shape, validation gates, and failure modes.
-5. Fill the shared explanation grammar: purpose, use/skip, workflow, inputs/outputs, resources, validation, and misuse prevention.
-6. Pick at least four visual patterns from the table above.
-7. Create or revise `skill.html` next to `SKILL.md`.
-8. Verify the HTML in a desktop browser viewport when practical.
-9. If the skill is part of this repo, run `node scripts/validate-skill.ts <skill-path>` from the repo root and then the skill-specific TypeScript validator when one exists.
-10. If paths, trigger wording, workflow, validators, snippets, or lifecycle state changed, update `README.md`, `AGENTS.md`, `project-snippets/`, and `history/skills.md` as applicable.
-11. Review `docs/skill-inspector.md`; if inspection finds issues, write `inspector/YYYY-MM-DD-<scope>.md` before fixing, then keep only unresolved local review notes and delete resolved review files.
-
-## Quality Bar
-
-The user should be able to answer these in under one minute:
-
-- What does this skill do?
-- When should this skill be used?
-- What does the agent do first, second, third?
-- What files belong to this skill?
-- How do I connect it to a project?
-- What should I avoid when using it?
+HTML만 봐도 이 스킬을 언제 쓰고 언제 쓰지 말아야 하는지 알 수 있어야 한다.

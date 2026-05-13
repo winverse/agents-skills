@@ -1,78 +1,30 @@
-# Skill Update Checklist
+# 스킬 업데이트 체크리스트
 
-Use this checklist for material updates to an existing shared skill.
+## package completeness 기준
 
-## Inventory
+- `SKILL.md`
+- `references/*.md`
+- `skill.html`
+- `agents/openai.yaml`
+- `project-snippets/<skill>.md`
+- README, AGENTS, docs
+- `history/skills.md`
+- validator와 eval case
 
-Start with current state:
+## coordination rules 기준
 
-```bash
-git status --short
-find skills/<skill-name> -maxdepth 3 -type f | sort
-rg -n "<skill-name>|old-name|trigger|validator|snippet|history" README.md AGENTS.md docs history project-snippets skills/<skill-name>
-```
+- behavior change와 visual guide를 분리하지 않는다.
+- 한국어 Markdown 규칙을 지킨다.
+- source of truth가 충돌하면 추측하지 말고 묻는다.
+- skill inventory가 바뀌면 show-skills catalog를 갱신한다.
 
-Read only the target files needed for the requested update.
+## history rules 기준
 
-## Package Completeness Matrix
+trigger, workflow, validator, eval, snippet, lifecycle state가 의미 있게 바뀔 때만 기록한다. typo나 단순 copy polish는 기록하지 않는다.
 
-| Area | Check |
-| --- | --- |
-| `SKILL.md` | Frontmatter name/description are current; trigger is clear; workflow is concise |
-| `references/` | Long details and examples live here, not in `SKILL.md` |
-| `agents/openai.yaml` | Display name, short description, and default prompt match current behavior |
-| `scripts/validate-*.ts` | Repo-owned validator is TypeScript and checks the behavior that matters |
-| `skill.html` | Visual guide reflects current trigger, workflow, resources, and project connection |
-| `project-snippets/` | Paths and trigger wording match `SKILL.md` |
-| `README.md` | Current skill catalog entry and validator command are present |
-| `AGENTS.md` | Repo-local skill link and overrides are present if relevant |
-| `history/skills.md` | Durable lifecycle and material behavior changes are recorded |
-| `show-skills/skill.html` | Skill inventory changes are reflected by `update-html-catalog.ts` |
-| `docs/` | Shared workflow docs do not contradict the updated skill |
+## failure modes 기준
 
-## Coordination Rules
-
-- Use `skill-to-html` for any material change that affects how a human chooses or uses the skill.
-- Run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills` after skill add, remove, rename, archive, or restore operations.
-- Use `sync-docs` when the update changes names, paths, snippets, validation commands, history, lifecycle, or repo-level wording.
-- Use `atomic-committer` only when the user asks to commit or push the completed update.
-- Use web research only if the update depends on external current facts.
-
-## History Rules
-
-Record in `history/skills.md` when the update changes:
-
-- trigger,
-- workflow,
-- validator,
-- eval prompt,
-- project snippet,
-- lifecycle state,
-- skill name or folder,
-- split, merge, deprecation, or archive status.
-- generated `show-skills/skill.html` catalog behavior.
-
-Do not record purely cosmetic HTML spacing, typo-only edits, or repeated validator results.
-
-## Validation
-
-Run the target skill and repo validators:
-
-```bash
-node scripts/validate-skill.ts skills/<skill-name>
-node skills/<skill-name>/scripts/validate-<skill-name>.ts skills/<skill-name>
-node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills --check
-node scripts/validate-skill-repo.ts .
-```
-
-If the update touched hooks or generated HTML, run the hook dry-run or HTML static checks that the repo uses.
-
-## Failure Modes
-
-- Updating `SKILL.md` but leaving `skill.html` stale.
-- Adding, removing, or renaming a skill without regenerating the `show-skills` HTML catalog.
-- Updating README but forgetting `project-snippets/`.
-- Changing a validator command without documenting it.
-- Turning history into a scratchpad instead of a durable ledger.
-- Resolving ambiguous behavior without asking the user.
-- Adding Python validators in this repo instead of TypeScript.
+- HTML은 갱신됐지만 SKILL.md가 stale
+- validator가 영어 고정 문구만 검사
+- snippet이 이전 trigger를 설명
+- history가 lifecycle state와 불일치
