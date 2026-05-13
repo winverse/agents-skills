@@ -160,7 +160,7 @@
           <tr><td>Docker/AWS/Pulumi</td><td>raw service idea에서 infra tree 생성</td><td>service ADR, infra choice, smoke endpoint</td></tr>
           <tr><td>MCP/API/file-write</td><td>권한과 write target 미정 구현</td><td>tool/security gate decision</td></tr>
           <tr><td>Cross-agent setup</td><td>global install drift</td><td>Project Setup Verification</td></tr>
-          <tr><td>completion/ship</td><td>검증 전 commit/push/release</td><td>review, QA/runtime evidence, sync-docs, atomic-committer, release checklist</td></tr>
+          <tr><td>completion/ship</td><td>검증 전 commit/push/release</td><td>review, QA/runtime evidence, sync-docs, atomic-committer, release checklist, goal condition</td></tr>
         </tbody>
       </table>
     </section>
@@ -254,7 +254,7 @@
       <div class="grid3">
         <div class="cell"><span class="tag accent">입력</span><h3>요청과 권위 문서</h3><ul><li>idea, feature, audit, implementation, completion 요청</li><li><code>AGENTS.md</code>, <code>CLAUDE.md</code>, ADR, docs, issue, design evidence</li><li>runtime adapter surface</li></ul></div>
         <div class="cell"><span class="tag warn">판단</span><h3>mode와 missing gate</h3><ul><li>discovery, architecture, product planning 등 mode 선택</li><li>dependency inventory</li><li>누락 gate가 있으면 다음 작업으로 승격</li></ul></div>
-        <div class="cell"><span class="tag ok">출력</span><h3>다음 한 단계</h3><ul><li>mode, current authority, adapter, dependencies</li><li>create/update/preserve artifact</li><li>required checks와 done condition</li></ul></div>
+        <div class="cell"><span class="tag ok">출력</span><h3>다음 한 단계</h3><ul><li>mode, current authority, adapter, dependencies</li><li>create/update/preserve artifact</li><li>required checks와 done condition</li><li>Claude Code 긴 작업은 `/goal`, 다른 runtime은 checklist 조건</li></ul></div>
       </div>
     </section>
 
@@ -337,7 +337,7 @@
       <h2>전문 스킬 handoff</h2>
       <div class="grid2">
         <div class="cell"><span class="tag accent">구조 handoff</span><p>domain language와 architecture 질문이 구체화된 뒤 <code>project-structure</code>를 호출해 folder/env/codegen/db/infra boundary를 정한다.</p></div>
-        <div class="cell"><span class="tag ok">eval seed</span><p>workflow routing, dependency inventory, project-structure timing, PRD settings, mockup 선택, CLI/no-browser evidence, MCP/API gate decision, project setup verification, completion/ship mapping, document sync, artifact hygiene는 <code>agent-eval-harness</code> seed case로 남긴다.</p></div>
+        <div class="cell"><span class="tag ok">eval seed</span><p>workflow routing, dependency inventory, project-structure timing, PRD settings, mockup 선택, CLI/no-browser evidence, MCP/API gate decision, project setup verification, completion/ship mapping, document sync, artifact hygiene, goal condition quality는 <code>agent-eval-harness</code> seed case로 남긴다.</p></div>
         <div class="cell"><span class="tag warn">Project Setup Verification</span><p>adapter snippet을 쓴 뒤 target instruction file, selected snippets, <code>skill.html</code>, no global install drift를 <code>sync-docs</code>와 eval case로 확인한다.</p></div>
       </div>
     </section>

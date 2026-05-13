@@ -47,6 +47,16 @@ gh pr status
 
 이 skills repo에서는 PR title/body를 한국어로 작성한다. 스킬 변경 PR은 `skills/**/*.md`가 한국어 우선이어야 한다는 문장을 남기고, 검증 항목에 `node scripts/validate-korean-markdown.ts .`를 포함한다.
 
+## `/goal` PR 조건 예시
+
+이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다.
+
+```text
+/goal PR body follows .github/pull_request_template.md, validation evidence is shown in the transcript, risk/rollback is filled, and a PR URL or exact gh command preview is reported; constraints: no merge, no close, no force-push, no branch delete; stop after 6 turns
+```
+
+`/goal`을 지원하지 않는 runtime에서는 이 조건을 checklist로 사용한다.
+
 ## 명령 선택
 
 | 상황 | 명령 |

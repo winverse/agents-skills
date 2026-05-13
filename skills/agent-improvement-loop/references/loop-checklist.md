@@ -23,6 +23,17 @@
 4. 수정 후 validator/test를 실행한다.
 5. 실패하면 범위를 넓히기 전에 원인을 좁힌다.
 
+## `/goal` 사용 기준
+
+이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. 긴 spend-down batch에는 Claude Code `/goal`이 유용하지만 runaway를 만들 수 있다. 조건은 다음 네 가지를 모두 포함해야 한다.
+
+- measurable end state: 예를 들어 `agent eval runner passes`, `3 stale snippets fixed`
+- check evidence: 실행 명령과 transcript에 남길 결과
+- constraints: user change 보존, global install 금지, secret 노출 금지
+- bound: 최대 turn, 시간, 파일 수, backlog item 수
+
+Claude Code가 아닌 runtime에서는 이 조건을 checklist로 바꾸고 한 lane씩 진행한다.
+
 ## 완료 기준
 
 - 개선 이유가 파일에 남아 있다.

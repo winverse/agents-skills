@@ -1,4 +1,4 @@
 interface:
   display_name: "Pull Request"
   short_description: "Prepare Korean, template-aligned GitHub pull requests"
-  default_prompt: "Use $pull-request to inspect branch/base/head state, prepare a Korean GitHub PR title and body, follow the repo PR template, link issues, choose draft/reviewer/label options, and run gh pr create only when the user explicitly asks for PR creation."
+  default_prompt: "Use $pull-request to inspect branch/base/head state, prepare a Korean GitHub PR title and body, follow the repo PR template, link issues, choose draft/reviewer/label options, and run gh pr create only when the user explicitly asks for PR creation. In this repo, /goal means the Claude Code /goal feature; for long Claude Code PR prep, use $pull-request only for template compliance, validation evidence, risk/rollback, and PR URL or exact command preview; never include merge, close, force-push, or branch delete in the goal."

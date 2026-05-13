@@ -35,6 +35,16 @@ description: "GitHub pull request를 준비, 생성, 업데이트, 초안 전환
 - behavior change가 있으면 `SKILL.md`, `references/`, `skill.html`, `project-snippets/`, `history/skills.md`, validator, eval case가 함께 맞았는지 scope에 적는다.
 - PR 본문에는 summary, changed scope, validation, risk/rollback, linked issues를 같은 순서로 남긴다.
 
+## goal condition 기준
+
+이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서 PR 준비를 오래 돌릴 때는 다음 조건을 제안할 수 있다.
+
+```text
+/goal PR body follows .github/pull_request_template.md, validation evidence is shown, risk/rollback is filled, and a PR URL or exact gh command preview is reported; stop after 6 turns
+```
+
+다른 runtime에서는 같은 문장을 PR checklist로 사용한다. goal condition은 PR merge, close, force-push, branch delete 같은 위험 작업을 포함하면 안 된다.
+
 ## PR body 기준
 
 - 변경 요약: 무엇이 바뀌었는지 2-4개 bullet로 적는다.

@@ -23,5 +23,6 @@
 - Prefer direction quality over speed. Do not compress domain, product, PRD, plan, design, and mockup gates just to start coding sooner.
 - For portability setup, verify target instruction links, selected snippets, `skill.html` companions, project-specific overrides, and no global install drift before calling the setup complete.
 - For completion/ship, map source stages to local helpers when needed: `review -> code-review`, `qa -> browser-qa` when a browser surface exists, `document-sync -> sync-docs`, `semantic-commits -> atomic-committer`; release prep is not release publishing unless explicitly requested.
+- In this repo, `/goal` means Claude Code's `/goal` feature. For long workflow runs on Claude Code, propose a `/goal` condition. Otherwise write the same measurable end state, check evidence, constraints, and turn/time bound as a completion checklist.
 - Use `agent-eval-harness` as a separate validation handoff when the workflow must stay reliable. Seed cases for workflow routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, and artifact hygiene.
 - Use web research only for current external docs, official APIs, tool versions, or third-party behavior that local docs cannot answer.

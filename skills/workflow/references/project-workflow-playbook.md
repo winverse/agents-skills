@@ -44,6 +44,8 @@ Agent Tool And Security Risk Gate를 작성한다. 권한, destructive action, s
 
 validation, docs sync, atomic commit, push/deploy 조건을 확인한다.
 
+이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 completion/ship 전에 goal condition을 제안한다. Codex, Cursor, Copilot, Windsurf처럼 같은 slash command가 없거나 확인되지 않은 runtime에서는 같은 내용을 checklist artifact로 남긴다.
+
 ## project-structure handoff 기준
 
 folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다.
@@ -72,3 +74,11 @@ YYYY-MM-DD | <stage>
 context, artifact, validation, docs sync, commit/ship mapping이 맞아야 완료한다.
 
 Project Setup Verification은 연결된 skill path, snippet, no-global-install 조건을 확인한다. completion/ship 기준은 validation, docs sync, atomic commit, push/deploy 조건이 모두 맞는지 보는 것이다.
+
+## goal condition recipe 기준
+
+```text
+/goal <measurable end state> and <stated check evidence appears in transcript>; constraints: <scope and forbidden changes>; stop after <turn/time bound>
+```
+
+좋은 조건은 agent가 출력으로 증명할 수 있는 상태여야 한다. 예: `node scripts/run-agent-evals.ts exits 0`, `git status is clean`, `PR URL is reported`. 나쁜 조건은 `좋아질 때까지`, `완벽할 때까지`처럼 증거와 종료 기준이 없는 문장이다.

@@ -15,6 +15,7 @@ description: "에이전트 스킬 라우팅, 프롬프트 경계, cross-agent po
 - `required_link_count`, `required_file_reference`, `json_schema`, `forbidden_text`처럼 결정적으로 확인 가능한 check를 우선한다.
 - live model/API 평가는 예산과 flake 정책이 명확해질 때까지 advisory로 둔다.
 - 저장되는 출력은 scrubbed artifact만 남기고, 비밀값·개인 경로·원본 사용자 데이터는 보존하지 않는다.
+- 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. `/goal` 같은 session-scoped completion loop를 검증할 때는 goal condition 자체를 평가 대상 artifact로 본다. 좋은 조건은 measurable end state, stated check, constraints, turn/time bound를 가진다.
 
 ## 설정 절차
 
@@ -36,7 +37,14 @@ description: "에이전트 스킬 라우팅, 프롬프트 경계, cross-agent po
 
 ## workflow handoff seed case 기준
 
-`workflow`와 함께 쓸 때는 dependency inventory, `project-structure` 호출 시점, PRD settings, UI mockup selection, CLI/no-browser evidence, MCP/API gate, fallback lane, project setup verification, completion/ship mapping, document sync, artifact hygiene를 seed case로 둔다.
+`workflow`와 함께 쓸 때는 dependency inventory, `project-structure` 호출 시점, PRD settings, UI mockup selection, CLI/no-browser evidence, MCP/API gate, fallback lane, project setup verification, completion/ship mapping, document sync, artifact hygiene, goal condition quality를 seed case로 둔다.
+
+## goal condition eval 기준
+
+- 좋은 조건: measurable end state, check evidence, constraints, turn/time bound가 모두 있다.
+- 나쁜 조건: "완벽할 때까지", "좋아질 때까지"처럼 종료 증거가 없다.
+- Claude Code `/goal` 기준 여부는 `agentSurfaces`와 `assumptionDate`에 기록한다.
+- evaluator가 tool을 직접 쓰지 않는다는 전제를 case 설명에 남긴다.
 
 ## 완료 기준
 

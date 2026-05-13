@@ -7,5 +7,6 @@
 - Treat current repo files, tests, docs, and validators as the first evidence source.
 - Choose the skills-repo track for skill catalogs and the general-repo track for application or library repos.
 - Before any spend-down run, ask: `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`. If the answer is yes, run safe backlog items in small multi-agent batches; if no, treat token budget as a ceiling and review one lane at a time.
+- In this repo, `/goal` means Claude Code's `/goal` feature. Use it only with a measurable end state, check evidence, constraints, and a turn/time/item bound. Otherwise use the same condition as a checklist.
 - Prefer durable artifacts over chat-only advice: update instructions, docs, snippets, validators, tests, hooks, or eval cases.
 - Ask before changing broad policy, deleting context, installing global config, or splitting skills.

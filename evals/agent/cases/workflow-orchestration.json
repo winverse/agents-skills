@@ -473,5 +473,45 @@
         "value": "Implementation design and plan must reference the gate decision"
       }
     ]
+  },
+  {
+    "id": "workflow-goal-condition-quality",
+    "title": "Long workflow runs produce bounded goal conditions",
+    "prompt": "이 큰 리팩터링을 /goal로 끝까지 돌릴 수 있게 조건을 잡아줘.",
+    "scope": "workflow",
+    "expectedSkills": ["workflow"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["claude-code", "codex"],
+    "assumptionDate": "2026-05-13",
+    "exampleType": "edge",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/workflow/SKILL.md",
+        "value": "measurable end state"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/agent-eval-harness/SKILL.md",
+        "value": "goal condition quality"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/workflow/goal-condition-quality.md",
+        "value": "measurable end state"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/workflow/goal-condition-quality.md",
+        "value": "turn/time bound"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/workflow/goal-condition-quality.md",
+        "value": "until perfect"
+      }
+    ]
   }
 ]
