@@ -77,6 +77,8 @@ Avoid fan-out when the answer is a simple known fact or a single official page w
 
 Parallel sub-agent fan-out is the default for verified, deep, and reproducible web research when the runtime permits delegation. Do not wait for the user to repeat "use subagents" after they ask for web research. Treat subagents as the normal execution path, and fall back to main-agent query fan-out only when a skip condition applies.
 
+When the user asks the agent to use web research as input to a downstream artifact, such as a recommendation, comparison, implementation plan, skill update, PR, architecture note, or product decision, classify the task as verified search unless one official source fully settles it. That means subagents should usually be launched before the main agent starts browsing broadly.
+
 Use subagents by default when all of these are true:
 
 - the active runtime permits subagent delegation,
@@ -93,6 +95,8 @@ Skip subagents when any of these are true:
 - the task is a quick check, not verified, deep, or reproducible research,
 - the search would expose sensitive local context,
 - the runtime does not support delegation or active tool policy requires explicit per-task delegation approval.
+
+If subagents are skipped, the agent must make that visible. State the reason in one short sentence, such as "Skipping subagents because this is a single official-page quick check" or "Skipping subagents because the task uses private local files." Then continue with main-agent query fan-out using the same source lanes.
 
 Keep the main agent on the critical path. The main agent owns the question frame, source quality bar, query decomposition, final citations, conflict resolution, safety, and final answer. Subagents are sidecar researchers.
 

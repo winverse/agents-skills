@@ -36,9 +36,10 @@ Read `references/eval-prompts.md` when updating this skill or checking whether t
 
 4. Default to parallel sub-agent fan-out for web research.
    - For verified, deep, or reproducible research, split the topic into independent source lanes and launch subagents by default when the active runtime permits delegation.
+   - Treat user requests like "use web-research", "research this", "compare options", "find recommendations", "audit sources", or "use this as a reference for implementation" as enough intent to use subagents when the task is broader than a quick check.
    - Do not ask for extra confirmation just to use parallel research; treat `web-research` activation as enough intent unless the user opts out.
    - Skip subagents for quick checks, single official-page lookups, sensitive/private data, or runtimes whose active tool policy requires the main agent to keep the work local.
-   - If subagents cannot be used, keep the same lane plan and run the searches in the main agent with query fan-out.
+   - If subagents cannot be used or are intentionally skipped, briefly state the skip reason before or in the final answer, keep the same lane plan, and run the searches in the main agent with query fan-out.
    - Keep the main agent responsible for the question frame, source quality bar, final synthesis, citations, conflict resolution, and safety.
    - Give each subagent a narrow search lane, such as primary sources, market scan, counterexamples, technical docs, legal/regulatory sources, or product/spec extraction.
    - Ask subagents for compact source ledgers, not narrative answers. Require links, dates, support level, confidence, and limits.

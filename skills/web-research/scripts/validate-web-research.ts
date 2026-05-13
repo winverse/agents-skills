@@ -59,6 +59,7 @@ const requiredSkillTerms = [
   "query fan-out",
   "parallel sub-agent fan-out",
   "default parallel sub-agent fan-out",
+  "skip reason",
   "citation ledger",
   "evidence scoring",
   "extraction",
@@ -88,6 +89,20 @@ const requiredStructuredHeadings = [
 for (const heading of requiredStructuredHeadings) {
   if (!structured.includes(heading)) {
     fail(`structured-search.md missing heading: ${heading}`);
+  }
+}
+
+const requiredStructuredTerms = [
+  "downstream artifact",
+  "verified search",
+  "subagents are skipped",
+  "State the reason",
+  "main-agent query fan-out",
+];
+
+for (const term of requiredStructuredTerms) {
+  if (!structured.includes(term)) {
+    fail(`structured-search.md missing required term: ${term}`);
   }
 }
 
