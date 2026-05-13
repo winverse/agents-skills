@@ -1,6 +1,6 @@
 ---
 name: karpathy-thinkings
-description: Use when coding, reviewing, refactoring, debugging, or planning implementation work where the agent should follow Andrej Karpathy-style coding agent discipline: think before coding, avoid silent assumptions, prefer simple solutions, make surgical changes, and define verifiable success criteria before calling work done.
+description: "Use when coding, reviewing, refactoring, debugging, or planning implementation work where the agent should follow Andrej Karpathy-style coding agent discipline: think before coding, avoid silent assumptions, prefer simple solutions, make surgical changes, and define verifiable success criteria before calling work done."
 ---
 
 # Karpathy Thinkings
