@@ -1,4 +1,4 @@
 interface:
   display_name: "Transcript Polisher"
-  short_description: "Claude goal 루프로 전사본 직접 다듬기"
-  default_prompt: "$transcript-polisher를 사용해서 Claude /goal 방식의 완료 조건 루프로 전사본을 문단 단위로 직접 읽고 다듬어줘."
+  short_description: "Claude Code goal 루프로 전사본 직접 다듬기"
+  default_prompt: "$transcript-polisher를 사용해서 Claude Code /goal 방식의 완료 조건 루프로 전사본을 문단 단위로 직접 읽고 다듬어줘."

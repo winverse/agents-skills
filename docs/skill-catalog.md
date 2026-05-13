@@ -74,7 +74,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
-| `transcript-polisher` | 전사본, 강의 대본, 자막, 회의록, 긴 산문을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며 Claude `/goal`식 완료 조건 루프로 검토한다. | [SKILL.md](../skills/transcript-polisher/SKILL.md) · [skill.html](../skills/transcript-polisher/skill.html) |
+| `transcript-polisher` | 전사본, 강의 대본, 자막, 회의록, 긴 산문을 코드 치환 없이 직접 읽고 source/output 구조, `polish` 분량, 불확실 용어를 검증하며 Claude Code `/goal`식 완료 조건 루프로 검토한다. | [SKILL.md](../skills/transcript-polisher/SKILL.md) · [skill.html](../skills/transcript-polisher/skill.html) |
 | `atomic-committer` | dirty git tree를 secret guard로 검사하고, 반복 untracked local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나눠 조건부 push를 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
 | `pull-request` | GitHub PR의 branch/base/head, 한국어 title/body, template, issue link, reviewer/label/draft 옵션과 `gh pr create` 실행 경계를 관리한다. | [SKILL.md](../skills/pull-request/SKILL.md) · [skill.html](../skills/pull-request/skill.html) |
 

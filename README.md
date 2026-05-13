@@ -73,7 +73,7 @@ skills/skill-name/
 - `sync-docs`: README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.
   - Source instruction: `skills/sync-docs/SKILL.md`
   - Human visual guide: `skills/sync-docs/skill.html`
-- `transcript-polisher`: 전사본, 강의 대본, 자막, 회의록을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며, Claude `/goal`식 완료 조건과 평가자용 증거로 긴 검토를 반복하는 스킬.
+- `transcript-polisher`: 전사본, 강의 대본, 자막, 회의록을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며, source/output 구조와 `polish` 분량 보존을 검증하고 Claude Code `/goal`식 완료 조건과 평가자용 증거로 긴 검토를 반복하는 스킬.
   - Source instruction: `skills/transcript-polisher/SKILL.md`
   - Human visual guide: `skills/transcript-polisher/skill.html`
 - `cmux-automation`: cmux hook, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리하는 스킬.
