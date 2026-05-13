@@ -22,10 +22,11 @@ Prefer grouping by intent over file type.
 
 1. User request or issue being solved
 2. Forbidden-content and secret safety
-3. Runtime behavior changed
-4. Tests for that behavior
-5. Docs or snippets explaining that behavior
-6. Tooling or generated files required by the same change
+3. `.gitignore` hygiene for untracked local or secret-bearing artifacts
+4. Runtime behavior changed
+5. Tests for that behavior
+6. Docs or snippets explaining that behavior
+7. Tooling or generated files required by the same change
 
 Do not combine unrelated work just because it is in the same directory.
 
@@ -74,6 +75,33 @@ Warn and ask before committing when the candidate includes:
 - large generated files whose source change is unclear.
 
 When a hard block is found, stop the commit, report the category and file, and ask the user to redact or remove the content. Do not stage a workaround and do not push.
+
+## Gitignore Hygiene
+
+Blocked or warned files often reveal a missing ignore rule. Treat `.gitignore` as a preventive follow-up, not as a way to hide a bad staged diff.
+
+Update `.gitignore` before committing other changes when all are true:
+
+- the file is untracked or newly generated local state,
+- the content should never be reviewed or committed in this project,
+- the ignore pattern can be narrow enough to avoid hiding real source files,
+- and the pattern does not hide placeholder examples, fixtures, docs, or intentionally reviewed generated artifacts.
+
+Common safe candidates:
+
+- `.env`, `.env.local`, `.env.*.local`, while keeping `.env.example` trackable.
+- local logs, caches, coverage temp output, scratch output, raw screenshots, exported archives, and local database files.
+- accidental project-local credential paths such as `.aws/`, `.ssh/`, `credentials`, `secrets`, service-account JSON files, and private key files.
+
+Before adding a pattern:
+
+```bash
+git check-ignore -v <path>
+```
+
+Use this when it helps determine whether an existing rule already covers the file. If a file is already tracked, `.gitignore` will not remove it from the index. Ask before running `git rm --cached`, and never use it to silently hide a tracked secret.
+
+When `.gitignore` changes are needed, commit them as a small housekeeping changeset or group them with the tooling/config change that introduced the local artifact.
 
 ## Common Commit Types
 
@@ -142,5 +170,7 @@ Ask before committing when:
 - the same file contains multiple unrelated changes and hunk splitting is risky
 - staged changes appear to be user-prepared but the requested grouping conflicts with them
 - a file looks secret-bearing or machine-local
+- adding a broad `.gitignore` pattern could hide source files, docs, examples, fixtures, or reviewed generated artifacts
+- the file is already tracked and would need `git rm --cached`
 - generated files are large and the source cause is unclear
 - commit type is unclear between behavior and maintenance

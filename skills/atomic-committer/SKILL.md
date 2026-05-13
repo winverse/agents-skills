@@ -1,6 +1,6 @@
 ---
 name: atomic-committer
-description: Use when the user asks to commit, split work into commits, create git commits, or commit and push. This skill inspects changed files, blocks forbidden secret-bearing content, groups safe changes into atomic commit units, commits each group with an English conventional prefix and Korean message body, and pushes only when a git remote exists and push was requested.
+description: Use when the user asks to commit, split work into commits, create git commits, or commit and push. This skill inspects changed files, blocks forbidden secret-bearing content, updates `.gitignore` for repeatable local or secret-bearing artifacts that should never be committed, groups safe changes into atomic commit units, commits each group with an English conventional prefix and Korean message body, and pushes only when a git remote exists and push was requested.
 ---
 
 # Atomic Committer
@@ -16,6 +16,8 @@ Detailed grouping heuristics live in `references/grouping-rules.md`; read it whe
 - Preserve unrelated user changes. Do not revert, discard, or silently include them.
 - Before staging and before committing, scan the candidate changeset for forbidden content and warn about risky content.
 - Hard-block credential-like assignments only when the value looks live rather than placeholder text. This applies across cloud, source control, AI API, payment, messaging, package registry, database, and private-key secrets.
+- When a warned or blocked untracked file is a repeatable local artifact, cache, log, raw tool output, machine-local config, credential path, or secret-bearing file that should never be committed, update the project `.gitignore` with the narrowest safe pattern before committing other changes.
+- Do not use `.gitignore` as a workaround for hard-blocked content already present in tracked files or staged hunks. Ask the user to redact or remove tracked secret-bearing content first; ask before `git rm --cached`.
 - Use commit messages with an English conventional prefix and a Korean summary.
 - Push only when the current directory is a git repo, at least one commit was created or already requested, a remote exists, and the user asked to push.
 
@@ -53,20 +55,21 @@ chore: 스킬 repo 검증 스크립트 갱신
 1. Confirm the current directory is inside a git worktree with `git rev-parse --show-toplevel`.
 2. Inspect state with `git status --short`, `git diff --stat`, `git diff`, and `git diff --cached` when staged changes exist.
 3. Run forbidden-content triage over the working diff, staged diff, and untracked candidate files before deciding commit groups.
-4. Identify logical changesets from file paths, diffs, tests, generated files, docs, and user intent.
-5. If a file mixes unrelated concerns, split by hunk when practical; otherwise ask before committing that file.
-6. For each changeset:
+4. If triage finds untracked files that should never be committed, inspect existing ignore rules with `git check-ignore -v <path>` when useful, then add the narrowest safe `.gitignore` pattern as its own housekeeping changeset or with the relevant tooling changeset.
+5. Identify logical changesets from file paths, diffs, tests, generated files, docs, and user intent.
+6. If a file mixes unrelated concerns, split by hunk when practical; otherwise ask before committing that file.
+7. For each changeset:
    - Warn about risky but not strictly forbidden content before staging.
    - Stage only that changeset.
    - Re-scan `git diff --cached -U0 --no-ext-diff` for live-looking credential assignments and private-key material.
    - Run targeted validation when practical and relevant.
    - Commit with the required message format only if the staged diff passes the guard.
-7. After commits, push only if:
+8. After commits, push only if:
    - the user requested push,
    - `git remote` has at least one remote,
    - the branch is not detached,
    - and local commits need to be published.
-8. If no remote exists, do not push. Report the commit hashes and say push was skipped because no remote is configured.
+9. If no remote exists, do not push. Report the commit hashes and say push was skipped because no remote is configured.
 
 ## Forbidden Content Guard
 
@@ -94,11 +97,29 @@ Warn and ask before committing, but allow after explicit confirmation when the c
 
 If hard-blocked content appears, stop before commit. Report the file or diff line category, ask the user to remove or redact it, and do not commit or push that changeset.
 
+## Gitignore Hygiene
+
+Use `.gitignore` as prevention, not as a bypass.
+
+Add or propose the narrowest safe `.gitignore` pattern when triage finds untracked content that is not meant to be reviewed or committed, such as:
+
+- `.env`, `.env.local`, and environment files with live local values, while keeping `.env.example` or documented placeholders trackable.
+- Machine-local caches, logs, coverage temp output, editor or tool state, raw screenshots, downloaded exports, scratch files, and local database files.
+- Credential directories or files such as `.aws/`, `.ssh/`, `credentials`, `secrets`, service-account JSON files, and private key files when they are project-local accidental artifacts.
+
+Before editing `.gitignore`:
+
+- Check whether a matching ignore rule already exists when practical.
+- Prefer specific path patterns over broad globs that could hide source files.
+- Ask before ignoring generated artifacts that may be intentionally reviewed, fixtures, examples, docs, or any path pattern that would hide real source.
+- If the sensitive file is already tracked, `.gitignore` alone is not enough. Ask before `git rm --cached`, and never remove tracked content silently.
+
 ## Safety Rules
 
 - Do not use destructive commands such as `git reset --hard`, `git checkout --`, or file deletion to make the tree cleaner.
 - Do not stage ignored build artifacts unless the diff clearly shows they are intentional source artifacts.
 - Do not commit secrets, personal absolute paths, credentials, `.env` files, or machine-local caches.
+- Do update `.gitignore` for repeatable untracked local/secret artifacts that should never be committed, but keep placeholder examples and intentional fixtures visible.
 - Do not bypass the forbidden-content guard with `--no-verify`, force options, manual staging, or a user request to "commit anyway".
 - Do not amend, rebase, squash, force-push, or rewrite history unless the user explicitly asks.
 - If validation fails, stop before push and report which commit or changeset is blocked.

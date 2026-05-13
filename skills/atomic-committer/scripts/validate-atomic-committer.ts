@@ -54,6 +54,8 @@ for (const term of [
   "Korean",
   "Push only",
   "git remote",
+  ".gitignore",
+  "git rm --cached",
 ]) {
   if (!skill.includes(term)) fail(`SKILL.md missing required term: ${term}`);
 }
@@ -73,6 +75,9 @@ for (const term of [
   "DB URL",
   "강제 차단",
   "forbidden-content scan",
+  ".gitignore",
+  "git check-ignore -v",
+  "git rm --cached",
   "작업 단위",
   "영어 prefix + 한글 메시지",
   "remote 있을 때만 push",
@@ -90,6 +95,9 @@ for (const term of [
   "placeholder",
   "live-looking",
   "cannot be overridden",
+  "Gitignore Hygiene",
+  "git check-ignore -v <path>",
+  "git rm --cached",
 ]) {
   if (!rules.includes(term)) fail(`grouping-rules.md missing guard term: ${term}`);
 }
@@ -98,6 +106,8 @@ for (const term of [
   "live-looking credential assignments",
   "AWS_ACCESS_KEY=...",
   "forbidden content",
+  ".gitignore",
+  "git rm --cached",
 ]) {
   const snippet = fs.readFileSync(path.join(repoRoot, "project-snippets/atomic-committer.md"), "utf8");
   if (!snippet.includes(term)) fail(`project snippet missing guard term: ${term}`);

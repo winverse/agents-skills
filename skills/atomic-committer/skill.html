@@ -6,39 +6,134 @@
   <title>Atomic Committer</title>
   <link rel="icon" href="data:,">
   <style>
-    :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#374151; }
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-muted: #f1f5f9;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --accent: #2563eb;
+      --ok: #1f7a52;
+      --warn: #a16207;
+      --danger: #b42318;
+      --ink: #374151;
+    }
     * { box-sizing: border-box; }
-    html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; }
-    body { padding:32px; }
-    .shell { width:100%; max-width:1180px; margin:0 auto; }
-    header { display:grid; grid-template-columns:1fr auto; gap:24px; align-items:end; padding-bottom:22px; border-bottom:2px solid var(--border); }
-    h1,h2,p { margin:0; }
-    h1 { font-size:34px; line-height:1.08; }
-    h2 { font-size:18px; line-height:1.2; }
-    .subtitle { margin-top:10px; color:var(--muted); font-size:15px; max-width:780px; line-height:1.55; }
-    .badge { display:inline-grid; place-items:center; min-width:92px; height:44px; border:1px solid var(--border); background:var(--surface); border-radius:8px; font-weight:800; color:var(--accent); }
-    .grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:18px; margin-top:22px; }
-    .panel { background:var(--surface); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
-    .wide { grid-column:1 / -1; }
-    .head { display:flex; justify-content:space-between; align-items:start; gap:16px; padding:18px 20px; border-bottom:1px solid var(--border); background:var(--muted-surface); }
-    .note { color:var(--muted); font-size:13px; line-height:1.45; max-width:450px; }
-    .body { padding:20px; }
-    svg { display:block; width:100%; height:auto; }
-    .matrix { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
-    .cell { min-height:126px; border:1px solid var(--border); border-radius:8px; padding:14px; background:#fff; }
-    .cell strong { display:block; margin-bottom:8px; font-size:14px; }
-    .cell p { color:var(--muted); font-size:13px; line-height:1.45; }
-    .ok strong { color:var(--ok); } .accent strong { color:var(--accent); } .warn strong { color:var(--warn); } .danger strong { color:var(--danger); }
-    .schema { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .stack { display:grid; gap:10px; }
-    .line { display:grid; grid-template-columns:132px 1fr; gap:12px; align-items:center; min-height:42px; border:1px solid var(--border); border-radius:8px; padding:10px 12px; background:#fff; font-size:13px; }
-    .line b { color:var(--ink); }
-    .line span { color:var(--muted); line-height:1.4; }
-    .files { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; margin-top:14px; }
-    .file { min-height:70px; border:1px solid var(--border); border-radius:8px; padding:12px; background:#fff; color:inherit; text-decoration:none; }
-    .file strong { display:block; margin-bottom:6px; font-size:13px; }
-    .file span { color:var(--muted); font-size:12px; line-height:1.35; }
-    .snippet { margin:0; padding:16px; border:1px solid var(--border); border-radius:8px; background:#0f172a; color:#e5e7eb; overflow:auto; font-size:13px; line-height:1.55; white-space:pre; }
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+    body { padding: 32px; }
+    .shell { width: 100%; max-width: 1192px; margin: 0 auto; }
+    header {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 24px;
+      align-items: end;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 30px; line-height: 1.12; }
+    h2 { font-size: 18px; line-height: 1.2; }
+    h3 { font-size: 14px; line-height: 1.25; }
+    .subtitle { margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 820px; }
+    .pair {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-size: 13px;
+    }
+    .pair b { color: var(--accent); }
+    .pair span { color: var(--muted); overflow-wrap: anywhere; }
+    .section {
+      margin-top: 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-muted);
+    }
+    .note { color: var(--muted); font-size: 13px; line-height: 1.45; max-width: 520px; }
+    .body { padding: 18px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .matrix { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .cell {
+      min-height: 118px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 13px;
+    }
+    .cell strong { display: block; margin-bottom: 8px; font-size: 14px; }
+    .cell p { color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .ok strong { color: var(--ok); }
+    .accent strong { color: var(--accent); }
+    .warn strong { color: var(--warn); }
+    .danger strong { color: var(--danger); }
+    .row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      align-items: center;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 13px;
+    }
+    .row + .row { margin-top: 8px; }
+    .row b { color: var(--ink); }
+    .row span { color: var(--muted); line-height: 1.4; overflow-wrap: anywhere; }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; color: var(--muted); font-size: 12px; }
+    .key { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 999px; border: 1px solid currentColor; }
+    svg { display: block; width: 100%; height: auto; }
+    .files { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .file {
+      min-height: 74px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: inherit;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    .file strong { display: block; margin-bottom: 6px; font-size: 13px; }
+    .file span { color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .snippet {
+      margin: 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e5e7eb;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   </style>
 </head>
 <body>
@@ -46,135 +141,301 @@
     <header>
       <div>
         <h1>Atomic Committer</h1>
-        <p class="subtitle">dirty git tree를 Secret Guard로 먼저 검사하고 작업 단위로 나눠 커밋하며, 메시지는 영어 prefix + 한글 메시지로 작성하고 remote 있을 때만 push합니다.</p>
+        <p class="subtitle">커밋 요청을 받으면 dirty tree를 먼저 읽고, 비밀값 검사와 forbidden-content scan을 거친 뒤 작업 단위로 stage, 재검사, commit, 조건부 push까지 수행하는 스킬입니다. 메시지는 영어 prefix + 한글 메시지이며 remote 있을 때만 push합니다.</p>
       </div>
-      <div class="badge">AC</div>
+      <div class="pair" aria-label="파일 쌍">
+        <b>파일 쌍</b>
+        <span><code>SKILL.md</code> 에이전트 지시문</span>
+        <span><code>skill.html</code> 사람용 시각 가이드</span>
+      </div>
     </header>
 
-    <section class="grid">
-      <article class="panel">
-        <div class="head"><h2>사용 판단 매트릭스</h2><p class="note">커밋 요청이 있어도 무조건 `git add .`로 가지 않습니다.</p></div>
-        <div class="body matrix">
-          <div class="cell ok"><strong>바로 사용</strong><p>사용자가 commit, commit and push, 변경사항을 나눠 커밋하라고 요청했습니다.</p></div>
-          <div class="cell accent"><strong>먼저 분리</strong><p>dirty file이 여러 관심사를 담고 있으면 diff를 읽고 atomic commit 단위로 분류합니다.</p></div>
-          <div class="cell warn"><strong>확인 필요</strong><p>한 파일 안에 unrelated hunk가 섞였거나 placeholder secret 예시, 큰 생성물, local artifact가 있습니다.</p></div>
-          <div class="cell danger"><strong>강제 차단</strong><p>실제값처럼 보이는 credential assignment, private key, live token은 강제 요청이 있어도 커밋하지 않습니다.</p></div>
-        </div>
-      </article>
+    <section class="section" aria-labelledby="decision-title">
+      <div class="section-head">
+        <h2 id="decision-title">사용 판단</h2>
+        <p class="note">커밋 요청이 있어도 자동으로 전체 stage하지 않습니다. 먼저 intent, diff, staged 상태, secret 위험을 분리합니다.</p>
+      </div>
+      <div class="body matrix">
+        <div class="cell ok"><strong>사용</strong><p>사용자가 commit, commit and push, 여러 변경을 atomic commit으로 나누라고 요청했습니다.</p></div>
+        <div class="cell accent"><strong>분리 또는 결합</strong><p>기능, 테스트, 문서, 생성물이 같은 의도에 묶이면 하나의 changeset으로 다루고, 무관한 변경은 분리합니다.</p></div>
+        <div class="cell warn"><strong>질문</strong><p>한 파일에 unrelated hunk가 섞였거나 staged 변경이 이미 있고 사용자 의도와 충돌할 수 있습니다.</p></div>
+        <div class="cell danger"><strong>중단</strong><p>live-looking credential assignment, private key, 실제 인증 URL은 사용자 요청으로도 커밋할 수 없습니다.</p></div>
+      </div>
+    </section>
 
-      <article class="panel">
-        <div class="head"><h2>비밀값 검증</h2><p class="note">candidate diff와 staged diff를 둘 다 검사합니다.</p></div>
-        <div class="body stack">
-          <div class="line"><b>강제 차단 (Hard block)</b><span>AWS, GCP, Azure, GitHub, OpenAI, Stripe, Slack, npm, DB URL / DB URLs의 실제값처럼 보이는 인증값 할당</span></div>
-          <div class="line"><b>AWS 예시</b><span>AWS_ACCESS_KEY=... 값이 실제처럼 보일 때만 차단하고, placeholder 언급은 경고로 둡니다</span></div>
-          <div class="line"><b>키 패턴</b><span>AKIA[0-9A-Z]{16}, ASIA[0-9A-Z]{16}, JWT-shaped values, private key block</span></div>
-          <div class="line"><b>먼저 경고</b><span>.env.example, placeholder docs, credential-like paths, local screenshots, generated files</span></div>
-          <div class="line"><b>우회 금지</b><span>--no-verify, force request, manual staging으로 forbidden-content scan을 우회하지 않습니다.</span></div>
+    <section class="section" aria-labelledby="flow-title">
+      <div class="section-head">
+        <h2 id="flow-title">실행 흐름</h2>
+        <p class="note">검사는 두 번 합니다. candidate diff를 보고 그룹을 정한 뒤 staged diff를 다시 검사해야 commit할 수 있습니다.</p>
+      </div>
+      <div class="body">
+        <svg viewBox="0 0 1120 320" role="img" aria-label="상태 확인부터 조건부 push까지의 atomic commit 흐름">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <g fill="#fff" stroke="#d1d5db" stroke-width="2">
+            <rect x="24" y="70" width="132" height="68" rx="8"/>
+            <rect x="188" y="70" width="132" height="68" rx="8"/>
+            <rect x="352" y="70" width="132" height="68" rx="8"/>
+            <rect x="516" y="70" width="132" height="68" rx="8"/>
+            <rect x="680" y="70" width="132" height="68" rx="8"/>
+            <rect x="844" y="70" width="132" height="68" rx="8"/>
+            <rect x="1008" y="70" width="88" height="68" rx="8"/>
+            <rect x="352" y="194" width="460" height="70" rx="8" fill="#fef3c7" stroke="#a16207"/>
+          </g>
+          <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)">
+            <line x1="156" y1="104" x2="184" y2="104"/>
+            <line x1="320" y1="104" x2="348" y2="104"/>
+            <line x1="484" y1="104" x2="512" y2="104"/>
+            <line x1="648" y1="104" x2="676" y2="104"/>
+            <line x1="812" y1="104" x2="840" y2="104"/>
+            <line x1="976" y1="104" x2="1004" y2="104"/>
+            <path d="M418 138 C418 168 460 170 460 194"/>
+            <path d="M704 194 C704 170 746 168 746 138"/>
+          </g>
+          <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827">
+            <text x="90" y="98">repo 확인</text>
+            <text x="254" y="98">diff 읽기</text>
+            <text x="418" y="98">비밀값 triage</text>
+            <text x="582" y="98">changeset 분류</text>
+            <text x="746" y="98">선택 stage</text>
+            <text x="910" y="98">commit</text>
+            <text x="1052" y="98">push</text>
+          </g>
+          <g text-anchor="middle" font-size="12" fill="#6b7280">
+            <text x="90" y="119">worktree / branch</text>
+            <text x="254" y="119">stat + unstaged + staged</text>
+            <text x="418" y="119">warn 또는 hard block</text>
+            <text x="582" y="119">intent 기준</text>
+            <text x="746" y="119">파일 또는 hunk</text>
+            <text x="910" y="119">prefix + 한글</text>
+            <text x="1052" y="119">요청+remote</text>
+            <text x="582" y="224" font-weight="800" fill="#111827">staged diff 재검사</text>
+            <text x="582" y="246">git diff --cached -U0 --no-ext-diff 통과 후에만 commit</text>
+          </g>
+        </svg>
+        <div class="legend">
+          <span class="key"><span class="dot" style="color:#d1d5db"></span>일반 단계</span>
+          <span class="key"><span class="dot" style="color:#a16207"></span>중간 gate</span>
+          <span class="key">화살표: 다음 행동</span>
         </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="panel">
-        <div class="head"><h2>커밋 메시지 규칙</h2><p class="note">접두사는 conventional commit, 본문은 한글로 고정합니다.</p></div>
-        <div class="body stack">
-          <div class="line"><b>형식</b><span>&lt;type&gt;: &lt;한글 요약&gt;</span></div>
-          <div class="line"><b>범위(scope) 선택</b><span>&lt;type&gt;(&lt;scope&gt;): &lt;한글 요약&gt;</span></div>
-          <div class="line"><b>예시</b><span>feat: 변경사항 단위 커밋 스킬 추가</span></div>
-          <div class="line"><b>주요 type</b><span>feat, fix, docs, refactor, test, chore, build, ci, style, perf, revert</span></div>
+    <section class="section" aria-labelledby="priority-title">
+      <div class="section-head">
+        <h2 id="priority-title">우선순위와 위험</h2>
+        <p class="note">그룹 기준은 파일 종류가 아니라 의도입니다. 다만 secret 안전과 `.gitignore` 예방은 커밋보다 앞섭니다.</p>
+      </div>
+      <div class="body grid-2">
+        <svg viewBox="0 0 540 278" role="img" aria-label="atomic commit grouping priority chart">
+          <g font-size="13" fill="#374151">
+            <text x="22" y="34">1 사용자 요청 / 이슈</text>
+            <text x="22" y="74">2 secret 안전</text>
+            <text x="22" y="114">3 .gitignore 예방</text>
+            <text x="22" y="154">4 런타임 행동</text>
+            <text x="22" y="194">5 테스트</text>
+            <text x="22" y="234">6 문서 / snippet</text>
+            <text x="22" y="266">7 도구 / 생성물</text>
+          </g>
+          <g>
+            <rect x="178" y="18" width="322" height="22" rx="6" fill="#2563eb"/>
+            <rect x="178" y="58" width="304" height="22" rx="6" fill="#b42318"/>
+            <rect x="178" y="98" width="282" height="22" rx="6" fill="#a16207"/>
+            <rect x="178" y="138" width="246" height="22" rx="6" fill="#1f7a52"/>
+            <rect x="178" y="178" width="210" height="22" rx="6" fill="#64748b"/>
+            <rect x="178" y="218" width="174" height="22" rx="6" fill="#6b7280"/>
+            <rect x="178" y="250" width="142" height="18" rx="6" fill="#6b7280"/>
+          </g>
+        </svg>
+        <div>
+          <div class="row"><b>강제 차단</b><span>실제값처럼 보이는 cloud, source control, AI API, payment, messaging, package registry token assignment. 예: <code>AWS_ACCESS_KEY=...</code>, OpenAI API key</span></div>
+          <div class="row"><b>DB URL</b><span><code>DATABASE_URL</code>, <code>REDIS_URL</code>, <code>MONGODB_URI</code>, <code>POSTGRES_URL</code> 안의 실제 username/password 또는 token</span></div>
+          <div class="row"><b>키 재료</b><span><code>AKIA...</code>, <code>ASIA...</code>, JWT-shaped value, private key block</span></div>
+          <div class="row"><b>경고 후 확인</b><span><code>.env.example</code>, placeholder docs, credential-like path, local screenshot, 큰 생성물</span></div>
+          <div class="row"><b>placeholder</b><span><code>example</code>, <code>dummy</code>, <code>REPLACE_ME</code>, <code>${...}</code>, <code>sk-...REDACTED</code>는 주변 diff를 보고 판단합니다.</span></div>
         </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="panel wide">
-        <div class="head"><h2>작업 단위 커밋 흐름</h2><p class="note">검사, Secret Guard, 분류, staged set, 재검사, commit, 조건부 push 순서입니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 1080 280" role="img" aria-label="git 변경사항을 확인하고 작업 단위로 나눈 뒤 커밋하고 remote 있을 때만 push하는 흐름">
-            <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2">
-              <rect x="24" y="74" width="142" height="70" rx="8"/><rect x="202" y="74" width="142" height="70" rx="8"/><rect x="380" y="74" width="142" height="70" rx="8"/><rect x="558" y="74" width="142" height="70" rx="8"/><rect x="736" y="74" width="142" height="70" rx="8"/><rect x="914" y="74" width="142" height="70" rx="8"/>
-              <rect x="380" y="184" width="320" height="58" rx="8" fill="#fef3c7" stroke="#d97706"/>
-            </g>
-            <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)">
-              <line x1="166" y1="109" x2="198" y2="109"/><line x1="344" y1="109" x2="376" y2="109"/><line x1="522" y1="109" x2="554" y2="109"/><line x1="700" y1="109" x2="732" y2="109"/><line x1="878" y1="109" x2="910" y2="109"/>
-              <path d="M451 144 C451 166 486 171 486 184" fill="none"/><path d="M594 184 C594 166 629 166 629 144" fill="none"/>
-            </g>
-            <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827">
-              <text x="95" y="103">git 상태 확인</text><text x="273" y="103">변경 확인</text><text x="451" y="103">비밀값 검사</text><text x="629" y="103">선택 stage</text><text x="807" y="103">commit</text><text x="985" y="103">조건부 push</text>
-            </g>
-            <g text-anchor="middle" font-size="12" fill="#6b7280">
-              <text x="95" y="124">repo / branch / remote</text><text x="273" y="124">unstaged + staged</text><text x="451" y="124">경고 또는 강제 차단</text><text x="629" y="124">파일 또는 hunk</text><text x="807" y="124">prefix + 한글</text><text x="985" y="124">remote 있을 때만</text><text x="540" y="218">staged diff를 다시 검사하고 통과한 changeset만 commit</text>
-            </g>
-          </svg>
+    <section class="section" aria-labelledby="io-title">
+      <div class="section-head">
+        <h2 id="io-title">입출력 스키마</h2>
+        <p class="note">이 스킬은 git 작업을 수행하지만 최종 보고도 계약입니다. 무엇을 커밋했고, 무엇을 남겼고, 왜 push했는지 또는 생략했는지 알려야 합니다.</p>
+      </div>
+      <div class="body grid-3">
+        <div>
+          <h3>입력</h3>
+          <div class="row"><b>요청</b><span>commit, commit and push, split commits</span></div>
+          <div class="row"><b>상태</b><span><code>git status --short</code>, working diff, staged diff, untracked files</span></div>
+          <div class="row"><b>제약</b><span>사용자 변경 보존, destructive command 금지, force-commit 금지</span></div>
         </div>
-      </article>
-
-      <article class="panel">
-        <div class="head"><h2>우선순위 차트</h2><p class="note">커밋 단위 결정에서 무엇을 먼저 보는지입니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 540 240" role="img" aria-label="atomic commit grouping priority bar chart">
-            <g font-size="13" fill="#374151"><text x="24" y="38">사용자 요청 / 이슈</text><text x="24" y="82">행동 변화</text><text x="24" y="126">테스트</text><text x="24" y="170">문서 / snippet</text><text x="24" y="214">도구 / 생성물</text></g>
-            <g><rect x="170" y="20" width="330" height="24" rx="6" fill="#2563eb"/><rect x="170" y="64" width="286" height="24" rx="6" fill="#1f7a52"/><rect x="170" y="108" width="238" height="24" rx="6" fill="#64748b"/><rect x="170" y="152" width="202" height="24" rx="6" fill="#a16207"/><rect x="170" y="196" width="170" height="24" rx="6" fill="#6b7280"/></g>
-            <g font-size="12" fill="#fff" font-weight="800" text-anchor="end"><text x="490" y="37">1</text><text x="446" y="81">2</text><text x="398" y="125">3</text><text x="362" y="169">4</text><text x="330" y="213">5</text></g>
-          </svg>
+        <div>
+          <h3>처리</h3>
+          <div class="row"><b>검사</b><span>candidate diff와 staged diff의 forbidden-content triage</span></div>
+          <div class="row"><b>정리</b><span>반복 local artifact는 좁은 `.gitignore` 패턴으로 예방</span></div>
+          <div class="row"><b>검증</b><span>관련 validation이 practical하면 실행하고 실패 시 push 전 중단</span></div>
         </div>
-      </article>
-
-      <article class="panel">
-        <div class="head"><h2>입출력 스키마</h2><p class="note">스킬이 받는 입력과 최종 보고 구조입니다.</p></div>
-        <div class="body schema">
-          <div class="stack"><div class="line"><b>입력</b><span>commit, commit and push, 변경사항 커밋 요청</span></div><div class="line"><b>맥락</b><span>git status, diff, staged diff, branch, remote</span></div><div class="line"><b>규칙</b><span>Secret Guard, 작업 단위, prefix, 한글 메시지, 조건부 push</span></div></div>
-          <div class="stack"><div class="line"><b>출력</b><span>커밋 hash와 메시지</span></div><div class="line"><b>차단됨</b><span>forbidden-content scan에서 막힌 파일과 이유</span></div><div class="line"><b>Push</b><span>remote/branch 또는 push 생략 사유</span></div></div>
+        <div>
+          <h3>출력</h3>
+          <div class="row"><b>commits</b><span>hash와 메시지</span></div>
+          <div class="row"><b>skipped</b><span>남은 dirty file, 차단 이유, 사용자 확인 필요 항목</span></div>
+          <div class="row"><b>push</b><span>remote/branch 또는 생략 사유</span></div>
         </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="panel wide">
-        <div class="head"><h2>파일 관계도</h2><p class="note">agent 지시문, grouping rule, validator, project snippet의 관계입니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 960 280" role="img" aria-label="atomic-committer 스킬 파일 관계도">
-            <defs><marker id="mapArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2"><rect x="382" y="102" width="196" height="72" rx="8"/><rect x="44" y="38" width="186" height="60" rx="8"/><rect x="44" y="184" width="186" height="60" rx="8"/><rect x="734" y="38" width="186" height="60" rx="8"/><rect x="734" y="184" width="186" height="60" rx="8"/></g>
-            <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#mapArrow)"><line x1="230" y1="68" x2="378" y2="116"/><line x1="230" y1="214" x2="378" y2="158"/><line x1="578" y1="116" x2="730" y2="68"/><line x1="578" y1="158" x2="730" y2="214"/></g>
-            <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827"><text x="480" y="132">atomic-committer</text><text x="137" y="72">SKILL.md</text><text x="137" y="218">grouping-rules</text><text x="827" y="72">skill.html</text><text x="827" y="218">validator / snippet</text></g>
-            <g text-anchor="middle" font-size="12" fill="#6b7280"><text x="480" y="152">소스 폴더</text><text x="137" y="86">에이전트 흐름</text><text x="137" y="232">commit 묶음</text><text x="827" y="86">사용자 가이드</text><text x="827" y="232">프로젝트 설정 검사</text></g>
-          </svg>
-          <div class="files">
-            <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트 흐름</span></a>
-            <a class="file" href="references/grouping-rules.md"><strong>grouping-rules.md</strong><span>atomic commit 기준</span></a>
-            <a class="file" href="agents/openai.yaml"><strong>openai.yaml</strong><span>UI metadata</span></a>
-            <a class="file" href="scripts/validate-atomic-committer.ts"><strong>검증기</strong><span>정적 검사</span></a>
-            <a class="file" href="../../project-snippets/atomic-committer.md"><strong>연결 조각</strong><span>프로젝트 연결</span></a>
-            <a class="file" href="skill.html"><strong>skill.html</strong><span>사용자용 시각 가이드</span></a>
-          </div>
+    <section class="section" aria-labelledby="ignore-title">
+      <div class="section-head">
+        <h2 id="ignore-title">`.gitignore` 예방 gate</h2>
+        <p class="note">`.gitignore`는 이미 staged된 비밀값을 숨기는 우회로가 아니라, untracked local artifact가 반복 유입되지 않게 막는 예방 장치입니다.</p>
+      </div>
+      <div class="body">
+        <svg viewBox="0 0 1120 230" role="img" aria-label="untracked artifact에서 narrow gitignore pattern으로 이어지는 예방 흐름">
+          <defs>
+            <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <g fill="#fff" stroke="#d1d5db" stroke-width="2">
+            <rect x="32" y="62" width="190" height="78" rx="8"/>
+            <rect x="274" y="62" width="190" height="78" rx="8"/>
+            <rect x="516" y="62" width="190" height="78" rx="8"/>
+            <rect x="758" y="62" width="154" height="78" rx="8"/>
+            <rect x="964" y="62" width="124" height="78" rx="8"/>
+          </g>
+          <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow2)">
+            <line x1="222" y1="101" x2="270" y2="101"/>
+            <line x1="464" y1="101" x2="512" y2="101"/>
+            <line x1="706" y1="101" x2="754" y2="101"/>
+            <line x1="912" y1="101" x2="960" y2="101"/>
+          </g>
+          <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827">
+            <text x="127" y="94">untracked 발견</text>
+            <text x="369" y="94">이미 ignore?</text>
+            <text x="611" y="94">좁은 패턴 가능?</text>
+            <text x="835" y="94">.gitignore</text>
+            <text x="1026" y="94">commit group</text>
+          </g>
+          <g text-anchor="middle" font-size="12" fill="#6b7280">
+            <text x="127" y="116">env, cache, log, key file</text>
+            <text x="369" y="116">git check-ignore -v</text>
+            <text x="611" y="116">source 숨김 방지</text>
+            <text x="835" y="116">예방만 수행</text>
+            <text x="1026" y="116">housekeeping</text>
+          </g>
+          <g font-size="12" fill="#b42318">
+            <text x="32" y="190">주의: tracked file 안의 secret은 `.gitignore`로 해결되지 않습니다. redact/remove가 먼저이며 `git rm --cached`도 사용자 확인이 필요합니다.</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="resource-title">
+      <div class="section-head">
+        <h2 id="resource-title">리소스 맵</h2>
+        <p class="note">agent 지시문은 짧게 유지하고, 세부 grouping과 validator는 인접 파일로 분리합니다.</p>
+      </div>
+      <div class="body">
+        <svg viewBox="0 0 980 260" role="img" aria-label="atomic-committer 파일 관계도">
+          <defs>
+            <marker id="mapArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <g fill="#fff" stroke="#d1d5db" stroke-width="2">
+            <rect x="386" y="92" width="208" height="76" rx="8"/>
+            <rect x="52" y="32" width="200" height="62" rx="8"/>
+            <rect x="52" y="166" width="200" height="62" rx="8"/>
+            <rect x="728" y="32" width="200" height="62" rx="8"/>
+            <rect x="728" y="166" width="200" height="62" rx="8"/>
+          </g>
+          <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#mapArrow)">
+            <line x1="252" y1="63" x2="382" y2="110"/>
+            <line x1="252" y1="197" x2="382" y2="150"/>
+            <line x1="594" y1="110" x2="724" y2="63"/>
+            <line x1="594" y1="150" x2="724" y2="197"/>
+          </g>
+          <g text-anchor="middle" font-size="14" font-weight="800" fill="#111827">
+            <text x="490" y="123">atomic-committer</text>
+            <text x="152" y="66">SKILL.md</text>
+            <text x="152" y="200">grouping-rules.md</text>
+            <text x="828" y="66">skill.html</text>
+            <text x="828" y="200">validator / snippet</text>
+          </g>
+          <g text-anchor="middle" font-size="12" fill="#6b7280">
+            <text x="490" y="145">소스 폴더</text>
+            <text x="152" y="80">core contract</text>
+            <text x="152" y="214">세부 grouping</text>
+            <text x="828" y="80">시각 가이드</text>
+            <text x="828" y="214">검사와 연결</text>
+          </g>
+        </svg>
+        <div class="files">
+          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>트리 검사, secret guard, commit/push 계약</span></a>
+          <a class="file" href="references/grouping-rules.md"><strong>references/grouping-rules.md</strong><span>changeset 정의, triage, `.gitignore`, push 규칙</span></a>
+          <a class="file" href="scripts/validate-atomic-committer.ts"><strong>scripts/validate-atomic-committer.ts</strong><span>스킬 전용 정적 validator</span></a>
+          <a class="file" href="agents/openai.yaml"><strong>agents/openai.yaml</strong><span>agent metadata</span></a>
+          <a class="file" href="../../project-snippets/atomic-committer.md"><strong>project-snippets/atomic-committer.md</strong><span>프로젝트 instruction 연결 조각</span></a>
+          <a class="file" href="skill.html"><strong>skill.html</strong><span>설치 후 사람이 읽는 HTML guide</span></a>
         </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="panel wide">
-        <div class="head"><h2>금지와 허용</h2><p class="note">커밋 자동화가 위험한 동작으로 흐르지 않게 막는 misuse guardrails입니다.</p></div>
-        <div class="body schema">
-          <div class="stack">
-            <div class="line"><b>허용</b><span>diff를 읽고 logical changeset별로 stage합니다.</span></div>
-            <div class="line"><b>허용</b><span>candidate diff와 staged diff를 모두 Secret Guard로 검사합니다.</span></div>
-            <div class="line"><b>허용</b><span>커밋 메시지는 영어 prefix와 한글 요약으로 씁니다.</span></div>
-          </div>
-          <div class="stack">
-            <div class="line"><b>금지</b><span>`git add .`로 무관한 변경을 한 번에 포함하지 않습니다.</span></div>
-            <div class="line"><b>금지</b><span>live-looking credential, private key, local artifact를 커밋하지 않습니다.</span></div>
-            <div class="line"><b>금지</b><span>remote가 없거나 push 요청이 없으면 push하지 않습니다.</span></div>
-          </div>
+    <section class="section" aria-labelledby="validation-title">
+      <div class="section-head">
+        <h2 id="validation-title">검증 gate</h2>
+        <p class="note">이 HTML을 수정한 뒤에는 skill validator와 HTML validator로 구조와 링크를 확인합니다.</p>
+      </div>
+      <div class="body grid-2">
+        <div>
+          <div class="row"><b>기본 검사</b><span><code>node scripts/validate-skill.ts skills/atomic-committer</code></span></div>
+          <div class="row"><b>전용 검사</b><span><code>node skills/atomic-committer/scripts/validate-atomic-committer.ts</code></span></div>
+          <div class="row"><b>HTML 검사</b><span><code>node scripts/validate-skill-html.ts .</code></span></div>
         </div>
-      </article>
+        <div>
+          <div class="row"><b>완료 조건</b><span>SKILL.md와 guide가 같은 trigger, workflow, guardrail을 설명합니다.</span></div>
+          <div class="row"><b>렌더링</b><span>desktop viewport에서 텍스트 겹침이 없고 local link가 상대 경로로 유지됩니다.</span></div>
+          <div class="row"><b>범위</b><span>hook run에서는 adjacent <code>skill.html</code>만 업데이트합니다.</span></div>
+        </div>
+      </div>
+    </section>
 
-      <article class="panel wide">
-        <div class="head"><h2>프로젝트 연결 snippet</h2><p class="note">프로젝트 instruction 파일에 붙이는 최소 블록입니다.</p></div>
-        <div class="body"><pre class="snippet">## Project Skills
+    <section class="section" aria-labelledby="misuse-title">
+      <div class="section-head">
+        <h2 id="misuse-title">오용 방지</h2>
+        <p class="note">atomic commit 자동화가 사용자 변경 손실, secret 유출, 예기치 않은 push로 이어지지 않게 막는 규칙입니다.</p>
+      </div>
+      <div class="body grid-2">
+        <div>
+          <div class="row"><b>허용</b><span>논리 changeset별로 파일이나 hunk를 선택 stage합니다.</span></div>
+          <div class="row"><b>허용</b><span>반복 untracked local artifact는 좁은 `.gitignore` 패턴으로 예방합니다.</span></div>
+          <div class="row"><b>허용</b><span>commit message는 <code>&lt;type&gt;: &lt;한글 요약&gt;</code> 형식으로 씁니다.</span></div>
+          <div class="row"><b>허용</b><span>push 요청, remote, branch, validation이 모두 맞을 때만 publish합니다.</span></div>
+        </div>
+        <div>
+          <div class="row"><b>금지</b><span><code>git add .</code>로 무관한 변경을 한 번에 포함하지 않습니다.</span></div>
+          <div class="row"><b>금지</b><span>hard-blocked credential이나 private key를 force request로 커밋하지 않습니다.</span></div>
+          <div class="row"><b>금지</b><span>tracked secret을 `.gitignore` 변경으로 숨기려 하지 않습니다.</span></div>
+          <div class="row"><b>금지</b><span><code>reset --hard</code>, <code>checkout --</code>, amend, rebase, force-push는 명시 요청 없이는 하지 않습니다.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="snippet-title">
+      <div class="section-head">
+        <h2 id="snippet-title">프로젝트 연결 snippet</h2>
+        <p class="note">프로젝트 instruction 파일에 연결할 때의 최소 규칙입니다. 실제 프로젝트에서는 해당 repo 경로에 맞게 skill path만 조정합니다.</p>
+      </div>
+      <div class="body">
+        <pre class="snippet">## Project Skills
 
 - Use $atomic-committer at &lt;skills-root&gt;/skills/atomic-committer/SKILL.md when asked to commit, split changes into commits, create multiple logical commits, or commit and push.
 
 ## Project Skill Overrides
 
-- Commit messages must use an English conventional prefix such as `feat`, `fix`, `docs`, or `chore`, followed by a Korean summary.
-- Group changed files by logical changeset before committing.
-- Before staging and before committing, scan candidate changes for forbidden content. Hard-block live-looking credential assignments and private-key material across common providers. For example, block `AWS_ACCESS_KEY=...` only when the assigned value looks real rather than placeholder text, and do not allow force-commit overrides.
-- Push only when a git remote exists and the user requested push.</pre></div>
-      </article>
+- Scan candidate changes before staging and scan `git diff --cached -U0 --no-ext-diff` before committing.
+- Hard-block live-looking credential assignments, private-key material, and URL credentials across common providers.
+- Update `.gitignore` only as narrow prevention for untracked local or secret-bearing artifacts; never use it to hide tracked secret content.
+- Group files by logical changeset and use commit messages like `feat: 한글 요약`.
+- Push only when the user requested push, a remote exists, the branch is not detached, and validation is not blocking.</pre>
+      </div>
     </section>
   </main>
 </body>
