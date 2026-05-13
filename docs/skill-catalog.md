@@ -16,6 +16,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | `browser-qa`, `design-review` |
 | 기존 스킬을 수정한다 | `skill-update` | `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
+| 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `workflow` |
 | cmux tab/status/hook으로 세션 질문을 기억한다 | `cmux-automation` | `sync-docs`, `browser-qa` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
@@ -38,6 +39,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | `workflow` / `project-structure` | `workflow`는 새 프로젝트나 feature의 product, architecture, issue, TDD, QA 순서를 잡는다. `project-structure`는 구조 선택이 구체화된 뒤 폴더/env/codegen/db/infra 경계를 잡는다. | workflow가 architecture handoff 지점에 도달하면 project-structure를 호출한다. |
 | `browser-qa` / `design-review` / `code-review` | `browser-qa`는 실제 렌더링과 console/network 증거, `design-review`는 UI 위계와 시각 판단, `code-review`는 구현 위험과 테스트 누락을 본다. | UI 변경 검토는 browser-qa로 사실을 확인하고 design-review로 판단을 보강한다. |
 | `web-research` / `sync-docs` | `web-research`는 외부 최신 사실과 출처 검증, `sync-docs`는 repo 안의 현재 문서와 파일 대조다. | 문서가 외부 최신 사실을 포함하면 web-research로 근거를 확인한 뒤 sync-docs로 반영한다. |
+| `transcript-polisher` / `sync-docs` / `code-review` | `transcript-polisher`는 전사본과 긴 산문을 직접 읽고 문맥을 다듬을 때, `sync-docs`는 repo 문서 간 정합성을 맞출 때, `code-review`는 코드 diff 위험을 볼 때 쓴다. | 전사본을 문서로 편입한 뒤 repo 문서와 연결해야 하면 transcript-polisher 후 sync-docs를 쓴다. |
 | `karpathy-thinkings` / `code-review` | `karpathy-thinkings`는 구현 전후의 작업 discipline, `code-review`는 결과 diff의 findings-first 검토다. | 중요한 구현은 karpathy-thinkings로 진행하고 code-review로 마무리한다. |
 
 ## 카테고리별 목록
@@ -72,6 +74,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
+| `transcript-polisher` | 전사본, 강의 대본, 자막, 회의록, 긴 산문을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며 Claude `/goal`식 완료 조건 루프로 검토한다. | [SKILL.md](../skills/transcript-polisher/SKILL.md) · [skill.html](../skills/transcript-polisher/skill.html) |
 | `atomic-committer` | dirty git tree를 secret guard로 검사하고, 반복 untracked local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나눠 조건부 push를 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
 | `pull-request` | GitHub PR의 branch/base/head, 한국어 title/body, template, issue link, reviewer/label/draft 옵션과 `gh pr create` 실행 경계를 관리한다. | [SKILL.md](../skills/pull-request/SKILL.md) · [skill.html](../skills/pull-request/skill.html) |
 

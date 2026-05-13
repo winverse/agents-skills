@@ -64,6 +64,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/project-structure.md`: only project structure, default stack rules, selected DB provider options, and requested infra/deployment boundaries.
 - `project-snippets/workflow.md`: only project and feature workflow sequencing, domain/ADR/PRD/issue/planning/TDD/QA/document-sync flow, and workflow artifact placement.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
+- `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.
 - `project-snippets/cmux-automation.md`: only cmux automation, prompt pinning, tab/status automation, workspace boards, feed workflows, and cmux CLI ergonomics.
 - `project-snippets/agent-eval-harness.md`: only initial agent eval harness setup, skill routing cases, cross-agent portability checks, guardrail checks, artifact hygiene, local runner wiring, and regression capture.
 
