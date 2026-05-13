@@ -3,12 +3,14 @@ import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 
 const args = new Set(process.argv.slice(2));
 const autoRun = args.has("--auto");
 const dryRun = args.has("--dry-run");
 const recursionGuard = process.env.SKILL_HTML_HOOK_ACTIVE === "1";
 const noWrite = process.env.SKILL_HTML_HOOK_NO_WRITE === "1";
+const localRepoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 async function readStdin() {
   const chunks = [];
@@ -32,6 +34,10 @@ function gitRoot(cwd) {
   } catch {
     return path.resolve(cwd);
   }
+}
+
+function isLocalRepoRoot(root) {
+  return path.resolve(root) === localRepoRoot;
 }
 
 function toPosix(filePath) {
@@ -274,6 +280,10 @@ try {
 
 const eventName = payload.hook_event_name ?? "PostToolUse";
 const root = gitRoot(payload.cwd ?? process.cwd());
+if (!isLocalRepoRoot(root)) {
+  process.stdout.write("{}\n");
+  process.exit(0);
+}
 const entries = parseGitStatus(root);
 const candidateDirs = collectDirtySkillDirs(entries);
 const changedSkillDirs = collectChangedSkillDirs(entries);
