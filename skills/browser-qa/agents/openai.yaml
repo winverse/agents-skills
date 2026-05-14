@@ -1,4 +1,4 @@
 interface:
   display_name: "Browser QA"
   short_description: "Runtime browser verification with Playwright"
-  default_prompt: "Use $browser-qa to verify the target page or app in a browser, checking console output, network failures, screenshots, accessibility snapshots, links, interactions, layout overlap, and responsive behavior."
+  default_prompt: "Use $browser-qa to verify the target page or app in a browser, checking console output, network failures, screenshots, accessibility snapshots, links, interactions, layout overlap, responsive behavior, and cleanup by closing Playwright/Chrome tabs plus any local server started for QA."

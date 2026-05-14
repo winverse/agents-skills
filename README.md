@@ -88,7 +88,7 @@ skills/skill-name/
 - `agent-eval-harness`: agent skill routing, cross-agent instruction portability, workflow, safety boundary, artifact hygiene, output quality, regression capture를 검증하는 초기 repo-local eval harness를 세팅하는 스킬. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check를 우선 쓰고, `project-workflow`나 `spec-workflow`에서 호출될 때는 routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, CLI/no-browser evidence, MCP/API gate decisions, fallback lane, project setup verification, completion mapping, document sync, artifact hygiene seed case를 만든다.
   - Source instruction: `skills/agent-eval-harness/SKILL.md`
   - Human visual guide: `skills/agent-eval-harness/skill.html`
-- `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하는 스킬.
+- `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하고 종료 시 browser/server를 정리하는 스킬.
   - Source instruction: `skills/browser-qa/SKILL.md`
   - Human visual guide: `skills/browser-qa/skill.html`
 - `code-review`: findings-first 코드/PR/diff 리뷰로 버그, 회귀, 테스트 누락, SRP/SOLID 경계, JS/TS 함수형 collection style, agent/tool-call boundary 위험을 점검하는 스킬.

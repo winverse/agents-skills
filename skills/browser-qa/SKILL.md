@@ -1,6 +1,6 @@
 ---
 name: browser-qa
-description: "웹 페이지, web app, skill.html, responsive layout, console/network, accessibility snapshot, screenshot, broken link, text overflow를 Playwright 기반 browser evidence로 확인할 때 사용한다."
+description: "웹 페이지, web app, skill.html, responsive layout, console/network, accessibility snapshot, screenshot, broken link, text overflow를 Playwright 기반 browser evidence로 확인하고, 검증 종료 후 브라우저와 임시 서버를 정리할 때 사용한다."
 ---
 
 # 브라우저 QA
@@ -15,6 +15,7 @@ description: "웹 페이지, web app, skill.html, responsive layout, console/net
 4. console error와 network failure를 본다.
 5. screenshot으로 overflow, overlap, blank canvas, missing asset을 확인한다.
 6. 사용자 요청과 직접 관련된 interaction만 수행한다.
+7. 사용자가 계속 열어 둘 URL을 요청하지 않았다면 QA 종료 후 Playwright/Chrome tab을 닫고, 직접 시작한 local HTTP/dev server를 중지한다.
 
 ## output shape 기준
 
@@ -28,6 +29,7 @@ description: "웹 페이지, web app, skill.html, responsive layout, console/net
 증거
 - console: <요약>
 - screenshot/snapshot: <파일 또는 관찰>
+- cleanup: <닫은 browser/session, 중지한 server, 또는 유지 사유>
 ```
 
 ## safety rules 기준
@@ -35,3 +37,4 @@ description: "웹 페이지, web app, skill.html, responsive layout, console/net
 - secret, payment data, destructive live action은 입력하지 않는다.
 - 실제 서비스에서 상태를 바꾸는 버튼은 사용자 확인 없이 누르지 않는다.
 - browser evidence 없이 단정하지 않는다.
+- QA를 위해 연 browser tab과 직접 시작한 server를 완료 뒤 방치하지 않는다.

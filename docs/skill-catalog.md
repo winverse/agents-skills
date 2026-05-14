@@ -26,7 +26,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
 | 커밋을 논리 단위로 나누고 push한다 | `atomic-committer` | `code-review` |
 | GitHub PR을 준비하거나 생성한다 | `pull-request` | `atomic-committer`, `code-review` |
-| 브라우저 렌더링과 console/network를 확인한다 | `browser-qa` | `design-review` |
+| 브라우저 렌더링과 console/network를 확인하고 QA 종료 후 browser/server를 정리한다 | `browser-qa` | `design-review` |
 | 코드 리뷰와 회귀 위험을 본다 | `code-review` | `browser-qa` |
 | UI 위계, 밀도, 타이포그래피, 취향을 본다 | `design-review` | `browser-qa` |
 
@@ -85,7 +85,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
-| `browser-qa` | 브라우저 runtime evidence로 렌더링, console, network, accessibility snapshot, viewport, text overflow를 확인한다. | [SKILL.md](../skills/browser-qa/SKILL.md) · [skill.html](../skills/browser-qa/skill.html) |
+| `browser-qa` | 브라우저 runtime evidence로 렌더링, console, network, accessibility snapshot, viewport, text overflow를 확인하고 QA 종료 후 browser/server를 정리한다. | [SKILL.md](../skills/browser-qa/SKILL.md) · [skill.html](../skills/browser-qa/skill.html) |
 | `code-review` | Findings-first 방식으로 버그, 회귀, 누락 테스트, SRP/SOLID, JS/TS 스타일, agent/tool-call boundary 위험을 검토한다. | [SKILL.md](../skills/code-review/SKILL.md) · [skill.html](../skills/code-review/skill.html) |
 | `design-review` | 제품 도메인과 기존 디자인 시스템을 우선해 UI hierarchy, density, typography, state, accessibility, responsive order를 리뷰한다. | [SKILL.md](../skills/design-review/SKILL.md) · [skill.html](../skills/design-review/skill.html) |
 

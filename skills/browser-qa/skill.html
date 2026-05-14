@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>browser-qa</title>
+  <link rel="icon" href="data:,">
   <style>
     :root { --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280; --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#0f172a; }
     html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
@@ -35,7 +36,7 @@
     <header>
       <div>
         <h1>browser-qa</h1>
-        <p>브라우저에서 실제 렌더링, 의도한 visible content, console, network, accessibility snapshot, viewport, text overflow를 확인하는 QA 스킬.</p>
+        <p>브라우저에서 실제 렌더링, 의도한 visible content, console, network, accessibility snapshot, viewport, text overflow를 확인하고 종료 시 browser/server를 정리하는 QA 스킬.</p>
       </div>
       <div class="pair">
         <span><strong>에이전트</strong><a href="SKILL.md">SKILL.md</a></span>
@@ -48,7 +49,7 @@
       <div class="matrix">
         <div class="cell"><span class="tag ok">사용</span><h3>런타임 + 의도 검증</h3><p>console, network, screenshot, accessibility snapshot, viewport, visible content 확인이 필요할 때.</p></div>
         <div class="cell"><span class="tag accent">함께 사용</span><h3>디자인 리뷰</h3><p>취향/위계 판단은 design-review와 분리하고, 실제 렌더 증거만 제공한다.</p></div>
-        <div class="cell"><span class="tag warn">확인 필요</span><h3>의도 불명확</h3><p>URL, route, viewport, dev server, 기대 visible section이 불명확하면 먼저 좁힌다.</p></div>
+        <div class="cell"><span class="tag warn">확인 필요</span><h3>의도 불명확</h3><p>URL, route, viewport, dev server, 기대 visible section, 유지할 browser/server가 불명확하면 먼저 좁힌다.</p></div>
         <div class="cell"><span class="tag danger">건너뜀</span><h3>민감/파괴 작업</h3><p>credential 입력, 결제, production destructive action은 하지 않는다.</p></div>
       </div>
     </section>
@@ -57,15 +58,17 @@
       <h2>검증 흐름</h2>
       <svg class="flow" viewBox="0 0 1080 220" role="img" aria-label="browser qa workflow">
         <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
-        <rect x="30" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="102" y="99" text-anchor="middle" font-size="14" font-weight="700">대상</text><text x="102" y="120" text-anchor="middle" font-size="12" fill="#6b7280">URL / HTML</text>
-        <line x1="175" y1="104" x2="245" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="248" y="68" width="145" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="320" y="99" text-anchor="middle" font-size="14" font-weight="700">화면 크기</text><text x="320" y="120" text-anchor="middle" font-size="12" fill="#6b7280">PC / mobile</text>
-        <line x1="393" y1="104" x2="463" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="466" y="68" width="160" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="546" y="99" text-anchor="middle" font-size="14" font-weight="700">의도 검증</text><text x="546" y="120" text-anchor="middle" font-size="12" fill="#6b7280">content contract</text>
-        <line x1="626" y1="104" x2="696" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="699" y="68" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="774" y="99" text-anchor="middle" font-size="14" font-weight="700">증거</text><text x="774" y="120" text-anchor="middle" font-size="12" fill="#6b7280">console / network</text>
-        <line x1="849" y1="104" x2="919" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="922" y="68" width="130" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="987" y="99" text-anchor="middle" font-size="14" font-weight="700">보고</text><text x="987" y="120" text-anchor="middle" font-size="12" fill="#6b7280">통과 / 실패</text>
+        <rect x="28" y="68" width="132" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="94" y="99" text-anchor="middle" font-size="14" font-weight="700">대상</text><text x="94" y="120" text-anchor="middle" font-size="12" fill="#6b7280">URL/HTML</text>
+        <line x1="160" y1="104" x2="205" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="208" y="68" width="132" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="274" y="99" text-anchor="middle" font-size="14" font-weight="700">화면 크기</text><text x="274" y="120" text-anchor="middle" font-size="12" fill="#6b7280">PC / mobile</text>
+        <line x1="340" y1="104" x2="385" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="388" y="68" width="146" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="461" y="99" text-anchor="middle" font-size="14" font-weight="700">의도 검증</text><text x="461" y="120" text-anchor="middle" font-size="12" fill="#6b7280">content contract</text>
+        <line x1="534" y1="104" x2="579" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="582" y="68" width="142" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="653" y="99" text-anchor="middle" font-size="14" font-weight="700">증거</text><text x="653" y="120" text-anchor="middle" font-size="12" fill="#6b7280">console / network</text>
+        <line x1="724" y1="104" x2="769" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="772" y="68" width="126" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="835" y="99" text-anchor="middle" font-size="14" font-weight="700">보고</text><text x="835" y="120" text-anchor="middle" font-size="12" fill="#6b7280">통과 / 실패</text>
+        <line x1="898" y1="104" x2="943" y2="104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="946" y="68" width="106" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="999" y="99" text-anchor="middle" font-size="14" font-weight="700">정리</text><text x="999" y="120" text-anchor="middle" font-size="12" fill="#6b7280">닫기 / 중지</text>
       </svg>
     </section>
 
@@ -74,7 +77,7 @@
       <div class="grid3">
         <div class="cell"><h3>입력</h3><ul><li>URL 또는 HTML 파일</li><li>route와 viewport</li><li>검증할 interaction</li></ul></div>
         <div class="cell"><h3>의도와 증거</h3><ul><li>visible headings/sections</li><li>console/network</li><li>accessibility snapshot</li><li>screenshot/viewport</li></ul></div>
-        <div class="cell"><h3>출력</h3><ul><li>severity별 findings</li><li>재현 단계</li><li>passed checks</li></ul></div>
+        <div class="cell"><h3>출력</h3><ul><li>severity별 findings</li><li>재현 단계</li><li>passed checks</li><li>cleanup 결과</li></ul></div>
       </div>
     </section>
 
@@ -93,7 +96,7 @@
 
     <section>
       <h2>품질 게이트</h2>
-      <p style="margin-bottom: 12px;">HTTP 200 OK는 도달성 확인일 뿐이다. 완료 판단은 visible content가 의도와 맞는지까지 확인한 뒤 내린다.</p>
+      <p style="margin-bottom: 12px;">HTTP 200 OK는 도달성 확인일 뿐이다. 완료 판단은 visible content가 의도와 맞는지 확인하고, 열린 browser/session과 직접 시작한 server를 정리한 뒤 내린다.</p>
       <pre>node scripts/validate-skill.ts skills/browser-qa
 node skills/browser-qa/scripts/validate-browser-qa.ts skills/browser-qa
 node scripts/validate-skill-html.ts .
@@ -103,8 +106,8 @@ node scripts/validate-skill-repo.ts .</pre>
     <section>
       <h2>금지와 허용</h2>
       <div class="grid2">
-        <div class="cell"><span class="tag ok">허용</span><ul><li>URL, viewport, repro step을 남긴다.</li><li>console과 network evidence를 확인한다.</li><li>visible content와 의도 검증 결과를 함께 남긴다.</li><li>정적 HTML은 local server로 확인한다.</li></ul></div>
-        <div class="cell"><span class="tag danger">금지</span><ul><li>민감 정보를 입력하지 않는다.</li><li>스크린샷만으로 결론내지 않는다.</li><li>디자인 취향을 QA failure로 쓰지 않는다.</li></ul></div>
+        <div class="cell"><span class="tag ok">허용</span><ul><li>URL, viewport, repro step을 남긴다.</li><li>console과 network evidence를 확인한다.</li><li>visible content와 의도 검증 결과를 함께 남긴다.</li><li>정적 HTML은 local server로 확인하고 끝나면 닫는다.</li></ul></div>
+        <div class="cell"><span class="tag danger">금지</span><ul><li>민감 정보를 입력하지 않는다.</li><li>스크린샷만으로 결론내지 않는다.</li><li>디자인 취향을 QA failure로 쓰지 않는다.</li><li>QA용 Chrome tab이나 server를 방치하지 않는다.</li></ul></div>
       </div>
     </section>
   </main>
