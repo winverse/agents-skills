@@ -30,7 +30,8 @@ const summaryBySkill: Record<string, string> = {
   "agent-eval-harness": "routing, portability, safety, artifact hygiene를 검증하는 eval harness",
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
   "project-structure": "frontend, backend, monorepo, desktop app, infra-aware 구조 결정",
-  "workflow": "domain, ADR, PRD, issue, TDD, QA, doc sync, ship 조율",
+  "project-workflow": "Workflow suite setup: domain, PRD, issue backlog, workflow-state cache",
+  "spec-workflow": "Workflow suite loop: spec/issue를 TDD, QA, docs sync, eval seed로 구현",
   "cmux-automation": "cmux hook, tab/status, session board 자동화",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
@@ -82,7 +83,9 @@ function escapeHtml(value: string): string {
 }
 
 function displayName(skill: SkillTile): string {
-  return skill.name === "workflow" ? "workflow 스킬" : skill.name;
+  if (skill.name === "project-workflow") return "project-workflow 스킬";
+  if (skill.name === "spec-workflow") return "spec-workflow 스킬";
+  return skill.name;
 }
 
 function relativeHref(folder: string, file: "SKILL.md" | "skill.html"): string {

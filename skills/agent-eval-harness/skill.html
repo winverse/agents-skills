@@ -18,9 +18,15 @@
       --warn: #A16207;
       --danger: #B42318;
       --ink: #0F172A;
+      --blue-soft: #DBEAFE;
+      --green-soft: #D1FAE5;
+      --amber-soft: #FEF3C7;
+      --red-soft: #FEE2E2;
+      --slate-soft: #E2E8F0;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       min-height: 100%;
       margin: 0;
@@ -43,7 +49,8 @@
       box-sizing: border-box;
     }
 
-    header, section {
+    header,
+    section {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -62,7 +69,10 @@
       padding: 20px;
     }
 
-    h1, h2, h3, p {
+    h1,
+    h2,
+    h3,
+    p {
       margin: 0;
     }
 
@@ -93,12 +103,19 @@
       overflow-wrap: anywhere;
     }
 
-    code, pre, .tree {
+    code,
+    pre,
+    .tree {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 13px;
     }
 
-    pre, .tree {
+    code {
+      overflow-wrap: anywhere;
+    }
+
+    pre,
+    .tree {
       margin: 0;
       padding: 12px;
       color: #E5E7EB;
@@ -132,7 +149,7 @@
 
     .file-pair div {
       display: grid;
-      grid-template-columns: 150px minmax(0, 1fr);
+      grid-template-columns: 134px minmax(0, 1fr);
       gap: 12px;
       align-items: baseline;
     }
@@ -190,7 +207,8 @@
     .flow svg,
     .chart svg,
     .map svg,
-    .schema svg {
+    .schema svg,
+    .goal svg {
       display: block;
       width: 100%;
       height: auto;
@@ -214,7 +232,7 @@
 
     .lane-row {
       display: grid;
-      grid-template-columns: 190px minmax(0, 1fr) 190px;
+      grid-template-columns: 188px minmax(0, 1fr) 210px;
       gap: 12px;
       padding: 10px 12px;
       border-top: 1px solid var(--border);
@@ -230,7 +248,7 @@
 
     .gate {
       display: grid;
-      grid-template-columns: 170px minmax(0, 1fr) 118px;
+      grid-template-columns: 158px minmax(0, 1fr) 118px;
       gap: 10px;
       align-items: center;
       padding: 10px 0;
@@ -241,8 +259,27 @@
       border-top: 0;
     }
 
-    .gate code {
-      overflow-wrap: anywhere;
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      box-sizing: border-box;
     }
 
     .snippet-note {
@@ -255,13 +292,13 @@
     <header>
       <div>
         <h1>agent-eval-harness</h1>
-        <p>에이전트 스킬 선택, prompt routing, 안전 경계, cross-agent 지시문 호환성, 산출물 위생, 출력 품질을 작고 반복 가능한 eval 하네스로 고정하는 스킬.</p>
+        <p>스킬 호출, workflow handoff, safety boundary, output shape, artifact hygiene가 실제 agent 행동으로 이어지는지 작은 deterministic eval로 반복 검증한다.</p>
       </div>
       <div class="file-pair" aria-label="스킬 파일 연결">
         <div><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></div>
         <div><strong>사람용 가이드</strong><a href="skill.html">skill.html</a></div>
-        <div><strong>세부 청사진</strong><a href="references/harness-blueprint.md">references/harness-blueprint.md</a></div>
-        <div><strong>검증 스크립트</strong><a href="scripts/validate-agent-eval-harness.ts">validate-agent-eval-harness.ts</a></div>
+        <div><strong>청사진</strong><a href="references/harness-blueprint.md">references/harness-blueprint.md</a></div>
+        <div><strong>전용 validator</strong><a href="scripts/validate-agent-eval-harness.ts">validate-agent-eval-harness.ts</a></div>
       </div>
     </header>
 
@@ -270,30 +307,30 @@
       <div class="matrix">
         <div class="cell">
           <span class="tag ok">사용</span>
-          <h3>초기 eval 하네스</h3>
-          <p>스킬 라우팅, guardrail, 출력 형식, 증거 기준을 5-20개 케이스로 반복 검증해야 할 때.</p>
+          <h3>행동 계약을 고정</h3>
+          <p>스킬 라우팅, 안전 경계, 출력 형식, 파일 참조, 문서 동기화가 반복해서 깨질 수 있을 때.</p>
         </div>
         <div class="cell">
           <span class="tag accent">함께 사용</span>
-          <h3>workflow 또는 skill-update</h3>
-          <p>워크플로 handoff나 스킬 변경이 다시 깨지지 않도록 regression case를 남길 때.</p>
+          <h3>workflow / skill-update</h3>
+          <p>새 workflow나 스킬 변경 뒤 regression case, handoff seed, `/goal` 조건 품질을 남길 때.</p>
         </div>
         <div class="cell">
-          <span class="tag warn">먼저 질문</span>
-          <h3>live/model grade</h3>
-          <p>유료 API, flaky model 평가, trace 저장, CI 차단 여부가 정해지지 않았을 때.</p>
+          <span class="tag warn">먼저 정함</span>
+          <h3>live model/API 평가</h3>
+          <p>예산, flake 정책, trace 저장, CI 차단 여부가 없으면 advisory 평가로만 둔다.</p>
         </div>
         <div class="cell">
           <span class="tag danger">건너뜀</span>
-          <h3>대형 플랫폼 요청</h3>
-          <p>초기 목적이 dashboard, vendor trace platform, 장기 결과 저장소 구축뿐일 때.</p>
+          <h3>앱 기능 QA 대체</h3>
+          <p>브라우저 QA, 제품 테스트, vendor trace platform 구축 자체가 목적이면 이 스킬의 범위가 아니다.</p>
         </div>
       </div>
     </section>
 
     <section class="flow">
-      <h2>하네스 설정 흐름</h2>
-      <svg viewBox="0 0 1088 236" role="img" aria-label="하네스 설정 흐름">
+      <h2>실행 흐름</h2>
+      <svg viewBox="0 0 1088 252" role="img" aria-label="agent eval harness 실행 흐름">
         <defs>
           <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
             <path d="M0,0 L10,4 L0,8 z" fill="#2563EB"></path>
@@ -301,193 +338,179 @@
           <style>
             .box { fill: #FFFFFF; stroke: #D1D5DB; }
             .soft { fill: #F1F5F9; stroke: #D1D5DB; }
+            .done { fill: #D1FAE5; stroke: #1F7A52; }
             .title { font: 700 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
             .note { font: 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6B7280; }
             .line { stroke: #2563EB; stroke-width: 2; marker-end: url(#arrow); }
+            .warn-line { stroke: #A16207; stroke-width: 2; stroke-dasharray: 5 5; }
           </style>
         </defs>
-        <rect x="18" y="74" width="142" height="76" rx="8" class="soft"></rect>
-        <text x="89" y="104" text-anchor="middle" class="title">repo 조사</text>
-        <text x="89" y="126" text-anchor="middle" class="note">tests / skills / CI</text>
-        <line x1="160" y1="112" x2="216" y2="112" class="line"></line>
+        <rect x="18" y="76" width="142" height="82" rx="8" class="soft"></rect>
+        <text x="89" y="108" text-anchor="middle" class="title">행동 계약</text>
+        <text x="89" y="130" text-anchor="middle" class="note">한 문장 범위</text>
+        <line x1="160" y1="117" x2="214" y2="117" class="line"></line>
 
-        <rect x="222" y="74" width="146" height="76" rx="8" class="box"></rect>
-        <text x="295" y="104" text-anchor="middle" class="title">성공 기준</text>
-        <text x="295" y="126" text-anchor="middle" class="note">metrics before cases</text>
-        <line x1="368" y1="112" x2="424" y2="112" class="line"></line>
+        <rect x="220" y="76" width="144" height="82" rx="8" class="box"></rect>
+        <text x="292" y="108" text-anchor="middle" class="title">성공 기준</text>
+        <text x="292" y="130" text-anchor="middle" class="note">case schema 반영</text>
+        <line x1="364" y1="117" x2="418" y2="117" class="line"></line>
 
-        <rect x="430" y="74" width="150" height="76" rx="8" class="box"></rect>
-        <text x="505" y="104" text-anchor="middle" class="title">범위 선택</text>
-        <text x="505" y="126" text-anchor="middle" class="note">routing / safety / output</text>
-        <line x1="580" y1="112" x2="636" y2="112" class="line"></line>
+        <rect x="424" y="76" width="156" height="82" rx="8" class="box"></rect>
+        <text x="502" y="108" text-anchor="middle" class="title">case 작성</text>
+        <text x="502" y="130" text-anchor="middle" class="note">typical / edge / adversarial</text>
+        <line x1="580" y1="117" x2="634" y2="117" class="line"></line>
 
-        <rect x="642" y="74" width="152" height="76" rx="8" class="box"></rect>
-        <text x="718" y="104" text-anchor="middle" class="title">케이스 작성</text>
-        <text x="718" y="126" text-anchor="middle" class="note">typical / edge / adversarial</text>
-        <line x1="794" y1="112" x2="850" y2="112" class="line"></line>
+        <rect x="640" y="76" width="154" height="82" rx="8" class="box"></rect>
+        <text x="717" y="108" text-anchor="middle" class="title">check 구현</text>
+        <text x="717" y="130" text-anchor="middle" class="note">deterministic 우선</text>
+        <line x1="794" y1="117" x2="848" y2="117" class="line"></line>
 
-        <rect x="856" y="74" width="100" height="76" rx="8" class="box"></rect>
-        <text x="906" y="104" text-anchor="middle" class="title">runner</text>
-        <text x="906" y="126" text-anchor="middle" class="note">Node 22+</text>
-        <line x1="956" y1="112" x2="1000" y2="112" class="line"></line>
+        <rect x="854" y="76" width="118" height="82" rx="8" class="box"></rect>
+        <text x="913" y="108" text-anchor="middle" class="title">runner</text>
+        <text x="913" y="130" text-anchor="middle" class="note">Node 22+</text>
+        <line x1="972" y1="117" x2="1010" y2="117" class="line"></line>
 
-        <rect x="1004" y="74" width="66" height="76" rx="8" class="soft"></rect>
-        <text x="1037" y="104" text-anchor="middle" class="title">보고</text>
-        <text x="1037" y="126" text-anchor="middle" class="note">baseline</text>
+        <rect x="1014" y="76" width="56" height="82" rx="8" class="done"></rect>
+        <text x="1042" y="108" text-anchor="middle" class="title">보고</text>
+        <text x="1042" y="130" text-anchor="middle" class="note">통과/실패</text>
 
-        <path d="M718 150 V188 H1037 V150" fill="none" stroke="#A16207" stroke-width="2" stroke-dasharray="5 5"></path>
-        <text x="878" y="210" text-anchor="middle" class="note">CI는 local 안정화 후 advisory, 그 다음 deterministic blocking</text>
+        <path d="M502 158 V196 H913 V158" fill="none" class="warn-line"></path>
+        <text x="707" y="222" text-anchor="middle" class="note">실패한 실제 agent run은 가장 작은 regression case로 축소해 추가</text>
       </svg>
-      <p class="caption">처음부터 플랫폼을 만들지 않고, repo-local command와 source-controlled case를 먼저 만든다.</p>
+      <p class="caption">완료 기준은 “하네스가 크다”가 아니라 case마다 성공 기준과 metric이 분명하고 deterministic gate가 실행되는 상태다.</p>
     </section>
 
     <section class="schema">
       <h2>입출력 스키마</h2>
-      <svg viewBox="0 0 1088 250" role="img" aria-label="입력, 처리, 출력 스키마">
+      <svg viewBox="0 0 1088 262" role="img" aria-label="입력, 처리, 출력 스키마">
         <defs>
           <marker id="schema-arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
             <path d="M0,0 L10,4 L0,8 z" fill="#1D4ED8"></path>
           </marker>
         </defs>
-        <rect x="24" y="34" width="270" height="178" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
+        <rect x="24" y="34" width="274" height="188" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
         <text x="48" y="66" font-size="15" font-weight="700">입력</text>
-        <text x="48" y="96" font-size="13">• 반복 실패 prompt</text>
+        <text x="48" y="96" font-size="13">• 평가할 행동 계약</text>
         <text x="48" y="120" font-size="13">• AGENTS.md / CLAUDE.md / SKILL.md</text>
-        <text x="48" y="144" font-size="13">• 기존 validators, tests, CI</text>
-        <text x="48" y="168" font-size="13">• agentSurfaces와 assumptionDate</text>
+        <text x="48" y="144" font-size="13">• 실패 prompt와 saved output</text>
+        <text x="48" y="168" font-size="13">• agentSurfaces / assumptionDate</text>
+        <text x="48" y="192" font-size="13">• 예산, flake, artifact 정책</text>
 
-        <line x1="294" y1="123" x2="392" y2="123" stroke="#1D4ED8" stroke-width="2" marker-end="url(#schema-arrow)"></line>
+        <line x1="298" y1="128" x2="388" y2="128" stroke="#1D4ED8" stroke-width="2" marker-end="url(#schema-arrow)"></line>
 
-        <rect x="398" y="34" width="292" height="178" rx="8" fill="#FFFFFF" stroke="#D1D5DB"></rect>
-        <text x="422" y="66" font-size="15" font-weight="700">처리</text>
-        <text x="422" y="96" font-size="13">• 성공 기준과 failure modes 정의</text>
-        <text x="422" y="120" font-size="13">• scope, risk, mode 선택</text>
-        <text x="422" y="144" font-size="13">• deterministic checks 우선 구현</text>
-        <text x="422" y="168" font-size="13">• artifact scrub 정책 문서화</text>
+        <rect x="394" y="34" width="300" height="188" rx="8" fill="#FFFFFF" stroke="#D1D5DB"></rect>
+        <text x="418" y="66" font-size="15" font-weight="700">처리</text>
+        <text x="418" y="96" font-size="13">• success criteria 먼저 정의</text>
+        <text x="418" y="120" font-size="13">• positive / near-miss / forbidden 구성</text>
+        <text x="418" y="144" font-size="13">• required_* / json_schema 등 구현</text>
+        <text x="418" y="168" font-size="13">• live model 평가는 advisory 분리</text>
+        <text x="418" y="192" font-size="13">• scrubbed fixture만 보존</text>
 
-        <line x1="690" y1="123" x2="788" y2="123" stroke="#1D4ED8" stroke-width="2" marker-end="url(#schema-arrow)"></line>
+        <line x1="694" y1="128" x2="784" y2="128" stroke="#1D4ED8" stroke-width="2" marker-end="url(#schema-arrow)"></line>
 
-        <rect x="794" y="34" width="270" height="178" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
-        <text x="818" y="66" font-size="15" font-weight="700">출력</text>
-        <text x="818" y="96" font-size="13">• evals/agent/cases/*.json</text>
-        <text x="818" y="120" font-size="13">• evals/agent/fixtures/</text>
-        <text x="818" y="144" font-size="13">• evals/agent/artifacts 정책</text>
-        <text x="818" y="168" font-size="13">• scripts/run-agent-evals.ts</text>
+        <rect x="790" y="34" width="274" height="188" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
+        <text x="814" y="66" font-size="15" font-weight="700">출력</text>
+        <text x="814" y="96" font-size="13">• evals/agent/cases/*.json</text>
+        <text x="814" y="120" font-size="13">• evals/agent/fixtures/</text>
+        <text x="814" y="144" font-size="13">• scripts/run-agent-evals.ts</text>
+        <text x="814" y="168" font-size="13">• CI blocking/advisory 구분</text>
+        <text x="814" y="192" font-size="13">• 간결한 검증 보고</text>
       </svg>
+      <p class="caption">사용자에게는 평가 범위, 추가한 case, 검증 명령과 결과를 짧게 보고한다.</p>
     </section>
 
     <section>
-      <h2>필수 케이스 팩</h2>
-      <div class="lane-table" role="table" aria-label="하네스 케이스 레인">
+      <h2>기본 lane과 첫 체크</h2>
+      <div class="lane-table" role="table" aria-label="agent eval harness 기본 lane">
         <div class="lane-row" role="row">
-          <div>레인</div>
-          <div>보호하는 동작</div>
-          <div>첫 검사</div>
+          <div>lane</div>
+          <div>확인 대상</div>
+          <div>첫 체크</div>
         </div>
         <div class="lane-row" role="row">
-          <div><strong>라우팅</strong></div>
-          <div>positive, near-miss, forbidden-skill prompt가 의도한 스킬과 도구로 흐르는지 확인한다.</div>
-          <div>expectedSkills, forbiddenSkills</div>
+          <div><strong>스킬 호출</strong></div>
+          <div>올바른 skill selection, near-miss prompt, forbidden skill을 구분한다.</div>
+          <div><code>expectedSkills</code>, <code>forbiddenSkills</code></div>
         </div>
         <div class="lane-row" role="row">
-          <div><strong>절차</strong></div>
-          <div>inspect → patch → validate → report 같은 필수 순서를 observable output으로 고정한다.</div>
-          <div>required_text, command_passed</div>
+          <div><strong>workflow behavior</strong></div>
+          <div>단계 순서, handoff, project-structure timing, fallback lane을 observable output으로 고정한다.</div>
+          <div><code>required_text</code>, <code>command_passed</code></div>
         </div>
         <div class="lane-row" role="row">
-          <div><strong>안전</strong></div>
-          <div>approval gate, destructive command 회피, prompt injection/tool misuse, secret redaction, least privilege를 확인한다.</div>
-          <div>approval_required, forbidden_command</div>
+          <div><strong>safety boundary</strong></div>
+          <div>prompt injection, destructive action, least privilege, secret/private data 보존 금지를 확인한다.</div>
+          <div><code>forbidden_text</code>, 금지 command</div>
         </div>
         <div class="lane-row" role="row">
-          <div><strong>호환성</strong></div>
-          <div>Codex, Claude, Copilot, Cursor, Windsurf 표면의 scope와 precedence 차이를 날짜와 함께 기록한다.</div>
-          <div>agentSurfaces, assumptionDate</div>
+          <div><strong>output quality</strong></div>
+          <div>file reference, source link, JSON schema, concise report 같은 출력 계약을 검증한다.</div>
+          <div><code>required_file_reference</code>, <code>json_schema</code></div>
         </div>
         <div class="lane-row" role="row">
-          <div><strong>산출물</strong></div>
-          <div>saved outputs, traces, screenshots, reports가 gitignored 또는 scrubbed golden fixture로 관리되는지 본다.</div>
-          <div>artifact policy, fixture path</div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>결정적 체크 타입</h2>
-      <div class="lane-table" role="table" aria-label="deterministic check types">
-        <div class="lane-row" role="row">
-          <div>체크</div>
-          <div>검증 대상</div>
-          <div>대표 사용</div>
-        </div>
-        <div class="lane-row" role="row">
-          <div><strong>required_link_count</strong></div>
-          <div>saved research output의 citation 수</div>
-          <div>web-research 답변이 최소 3개 출처를 포함하는지</div>
-        </div>
-        <div class="lane-row" role="row">
-          <div><strong>required_file_reference</strong></div>
-          <div>파일 경로 또는 변경 파일 언급</div>
-          <div>project setup report가 <code>AGENTS.md</code>와 selected <code>SKILL.md</code>를 참조하는지</div>
-        </div>
-        <div class="lane-row" role="row">
-          <div><strong>json_schema</strong></div>
-          <div>구조화된 JSON 보고</div>
-          <div><code>targetInstructionFile</code>, <code>skills</code>, <code>linksValid</code> 같은 필드 타입을 확인한다.</div>
+          <div><strong>artifact hygiene</strong></div>
+          <div>scrubbed fixture, no local secret, no raw transcript leak, gitignore 정책을 확인한다.</div>
+          <div>fixture path, forbidden secret text</div>
         </div>
       </div>
     </section>
 
     <section class="chart">
-      <h2>검증 강도 차트</h2>
-      <svg viewBox="0 0 1088 260" role="img" aria-label="검증 강도 차트">
-        <text x="24" y="34" font-size="14" font-weight="700">결정적 검사는 먼저 blocking, 판단형 평가는 보정 전 advisory</text>
-        <line x1="242" y1="218" x2="940" y2="218" stroke="#D1D5DB"></line>
-        <text x="242" y="240" font-size="12" fill="#6B7280">낮음</text>
-        <text x="897" y="240" font-size="12" fill="#6B7280">높음</text>
+      <h2>차단 강도 차트</h2>
+      <svg viewBox="0 0 1088 270" role="img" aria-label="deterministic checks와 advisory checks의 차단 강도">
+        <text x="24" y="34" font-size="14" font-weight="700">deterministic check는 blocking 후보, live model/API 평가는 정책 확정 전 advisory</text>
+        <line x1="246" y1="222" x2="958" y2="222" stroke="#D1D5DB"></line>
+        <text x="246" y="244" font-size="12" fill="#6B7280">낮음</text>
+        <text x="915" y="244" font-size="12" fill="#6B7280">높음</text>
 
-        <text x="24" y="76" font-size="13">필수/금지 문구</text>
-        <rect x="242" y="56" width="630" height="26" fill="#DBEAFE" stroke="#2563EB"></rect>
-        <text x="884" y="75" font-size="13" fill="#111827">blocking</text>
+        <text x="24" y="78" font-size="13">required/forbidden text</text>
+        <rect x="246" y="58" width="660" height="26" fill="#DBEAFE" stroke="#2563EB"></rect>
+        <text x="918" y="77" font-size="13" fill="#111827">blocking</text>
 
-        <text x="24" y="116" font-size="13">파일/명령/스키마</text>
-        <rect x="242" y="96" width="560" height="26" fill="#D1FAE5" stroke="#1F7A52"></rect>
-        <text x="814" y="115" font-size="13" fill="#111827">blocking</text>
+        <text x="24" y="118" font-size="13">file reference / link count</text>
+        <rect x="246" y="98" width="596" height="26" fill="#D1FAE5" stroke="#1F7A52"></rect>
+        <text x="854" y="117" font-size="13" fill="#111827">blocking</text>
 
-        <text x="24" y="156" font-size="13">trace/tool event</text>
-        <rect x="242" y="136" width="450" height="26" fill="#E0E7FF" stroke="#475569"></rect>
-        <text x="704" y="155" font-size="13" fill="#111827">advisory → blocking</text>
+        <text x="24" y="158" font-size="13">json_schema / command_passed</text>
+        <rect x="246" y="138" width="560" height="26" fill="#E2E8F0" stroke="#475569"></rect>
+        <text x="818" y="157" font-size="13" fill="#111827">blocking</text>
 
-        <text x="24" y="196" font-size="13">리뷰/디자인/리서치 판단</text>
-        <rect x="242" y="176" width="310" height="26" fill="#FEF3C7" stroke="#A16207"></rect>
-        <text x="564" y="195" font-size="13" fill="#111827">advisory</text>
+        <text x="24" y="198" font-size="13">live model / human grade</text>
+        <rect x="246" y="178" width="330" height="26" fill="#FEF3C7" stroke="#A16207"></rect>
+        <text x="588" y="197" font-size="13" fill="#111827">advisory</text>
       </svg>
+      <div class="legend" aria-label="차트 범례">
+        <span><i class="swatch" style="background:#DBEAFE"></i>문구 기반 deterministic</span>
+        <span><i class="swatch" style="background:#D1FAE5"></i>파일·링크 증거</span>
+        <span><i class="swatch" style="background:#FEF3C7"></i>정책 확정 전 advisory</span>
+      </div>
     </section>
 
-    <section>
-      <h2>workflow handoff</h2>
-      <div class="grid3">
-        <div class="cell">
-          <span class="tag accent">라우팅 seed</span>
-          <h3>workflow 선택</h3>
-          <p>새 프로젝트와 feature prompt는 직접 coding이나 project-structure로 가지 않고 workflow를 선택하는지 확인한다.</p>
-        </div>
-        <div class="cell">
-          <span class="tag warn">project-structure timing</span>
-          <h3>구조 호출 시점</h3>
-          <p>domain language와 구체적 architecture 질문 이후, ADR/PRD lock 전에만 project-structure가 쓰이는지 고정한다.</p>
-        </div>
-        <div class="cell">
-          <span class="tag ok">문서와 UI gate</span>
-          <h3>handoff 증거</h3>
-          <p>PRD settings, mockup selection, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, artifact hygiene, goal condition quality를 fixture와 saved output으로 검증한다.</p>
-        </div>
-        <div class="cell">
-          <span class="tag accent">goal condition</span>
-          <h3>종료 조건 품질</h3>
-          <p>이 repo에서 <code>/goal</code>은 Claude Code 기능을 뜻한다. Claude Code <code>/goal</code>이나 유사 loop 조건에 measurable end state, check evidence, constraints, turn/time bound가 있는지 deterministic check로 본다.</p>
-        </div>
-      </div>
+    <section class="goal">
+      <h2>/goal 조건 품질</h2>
+      <svg viewBox="0 0 1088 236" role="img" aria-label="/goal 조건 평가 기준">
+        <rect x="24" y="34" width="244" height="142" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
+        <text x="146" y="66" text-anchor="middle" font-size="15" font-weight="700">평가 대상</text>
+        <text x="48" y="98" font-size="13">Claude Code `/goal`</text>
+        <text x="48" y="122" font-size="13">session-scoped loop</text>
+        <text x="48" y="146" font-size="13">completion checklist</text>
+
+        <rect x="306" y="34" width="456" height="142" rx="8" fill="#FFFFFF" stroke="#D1D5DB"></rect>
+        <text x="534" y="66" text-anchor="middle" font-size="15" font-weight="700">좋은 조건의 4요소</text>
+        <line x1="330" y1="88" x2="738" y2="88" stroke="#D1D5DB"></line>
+        <text x="330" y="116" font-size="13">1. measurable end state</text>
+        <text x="330" y="144" font-size="13">2. check evidence</text>
+        <text x="548" y="116" font-size="13">3. constraints</text>
+        <text x="548" y="144" font-size="13">4. turn/time bound</text>
+
+        <rect x="800" y="34" width="264" height="142" rx="8" fill="#FEE2E2" stroke="#B42318"></rect>
+        <text x="932" y="66" text-anchor="middle" font-size="15" font-weight="700">금지 패턴</text>
+        <text x="824" y="98" font-size="13">무제한 실행</text>
+        <text x="824" y="122" font-size="13">secret 출력</text>
+        <text x="824" y="146" font-size="13">merge / force-push 자동화</text>
+
+        <text x="24" y="212" font-size="12" fill="#6B7280">case 설명에는 evaluator가 tool을 직접 쓰지 않는다는 전제와 `agentSurfaces`, `assumptionDate`를 남긴다.</text>
+      </svg>
     </section>
 
     <section class="map">
@@ -505,12 +528,15 @@
 
 project-snippets/
 └── agent-eval-harness.md</div>
-        <svg viewBox="0 0 520 244" role="img" aria-label="생성되는 하네스 파일 지도">
+        <svg viewBox="0 0 520 266" role="img" aria-label="생성되는 평가 하네스 파일 지도">
           <rect x="20" y="20" width="146" height="56" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
-          <text x="93" y="52" text-anchor="middle" font-size="13" font-weight="700">evals/agent/README.md</text>
+          <text x="93" y="52" text-anchor="middle" font-size="13" font-weight="700">README.md</text>
+          <text x="93" y="70" text-anchor="middle" font-size="12" fill="#6B7280">범위와 정책</text>
+
           <rect x="196" y="20" width="140" height="56" rx="8" fill="#FFFFFF" stroke="#D1D5DB"></rect>
           <text x="266" y="45" text-anchor="middle" font-size="13" font-weight="700">cases/*.json</text>
           <text x="266" y="63" text-anchor="middle" font-size="12" fill="#6B7280">source-controlled</text>
+
           <rect x="366" y="20" width="132" height="56" rx="8" fill="#F1F5F9" stroke="#D1D5DB"></rect>
           <text x="432" y="45" text-anchor="middle" font-size="13" font-weight="700">fixtures/</text>
           <text x="432" y="63" text-anchor="middle" font-size="12" fill="#6B7280">scrubbed input</text>
@@ -519,13 +545,14 @@ project-snippets/
           <line x1="266" y1="76" x2="266" y2="128" stroke="#2563EB" stroke-width="2"></line>
           <line x1="432" y1="76" x2="432" y2="128" stroke="#2563EB" stroke-width="2"></line>
           <line x1="93" y1="128" x2="432" y2="128" stroke="#2563EB" stroke-width="2"></line>
-          <line x1="266" y1="128" x2="266" y2="160" stroke="#2563EB" stroke-width="2"></line>
+          <line x1="266" y1="128" x2="266" y2="158" stroke="#2563EB" stroke-width="2"></line>
 
-          <rect x="170" y="160" width="192" height="56" rx="8" fill="#FFFFFF" stroke="#D1D5DB"></rect>
-          <text x="266" y="185" text-anchor="middle" font-size="13" font-weight="700">scripts/run-agent-evals.ts</text>
-          <text x="266" y="203" text-anchor="middle" font-size="12" fill="#6B7280">local first, CI later</text>
+          <rect x="156" y="158" width="220" height="56" rx="8" fill="#FFFFFF" stroke="#D1D5DB"></rect>
+          <text x="266" y="183" text-anchor="middle" font-size="13" font-weight="700">scripts/run-agent-evals.ts</text>
+          <text x="266" y="201" text-anchor="middle" font-size="12" fill="#6B7280">blocking / advisory report</text>
 
-          <text x="20" y="236" font-size="12" fill="#6B7280">outputs/와 artifacts/는 scrubbed policy 또는 gitignore 규칙이 필요하다.</text>
+          <rect x="156" y="228" width="220" height="20" rx="4" fill="#FEF3C7" stroke="#A16207"></rect>
+          <text x="266" y="243" text-anchor="middle" font-size="12" fill="#111827">artifacts는 scrub 또는 gitignore</text>
         </svg>
       </div>
     </section>
@@ -535,7 +562,7 @@ project-snippets/
       <pre>## Project Skills
 
 - Use $agent-eval-harness at &lt;skills-root&gt;/skills/agent-eval-harness/SKILL.md when asked to set up, scaffold, configure, or improve an evaluation harness for agent skill routing, cross-agent portability, safety boundaries, artifact hygiene, output quality, or regression capture.</pre>
-      <p class="muted snippet-note">전체 snippet은 <a href="../../project-snippets/agent-eval-harness.md">project-snippets/agent-eval-harness.md</a>를 사용한다.</p>
+      <p class="muted snippet-note">전체 snippet은 <a href="../../project-snippets/agent-eval-harness.md">project-snippets/agent-eval-harness.md</a>를 기준으로 연결한다.</p>
     </section>
 
     <section>
@@ -548,24 +575,24 @@ project-snippets/
     </section>
 
     <section>
-      <h2>금지와 허용</h2>
+      <h2>오용 방지</h2>
       <div class="grid2">
         <div class="cell">
           <span class="tag ok">허용</span>
           <ul>
-            <li>작은 case set으로 시작하고 baseline을 문서화한다.</li>
-            <li>real failure를 가장 작은 regression prompt로 승격한다.</li>
-            <li>결정적 check를 먼저 blocking으로 둔다.</li>
-            <li>model/human grade는 보정 후 차단 조건으로 올린다.</li>
+            <li>먼저 success criteria를 쓰고 case schema에 반영한다.</li>
+            <li>실제 실패를 가장 작은 regression prompt로 줄인다.</li>
+            <li>deterministic check를 먼저 blocking으로 둔다.</li>
+            <li>cross-agent portability 표면을 날짜와 함께 기록한다.</li>
           </ul>
         </div>
         <div class="cell">
           <span class="tag danger">금지</span>
           <ul>
-            <li>실제 secret, 고객 데이터, production credential을 fixture에 넣는다.</li>
-            <li>raw trace, screenshot, exported report를 검토 없이 commit한다.</li>
+            <li>비밀값, 개인 경로, 원본 사용자 데이터를 fixture로 보존한다.</li>
             <li>불안정한 live API eval을 즉시 merge blocker로 둔다.</li>
             <li>한 모델의 말투에만 맞춘 brittle wording check를 만든다.</li>
+            <li>browser QA나 제품 기능 테스트를 이 하네스로 대체한다.</li>
           </ul>
         </div>
       </div>

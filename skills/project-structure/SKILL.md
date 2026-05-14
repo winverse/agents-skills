@@ -5,7 +5,7 @@ description: "frontend, backend, full-stack monorepo, desktop app, infrastructur
 
 # 프로젝트 구조
 
-이 스킬은 새 프로젝트나 큰 구조 변경에서 folder boundary, env, codegen, DB, test, security, health/readiness, observability, infra handoff를 한 번에 정리한다. raw product discovery는 먼저 `workflow`가 처리하고, 이 스킬은 구조 선택이 구체화된 뒤 호출한다.
+이 스킬은 새 프로젝트나 큰 구조 변경에서 folder boundary, env, codegen, DB, test, security, health/readiness, observability, infra handoff를 한 번에 정리한다. raw product discovery는 먼저 `project-workflow`가 처리하고, 이 스킬은 구조 선택이 구체화된 뒤 호출한다.
 
 ## 첫 행동
 

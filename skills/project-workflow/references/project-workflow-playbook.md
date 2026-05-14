@@ -1,0 +1,119 @@
+# project-workflow playbook 기준
+
+## core idea 기준
+
+`project-workflow`는 `workflow suite`의 setup gate다. 프로젝트 초기에 잘못된 방향으로 빨리 가는 것을 막고, 반복 구현이 가능한 기준을 만든다. 이 문서는 구현 loop가 아니라 setup gate다.
+
+## read order 기준
+
+1. root instruction
+2. folder-local instruction
+3. README와 기존 domain docs
+4. ADR, PRD, issue tracker가 이미 있으면 먼저 확인
+5. 디자인 기준, env, API, DB, deployment docs
+
+## dependency inventory 기준
+
+dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기 셋팅에 채택한 primitive 장부다. 각 항목은 `Matt Pocock skills: grill-me -> selected`, `GStack plugin: office-hours -> selected`, `repo-local custom: project-structure -> skipped`처럼 source package, exact skill/plugin name, selected/skipped/fallback 상태를 함께 쓴다.
+
+upstream이 바뀌면 전체 내용을 복사하지 않는다. `upstream-dependency-map.md`에서 source package, exact name, 채택 역할, handoff 조건, artifact path, validator/eval 경계를 갱신하고, 같은 변경을 `SKILL.md`, `skill.html`, project snippet, history에 반영한다.
+
+## scenario lanes 기준
+
+### raw new SaaS/service 기준
+
+domain language, target user, first usable slice, product challenge, ADR, PRD 순서로 간다. Docker/AWS/Pulumi가 필요한 새 서비스는 service boundary와 secret boundary를 먼저 확인한 뒤 `project-structure`로 넘긴다.
+
+### existing backend/API cleanup 기준
+
+현재 architecture와 behavior를 보존할 evidence를 먼저 정하고, 구조 정리 목표를 ADR 또는 architecture note로 남긴다. 동작이 바뀌지 않는 cleanup이면 full PRD를 강제하지 않는다.
+
+### substantial UI 기준
+
+`design.md` 또는 design token 기준을 만든 뒤 2-3 mock direction을 제시하고 사용자가 선택한다. 선택 전 대규모 UI coding을 하지 않는다. 실제 구현 loop는 `spec-workflow`가 맡는다.
+
+### CLI/no-browser 프로젝트 기준
+
+browser evidence를 요구하지 않는다. setup 단계에서는 command/API boundary, fixture path, runtime evidence 방식만 정한다.
+
+### MCP/API/file-write automation 기준
+
+Agent Tool And Security Risk Gate를 작성한다. 권한, destructive action, secret, untrusted content를 분리한다.
+
+### cross-agent setup 기준
+
+Codex, Claude Code, Cursor, Windsurf, Copilot 같은 agent별 instruction surface를 먼저 확인한다. repo skill을 global install하지 않고 project instruction에 필요한 snippet만 연결한다.
+
+## project-structure handoff 기준
+
+folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다.
+
+## PRD settings 기준
+
+PRD에는 problem, user, first usable slice, included scope, excluded scope, acceptance criteria, risk를 포함한다.
+
+`CONTEXT.md` 또는 ADR이 없으면 PRD와 issue 생성을 바로 시작하지 않는다. 먼저 domain language와 architecture premise를 정한다. Eval fixture 호환을 위해 `CONTEXT.md or ADR` 문구도 이 gate의 동의어로 본다.
+
+## local implementation fallback lane 기준
+
+`project-workflow`는 local implementation fallback을 직접 실행하지 않는다. implementation helper가 없거나 TDD 계획이 필요한 상황은 `spec-workflow`로 넘기고, setup 단계에서는 spec/issue, acceptance criteria, validation command, evidence plan만 준비한다.
+
+## completion/ship 기준
+
+`project-workflow`의 completion은 project setup 완료와 `spec-workflow` handoff 완료를 뜻한다. code review, QA, document sync, atomic commit, push/deploy는 구현 spec이 끝난 뒤 `spec-workflow`나 관련 helper가 맡으며, release prep은 release publishing이 아니다.
+
+## spec-workflow handoff 기준
+
+`spec-workflow`는 project setup 이후 반복 개발을 맡는다. 넘길 때는 아래 정보를 남긴다.
+
+```text
+Spec handoff
+- spec or issue:
+- acceptance criteria:
+- design reference:
+- architecture reference:
+- tool/security gate:
+- validation command:
+- state cache:
+```
+
+## workflow-state cache 기준
+
+`workflow-state.md`는 자가개선 엔진이 아니라 반복 질문을 줄이는 handoff cache다. setup 단계에서 아래 내용을 남긴다.
+
+```text
+Workflow State
+- source primitives:
+- authority docs:
+- decisions:
+- skipped questions:
+- open questions:
+- tool/security gate:
+- next spec-workflow target:
+```
+
+캐시는 source of truth를 대체하지 않는다. `CONTEXT.md`, ADR, PRD, `design.md`, issue가 authority이고, `workflow-state.md`는 다음 agent가 빠르게 찾는 색인이다.
+
+## workflow log 기준
+
+```text
+YYYY-MM-DD | <stage>
+- decision:
+- artifact:
+- validation:
+- next: spec-workflow / project-workflow
+```
+
+## completion gate 기준
+
+context, ADR, PRD or issue backlog, design baseline, project setup verification, spec handoff가 맞아야 완료한다. commit, push, deploy는 사용자가 명시적으로 요청한 경우에만 연결한다.
+
+Project Setup Verification은 연결된 skill path, snippet, no-global-install 조건을 확인한다.
+
+## goal condition recipe 기준
+
+```text
+/goal <measurable project setup end state> and <stated check evidence appears in transcript>; constraints: <scope and forbidden changes>; stop after <turn/time bound>
+```
+
+좋은 조건은 agent가 출력으로 증명할 수 있는 상태여야 한다. 예: `CONTEXT.md exists`, `docs/adr/0001-*.md is written`, `project-snippets/project-workflow.md is linked`, `spec handoff is reported`. 나쁜 조건은 `좋아질 때까지`, `완벽할 때까지`처럼 증거와 종료 기준이 없는 문장이다.

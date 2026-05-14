@@ -13,71 +13,187 @@
       --text: #111827;
       --muted: #6b7280;
       --border: #d1d5db;
-      --strong-border: #94a3b8;
+      --border-strong: #94a3b8;
       --accent: #2563eb;
       --ok: #1f7a52;
       --warn: #a16207;
       --danger: #b42318;
-      --ink: #0f172a;
+      --code: #0f172a;
     }
+
     * { box-sizing: border-box; }
-    html, body {
+
+    html,
+    body {
       width: 100%;
       min-height: 100%;
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 14px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
       letter-spacing: 0;
     }
+
     body { padding: 32px 0 48px; }
-    .shell { width: 100%; max-width: 1192px; margin: 0 auto; padding: 0 32px; }
-    header, section {
-      background: var(--surface);
+
+    .shell {
+      width: 100%;
+      max-width: 1192px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    header,
+    section {
+      margin-bottom: 18px;
+      padding: 20px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 18px;
+      background: var(--surface);
     }
+
     header {
       display: grid;
       grid-template-columns: 1fr 360px;
       gap: 20px;
       align-items: start;
     }
-    h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.2; letter-spacing: 0; }
-    h2 { margin: 0 0 14px; font-size: 18px; line-height: 1.25; letter-spacing: 0; }
-    h3 { margin: 0 0 8px; font-size: 15px; line-height: 1.3; letter-spacing: 0; }
-    p { margin: 0; color: var(--muted); }
+
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    p { color: var(--muted); }
+
+    p:last-child,
+    ul:last-child { margin-bottom: 0; }
+
     a { color: var(--accent); overflow-wrap: anywhere; }
-    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
-    pre, .tree {
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    pre,
+    .tree {
       margin: 0;
       padding: 14px;
-      background: var(--ink);
-      color: #e5e7eb;
-      border-radius: 8px;
       overflow-x: auto;
       white-space: pre;
+      border-radius: 8px;
+      background: var(--code);
+      color: #e5e7eb;
+      font-size: 12px;
+      line-height: 1.45;
     }
-    ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
     li + li { margin-top: 4px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; vertical-align: top; }
-    th { background: var(--surface-muted); color: var(--text); font-size: 12px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      background: var(--surface-muted);
+      color: var(--text);
+      font-size: 12px;
+    }
+
     td { color: var(--muted); }
-    .pair, .cell {
+
+    svg {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+    }
+
+    .pair {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-muted);
+    }
+
+    .pair span {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .cell {
+      min-width: 0;
+      padding: 14px;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--surface);
-      padding: 14px;
-      min-width: 0;
     }
-    .pair { background: var(--surface-muted); display: grid; gap: 8px; }
-    .pair span { display: flex; justify-content: space-between; gap: 14px; color: var(--muted); }
-    .matrix { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
     .tag {
       display: inline-block;
       margin-bottom: 8px;
@@ -87,290 +203,215 @@
       font-size: 12px;
       font-weight: 700;
     }
+
     .ok { color: var(--ok); }
     .warn { color: var(--warn); }
     .danger { color: var(--danger); }
     .accent { color: var(--accent); }
-    .flow, .map, .bars {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-muted);
-      display: block;
+
+    .flow { height: 330px; }
+    .resource-map { height: 324px; }
+    .bars { height: 260px; }
+    .schema { height: 258px; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
     }
-    .flow { height: 306px; }
-    .map { height: 260px; }
-    .bars { height: 240px; }
-    .note { margin-top: 10px; color: var(--muted); font-size: 12px; }
-    .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; color: var(--muted); font-size: 12px; }
-    .swatch { display: inline-flex; align-items: center; gap: 6px; }
-    .swatch::before { content: ""; width: 14px; height: 8px; border-radius: 2px; border: 1px solid var(--strong-border); background: var(--surface); }
-    .swatch.ok::before { background: #dcfce7; border-color: var(--ok); }
-    .swatch.warn::before { background: #fef3c7; border-color: var(--warn); }
-    .swatch.accent::before { background: #dbeafe; border-color: var(--accent); }
-    .swatch.danger::before { background: #fee2e2; border-color: var(--danger); }
+
+    .swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch::before {
+      content: "";
+      width: 14px;
+      height: 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: 2px;
+      background: var(--surface);
+    }
+
+    .swatch.ok::before { border-color: var(--ok); background: #dcfce7; }
+    .swatch.warn::before { border-color: var(--warn); background: #fef3c7; }
+    .swatch.danger::before { border-color: var(--danger); background: #fee2e2; }
+    .swatch.accent::before { border-color: var(--accent); background: #dbeafe; }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
   <main class="shell">
     <header>
       <div>
-        <h1>project-structure 구조 설계 가이드</h1>
-        <p>프로젝트 종류와 선택된 stack에 맞춰 app, package, env, GraphQL codegen, DB, Tauri, Docker/Pulumi/AWS, folder-local <code>AGENTS.md</code>, test, security, health, observability 경계를 일관된 tree로 정리하는 스킬.</p>
+        <h1>project-structure</h1>
+        <p>frontend, backend, full-stack monorepo, desktop app, infrastructure-aware 구조를 선택하고 folder boundary, env, codegen, DB, test, security, health/readiness, observability, infra handoff까지 한 번에 정리하는 스킬.</p>
       </div>
       <div class="pair" aria-label="파일 쌍">
         <span><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></span>
         <span><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></span>
-        <span><strong>검증 기준</strong><a href="references/structure-validation.md">structure-validation.md</a></span>
-        <span><strong>HTML 원칙</strong><code>static HTML + inline SVG</code></span>
+        <span><strong>출력 기준</strong><code>tree + boundary + validation</code></span>
+        <span><strong>페이지 형식</strong><code>static HTML + inline SVG</code></span>
       </div>
     </header>
 
     <section>
-      <h2>사용 판단 매트릭스</h2>
+      <h2>사용 판단</h2>
       <div class="matrix">
-        <div class="cell"><span class="tag ok">사용</span><h3>새 구조 선택</h3><p>frontend, backend, full-stack monorepo, desktop app, infra-aware repo의 folder tree와 boundary가 필요할 때.</p></div>
-        <div class="cell"><span class="tag accent">질문</span><h3>종류가 불명확</h3><p><code>1 Frontend web</code>, <code>2 Backend API</code>, <code>3 Full-stack monorepo</code>, <code>4 Desktop app</code>처럼 숫자 메뉴로 좁힌다.</p></div>
-        <div class="cell"><span class="tag warn">함께 사용</span><h3>workflow 이후</h3><p>raw idea 단계가 아니라 domain language와 architecture 질문이 생긴 뒤 <code>workflow</code>에서 구조 handoff로 호출한다.</p></div>
-        <div class="cell"><span class="tag danger">중단</span><h3>기존 코드 무시</h3><p>repo 편집 시 기존 folder와 user code를 읽지 않고 tree를 덮어쓰면 안 된다.</p></div>
+        <div class="cell">
+          <span class="tag ok">사용</span>
+          <h3>구조 선택이 목적</h3>
+          <p>web, API, monorepo, desktop, infra-aware repo의 folder tree와 경계가 필요할 때 호출한다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag accent">질문</span>
+          <h3>stack이 불명확</h3>
+          <p>숫자 선택(compact numeric choices)으로 project kind, runtime, DB, infra 여부처럼 tree가 바뀌는 항목만 묻는다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag warn">연결</span>
+          <h3>workflow 이후</h3>
+          <p>raw product discovery는 먼저 <code>project-workflow</code>가 처리한다. 이 스킬은 구조 질문이 구체화된 뒤 사용한다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag danger">건너뜀</span>
+          <h3>infra 요청 없음</h3>
+          <p>사용자가 cloud, deploy, Docker, Pulumi, AWS를 요구하지 않았다면 infra folder를 추가하지 않는다.</p>
+        </div>
       </div>
     </section>
 
     <section>
-      <h2>질문 흐름</h2>
-      <svg class="flow" viewBox="0 0 1080 306" role="img" aria-label="project-structure 실행 흐름">
+      <h2>실행 흐름</h2>
+      <svg class="flow" viewBox="0 0 1080 330" role="img" aria-label="project-structure 실행 순서">
         <defs>
-          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+          </marker>
         </defs>
-        <rect x="24" y="46" width="140" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="94" y="77" text-anchor="middle" font-size="13" font-weight="700">프로젝트 종류</text>
-        <text x="94" y="99" text-anchor="middle" font-size="12" fill="#6b7280">숫자 메뉴</text>
-        <line x1="164" y1="82" x2="214" y2="82" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="218" y="46" width="140" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="288" y="77" text-anchor="middle" font-size="13" font-weight="700">선택만 질문</text>
-        <text x="288" y="99" text-anchor="middle" font-size="12" fill="#6b7280">API/DB/infra 등</text>
-        <line x1="358" y1="82" x2="408" y2="82" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="412" y="46" width="140" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="482" y="77" text-anchor="middle" font-size="13" font-weight="700">reference 읽기</text>
-        <text x="482" y="99" text-anchor="middle" font-size="12" fill="#6b7280">kind별 파일</text>
-        <line x1="552" y1="82" x2="602" y2="82" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="606" y="46" width="140" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="676" y="77" text-anchor="middle" font-size="13" font-weight="700">tree 먼저</text>
-        <text x="676" y="99" text-anchor="middle" font-size="12" fill="#6b7280">구현 가능한 구조</text>
-        <line x1="746" y1="82" x2="796" y2="82" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="800" y="46" width="140" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="870" y="77" text-anchor="middle" font-size="13" font-weight="700">경계 설명</text>
-        <text x="870" y="99" text-anchor="middle" font-size="12" fill="#6b7280">app/package/script</text>
-        <path d="M870 118 V154 H94 V188" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
-        <rect x="24" y="188" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="99" y="218" text-anchor="middle" font-size="13" font-weight="700">env/codegen/DB</text>
-        <text x="99" y="240" text-anchor="middle" font-size="12" fill="#6b7280">소유자 고정</text>
-        <line x1="174" y1="224" x2="224" y2="224" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="228" y="188" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="303" y="218" text-anchor="middle" font-size="13" font-weight="700">folder AGENTS</text>
-        <text x="303" y="240" text-anchor="middle" font-size="12" fill="#6b7280">짧은 index</text>
-        <line x1="378" y1="224" x2="428" y2="224" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="432" y="188" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="507" y="218" text-anchor="middle" font-size="13" font-weight="700">infra 선택 시</text>
-        <text x="507" y="240" text-anchor="middle" font-size="12" fill="#6b7280">Pulumi/AWS/ECR</text>
-        <line x1="582" y1="224" x2="632" y2="224" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="636" y="188" width="150" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="711" y="218" text-anchor="middle" font-size="13" font-weight="700">검증 checklist</text>
-        <text x="711" y="240" text-anchor="middle" font-size="12" fill="#6b7280">중복/누락 확인</text>
-        <line x1="786" y1="224" x2="836" y2="224" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="840" y="188" width="170" height="72" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="925" y="218" text-anchor="middle" font-size="13" font-weight="700">답변 shape</text>
-        <text x="925" y="240" text-anchor="middle" font-size="12" fill="#6b7280">tree + policies</text>
+        <rect x="28" y="46" width="148" height="74" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="102" y="76" text-anchor="middle" font-size="13" font-weight="700">1. 요구 확인</text>
+        <text x="102" y="98" text-anchor="middle" font-size="12" fill="#6b7280">도메인/runtime</text>
+        <line x1="176" y1="83" x2="224" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="228" y="46" width="148" height="74" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="302" y="76" text-anchor="middle" font-size="13" font-weight="700">2. 기존 repo 읽기</text>
+        <text x="302" y="98" text-anchor="middle" font-size="12" fill="#6b7280">folder/package</text>
+        <line x1="376" y1="83" x2="424" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="428" y="46" width="148" height="74" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="502" y="76" text-anchor="middle" font-size="13" font-weight="700">3. boundary 선택</text>
+        <text x="502" y="98" text-anchor="middle" font-size="12" fill="#6b7280">app/package/infra</text>
+        <line x1="576" y1="83" x2="624" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="628" y="46" width="162" height="74" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="709" y="76" text-anchor="middle" font-size="13" font-weight="700">4. owner 고정</text>
+        <text x="709" y="98" text-anchor="middle" font-size="12" fill="#6b7280">env/codegen/DB/test</text>
+        <line x1="790" y1="83" x2="838" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="842" y="46" width="182" height="74" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="933" y="76" text-anchor="middle" font-size="13" font-weight="700">5. folder AGENTS</text>
+        <text x="933" y="98" text-anchor="middle" font-size="12" fill="#6b7280">짧은 index</text>
+
+        <path d="M933 120 V157 H102 V196" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
+
+        <rect x="28" y="196" width="180" height="76" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="118" y="226" text-anchor="middle" font-size="13" font-weight="700">6. 보안 경계 표시</text>
+        <text x="118" y="248" text-anchor="middle" font-size="12" fill="#6b7280">tool/API/secret</text>
+        <line x1="208" y1="234" x2="256" y2="234" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="260" y="196" width="184" height="76" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="352" y="226" text-anchor="middle" font-size="13" font-weight="700">7. infra는 조건부</text>
+        <text x="352" y="248" text-anchor="middle" font-size="12" fill="#6b7280">요청 있을 때만</text>
+        <line x1="444" y1="234" x2="492" y2="234" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="496" y="196" width="184" height="76" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="588" y="226" text-anchor="middle" font-size="13" font-weight="700">8. tree 작성</text>
+        <text x="588" y="248" text-anchor="middle" font-size="12" fill="#6b7280">선택한 구조만</text>
+        <line x1="680" y1="234" x2="728" y2="234" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+
+        <rect x="732" y="196" width="184" height="76" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="824" y="226" text-anchor="middle" font-size="13" font-weight="700">9. 검증 명령</text>
+        <text x="824" y="248" text-anchor="middle" font-size="12" fill="#6b7280">test/security/health</text>
       </svg>
       <div class="legend">
-        <span class="swatch accent">순서가 있는 handoff</span>
-        <span class="swatch ok">완료 기준: tree, boundary, 검증 결과가 함께 있음</span>
+        <span class="swatch accent">순서 있는 workflow</span>
+        <span class="swatch ok">완료: 선택한 구조, folder tree, 경계, 검증이 함께 있음</span>
       </div>
     </section>
 
     <section>
-      <h2>기본 스택</h2>
-      <svg class="bars" viewBox="0 0 1080 240" role="img" aria-label="기본 stack 우선순위">
-        <text x="28" y="32" font-size="13" font-weight="700">선택이 없으면 repo 기본값을 적용한다</text>
+      <h2>기본 stack 우선순위</h2>
+      <svg class="bars" viewBox="0 0 1080 260" role="img" aria-label="기본 stack과 조건부 infra">
+        <text x="28" y="34" font-size="13" font-weight="700">명시 선택이 없을 때 적용하는 보수적 기본값</text>
         <g font-size="12" fill="#111827">
-          <text x="32" y="70">패키지/monorepo</text><rect x="178" y="55" width="760" height="24" rx="4" fill="#dbeafe" stroke="#2563eb"></rect><text x="952" y="72">Bun + Turborepo</text>
-          <text x="32" y="106">web/API</text><rect x="178" y="91" width="700" height="24" rx="4" fill="#dbeafe" stroke="#2563eb"></rect><text x="892" y="108">Next.js + NestJS Fastify</text>
-          <text x="32" y="142">contract/DB</text><rect x="178" y="127" width="650" height="24" rx="4" fill="#dbeafe" stroke="#2563eb"></rect><text x="842" y="144">GraphQL + PostgreSQL/Drizzle</text>
-          <text x="32" y="178">UI/env/test</text><rect x="178" y="163" width="590" height="24" rx="4" fill="#dbeafe" stroke="#2563eb"></rect><text x="782" y="180">Panda CSS, Zod, colocated tests</text>
-          <text x="32" y="214">infra 선택 시</text><rect x="178" y="199" width="530" height="24" rx="4" fill="#fef3c7" stroke="#a16207"></rect><text x="722" y="216">Pulumi AWS, Docker, ECR, ECS Fargate</text>
+          <text x="32" y="75">패키지/monorepo</text>
+          <rect x="178" y="58" width="760" height="26" rx="4" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="952" y="76">Bun + Turborepo</text>
+
+          <text x="32" y="116">web/API</text>
+          <rect x="178" y="99" width="710" height="26" rx="4" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="902" y="117">Next.js + NestJS Fastify</text>
+
+          <text x="32" y="157">contract/DB</text>
+          <rect x="178" y="140" width="670" height="26" rx="4" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="862" y="158">GraphQL + PostgreSQL/Drizzle</text>
+
+          <text x="32" y="198">UI/env/desktop</text>
+          <rect x="178" y="181" width="618" height="26" rx="4" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="810" y="199">Panda CSS, headless UI, Tauri, Zod</text>
+
+          <text x="32" y="239">infra 요청 시</text>
+          <rect x="178" y="222" width="552" height="26" rx="4" fill="#fef3c7" stroke="#a16207"></rect>
+          <text x="744" y="240">Pulumi + Docker + AWS ECR/ECS Fargate</text>
         </g>
       </svg>
-      <p class="note">MongoDB 선택 시 Atlas와 repository boundary를, Supabase 선택 시 managed PostgreSQL과 server-only service-role boundary를 적용한다.</p>
-    </section>
-
-    <section>
-      <h2>선택 메뉴</h2>
-      <p class="note">긴 questionnaire 대신 tree가 바뀌는 선택지만 숫자로 묻는다.</p>
-      <table aria-label="project-structure compact menu">
-        <thead><tr><th>메뉴</th><th>기본 선택과 대안</th><th>tree 영향</th></tr></thead>
-        <tbody>
-          <tr><td>API 계약</td><td>1 GraphQL 기본, 2 REST, 3 hybrid</td><td>GraphQL resolver와 <code>codegen.ts</code>, REST 선택 시 controller 경계</td></tr>
-          <tr><td>DB</td><td>1 PostgreSQL + Drizzle 기본, 2 MongoDB + Atlas, 3 Supabase Postgres, 4 no DB, 5 external DB</td><td>선택한 DB owner만 생성</td></tr>
-          <tr><td>Postgres hosting</td><td>1 app-managed Postgres 기본, 2 Supabase managed Postgres, 3 existing Postgres</td><td><code>DATABASE_DIRECT_URL</code> 같은 server-only migration env 분리</td></tr>
-          <tr><td>Mongo hosting</td><td>1 MongoDB Atlas 기본, 2 self-hosted MongoDB, 3 existing MongoDB</td><td>Atlas network access, private endpoint/IP allowlist, DB user, <code>MONGODB_URI</code> 문서화</td></tr>
-          <tr><td>DB shell</td><td>1 psql, 2 mongosh, 3 no shell script</td><td><code>packages/db/scripts</code>에 env 검증을 통과한 helper만 둠</td></tr>
-          <tr><td>캐시</td><td>1 Redis through cache boundary 기본, 2 no Redis</td><td>monorepo Redis는 <code>packages/db/src/redis</code>, API는 cache provider wrapper</td></tr>
-          <tr><td>인증</td><td>1 app-owned auth module, 2 external auth, 3 no auth</td><td><code>modules/auth</code>, guards, cookie/JWT/password provider 선택</td></tr>
-          <tr><td>생성 산출물</td><td>1 ignored and reproducible 기본, 2 committed and reviewed</td><td>GraphQL/Panda generated artifact 정책을 repo 단위로 통일</td></tr>
-          <tr><td>데스크톱 shell</td><td>1 Tauri + Vite React 기본, 2 Tauri + existing frontend shell</td><td><code>apps/desktop</code>, <code>src-tauri</code>, Tauri build env bridge</td></tr>
-          <tr><td>인프라</td><td>1 Pulumi AWS 기본, 2 no infra, 3 existing infra tool</td><td>배포/cloud/Docker 요청이 있을 때만 <code>infra/pulumi</code></td></tr>
-          <tr><td>컨테이너 registry</td><td>1 Docker image to AWS ECR 기본, 2 no registry, 3 external registry</td><td>app-local <code>Dockerfile</code>, <code>.dockerignore</code>, ECR image owner</td></tr>
-          <tr><td>런타임 target</td><td>1 ECS Fargate 기본, 2 EC2 Docker host, 3 no cloud runtime</td><td>runtime path는 정확히 하나만 둠</td></tr>
-          <tr><td>공개 진입점</td><td>1 ALB 기본, 2 internal service, 3 existing DNS/CDN</td><td>custom domain/TLS가 있을 때만 Route 53, ACM 추가</td></tr>
-          <tr><td>Folder instructions</td><td>1 boundary <code>AGENTS.md</code> index 기본, 2 root only, 3 existing instruction files</td><td>root rulebook 복사가 아니라 짧은 folder-local index</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section>
-      <h2>DB 옵션</h2>
-      <div class="grid3">
-        <div class="cell"><span class="tag ok">PostgreSQL / Supabase Postgres</span><p><code>packages/db/drizzle</code>, <code>packages/db/src/postgres</code>, <code>packages/db/scripts/psql.ts</code>를 둔다. Supabase service-role 값은 <code>SUPABASE_SERVICE_ROLE_KEY</code> secret name으로만 문서화한다.</p></div>
-        <div class="cell"><span class="tag accent">MongoDB Atlas</span><p><code>packages/db/src/mongo</code>가 client, collections, indexes를 소유한다. <code>MONGODB_URI</code>와 Atlas network assumptions를 서버 전용으로 둔다.</p></div>
-        <div class="cell"><span class="tag warn">shell helper</span><p>PostgreSQL/Supabase는 psql, MongoDB는 mongosh를 쓴다. MongoDB에는 Drizzle migration을 만들지 않는다.</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>폴더 AGENTS.md</h2>
-      <div class="grid3">
-        <div class="cell"><span class="tag ok">purpose</span><p>각 boundary folder의 목적과 소유 범위를 한 줄로 설명한다. 예: <code>apps/api/AGENTS.md</code>는 API module, provider, test boundary를 설명한다.</p></div>
-        <div class="cell"><span class="tag accent">local map</span><p>하위 목차를 짧게 둔다. <code>src/modules</code>, <code>src/providers</code>, <code>test</code>처럼 agent가 먼저 볼 경로만 나열한다.</p></div>
-        <div class="cell"><span class="tag warn">do-not-change</span><p>generated output, vendor, build artifact, live secret, cross-boundary owner를 이 folder에서 직접 바꾸지 않도록 적는다.</p></div>
-        <div class="cell"><span class="tag accent">related skills</span><p><code>$project-structure</code>, <code>$sync-docs</code>, <code>$browser-qa</code>처럼 이 folder에서 자주 쓰는 skill을 링크한다.</p></div>
-        <div class="cell"><span class="tag ok">validation</span><p>이 folder에서 변경 후 실행할 typecheck, lint, test, codegen, migration, infra preview 명령을 적는다.</p></div>
-        <div class="cell"><span class="tag danger">root 복사 금지</span><p>Root <code>AGENTS.md</code> 전체를 복제하지 않는다. folder-local 파일은 목차형 index로 유지한다.</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>폴더 구조 트리</h2>
-      <p class="note">대표 tree는 선택된 app type만 남기고, env/codegen/DB/infra/generated output owner를 한눈에 보이게 한다.</p>
-      <div class="grid2">
-        <div class="tree">apps/web/                         # 프론트엔드 web 트리
-├── env/
-│   └── .env.stage
-├── codegen.ts
-├── panda.config.ts
-├── styled-system/
-├── src/
-│   ├── app/
-│   ├── config/
-│   │   └── env.ts                 # src/config/env.ts
-│   ├── features/
-│   │   └── posts/
-│   │       └── graphql/
-│   ├── graphql/
-│   │   └── autogen.ts             # web GraphQL autogen
-│   └── providers/
-└── test/
-    └── e2e/                       # test/e2e</div>
-        <div class="tree">apps/api/                         # 백엔드 API 트리
-├── env/
-│   └── .env.stage
-├── codegen.ts
-├── src/
-│   ├── config/
-│   │   └── env.ts                 # src/config/env.ts
-│   ├── common/                    # guards, pipes, plugins, rate limit
-│   ├── graphql/
-│   │   └── autogen.ts             # API GraphQL autogen
-│   ├── modules/
-│   │   ├── auth/
-│   │   └── health/
-│   └── providers/
-│       ├── logger/                # request logging
-│       ├── cache/
-│       │   └── cache.service.ts   # packages/db Redis helper wrapper
-│       └── observability/
-└── test/</div>
-      </div>
-      <div class="grid2" style="margin-top:12px">
-        <div class="tree">repo-root/                        # 풀스택 모노레포 package 경계
-├── apps/
-│   ├── web/
-│   ├── api/
-│   └── desktop/                    # 데스크톱 앱 트리
-│       ├── codegen.ts
-│       ├── src/
-│       │   └── graphql/
-│       │       └── autogen.ts     # desktop GraphQL autogen
-│       └── src-tauri/
-├── packages/
-│   ├── config/
-│   ├── db/
-│   │   ├── drizzle/
-│   │   ├── scripts/               # migrate, seed, psql, mongosh
-│   │   └── src/
-│   │       ├── postgres/
-│   │       ├── mongo/
-│   │       ├── redis/
-│   │       └── schema/
-│   └── ui/
-└── turbo.json</div>
-        <div class="tree">repo-root/                        # 인프라 포함 트리
-├── apps/
-│   ├── web/
-│   │   ├── Dockerfile
-│   │   └── .dockerignore
-│   └── api/
-│       ├── Dockerfile
-│       └── .dockerignore
-├── docker/
-│   └── docker-compose.yml         # local-only, production runtime 아님
-└── infra/
-    └── pulumi/
-        ├── Pulumi.yaml
-        ├── Pulumi.dev.yaml.example
-        ├── src/
-        │   ├── ecr.ts             # AWS ECR
-        │   ├── load-balancer.ts   # public entrypoint
-        │   └── runtime/
-        │       └── ecs-fargate.ts # EC2 Docker host 선택 시 대체
-        └── scripts/
-            └── smoke-check.ts     # smoke check</div>
-      </div>
-    </section>
-
-    <section>
-      <h2>env 계약</h2>
-      <div class="grid3">
-        <div class="cell"><span class="tag ok">앱별 schema</span><p>모든 app은 <code>&lt;app&gt;/env/*</code>와 <code>&lt;app&gt;/src/config/env.ts</code> Zod schema를 가진다.</p></div>
-        <div class="cell"><span class="tag accent">helper 전용 package</span><p><code>packages/config</code>는 helper만 제공한다. shared package는 <code>process.env</code>를 직접 읽지 않는다.</p></div>
-        <div class="cell"><span class="tag warn">도구도 동일 경로</span><p>GraphQL codegen, Drizzle migration, psql/mongosh shell, Tauri build, Infrastructure deploy script가 같은 env helper layer를 통과한다.</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>GraphQL codegen 계약</h2>
-      <div class="grid3">
-        <div class="cell"><span class="tag ok">앱 소유 config</span><p>GraphQL app은 app root에 <code>codegen.ts</code>를 둔다.</p></div>
-        <div class="cell"><span class="tag accent">operation 위치</span><p>frontend와 desktop query/mutation 문서는 <code>src/features/&lt;domain&gt;/graphql</code> 근처에 둔다.</p></div>
-        <div class="cell"><span class="tag warn">autogen entrypoint</span><p>web, API, desktop 모두 <code>&lt;app&gt;/src/graphql/autogen.ts</code>를 import entrypoint로 쓴다.</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>인프라 정책</h2>
-      <div class="grid3">
-        <div class="cell"><span class="tag ok">Pulumi AWS</span><p><code>infra/pulumi</code>가 network, IAM, AWS ECR, ECS Fargate 또는 EC2 Docker host, load balancer, logs, runtime wiring을 소유한다.</p></div>
-        <div class="cell"><span class="tag accent">Docker와 registry</span><p><code>&lt;app&gt;/Dockerfile</code>과 <code>.dockerignore</code>는 app 옆에 둔다. CI는 Docker image를 immutable tag로 ECR에 push한다.</p></div>
-        <div class="cell"><span class="tag danger">secret과 entrypoint</span><p>live secret은 Pulumi stack file에 넣지 않는다. required secret names, public entrypoint, Route 53, ACM, post-deploy smoke check를 문서화한다.</p></div>
-      </div>
+      <p class="note">MongoDB/document DB가 선택되면 MongoDB + Atlas, managed psql-compatible Postgres가 선택되면 Supabase Postgres 경계를 사용한다.</p>
     </section>
 
     <section>
       <h2>입출력 스키마</h2>
-      <div class="grid3">
-        <div class="cell"><span class="tag accent">입력</span><h3>사용자와 repo 상태</h3><ul><li>project kind 또는 numeric choice</li><li>선택된 API, DB, cache, auth, infra</li><li>기존 folder, scripts, instruction surface</li></ul></div>
-        <div class="cell"><span class="tag warn">판단</span><h3>reference와 정책</h3><ul><li>kind별 reference 파일</li><li>env, GraphQL, DB, folder AGENTS, infra 정책</li><li>중복 folder 역할을 최소화</li></ul></div>
-        <div class="cell"><span class="tag ok">출력</span><h3>구조 답변</h3><ul><li>chosen kind와 stack assumptions</li><li>directory tree와 boundary rules</li><li>검증 결과와 남은 질문</li></ul></div>
-      </div>
+      <svg class="schema" viewBox="0 0 1080 258" role="img" aria-label="입력에서 출력까지의 정보 흐름">
+        <defs>
+          <marker id="schema-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+          </marker>
+        </defs>
+        <rect x="28" y="38" width="278" height="166" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="167" y="66" text-anchor="middle" font-size="14" font-weight="700">입력</text>
+        <text x="52" y="100" font-size="12" fill="#6b7280">사용자 선택: project kind, stack, DB, infra</text>
+        <text x="52" y="126" font-size="12" fill="#6b7280">기존 repo: folder, package manager, scripts</text>
+        <text x="52" y="152" font-size="12" fill="#6b7280">제약: security, tool, generated artifact</text>
+        <text x="52" y="178" font-size="12" fill="#6b7280">workflow handoff: 도메인/runtime 질문</text>
+
+        <line x1="306" y1="121" x2="386" y2="121" stroke="#2563eb" stroke-width="2" marker-end="url(#schema-arrow)"></line>
+
+        <rect x="392" y="38" width="292" height="166" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="538" y="66" text-anchor="middle" font-size="14" font-weight="700">처리</text>
+        <text x="416" y="100" font-size="12" fill="#6b7280">app, package, infra, docs boundary 선택</text>
+        <text x="416" y="126" font-size="12" fill="#6b7280">env, codegen, DB migration, test 위치 고정</text>
+        <text x="416" y="152" font-size="12" fill="#6b7280">tool/API/secret/scrubbed artifact 경계 표시</text>
+        <text x="416" y="178" font-size="12" fill="#6b7280">folder-local AGENTS.md index 포함</text>
+
+        <line x1="684" y1="121" x2="764" y2="121" stroke="#2563eb" stroke-width="2" marker-end="url(#schema-arrow)"></line>
+
+        <rect x="770" y="38" width="282" height="166" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+        <text x="911" y="66" text-anchor="middle" font-size="14" font-weight="700">출력</text>
+        <text x="794" y="100" font-size="12" fill="#6b7280">선택한 구조: stack/runtime/db/infra</text>
+        <text x="794" y="126" font-size="12" fill="#6b7280">폴더 트리: source와 generated 분리</text>
+        <text x="794" y="152" font-size="12" fill="#6b7280">경계: env/codegen/db/test/security/tool</text>
+        <text x="794" y="178" font-size="12" fill="#6b7280">검증: 실행할 commands와 남은 질문</text>
+      </svg>
     </section>
 
     <section>
@@ -393,73 +434,113 @@
 │   └── structure-validation.md
 └── scripts/
     └── validate-project-structure.ts</div>
-        <svg class="map" viewBox="0 0 520 260" role="img" aria-label="reference 선택 지도">
-          <rect x="26" y="22" width="140" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="96" y="49" text-anchor="middle" font-size="12" font-weight="700">Frontend web</text>
-          <rect x="26" y="82" width="140" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="96" y="109" text-anchor="middle" font-size="12" font-weight="700">Backend API</text>
-          <rect x="26" y="142" width="140" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="96" y="169" text-anchor="middle" font-size="12" font-weight="700">Monorepo</text>
-          <rect x="26" y="202" width="140" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="96" y="229" text-anchor="middle" font-size="12" font-weight="700">Desktop</text>
-          <rect x="318" y="22" width="170" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="403" y="49" text-anchor="middle" font-size="12">frontend-next.md</text>
-          <rect x="318" y="82" width="170" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="403" y="109" text-anchor="middle" font-size="12">backend-nest.md</text>
-          <rect x="318" y="142" width="170" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="403" y="169" text-anchor="middle" font-size="12">monorepo.md</text>
-          <rect x="318" y="202" width="170" height="42" rx="8" fill="#fff" stroke="#d1d5db"></rect><text x="403" y="229" text-anchor="middle" font-size="12">desktop-tauri.md</text>
-          <line x1="166" y1="43" x2="318" y2="43" stroke="#2563eb" stroke-width="2"></line>
-          <line x1="166" y1="103" x2="318" y2="103" stroke="#2563eb" stroke-width="2"></line>
-          <line x1="166" y1="163" x2="318" y2="163" stroke="#2563eb" stroke-width="2"></line>
-          <line x1="166" y1="223" x2="318" y2="223" stroke="#2563eb" stroke-width="2"></line>
-          <text x="242" y="132" text-anchor="middle" font-size="12" fill="#6b7280">선택된 kind에 맞는 파일부터 읽음</text>
+        <svg class="resource-map" viewBox="0 0 520 324" role="img" aria-label="reference resource map">
+          <defs>
+            <marker id="map-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+            </marker>
+          </defs>
+          <rect x="22" y="26" width="132" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="88" y="52" text-anchor="middle" font-size="12" font-weight="700">SKILL.md</text>
+          <line x1="154" y1="47" x2="214" y2="47" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="220" y="26" width="132" height="42" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+          <text x="286" y="52" text-anchor="middle" font-size="12" font-weight="700">첫 행동</text>
+          <line x1="352" y1="47" x2="412" y2="47" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="418" y="26" width="80" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="458" y="52" text-anchor="middle" font-size="12">선택 질문</text>
+
+          <rect x="22" y="96" width="132" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="88" y="122" text-anchor="middle" font-size="12">kind references</text>
+          <line x1="154" y1="117" x2="214" y2="117" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="220" y="96" width="132" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="286" y="122" text-anchor="middle" font-size="12">frontend/backend</text>
+          <line x1="352" y1="117" x2="412" y2="117" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="418" y="96" width="80" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="458" y="122" text-anchor="middle" font-size="12">tree</text>
+
+          <rect x="22" y="166" width="132" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="88" y="192" text-anchor="middle" font-size="12">policy references</text>
+          <line x1="154" y1="187" x2="214" y2="187" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="220" y="166" width="132" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="286" y="192" text-anchor="middle" font-size="12">env/DB/folder</text>
+          <line x1="352" y1="187" x2="412" y2="187" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="418" y="166" width="80" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="458" y="192" text-anchor="middle" font-size="12">boundary</text>
+
+          <rect x="22" y="236" width="132" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="88" y="262" text-anchor="middle" font-size="12">validator</text>
+          <line x1="154" y1="257" x2="214" y2="257" stroke="#2563eb" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="220" y="236" width="132" height="42" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
+          <text x="286" y="262" text-anchor="middle" font-size="12">검증 기준</text>
+          <line x1="352" y1="257" x2="412" y2="257" stroke="#1f7a52" stroke-width="2" marker-end="url(#map-arrow)"></line>
+          <rect x="418" y="236" width="80" height="42" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+          <text x="458" y="262" text-anchor="middle" font-size="12">완료</text>
         </svg>
       </div>
     </section>
 
     <section>
-      <h2>정책 경계</h2>
-      <table aria-label="project-structure 정책 경계">
-        <thead><tr><th>영역</th><th>소유 위치</th><th>중요 규칙</th></tr></thead>
+      <h2>경계 체크</h2>
+      <table aria-label="project-structure boundary checklist">
+        <thead>
+          <tr>
+            <th>영역</th>
+            <th>출력에 보여야 하는 것</th>
+            <th>실패 신호</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td>Env</td><td><code>&lt;app&gt;/env/*</code>, <code>&lt;app&gt;/src/config/env.ts</code></td><td>Zod 필수. frontend public env와 server env를 분리하고 shared package는 <code>process.env</code>를 직접 읽지 않는다.</td></tr>
-          <tr><td>GraphQL</td><td><code>&lt;app&gt;/codegen.ts</code>, <code>&lt;app&gt;/src/graphql/autogen.ts</code></td><td>schema와 operation 위치를 app별로 고정하고 generated artifact 정책을 하나만 선택한다.</td></tr>
-          <tr><td>PostgreSQL</td><td><code>packages/db/drizzle</code>, <code>packages/db/src/postgres</code></td><td>Drizzle migration owner를 하나로 유지한다. Supabase Postgres도 psql-compatible boundary로 다룬다.</td></tr>
-          <tr><td>MongoDB</td><td><code>packages/db/src/mongo</code></td><td>Atlas가 default managed provider다. Drizzle migration을 만들지 않고 collection/index helper를 둔다.</td></tr>
-          <tr><td>Redis</td><td><code>packages/db/src/redis</code></td><td>monorepo에서는 DB package가 Redis client/key/connection을 소유하고 API는 cache provider로 감싼다.</td></tr>
-          <tr><td>Infra</td><td><code>infra/pulumi</code>, app-local <code>Dockerfile</code></td><td>사용자가 infra를 요청한 경우에만 Pulumi AWS, ECR, ECS Fargate 또는 EC2 중 하나의 runtime path를 보인다.</td></tr>
-          <tr><td>Folder instructions</td><td>boundary folder의 <code>AGENTS.md</code></td><td>짧은 table-of-contents index만 둔다. root 규칙을 복사하지 않는다.</td></tr>
+          <tr>
+            <td>env</td>
+            <td>app별 env schema, server-only secret, Zod validation 위치</td>
+            <td>frontend public env와 server secret이 섞임</td>
+          </tr>
+          <tr>
+            <td>GraphQL codegen</td>
+            <td>app-local <code>codegen.ts</code>, generated artifact 정책, import entrypoint</td>
+            <td>generated output과 source가 같은 owner 없이 흩어짐</td>
+          </tr>
+          <tr>
+            <td>DB / migration</td>
+            <td>PostgreSQL + Drizzle, MongoDB + Atlas, Supabase 중 선택된 owner</td>
+            <td>MongoDB에 Drizzle migration을 만들거나 DB owner가 중복됨</td>
+          </tr>
+          <tr>
+            <td>tool / MCP / external API</td>
+            <td>read/write/delete/network 권한, approval gate, untrusted output 처리</td>
+            <td>feature 코드가 외부 API와 tool output을 직접 신뢰함</td>
+          </tr>
+          <tr>
+            <td>folder <code>AGENTS.md</code></td>
+            <td>purpose, local map, do-not-change, related skills, validation commands</td>
+            <td>root instruction 전체를 folder-local 파일에 복사함</td>
+          </tr>
+          <tr>
+            <td>infra</td>
+            <td>요청 시에만 Pulumi, app-local Dockerfile, ECR, one runtime path, smoke check</td>
+            <td>infra 요청 없이 AWS/Pulumi folder가 추가됨</td>
+          </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>도구 보안 경계</h2>
-      <table aria-label="tool and security boundaries">
-        <thead><tr><th>구조 요소</th><th>소유 위치</th><th>검증 기준</th></tr></thead>
-        <tbody>
-          <tr><td>agent tool / MCP server</td><td><code>providers/</code>, <code>scripts/</code>, 또는 agent instruction surface</td><td>read/write/delete/network 권한과 approval gate를 문서화한다.</td></tr>
-          <tr><td>external API client</td><td>named provider folder</td><td>직접 호출을 feature 코드에 흩뿌리지 않고 untrusted tool output을 data로 취급한다.</td></tr>
-          <tr><td>DB shell / migration</td><td><code>packages/db/scripts</code></td><td>write-capable command, destructive command, production-like resource 접근을 구분한다.</td></tr>
-          <tr><td>secret / private data</td><td>server-only env schema</td><td>live secret, private data, screenshot, log, eval fixture는 scrubbed 상태만 보관한다.</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section>
-      <h2>구조 검증</h2>
+      <h2>검증 게이트</h2>
       <div class="grid2">
         <div class="cell">
-          <span class="tag ok">완료 전 확인</span>
-          <ul>
-            <li>선택한 project kind에 없는 app type이 tree에 끼지 않았는지 확인한다.</li>
-            <li>최종 tree가 선택한 folder 규칙을 지켰는지 검증한다.</li>
-            <li>env와 GraphQL codegen path가 모든 app에서 같은 상대 위치인지 확인한다.</li>
-            <li>Drizzle, MongoDB, Supabase, Redis owner가 중복되지 않는지 확인한다.</li>
-            <li>infra-aware tree라면 public entrypoint, secret names, smoke check, runtime path가 보이는지 확인한다.</li>
-          </ul>
-        </div>
-        <div class="cell">
-          <span class="tag accent">로컬 validator</span>
+          <span class="tag ok">HTML 변경 검증</span>
           <ul>
             <li><code>node scripts/validate-skill.ts skills/project-structure</code></li>
             <li><code>node skills/project-structure/scripts/validate-project-structure.ts</code></li>
             <li><code>node scripts/validate-skill-html.ts .</code></li>
-            <li>repo-level lifecycle/history/doc 변경 시에만 <code>node scripts/validate-skill-repo.ts .</code></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <span class="tag warn">구조 답변 검증</span>
+          <ul>
+            <li>사용자가 선택한 project kind에 없는 app type을 tree에 넣지 않는다.</li>
+            <li>security, tool, migration, deploy, secret, scrubbed artifact boundary를 표시한다.</li>
+            <li>최종 답변은 <code>선택한 구조</code>, <code>폴더 트리</code>, <code>경계</code>, <code>검증</code> 순서를 따른다.</li>
           </ul>
         </div>
       </div>
@@ -468,8 +549,24 @@
     <section>
       <h2>금지와 허용</h2>
       <div class="grid2">
-        <div class="cell"><span class="tag ok">해야 함</span><ul><li>숫자 메뉴는 tree를 바꾸는 선택에만 쓴다.</li><li>directory tree를 먼저 보여주고 app, feature, provider, shared package, generated files, scripts 경계를 설명한다.</li><li>기존 repo를 편집할 때는 먼저 folder와 scripts를 읽고 user code를 보존한다.</li></ul></div>
-        <div class="cell"><span class="tag danger">하지 않음</span><ul><li>full-stack single-repo layout을 기본으로 제안하지 않는다.</li><li>infra 요청이 없는데 Pulumi, Docker, AWS folder를 넣지 않는다.</li><li>local Compose를 production runtime처럼 설명하지 않는다.</li><li>folder-local <code>AGENTS.md</code>에 root instruction 전체를 복사하지 않는다.</li></ul></div>
+        <div class="cell">
+          <span class="tag ok">해야 함</span>
+          <ul>
+            <li>기존 repo가 있으면 구조와 package manager를 먼저 읽는다.</li>
+            <li>tree가 바뀌는 선택만 compact numeric choices로 묻는다.</li>
+            <li>meaningful boundary folder에 짧은 <code>AGENTS.md</code> index를 둔다.</li>
+            <li>health/readiness와 observability 위치를 app 또는 provider boundary에 포함한다.</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <span class="tag danger">하지 않음</span>
+          <ul>
+            <li>raw product discovery 단계에서 이 스킬만으로 PRD나 domain language를 만든다.</li>
+            <li>사용자가 infra를 요청하지 않았는데 Pulumi, Docker, AWS 구조를 넣는다.</li>
+            <li>Supabase service-role key나 MongoDB URI를 client-visible env에 둔다.</li>
+            <li>source artifact와 generated artifact를 같은 owner 없이 섞는다.</li>
+          </ul>
+        </div>
       </div>
     </section>
   </main>

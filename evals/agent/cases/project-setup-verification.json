@@ -22,7 +22,8 @@
         "file": "evals/agent/fixtures/project-setup/skill-link-report.md",
         "values": [
           "AGENTS.md",
-          "skills/workflow/SKILL.md",
+          "skills/project-workflow/SKILL.md",
+          "skills/spec-workflow/SKILL.md",
           "skills/project-structure/SKILL.md",
           "skills/browser-qa/SKILL.md"
         ]

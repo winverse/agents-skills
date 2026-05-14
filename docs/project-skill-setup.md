@@ -37,7 +37,7 @@ Suggested verification report shape:
 ```json
 {
   "targetInstructionFile": "AGENTS.md",
-  "skills": ["workflow", "project-structure", "browser-qa"],
+  "skills": ["project-workflow", "spec-workflow", "project-structure", "browser-qa"],
   "linksValid": true,
   "globalInstallAllowed": false,
   "validation": ["node scripts/run-agent-evals.ts --scope cross_agent_portability"]
@@ -62,7 +62,8 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
 - `project-snippets/pull-request.md`: only GitHub PR preparation and creation rules.
 - `project-snippets/project-structure.md`: only project structure, default stack rules, selected DB provider options, and requested infra/deployment boundaries.
-- `project-snippets/workflow.md`: only project and feature workflow sequencing, domain/ADR/PRD/issue/planning/TDD/QA/document-sync flow, and workflow artifact placement.
+- `project-snippets/project-workflow.md`: only the Workflow suite setup half, project bootstrap sequencing, domain/product/ADR/design/PRD/issue backlog setup, `workflow-state.md` cache, and `spec-workflow` handoff.
+- `project-snippets/spec-workflow.md`: only the Workflow suite implementation half, PRD/issue/spec based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.
 - `project-snippets/cmux-automation.md`: only cmux automation, prompt pinning, tab/status automation, workspace boards, feed workflows, and cmux CLI ergonomics.

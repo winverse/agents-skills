@@ -4,7 +4,7 @@
 
 ## Project Structure Overrides
 
-- If the request is still raw product discovery, end-to-end project workflow, domain modeling, PRD/issues, or “start a new project and take it through planning/implementation,” use `workflow` first. Use `project-structure` after domain language and architecture questions are concrete enough to choose folder/env/codegen/db/infra boundaries.
+- If the request is still raw product discovery, domain modeling, PRD/issues, project setup, or “start a new project and prepare implementation,” use `project-workflow` first. Use `project-structure` after domain language and architecture questions are concrete enough to choose folder/env/codegen/db/infra boundaries. Use `spec-workflow` later for concrete implementation slices.
 - Prefer numeric choices when the project kind or stack is not clear.
 - Default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation, and Pulumi/Docker/AWS ECR/ECS Fargate when infrastructure is requested unless the project says otherwise.
 - Use MongoDB + Atlas when MongoDB/document DB is selected, and Supabase Postgres when the user wants managed psql-compatible Postgres. Keep Supabase service-role keys and MongoDB URIs server-only.

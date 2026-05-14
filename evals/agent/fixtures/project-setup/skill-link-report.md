@@ -3,13 +3,15 @@
 Target instruction file: AGENTS.md
 
 Checked links:
-- skills/workflow/SKILL.md
+- skills/project-workflow/SKILL.md
+- skills/spec-workflow/SKILL.md
 - skills/project-structure/SKILL.md
 - skills/browser-qa/SKILL.md
 - skills/sync-docs/SKILL.md
 
 HTML companions:
-- skills/workflow/skill.html
+- skills/project-workflow/skill.html
+- skills/spec-workflow/skill.html
 - skills/project-structure/skill.html
 - skills/browser-qa/skill.html
 - skills/sync-docs/skill.html

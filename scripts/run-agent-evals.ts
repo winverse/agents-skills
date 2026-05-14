@@ -10,6 +10,8 @@ type Scope =
   | "skill_invocation"
   | "trigger_quality"
   | "workflow"
+  | "project-workflow"
+  | "spec-workflow"
   | "safety"
   | "cross_agent_portability"
   | "artifact_hygiene"
@@ -195,6 +197,8 @@ function parseCase(raw: unknown, source: string, index: number): EvalCase | null
     "skill_invocation",
     "trigger_quality",
     "workflow",
+    "project-workflow",
+    "spec-workflow",
     "safety",
     "cross_agent_portability",
     "artifact_hygiene",
@@ -253,13 +257,19 @@ function parseCase(raw: unknown, source: string, index: number): EvalCase | null
     caseErrors.push(`${source}[${index}] checks contain an unsupported shape`);
   }
   if (
-    raw.scope === "workflow" &&
+    (raw.scope === "workflow" || raw.scope === "project-workflow" || raw.scope === "spec-workflow") &&
     Array.isArray(raw.checks) &&
     raw.checks.every(isCheck) &&
-    !raw.checks.some((check) => textCheckFile(check)?.startsWith("evals/agent/fixtures/workflow/"))
+    !raw.checks.some((check) => {
+      const file = textCheckFile(check);
+      return (
+        file?.startsWith("evals/agent/fixtures/project-workflow/") ||
+        file?.startsWith("evals/agent/fixtures/spec-workflow/")
+      );
+    })
   ) {
     caseErrors.push(
-      `${source}[${index}] workflow cases must check a saved workflow output fixture under evals/agent/fixtures/workflow/`,
+      `${source}[${index}] workflow cases must check a saved workflow output fixture under evals/agent/fixtures/project-workflow/ or evals/agent/fixtures/spec-workflow/`,
     );
   }
 
@@ -462,6 +472,8 @@ if (
     "skill_invocation",
     "trigger_quality",
     "workflow",
+    "project-workflow",
+    "spec-workflow",
     "safety",
     "cross_agent_portability",
     "artifact_hygiene",
