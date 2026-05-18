@@ -15,6 +15,7 @@ const ignoredDirs = new Set<string>([
   "images",
   "inspector",
   "node_modules",
+  "plugins",
 ]);
 const sourceExtensions = new Set<string>([
   ".html",
@@ -110,11 +111,13 @@ requireFile("skills");
 requireFile("scripts/validate-skill.ts");
 requireFile("docs/skill-lifecycle.md");
 requireFile("docs/skill-inspector.md");
+requireFile("docs/update-source-registry.md");
 requireFile("history/skills.md");
 requireFile("project-snippets/base.md");
 requireFile("project-snippets/claude-base.md");
 requireFile("scripts/validate-skill-html.ts");
 requireFile("scripts/validate-korean-markdown.ts");
+requireFile("scripts/validate-plugins.ts");
 requireFile("scripts/run-agent-evals.ts");
 requireFile("evals/agent/README.md");
 requireFile("evals/agent/cases/skill-routing.json");
@@ -122,10 +125,15 @@ requireFile("evals/agent/cases/safety-boundaries.json");
 requireFile("evals/agent/cases/output-shape.json");
 requireText("README.md", "node scripts/validate-skill-html.ts .", "common skill HTML validator command");
 requireText("README.md", "node scripts/validate-korean-markdown.ts .", "Korean Markdown validator command");
+requireText("README.md", "node scripts/validate-plugins.ts .", "plugin validator command");
 requireText("README.md", "node scripts/run-agent-evals.ts", "agent eval harness command");
+requireText("README.md", "docs/update-source-registry.md", "update source registry document");
 requireText("AGENTS.md", "skills/**/*.md", "Korean Markdown rule for skill docs");
 requireText("AGENTS.md", "node scripts/validate-korean-markdown.ts .", "Korean Markdown validator command");
 requireText("AGENTS.md", "node scripts/run-agent-evals.ts", "agent eval harness command");
+requireText("AGENTS.md", "docs/update-source-registry.md", "update source registry instruction");
+requireText("docs/update-source-registry.md", ".gitmodules", "canonical submodule source");
+requireText("docs/update-source-registry.md", "workflow provenance-only primitive", "workflow primitive boundary");
 
 if (nodeMajor < 22) {
   errors.push(`Node 22+ is required for direct .ts validator execution; current Node is ${process.versions.node}`);
@@ -225,6 +233,10 @@ for (const filePath of walkSourceFiles()) {
 
   const skillPathPattern = /skills\/([a-z0-9-]+)\/(?:SKILL\.md|skill\.html|scripts\/validate-[a-z0-9-]+\.ts)/g;
   for (const match of text.matchAll(skillPathPattern)) {
+    const precedingPath = text.slice(Math.max(0, match.index - 96), match.index);
+    if (/plugins\/[a-z0-9-]+\/(?:[^"'`\s)]*\/)?$/.test(precedingPath)) {
+      continue;
+    }
     const referencedSkill = match[1];
     if (!skillNames.has(referencedSkill)) {
       errors.push(

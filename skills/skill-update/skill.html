@@ -7,21 +7,23 @@
   <link rel="icon" href="data:,">
   <style>
     :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-muted: #f1f5f9;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #d1d5db;
-      --strong: #0f172a;
-      --accent: #2563eb;
-      --accent-soft: #dbeafe;
-      --ok: #1f7a52;
-      --ok-soft: #dcfce7;
-      --warn: #a16207;
-      --warn-soft: #fef3c7;
-      --danger: #b42318;
-      --danger-soft: #fee2e2;
+      --bg: #f7f8fb;
+      --paper: #ffffff;
+      --ink: #111827;
+      --muted: #5f6b7a;
+      --line: #cfd6df;
+      --line-dark: #334155;
+      --blue: #2563eb;
+      --blue-soft: #dbeafe;
+      --green: #16835d;
+      --green-soft: #dcfce7;
+      --amber: #a16207;
+      --amber-soft: #fef3c7;
+      --red: #b42318;
+      --red-soft: #fee2e2;
+      --slate: #f1f5f9;
+      --violet: #6d28d9;
+      --violet-soft: #ede9fe;
     }
 
     * {
@@ -30,12 +32,11 @@
 
     html,
     body {
-      width: 100%;
-      min-height: 100%;
       margin: 0;
+      min-height: 100%;
       background: var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
     }
 
@@ -51,11 +52,11 @@
 
     header {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) 320px;
       gap: 20px;
       align-items: end;
-      padding: 24px 0 18px;
-      border-bottom: 2px solid var(--strong);
+      padding: 24px 0 20px;
+      border-bottom: 2px solid var(--line-dark);
     }
 
     h1,
@@ -67,12 +68,12 @@
 
     h1 {
       font-size: 34px;
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
     h2 {
       font-size: 18px;
-      line-height: 1.2;
+      line-height: 1.25;
     }
 
     h3 {
@@ -81,57 +82,57 @@
     }
 
     .sub {
-      margin-top: 8px;
-      max-width: 790px;
+      max-width: 820px;
+      margin-top: 9px;
       color: var(--muted);
       font-size: 15px;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
-    .pair {
+    .tagbox {
       display: grid;
-      gap: 6px;
-      min-width: 270px;
-      padding: 12px 14px;
-      border: 1px solid var(--border);
+      gap: 7px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--surface);
+      background: var(--paper);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 12px;
+      line-height: 1.35;
     }
 
-    .pair span {
+    .tagbox span {
       color: var(--muted);
     }
 
     main {
       display: grid;
       gap: 18px;
-      padding: 20px 0 34px;
+      padding: 20px 0 36px;
     }
 
     section {
       overflow: hidden;
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--surface);
+      background: var(--paper);
     }
 
     .head {
       display: flex;
-      align-items: end;
       justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
+      align-items: end;
       padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface-muted);
+      border-bottom: 1px solid var(--line);
+      background: var(--slate);
     }
 
     .note {
-      max-width: 560px;
+      max-width: 610px;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.35;
+      line-height: 1.4;
       text-align: right;
     }
 
@@ -141,12 +142,12 @@
     }
 
     .cell {
-      min-height: 148px;
+      min-height: 150px;
       display: grid;
       align-content: start;
       gap: 9px;
       padding: 15px;
-      border-right: 1px solid var(--border);
+      border-right: 1px solid var(--line);
     }
 
     .cell:last-child {
@@ -165,7 +166,7 @@
       line-height: 1.45;
     }
 
-    .cell ul {
+    ul {
       margin: 0;
       padding-left: 18px;
     }
@@ -182,94 +183,68 @@
 
     .two {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 18px;
     }
 
-    .coverage {
+    .scope {
       display: grid;
-      gap: 11px;
-      padding: 18px;
+      gap: 0;
     }
 
-    .bar {
+    .row {
       display: grid;
-      grid-template-columns: 145px 1fr 64px;
-      gap: 10px;
-      align-items: center;
-      font-size: 12px;
-    }
-
-    .bar span:first-child {
-      color: var(--text);
-      font-weight: 750;
-    }
-
-    .track {
-      height: 18px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-muted);
-      overflow: hidden;
-    }
-
-    .fill {
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .bar span:last-child {
-      color: var(--muted);
-      text-align: right;
-    }
-
-    .resources {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      padding: 18px;
-    }
-
-    .file {
-      min-height: 88px;
-      display: grid;
-      gap: 6px;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .file strong {
+      grid-template-columns: 190px 1fr 1fr;
+      border-bottom: 1px solid var(--line);
       font-size: 13px;
+      line-height: 1.35;
     }
 
-    .file span {
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row > div {
+      padding: 12px 14px;
+      border-right: 1px solid var(--line);
+    }
+
+    .row > div:last-child {
+      border-right: 0;
+    }
+
+    .row strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .row span {
       color: var(--muted);
-      font-size: 12px;
-      line-height: 1.35;
+    }
+
+    .row.header {
+      background: #eef2f7;
+      font-weight: 800;
     }
 
     .io {
       display: grid;
-      grid-template-columns: 1fr 82px 1fr;
+      grid-template-columns: 1fr 74px 1fr;
       gap: 12px;
       align-items: stretch;
       padding: 18px;
     }
 
     .box {
-      min-height: 176px;
+      min-height: 184px;
       padding: 14px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: 8px;
+      background: var(--paper);
     }
 
     .box ul {
-      margin: 10px 0 0;
-      padding-left: 18px;
+      margin-top: 10px;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.55;
@@ -278,20 +253,40 @@
     .arrow {
       display: grid;
       place-items: center;
-      color: var(--accent);
+      color: var(--blue);
       font-size: 28px;
       font-weight: 800;
     }
 
-    .snippet {
-      margin: 0;
-      padding: 16px 18px;
-      overflow-x: auto;
-      background: #0f172a;
-      color: #e5eefc;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .file {
+      min-height: 96px;
+      display: grid;
+      gap: 7px;
+      align-content: start;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: inherit;
+      text-decoration: none;
+      background: var(--paper);
+    }
+
+    .file strong {
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .file span {
+      color: var(--muted);
       font-size: 12px;
-      line-height: 1.55;
+      line-height: 1.35;
     }
 
     .split {
@@ -304,14 +299,24 @@
     }
 
     .split > div:first-child {
-      border-right: 1px solid var(--border);
+      border-right: 1px solid var(--line);
     }
 
     .rules {
-      margin: 12px 0 0;
-      padding-left: 18px;
+      margin-top: 12px;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .snippet {
+      margin: 0;
+      padding: 16px 18px;
+      overflow-x: auto;
+      background: #111827;
+      color: #e5eefc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
       line-height: 1.55;
     }
 
@@ -327,9 +332,9 @@
       align-items: center;
       gap: 7px;
       padding: 6px 8px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--surface);
+      background: var(--paper);
       color: var(--muted);
       font-size: 12px;
     }
@@ -338,8 +343,89 @@
       width: 10px;
       height: 10px;
       border-radius: 2px;
-      background: var(--accent);
-      border: 1px solid rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(15, 23, 42, 0.24);
+      background: var(--blue);
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 18px;
+      }
+
+      header,
+      .two,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .matrix,
+      .resources {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cell:nth-child(2n),
+      .cell:last-child {
+        border-right: 0;
+      }
+
+      .cell {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .cell:nth-last-child(-n + 2) {
+        border-bottom: 0;
+      }
+
+      .head {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .note {
+        text-align: left;
+      }
+
+      .split > div:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .matrix,
+      .resources,
+      .row,
+      .io {
+        grid-template-columns: 1fr;
+      }
+
+      .cell,
+      .cell:nth-last-child(-n + 2) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .cell:last-child {
+        border-bottom: 0;
+      }
+
+      .row > div {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .row > div:last-child {
+        border-bottom: 0;
+      }
+
+      .arrow {
+        min-height: 36px;
+        transform: rotate(90deg);
+      }
     }
   </style>
 </head>
@@ -348,12 +434,12 @@
     <header>
       <div>
         <h1>skill-update</h1>
-        <p class="sub">기존 공유 스킬을 수정할 때 SKILL.md, references, validator, agents metadata, skill.html, snippets, docs, history를 한 번에 맞추는 유지보수 오케스트레이터</p>
+        <p class="sub">기존 shared skill을 바꿀 때 호출 즉시 original/upstream provenance preflight를 실행하고, source delta를 adopt/adapt/reject/defer로 분류해 repo-local package와 검증 증거를 한 흐름으로 묶는 유지보수 스킬입니다.</p>
       </div>
-      <div class="pair" aria-label="skill file pair">
+      <div class="tagbox" aria-label="skill folder pair">
         <strong>skills/skill-update/</strong>
-        <span>SKILL.md - update workflow</span>
-        <span>skill.html - human guide</span>
+        <span>SKILL.md - agent workflow</span>
+        <span>skill.html - human visual guide</span>
       </div>
     </header>
 
@@ -361,122 +447,151 @@
       <section>
         <div class="head">
           <h2>사용 판단 매트릭스</h2>
-          <p class="note">기존 스킬 수정 요청인지, 다른 스킬을 먼저 써야 하는지 빠르게 구분합니다.</p>
+          <p class="note">기존 스킬 변경 요청인지, 원본 확인이 필요한 fork/update인지, 먼저 물어야 하는 변경인지 구분합니다.</p>
         </div>
         <div class="matrix" role="list">
-          <div class="cell" style="background: var(--ok-soft)">
+          <div class="cell" style="background: var(--green-soft)">
             <strong>사용</strong>
-            <p>기존 스킬의 trigger, workflow, references, validator, snippet, lifecycle를 바꿀 때.</p>
+            <p>기존 shared skill의 trigger, workflow, reference, validator, snippet, docs, history, lifecycle를 수정할 때.</p>
           </div>
-          <div class="cell" style="background: var(--accent-soft)">
-            <strong>함께 사용</strong>
-            <ul>
-              <li>material change → skill-to-html</li>
-              <li>문서 drift 가능 → sync-docs</li>
-              <li>커밋 요청 → atomic-committer</li>
-            </ul>
+          <div class="cell" style="background: var(--blue-soft)">
+            <strong>원본 확인</strong>
+            <p>모든 호출에서 local provenance를 먼저 훑고, 원본 skill, upstream primitive, fork 기록이 있거나 의심되면 `web-research`로 공식 source를 검증합니다.</p>
           </div>
-          <div class="cell" style="background: var(--warn-soft)">
-            <strong>확인 필요</strong>
-            <p>트리거 변경, rename, split, merge, deprecate, 제거처럼 의도가 불명확하면 수정 전에 확인합니다.</p>
+          <div class="cell" style="background: var(--amber-soft)">
+            <strong>질문 먼저</strong>
+            <p>trigger 의미 변경, behavior 제거, rename, split, archive, repo-wide preference 변경, source-of-truth conflict.</p>
           </div>
-          <div class="cell" style="background: var(--danger-soft)">
-            <strong>건너뜀</strong>
-            <p>새 스킬의 초기 scaffold만 필요하면 먼저 system skill-creator를 사용합니다.</p>
+          <div class="cell" style="background: var(--red-soft)">
+            <strong>다른 스킬</strong>
+            <p>새 스킬 scaffold는 system `skill-creator`, visual guide는 `skill-to-html`, 문서 drift는 `sync-docs`. plugin package, MCP config, submodule update는 `Plugin update list` 확인 후 별도 plugin workflow입니다.</p>
           </div>
         </div>
       </section>
 
       <section>
         <div class="head">
-          <h2>실행 흐름</h2>
-          <p class="note">행동 변경을 기준으로 범위를 정하고, package 전체가 같은 상태로 끝나게 합니다.</p>
+          <h2>업데이트 흐름</h2>
+          <p class="note">사용자 의도에서 시작해 원본 후보를 자동으로 찾고, source ledger와 adopt/adapt/reject/defer 판단을 남긴 뒤 최소 파일 수정과 검증까지 닫습니다.</p>
         </div>
         <div class="visual">
-          <svg viewBox="0 0 1040 310" role="img" aria-label="skill-update workflow">
+          <svg viewBox="0 0 1120 360" role="img" aria-label="skill-update workflow with upstream source gate">
             <defs>
-              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+              <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
                 <path d="M0,0 L9,3 L0,6 Z" fill="#2563eb"></path>
               </marker>
+              <marker id="arrow-amber" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L9,3 L0,6 Z" fill="#a16207"></path>
+              </marker>
             </defs>
-            <g>
-              <rect x="10" y="42" width="150" height="82" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
-              <rect x="202" y="42" width="150" height="82" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-              <rect x="394" y="42" width="150" height="82" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
-              <rect x="586" y="42" width="150" height="82" rx="8" fill="#dcfce7" stroke="#1f7a52"></rect>
-              <rect x="778" y="42" width="150" height="82" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-              <path d="M160 83 H196" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
-              <path d="M352 83 H388" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
-              <path d="M544 83 H580" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
-              <path d="M736 83 H772" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"></path>
-              <g font-size="13" font-weight="800" text-anchor="middle" fill="#111827">
-                <text x="85" y="76">의도</text>
-                <text x="277" y="76">점검</text>
-                <text x="469" y="76">범위</text>
-                <text x="661" y="76">패키지 수정</text>
-                <text x="853" y="76">검증</text>
-              </g>
-              <g font-size="12" text-anchor="middle" fill="#4b5563">
-                <text x="85" y="100">행동 변화</text>
-                <text x="277" y="100">현재 skill</text>
-                <text x="469" y="100">영향 범위</text>
-                <text x="661" y="100">전체 파일</text>
-                <text x="853" y="100">repo 검사</text>
-              </g>
+            <rect x="16" y="42" width="138" height="78" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+            <rect x="196" y="42" width="138" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <rect x="376" y="42" width="138" height="78" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
+            <rect x="556" y="42" width="138" height="78" rx="8" fill="#ede9fe" stroke="#6d28d9"></rect>
+            <rect x="736" y="42" width="138" height="78" rx="8" fill="#dcfce7" stroke="#16835d"></rect>
+            <rect x="916" y="42" width="138" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+
+            <path d="M154 81 H190" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"></path>
+            <path d="M334 81 H370" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"></path>
+            <path d="M514 81 H550" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"></path>
+            <path d="M694 81 H730" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"></path>
+            <path d="M874 81 H910" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"></path>
+
+            <g fill="#111827" font-size="13" font-weight="800" text-anchor="middle">
+              <text x="85" y="74">의도</text>
+              <text x="265" y="74">현재 패키지</text>
+              <text x="445" y="74">preflight</text>
+              <text x="625" y="74">source 검증</text>
+              <text x="805" y="74">delta 적용</text>
+              <text x="985" y="74">검증 보고</text>
             </g>
-            <rect x="254" y="184" width="532" height="78" rx="8" fill="#f8fafc" stroke="#94a3b8"></rect>
-            <path d="M469 124 V184" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5"></path>
-            <path d="M661 184 V130" stroke="#1f7a52" stroke-width="2" stroke-dasharray="6 5"></path>
-            <text x="520" y="216" text-anchor="middle" font-size="14" font-weight="800" fill="#111827">조정</text>
-            <text x="520" y="239" text-anchor="middle" font-size="12" fill="#4b5563">skill-to-html + sync-docs + inspector + history</text>
+            <g fill="#4b5563" font-size="12" text-anchor="middle">
+              <text x="85" y="99">behavior change</text>
+              <text x="265" y="99">skill/history</text>
+              <text x="445" y="99">provenance</text>
+              <text x="625" y="99">web-research</text>
+              <text x="805" y="99">최소 수정</text>
+              <text x="985" y="99">validators</text>
+            </g>
+
+            <rect x="318" y="190" width="486" height="94" rx="8" fill="#f8fafc" stroke="#94a3b8"></rect>
+            <path d="M445 120 V184" stroke="#a16207" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrow-amber)"></path>
+            <path d="M625 190 V126" stroke="#6d28d9" stroke-width="2.2" stroke-dasharray="7 5"></path>
+            <text x="561" y="222" text-anchor="middle" font-size="14" font-weight="800" fill="#111827">원본 delta 게이트</text>
+            <text x="561" y="248" text-anchor="middle" font-size="12" fill="#4b5563">source URL, checked date, upstream version/commit, adopt/adapt/reject/defer 판단을 남깁니다.</text>
           </svg>
         </div>
         <div class="legend">
-          <span class="chip"><span class="swatch"></span>필수 흐름</span>
-          <span class="chip"><span class="swatch" style="background:#a16207"></span>범위 판단</span>
-          <span class="chip"><span class="swatch" style="background:#1f7a52"></span>패키지 동기화</span>
+          <span class="chip"><span class="swatch"></span>기본 흐름</span>
+          <span class="chip"><span class="swatch" style="background: var(--amber)"></span>원본 판단</span>
+          <span class="chip"><span class="swatch" style="background: var(--violet)"></span>공식 source 검증</span>
+          <span class="chip"><span class="swatch" style="background: var(--green)"></span>repo-local 반영</span>
         </div>
       </section>
 
       <div class="two">
         <section>
           <div class="head">
-            <h2>변경 패키지 범위와 검증</h2>
-            <p class="note">행동 변경 시 같이 확인해야 하는 파일군입니다.</p>
+            <h2>변경 범위 표</h2>
+            <p class="note">변경 종류별로 같이 맞춰야 하는 파일군과 추가 행동을 빠르게 고릅니다.</p>
           </div>
-          <div class="coverage" aria-label="package coverage chart">
-            <div class="bar"><span>SKILL.md</span><div class="track"><div class="fill" style="width:100%"></div></div><span>항상</span></div>
-            <div class="bar"><span>references</span><div class="track"><div class="fill" style="width:82%"></div></div><span>자주</span></div>
-            <div class="bar"><span>검증기</span><div class="track"><div class="fill" style="width:78%"></div></div><span>자주</span></div>
-            <div class="bar"><span>skill.html</span><div class="track"><div class="fill" style="width:92%"></div></div><span>큰 변경</span></div>
-            <div class="bar"><span>snippets/docs</span><div class="track"><div class="fill" style="width:74%"></div></div><span>paths</span></div>
-            <div class="bar"><span>show-skills</span><div class="track"><div class="fill" style="width:70%"></div></div><span>inventory</span></div>
-            <div class="bar"><span>history</span><div class="track"><div class="fill" style="width:66%"></div></div><span>durable</span></div>
+          <div class="scope" role="table" aria-label="update scope matrix">
+            <div class="row header" role="row">
+              <div>변경</div>
+              <div>같이 맞출 파일</div>
+              <div>추가 게이트</div>
+            </div>
+            <div class="row" role="row">
+              <div><strong>trigger/description</strong><span>스킬 호출 조건</span></div>
+              <div>`SKILL.md`, snippet, README/AGENTS, metadata, HTML, history</div>
+              <div>의미가 바뀌면 먼저 확인</div>
+            </div>
+            <div class="row" role="row">
+              <div><strong>workflow/rules</strong><span>행동 계약</span></div>
+              <div>`SKILL.md`, references, validator, HTML, history</div>
+              <div>기존 유용한 behavior 제거 금지</div>
+            </div>
+            <div class="row" role="row">
+              <div><strong>validator/script</strong><span>검증 방식</span></div>
+              <div>validator, README command, history 필요 여부</div>
+              <div>검증 명령과 실제 결과를 보고</div>
+            </div>
+            <div class="row" role="row">
+              <div><strong>rename/split/archive</strong><span>lifecycle</span></div>
+              <div>경로 전체, catalog, lifecycle, history</div>
+              <div>명시 승인 없으면 중단</div>
+            </div>
+            <div class="row" role="row">
+              <div><strong>upstream delta</strong><span>원본 동기화</span></div>
+              <div>provenance preflight, source ledger, release/changelog, local package, history/eval</div>
+              <div>`web-research`와 병렬 후보 비교, adopt/adapt/reject/defer. plugin 자체 update는 `Plugin update list`로 별도 보고</div>
+            </div>
           </div>
         </section>
 
         <section>
           <div class="head">
-            <h2>입출력</h2>
-            <p class="note">요청은 행동 변화이고, 결과는 동기화된 스킬 패키지입니다.</p>
+            <h2>입출력 스키마</h2>
+            <p class="note">요청은 behavior change이고, 결과는 검증된 shared skill package입니다.</p>
           </div>
           <div class="io">
             <div class="box">
               <h3>입력</h3>
               <ul>
-                <li>업데이트할 스킬 이름</li>
-                <li>원하는 행동 변화</li>
-                <li>현재 파일과 history</li>
-                <li>검증 실패 또는 사용자 피드백</li>
+                <li>대상 skill folder</li>
+                <li>원하는 행동 변화 또는 실패 증거</li>
+                <li>현재 `SKILL.md`, references, snippets, history</li>
+                <li>원본/fork/upstream 가능성</li>
               </ul>
             </div>
             <div class="arrow">→</div>
             <div class="box">
               <h3>출력</h3>
               <ul>
-                <li>수정된 skill package</li>
-                <li>최신 skill.html</li>
-                <li>맞춰진 snippets/docs/history</li>
+                <li>최소 수정된 skill package</li>
+                <li>최신 `skill.html`</li>
+                <li>source ledger와 checked date</li>
+                <li>adopt/adapt/reject/defer 판단</li>
                 <li>validator 결과와 남은 질문</li>
               </ul>
             </div>
@@ -486,54 +601,100 @@
 
       <section>
         <div class="head">
-          <h2>파일 관계 지도</h2>
-          <p class="note">반복되는 체크리스트는 reference와 validator에 두고 본문은 오케스트레이션에 집중합니다.</p>
+          <h2>원본 확인 의사결정</h2>
+          <p class="note">원본 여부를 사용자가 말하지 않아도 먼저 provenance preflight를 실행하고, 원본 delta가 있으면 local repo에 맞는 항목만 반영합니다.</p>
         </div>
-        <div class="resources">
-          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, 핵심 계약, 업데이트 흐름</span></a>
-          <a class="file" href="references/update-checklist.md"><strong>update-checklist</strong><span>package matrix, 조정, 검증</span></a>
-          <a class="file" href="scripts/validate-skill-update.ts"><strong>검증기</strong><span>정적 검사</span></a>
-          <a class="file" href="../../project-snippets/skill-update.md"><strong>project-snippets/skill-update.md</strong><span>프로젝트 연결 블록</span></a>
-          <a class="file" href="../skill-to-html/SKILL.md"><strong>skill-to-html</strong><span>시각 가이드 갱신</span></a>
-          <a class="file" href="../show-skills/scripts/update-html-catalog.ts"><strong>show-skills 카탈로그</strong><span>스킬 inventory HTML 링크 생성</span></a>
-          <a class="file" href="../sync-docs/SKILL.md"><strong>sync-docs</strong><span>문서 불일치 정리</span></a>
+        <div class="visual">
+          <svg viewBox="0 0 1120 420" role="img" aria-label="upstream provenance decision tree">
+            <defs>
+              <marker id="tree-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L9,3 L0,6 Z" fill="#334155"></path>
+              </marker>
+            </defs>
+            <rect x="430" y="24" width="260" height="58" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+            <text x="560" y="58" text-anchor="middle" font-size="14" font-weight="800" fill="#111827">provenance preflight 결과가 있는가?</text>
+
+            <path d="M560 82 V126" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
+            <rect x="126" y="126" width="290" height="72" rx="8" fill="#dcfce7" stroke="#16835d"></rect>
+            <rect x="704" y="126" width="290" height="72" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
+            <path d="M430 53 H271 V120" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <path d="M690 53 H849 V120" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <text x="271" y="157" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">아니오</text>
+            <text x="271" y="178" text-anchor="middle" font-size="12" fill="#4b5563">no upstream source found 기록 후 최소 수정</text>
+            <text x="849" y="157" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">예</text>
+            <text x="849" y="178" text-anchor="middle" font-size="12" fill="#4b5563">references/history/snippets에서 provenance 탐색</text>
+
+            <path d="M849 198 V240" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
+            <rect x="704" y="240" width="290" height="72" rx="8" fill="#ede9fe" stroke="#6d28d9"></rect>
+            <text x="849" y="270" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">`web-research`로 공식 source 검증</text>
+            <text x="849" y="292" text-anchor="middle" font-size="12" fill="#4b5563">현재성/비교/후보 탐색은 병렬 fan-out</text>
+
+            <path d="M849 312 V354" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
+            <rect x="512" y="354" width="260" height="48" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <rect x="808" y="354" width="260" height="48" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <path d="M849 330 H642 V348" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <path d="M849 330 H938 V348" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <text x="642" y="383" text-anchor="middle" font-size="12" font-weight="800" fill="#111827">권한 있음: 원본 변경 먼저</text>
+            <text x="938" y="383" text-anchor="middle" font-size="12" font-weight="800" fill="#111827">권한 없음: ledger와 이유 기록</text>
+          </svg>
         </div>
       </section>
 
       <section>
         <div class="head">
-          <h2>프로젝트 연결</h2>
-          <p class="note">스킬을 운영하는 프로젝트에만 붙입니다.</p>
+          <h2>파일 관계 지도</h2>
+          <p class="note">`SKILL.md`는 짧게, 긴 기준은 references와 validator에 두고, material change는 HTML과 history까지 닫습니다.</p>
         </div>
-        <pre class="snippet">## Project Skills
+        <div class="resources">
+          <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, 핵심 계약, provenance preflight, 원본 delta workflow</span></a>
+          <a class="file" href="../../docs/update-source-registry.md"><strong>업데이트 원천 레지스트리</strong><span>.gitmodules, Plugin update list, workflow source map을 나누는 단일 진입점</span></a>
+          <a class="file" href="references/update-checklist.md"><strong>references/update-checklist.md</strong><span>package completeness, source ledger, history, failure modes</span></a>
+          <a class="file" href="scripts/validate-skill-update.ts"><strong>scripts/validate-skill-update.ts</strong><span>스킬별 정적 검사</span></a>
+          <a class="file" href="agents/openai.yaml"><strong>agents/openai.yaml</strong><span>agent-facing metadata 동기화 대상</span></a>
+          <a class="file" href="../skill-to-html/SKILL.md"><strong>skill-to-html</strong><span>material change 후 human visual guide 갱신</span></a>
+          <a class="file" href="../web-research/SKILL.md"><strong>web-research</strong><span>공식 source와 upstream 변경 이력 검증</span></a>
+          <a class="file" href="../sync-docs/SKILL.md"><strong>sync-docs</strong><span>README, AGENTS, docs, snippets drift 정리</span></a>
+          <a class="file" href="../../history/skills.md"><strong>history/skills.md</strong><span>trigger/workflow/validator/eval/lifecycle material change 기록</span></a>
+        </div>
+      </section>
 
-- Use $skill-update at &lt;skills-root&gt;/skills/skill-update/SKILL.md when asked to update, revise, improve, maintain, rename, split, deprecate, or otherwise change an existing shared skill.
+      <section>
+        <div class="head">
+          <h2>검증과 완료 보고</h2>
+          <p class="note">작업 범위가 커질수록 repo 검증 명령을 빠뜨리지 않고, 실패하면 남은 risk를 명시합니다.</p>
+        </div>
+        <pre class="snippet">node scripts/validate-skill.ts skills/&lt;target-skill&gt;
+node skills/&lt;target-skill&gt;/scripts/&lt;skill-validator&gt;.ts
+node scripts/validate-korean-markdown.ts .
+node scripts/validate-skill-html.ts .
+node scripts/run-agent-evals.ts
 
-## Project-Specific Overrides
-
-- Keep SKILL.md, references, validator, agents/openai.yaml, skill.html, snippets, docs, and history aligned when behavior changes.
-- Use skill-to-html after material skill changes.
-- Run node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills when skill inventory changes.
-- Use sync-docs when paths, snippets, README, AGENTS, docs, history, or validation commands may drift.
-- Ask before changing unclear trigger behavior, lifecycle state, rename, split, merge, deprecation, or removal.</pre>
+# add/remove/rename/archive/restore가 있으면:
+node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills</pre>
       </section>
 
       <section>
         <div class="split">
           <div>
-            <h2>허용</h2>
+            <h2>해야 할 일</h2>
             <ul class="rules">
-              <li>사용자가 원하는 행동 변화를 먼저 확인합니다.</li>
-              <li>한 파일만 고치지 말고 관련 package 전체를 맞춥니다.</li>
-              <li>validator와 history 기준을 끝에서 확인합니다.</li>
+              <li>사용자가 의도한 behavior change에서 시작합니다.</li>
+              <li>모든 호출에서 original/upstream provenance preflight를 실행합니다.</li>
+              <li>원본이 있거나 의심되면 provenance와 공식 source를 확인합니다.</li>
+              <li>plugin-bundled skill은 metadata를 원본 증거로만 읽습니다.</li>
+              <li>`SKILL.md`는 concise하고 trigger-focused로 유지합니다.</li>
+              <li>material change면 `skill-to-html`을 실행하고 검증 결과를 보고합니다.</li>
             </ul>
           </div>
           <div>
-            <h2>금지</h2>
+            <h2>멈춰야 할 일</h2>
             <ul class="rules">
-              <li>애매한 trigger 변경을 임의로 결정하지 않습니다.</li>
-              <li>SKILL.md에 긴 취향과 예시를 계속 쌓지 않습니다.</li>
-              <li>skill.html, snippets, README를 stale 상태로 남기지 않습니다.</li>
+              <li>요청 없이 기존 유용한 behavior를 제거하지 않습니다.</li>
+              <li>원본 전체를 이 repo에 무조건 복사하지 않습니다.</li>
+              <li>plugin package, MCP config, submodule 자체는 `Plugin update list` 확인 후 별도 workflow로 넘깁니다.</li>
+              <li>source-of-truth conflict를 추측으로 해결하지 않습니다.</li>
+              <li>rename, split, archive, repo-wide preference 변경을 임의로 진행하지 않습니다.</li>
+              <li>HTML, snippets, docs, history를 stale 상태로 남기지 않습니다.</li>
             </ul>
           </div>
         </div>

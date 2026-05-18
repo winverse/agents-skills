@@ -5,7 +5,7 @@ description: "기존 shared skill을 업데이트, 수정, 개선, 유지보수,
 
 # 스킬 업데이트
 
-이 스킬은 기존 스킬을 바꿀 때 `SKILL.md`, references, validators, `agents/openai.yaml`, `skill.html`, snippets, docs, history를 하나의 package로 맞춘다.
+이 스킬은 기존 스킬을 바꿀 때 `docs/update-source-registry.md`를 단일 진입점으로 읽고, `SKILL.md`, references, validators, `agents/openai.yaml`, `skill.html`, snippets, docs, history를 하나의 package로 맞춘다. 원본 skill이나 upstream primitive에서 파생된 스킬은 원본을 먼저 확인하고, 원본 delta를 이 repo에 적용한다.
 
 ## 핵심 계약
 
@@ -16,6 +16,21 @@ description: "기존 shared skill을 업데이트, 수정, 개선, 유지보수,
 - material change가 있으면 `skill-to-html`도 실행한다.
 - skill add/remove/rename/archive/restore가 있으면 show-skills HTML catalog를 갱신한다.
 - 한국어 Markdown 규칙을 지켜 `skills/**/*.md`를 한국어 우선으로 유지한다.
+- `skill-update` 호출 자체는 대상 skill의 original/upstream provenance preflight를 포함한다.
+- 사용자가 원본 조사를 따로 말하지 않아도 먼저 `docs/update-source-registry.md`를 읽고 source family를 고른다.
+- `.gitmodules`는 vendored plugin/submodule update candidates의 canonical source다.
+- `docs/update-source-registry.md`의 `Plugin update list`는 `.gitmodules`에서 파생한 사람이 읽는 별도 plugin update checklist다.
+- `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 plugin catalog와 `Plugin update list`의 path/URL drift를 막는다.
+- workflow provenance-only primitive는 각 workflow의 `references/upstream-dependency-map.md`를 canonical source로 읽고, `.gitmodules` 항목처럼 취급하지 않는다.
+- 그 다음 `references/`, `history/skills.md`, project snippets, `agents/openai.yaml`, `skill.html`, git history에서 local provenance를 찾는다.
+- 대상 skill이 plugin-bundled skill에서 fork되었거나 이를 명시적으로 참조할 때만 `.gitmodules`와 plugin/submodule metadata를 원본 후보 증거로 읽는다.
+- `skill-update`는 plugin package, MCP config, submodule 자체를 incidental하게 업데이트하지 않는다. plugin bump나 bundled plugin skill 수정은 사용자가 plugin update를 명시했을 때 plugin update lane으로 다룬다.
+- 원본이 있는 스킬은 local provenance를 확인한 뒤 `web-research`로 원본 source를 검증한다.
+- 원본 확인이 현재성, release/changelog 비교, 여러 후보 탐색을 필요로 하면 runtime이 허용하는 한 `web-research`의 병렬 sub-agent fan-out을 사용한다.
+- 원본 조사 결과는 source URL, checked date, upstream version/commit, local 채택 판단을 포함한 source ledger로 남긴다.
+- 원본 수정 권한과 위치가 명확하면 원본 변경을 먼저 준비하거나 적용한 뒤, 그 delta를 이 repo의 shared skill package에 반영한다.
+- 원본 전체를 무조건 복사하지 않고 `adopt`, `adapt`, `reject`, `defer`로 분류한 뒤 이 repo의 취향과 cross-agent 계약에 맞는 delta만 반영한다.
+- 원본을 직접 수정할 수 없으면 source ledger, checked date, local delta 이유를 references나 history에 남긴다.
 
 ## update scope 기준
 
@@ -25,16 +40,26 @@ description: "기존 shared skill을 업데이트, 수정, 개선, 유지보수,
 | workflow/rules | SKILL.md, references, validator, HTML, history |
 | validator/script | README command, validator 실행, 필요 시 history |
 | rename/split/archive | 경로 전체 갱신, catalog, lifecycle, history |
+| upstream/original delta | provenance preflight, web-research ledger, release/changelog 비교, 원본 변경, local package, history/eval |
 
 ## workflow
 
 1. 대상 skill과 결과를 확인한다.
 2. 현재 skill folder, snippets, README, AGENTS, history를 본다.
-3. 필요한 reference만 읽는다.
-4. 최소 파일을 수정한다.
-5. material change면 `skill-to-html`을 실행한다.
-6. `docs/skill-inspector.md` 기준으로 검사한다.
-7. validator를 실행하고 결과를 보고한다.
+3. `docs/update-source-registry.md`를 읽고 `.gitmodules`, workflow source map, repo-owned skill inventory 중 어느 source family가 relevant한지 고른다.
+4. original/upstream provenance preflight를 실행해 원본 skill, upstream primitive, fork 기록, git history를 찾는다.
+5. 원본이 없으면 `no upstream source found`를 판단 근거와 함께 기록하고 local package 기준으로 진행한다.
+6. 대상 skill이 plugin-bundled skill에서 온 경우에만 `.gitmodules`, `Plugin update list`, plugin/submodule metadata, package manifest를 원본 증거로 읽는다.
+7. 원본이 있거나 의심되면 `web-research`로 공식 repo/docs/source/release/changelog를 찾고, runtime이 허용하면 독립 후보와 변경 이력을 병렬로 비교한다.
+8. source ledger에 source URL, checked date, upstream version/commit, 변경 후보, local 적용 판단을 남긴다.
+9. plugin package, MCP config, submodule bump가 필요하지만 사용자가 plugin update를 명시하지 않았으면 멈추고 별도 plugin update 필요성을 보고한다.
+10. 사용자가 plugin update를 명시했으면 plugin update lane으로 submodule tag/commit, upstream release note, package metadata, manifest, bundled skill 경로를 확인하고 `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, validator, history를 맞춘다.
+11. 원본 수정 권한과 위치가 확인되면 원본 skill 변경을 먼저 준비하거나 적용한다.
+12. 원본 delta를 `adopt`, `adapt`, `reject`, `defer`로 분류하고 이 repo의 skill folder, references, snippets, README, AGENTS, docs, history에 적용한다.
+13. 최소 파일을 수정한다.
+14. material change면 `skill-to-html`을 실행한다.
+15. `docs/skill-inspector.md` 기준으로 검사한다.
+16. validator를 실행하고 결과를 보고한다.
 
 ## ask before changing 기준
 
