@@ -34,6 +34,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 ## 핵심 계약
 
 - local project instructions와 docs를 먼저 읽는다.
+- 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. `code identifiers`, 명령, 파일 경로, 제품명, API 이름은 원문 표기를 유지한다.
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
 - architecture decision은 PRD/issues 전에 ADR로 기록한다.
@@ -59,19 +60,22 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 
 1. context 읽기
 2. source-labeled primitive inventory
-3. Matt Pocock skills `grill-me`/`grill-with-docs` 또는 fallback으로 domain language와 `CONTEXT.md` 정리
-4. GStack plugin `office-hours` 또는 fallback으로 product challenge와 가장 좁은 진입점 확인
-5. 필요한 경우 Agent Tool And Security Risk Gate 기록
-6. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
-7. light spec과 PRD settings 확정
-8. vertical issue backlog 작성
-9. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
-10. `spec-workflow`가 받을 준비 상태를 점검
-11. document sync와 setup validation을 수행하고 다음 spec을 지정
+3. document language를 한국어 우선으로 고정하고, target project가 이미 다른 언어 규칙을 갖고 있으면 그 규칙을 명시
+4. Matt Pocock skills `grill-me`/`grill-with-docs` 또는 fallback으로 domain language와 `CONTEXT.md` 정리
+5. GStack plugin `office-hours` 또는 fallback으로 product challenge와 가장 좁은 진입점 확인
+6. 필요한 경우 Agent Tool And Security Risk Gate 기록
+7. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
+8. light spec과 PRD settings 확정
+9. vertical issue backlog 작성
+10. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
+11. `spec-workflow`가 받을 준비 상태를 점검
+12. document sync와 setup validation을 수행하고 다음 spec을 지정
 
 ## artifact map 기준
 
 `.scratch/<project-or-feature-slug>/` 아래에 notes, `CONTEXT.md` draft, ADR, PRD, issues, design decisions, setup validation, workflow log를 둔다. 프로젝트가 이미 다른 workflow area를 갖고 있으면 그 위치를 따른다.
+
+초기 셋팅 산출물은 사용자가 다른 언어를 지정하지 않는 한 한국어 우선이다. 여기에는 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`가 포함된다. 코드 식별자, 명령, 경로, 제품명, 외부 API 이름은 원문을 유지한다.
 
 `workflow-state.md`를 같은 위치에 두고, 이후 `spec-workflow`가 반복 질문 없이 이어받을 수 있는 최소 상태를 남긴다.
 
@@ -125,6 +129,7 @@ Primitive inventory
 
 Project setup state
 - <domain/product/architecture/design/PRD/issues readiness>
+- document language: Korean-first unless target project says otherwise
 - state cache: <workflow-state.md path>
 - work claims: <work-claims.md path or none>
 

@@ -20,6 +20,7 @@
       --danger: #b42318;
       --violet: #6d28d9;
       --cyan: #0e7490;
+      --ink: #334155;
     }
 
     * {
@@ -462,6 +463,38 @@
       gap: 16px;
     }
 
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .goal-step {
+      display: grid;
+      gap: 8px;
+      min-height: 150px;
+      padding: 14px;
+      border-right: 1px solid var(--border);
+      align-content: start;
+    }
+
+    .goal-step:last-child {
+      border-right: 0;
+    }
+
+    .goal-step strong {
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .goal-step p {
+      color: #374151;
+      font-size: 12px;
+    }
+
     .ledger-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -541,7 +574,8 @@
       .two-col,
       .map,
       .gates,
-      .guard-grid {
+      .guard-grid,
+      .goal-grid {
         grid-template-columns: 1fr;
       }
 
@@ -556,14 +590,16 @@
 
       .matrix-cell,
       .io-col,
-      .ledger-cell {
+      .ledger-cell,
+      .goal-step {
         border-right: 0;
         border-bottom: 1px solid var(--border);
       }
 
       .matrix-cell:last-child,
       .io-col:last-child,
-      .ledger-cell:last-child {
+      .ledger-cell:last-child,
+      .goal-step:last-child {
         border-bottom: 0;
       }
 
@@ -607,6 +643,7 @@
         <p>Workflow suite의 setup 절반입니다. 새 프로젝트나 큰 initiative를 바로 구현으로 넘기지 않고, domain language, product reason, architecture boundary, design direction, PRD, issue backlog, workflow-state cache, work-claims coordination, spec handoff까지 준비시키는 초기 셋팅 orchestration입니다.</p>
         <div class="tag-row" aria-label="핵심 범위">
           <span class="tag">초기 셋팅 전용</span>
+          <span class="tag">한국어 우선 docs</span>
           <span class="tag">provenance ledger</span>
           <span class="tag">workflow-state cache</span>
           <span class="tag">work-claims coordination</span>
@@ -684,8 +721,8 @@
             <text x="269" y="82" text-anchor="middle" class="flow-small">selected / skipped / fallback</text>
 
             <rect x="378" y="34" width="150" height="70" rx="8" fill="#ecfdf5" stroke="#1f7a52"></rect>
-            <text x="453" y="60" text-anchor="middle" class="flow-text">3. domain 정리</text>
-            <text x="453" y="82" text-anchor="middle" class="flow-small">CONTEXT, glossary</text>
+            <text x="453" y="58" text-anchor="middle" class="flow-text">3. language + domain</text>
+            <text x="453" y="80" text-anchor="middle" class="flow-small">Korean-first, CONTEXT</text>
 
             <rect x="562" y="34" width="150" height="70" rx="8" fill="#ecfdf5" stroke="#1f7a52"></rect>
             <text x="637" y="60" text-anchor="middle" class="flow-text">4. product challenge</text>
@@ -715,6 +752,10 @@
             <text x="969" y="210" text-anchor="middle" class="flow-text">spec handoff</text>
             <text x="969" y="232" text-anchor="middle" class="flow-small">spec-workflow</text>
 
+            <rect x="378" y="184" width="150" height="70" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
+            <text x="453" y="210" text-anchor="middle" class="flow-text">goal/checklist</text>
+            <text x="453" y="232" text-anchor="middle" class="flow-small">긴 bootstrap 조건</text>
+
             <path d="M160 69 H194" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
             <path d="M344 69 H378" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
             <path d="M528 69 H562" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
@@ -725,7 +766,8 @@
             <path d="M746 219 H712" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
             <path d="M637 184 V104" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></path>
             <path d="M269 104 V184" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#warnArrow)"></path>
-            <path d="M344 219 H562" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#warnArrow)"></path>
+            <path d="M344 219 H378" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#warnArrow)"></path>
+            <path d="M528 219 H562" stroke="#a16207" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#warnArrow)"></path>
           </svg>
         </div>
         <div class="legend" aria-label="흐름 범례">
@@ -758,12 +800,14 @@
               <li><code>references/upstream-dependency-map.md</code></li>
               <li><code>references/project-workflow-playbook.md</code></li>
               <li>project docs, design 기준, env/API/DB/deploy docs</li>
+              <li>target project의 문서 언어 규칙과 instruction surface</li>
             </ul>
           </div>
           <div class="io-col" role="cell">
             <h3>출력</h3>
             <ul>
               <li>Runtime adapter와 active instruction surface</li>
+              <li>document language: 한국어 우선, unless target project says otherwise</li>
               <li>Primitive inventory with source package</li>
               <li><code>workflow-state.md</code> handoff cache</li>
               <li><code>work-claims.md</code> lane ownership, claimed write set, integration owner</li>
@@ -782,12 +826,12 @@
         <div class="ledger-grid" role="table" aria-label="primitive 출처 장부">
           <div class="ledger-cell" role="cell">
             <strong>Matt Pocock skills</strong>
-            <p><code>grill-me</code>, <code>grill-with-docs</code>, <code>to-prd</code>, <code>to-issues</code>, <code>triage</code>를 domain, PRD, vertical issue 준비에만 사용합니다.</p>
+            <p><code>setup-matt-pocock-skills</code>, <code>grill-me</code>, <code>grill-with-docs</code>, <code>to-prd</code>, <code>to-issues</code>, <code>triage</code>를 project instruction, domain, PRD, vertical issue 준비에만 사용합니다.</p>
             <span class="mono">selected | skipped | fallback</span>
           </div>
           <div class="ledger-cell" role="cell">
             <strong>GStack plugin</strong>
-            <p><code>office-hours</code>로 product challenge와 좁은 진입점을 확인하고, review primitive는 조건부로만 연결합니다.</p>
+            <p><code>office-hours</code>로 product challenge와 좁은 진입점을 확인하고, <code>plan-ceo-review</code>, <code>plan-design-review</code>는 조건부로만 연결합니다.</p>
             <span class="mono">product gate</span>
           </div>
           <div class="ledger-cell" role="cell">
@@ -825,6 +869,11 @@
               <span class="bar-label">Matt Pocock / grill-me</span>
               <span class="bar-track"><span class="bar-fill core" style="width: 92%"></span></span>
               <span class="bar-value">핵심</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">document language decision</span>
+              <span class="bar-track"><span class="bar-fill core" style="width: 90%"></span></span>
+              <span class="bar-value">초기</span>
             </div>
             <div class="bar-row">
               <span class="bar-label">GStack / office-hours</span>
@@ -927,7 +976,7 @@
             </div>
             <div class="note-row">
               <strong><code>references/</code></strong>
-              <span>upstream primitive 장부, scenario lane, PRD settings, work claims, goal condition recipe.</span>
+              <span>upstream primitive 장부, document language, scenario lane, PRD settings, work claims, goal condition recipe.</span>
             </div>
             <div class="note-row">
               <strong><code>agents/</code></strong>
@@ -977,6 +1026,32 @@
             </ul>
           </div>
         </div>
+      </section>
+
+      <section aria-labelledby="goal-title">
+        <div class="section-head">
+          <h2 id="goal-title">Goal Condition</h2>
+          <p>긴 초기 셋팅은 Claude Code <code>/goal</code> 또는 동등한 completion checklist로 종료 기준을 먼저 잠급니다.</p>
+        </div>
+        <div class="goal-grid" role="table" aria-label="goal condition 구성 요소">
+          <div class="goal-step" role="cell">
+            <strong>measurable end state</strong>
+            <p><code>CONTEXT.md</code>, ADR, PRD, issue backlog, <code>design.md</code>, setup validation처럼 파일이나 보고로 판단 가능한 상태를 씁니다.</p>
+          </div>
+          <div class="goal-step" role="cell">
+            <strong>stated check evidence</strong>
+            <p>agent output에 남길 명령, 파일 경로, validation evidence를 지정합니다. evaluator가 직접 파일을 읽는다고 가정하지 않습니다.</p>
+          </div>
+          <div class="goal-step" role="cell">
+            <strong>constraints</strong>
+            <p>건드리면 안 되는 파일, secret, destructive action, commit/push/deploy 금지, scope 제한을 함께 적습니다.</p>
+          </div>
+          <div class="goal-step" role="cell">
+            <strong>turn/time bound</strong>
+            <p><code>8 turns 후 중단</code>처럼 runaway를 막는 한계를 둡니다. 증거와 종료 기준 없는 "완벽할 때까지"는 쓰지 않습니다.</p>
+          </div>
+        </div>
+        <pre class="snippet"><code>/goal &lt;measurable project setup end state&gt; and &lt;stated check evidence appears in transcript&gt;; constraints: &lt;scope and forbidden changes&gt;; stop after &lt;turn/time bound&gt;</code></pre>
       </section>
 
       <section aria-labelledby="guard-title">

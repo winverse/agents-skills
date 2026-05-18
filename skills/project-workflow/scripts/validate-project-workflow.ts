@@ -13,13 +13,20 @@ const requiredChecks = [
   ["SKILL.md", "work-claims.md"],
   ["SKILL.md", "claimed write set"],
   ["SKILL.md", "integration owner"],
+  ["SKILL.md", "한국어 우선"],
   ["references/project-workflow-playbook.md", "parallel multi-session setup 기준"],
   ["references/project-workflow-playbook.md", "one active owner per claimed write path"],
+  ["references/project-workflow-playbook.md", "document language 기준"],
   ["agents/openai.yaml", "parallel work-claims.md lane coordination"],
+  ["agents/openai.yaml", "Korean first"],
   ["skill.html", "work-claims.md"],
   ["skill.html", "integration owner"],
+  ["skill.html", "한국어 우선"],
   ["../../project-snippets/project-workflow.md", "work-claims.md"],
+  ["../../project-snippets/project-workflow.md", "Korean first"],
   ["../../project-snippets/base.md", "work-claims.md"],
+  ["../../project-snippets/base.md", "Korean first"],
+  ["../../project-snippets/claude-base.md", "Korean first"],
 ] as const;
 
 const failures: string[] = [];

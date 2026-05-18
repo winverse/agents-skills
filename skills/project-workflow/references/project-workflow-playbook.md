@@ -18,6 +18,12 @@ dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기
 
 upstream이 바뀌면 전체 내용을 복사하지 않는다. `upstream-dependency-map.md`에서 source package, exact name, 채택 역할, handoff 조건, artifact path, validator/eval 경계를 갱신하고, 같은 변경을 `SKILL.md`, `skill.html`, project snippet, history에 반영한다.
 
+## document language 기준
+
+초기 셋팅 산출물과 프로젝트 문서는 사용자가 다른 언어를 지정하지 않는 한 한국어 우선으로 작성한다. 대상 프로젝트에 이미 영어 PRD, 영문 ADR, 다국어 issue template 같은 명시 규칙이 있으면 그 규칙을 따르고 `workflow-state.md`에 이유를 남긴다.
+
+한국어 우선 대상은 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, workflow log, `workflow-state.md`, `work-claims.md`다. `code identifiers`, 명령, 파일 경로, 제품명, protocol, API 이름, upstream skill/plugin 이름은 원문 표기를 유지한다.
+
 ## scenario lanes 기준
 
 ### raw new SaaS/service 기준
@@ -120,6 +126,7 @@ Spec handoff
 ```text
 Workflow State
 - source primitives:
+- document language: Korean-first unless target project says otherwise
 - authority docs:
 - decisions:
 - skipped questions:

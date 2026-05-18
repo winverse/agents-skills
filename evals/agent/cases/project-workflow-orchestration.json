@@ -39,6 +39,11 @@
         "value": "Next step: Discovery"
       },
       {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
+        "value": "Document language: Korean-first unless target project says otherwise"
+      },
+      {
         "type": "forbidden_text",
         "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
         "value": "Call project-structure now"
@@ -513,6 +518,11 @@
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/workflow-state-cache.md",
         "value": "Path: `.scratch/new-product/workflow-state.md`"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/workflow-state-cache.md",
+        "value": "Document language: Korean-first unless target project says otherwise"
       },
       {
         "type": "required_text",
