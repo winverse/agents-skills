@@ -33,7 +33,6 @@ const summaryBySkill: Record<string, string> = {
   "project-workflow": "Workflow suite setup: domain, PRD, issue backlog, workflow-state cache",
   "spec-workflow": "Workflow suite loop: spec/issue를 TDD, QA, docs sync, eval seed로 구현",
   "terminal-session-automation": "cmux, Warp, terminal title/status 자동화",
-  "course-evaluator": "학생 답안 CSV를 학생별 Markdown 평가로 채점",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
   "code-review": "findings-first 코드 리뷰와 회귀/테스트/보안 위험 점검",

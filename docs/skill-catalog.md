@@ -17,7 +17,6 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 기존 스킬을 수정한다 | `skill-update` | `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `sync-docs` |
-| 학생 답안 CSV와 루브릭을 학생별 평가 파일로 채점한다 | `course-evaluator` | `sync-docs` |
 | cmux/Warp/terminal tab title, status, hook으로 세션 질문을 기억한다 | `terminal-session-automation` | `sync-docs`, `browser-qa` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
@@ -79,7 +78,6 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `transcript-polisher` | 전사본, 강의 대본, 자막, 회의록, 긴 산문을 코드 치환 없이 직접 읽고 source/output 구조, `polish` 분량, 불확실 용어를 검증하며 Claude Code `/goal`식 완료 조건 루프로 검토한다. | [SKILL.md](../skills/transcript-polisher/SKILL.md) · [skill.html](../skills/transcript-polisher/skill.html) |
-| `course-evaluator` | 학생 답안 CSV, 스프레드시트, 과제 응답을 구조화 파싱하고 루브릭과 채점 톤에 맞춰 학생별 Markdown 평가 파일과 개별 피드백을 만든다. | [SKILL.md](../skills/course-evaluator/SKILL.md) · [skill.html](../skills/course-evaluator/skill.html) |
 | `atomic-committer` | dirty git tree를 secret guard로 검사하고, 반복 untracked local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나눠 조건부 push를 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
 | `pull-request` | GitHub PR의 branch/base/head, 한국어 title/body, template, issue link, reviewer/label/draft 옵션과 `gh pr create` 실행 경계를 관리한다. | [SKILL.md](../skills/pull-request/SKILL.md) · [skill.html](../skills/pull-request/skill.html) |
 

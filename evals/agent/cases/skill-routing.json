@@ -1,45 +1,5 @@
 [
   {
-    "id": "route-student-grading-to-course-evaluator",
-    "title": "Student answer CSV grading uses course-evaluator",
-    "prompt": "학생 답안 CSV를 읽어서 러프하게 채점하고 학생별 평가 Markdown을 합쇼체로 만들어줘. 코멘트는 반복되지 않게 거의 모범 답안까지 적어줘",
-    "scope": "skill_invocation",
-    "expectedSkills": ["course-evaluator"],
-    "forbiddenSkills": ["transcript-polisher", "sync-docs"],
-    "agentSurfaces": ["codex", "claude"],
-    "assumptionDate": "2026-05-15",
-    "exampleType": "typical",
-    "risk": "medium",
-    "mode": "blocking",
-    "checks": [
-      {
-        "type": "skill_listed_in",
-        "skill": "course-evaluator",
-        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
-      },
-      {
-        "type": "required_text",
-        "file": "skills/course-evaluator/SKILL.md",
-        "value": "embedded newline"
-      },
-      {
-        "type": "required_text",
-        "file": "skills/course-evaluator/SKILL.md",
-        "value": "평가/학생명.md"
-      },
-      {
-        "type": "required_text",
-        "file": "skills/course-evaluator/SKILL.md",
-        "value": "반복 코멘트"
-      },
-      {
-        "type": "required_text",
-        "file": "project-snippets/course-evaluator.md",
-        "value": "one Markdown file per student"
-      }
-    ]
-  },
-  {
     "id": "route-transcript-review-to-transcript-polisher",
     "title": "Transcript context polishing uses transcript-polisher",
     "prompt": "transcripts_reviewed 안의 강의 전사본을 문맥 흐름에 맞게 직접 읽고 다듬어줘. 코드 치환은 쓰지 말고 문단별 subagent와 goal 루프로 검토해줘",
