@@ -39,6 +39,9 @@
 
 - Package metadata: `plugins/caveman/package.json`
 - Claude plugin manifest: `plugins/caveman/.claude-plugin/plugin.json`
+- Codex plugin manifest: `plugins/caveman/plugins/caveman/.codex-plugin/plugin.json`
+- Codex plugin hooks: `plugins/caveman/plugins/caveman/.codex-plugin/hooks.json`
+- Codex SessionStart script: `plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs`
 - Commands: `plugins/caveman/commands/`
 - Bundled skills: `plugins/caveman/skills/`
 - Primary skill: `plugins/caveman/skills/caveman/SKILL.md`

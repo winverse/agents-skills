@@ -136,7 +136,7 @@ plugins/caveman/
   - Version: `v2.3.3`
   - Source: `https://github.com/tirth8205/code-review-graph`
   - Catalog: `docs/plugin-catalog.md`
-- `caveman`: `JuliusBrussee/caveman` upstream을 `plugins/caveman` submodule로 고정한 token-compression skill/plugin reference다. Claude plugin manifest는 `plugins/caveman/.claude-plugin/plugin.json`이고, bundled upstream skills는 `plugins/caveman/skills/`에 그대로 둔다.
+- `caveman`: `JuliusBrussee/caveman` upstream을 `plugins/caveman` submodule로 고정한 token-compression skill/plugin reference다. Claude plugin manifest는 `plugins/caveman/.claude-plugin/plugin.json`이고, Codex plugin manifest는 `plugins/caveman/plugins/caveman/.codex-plugin/plugin.json`이다. Codex `SessionStart` hook은 `plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs`를 통해 Caveman skill 본문을 세션 시작 시 출력한다.
   - Version: `v1.8.2`
   - Source: `https://github.com/JuliusBrussee/caveman`
   - Catalog: `docs/plugin-catalog.md`

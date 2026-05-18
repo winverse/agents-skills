@@ -91,6 +91,18 @@ type CavemanClaudePluginManifest = {
   };
 };
 
+type PluginHooksConfig = {
+  hooks?: {
+    SessionStart?: Array<{
+      matcher?: string;
+      hooks?: Array<{
+        type?: string;
+        command?: string;
+      }>;
+    }>;
+  };
+};
+
 type SubmoduleEntry = {
   name: string;
   path: string;
@@ -161,6 +173,9 @@ requireFile(path.posix.join("plugins/code-review-graph/skills", "review-pr", "SK
 requireFile(path.posix.join("plugins/code-review-graph/skills", "review-changes", "SKILL.md"));
 requireFile("plugins/caveman/package.json");
 requireFile("plugins/caveman/.claude-plugin/plugin.json");
+requireFile("plugins/caveman/plugins/caveman/.codex-plugin/plugin.json");
+requireFile("plugins/caveman/plugins/caveman/.codex-plugin/hooks.json");
+requireFile("plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs");
 requireFile("plugins/caveman/commands");
 requireFile("plugins/caveman/skills");
 requireFile(path.posix.join("plugins/caveman/skills", "caveman", "SKILL.md"));
@@ -213,12 +228,16 @@ requireText("docs/plugin-catalog.md", "`caveman`");
 requireText("docs/plugin-catalog.md", "v1.8.2");
 requireText("docs/plugin-catalog.md", "JuliusBrussee/caveman");
 requireText("docs/plugin-catalog.md", "plugins/caveman/skills/caveman/SKILL.md");
+requireText("docs/plugin-catalog.md", "plugins/caveman/plugins/caveman/.codex-plugin/plugin.json");
+requireText("docs/plugin-catalog.md", "plugins/caveman/plugins/caveman/.codex-plugin/hooks.json");
+requireText("docs/plugin-catalog.md", "plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs");
 requireText("docs/plugin-catalog.md", "canonical source는 `.gitmodules`");
 requireText("docs/update-source-registry.md", ".gitmodules");
 requireText("docs/update-source-registry.md", "## Plugin update list");
 requireText("docs/update-source-registry.md", "`context-mode` | `plugins/context-mode` | `https://github.com/mksglu/context-mode.git`");
 requireText("docs/update-source-registry.md", "`code-review-graph` | `plugins/code-review-graph` | `https://github.com/tirth8205/code-review-graph.git`");
 requireText("docs/update-source-registry.md", "`caveman` | `plugins/caveman` | `https://github.com/JuliusBrussee/caveman.git`");
+requireText("docs/update-source-registry.md", "plugins/caveman/plugins/caveman/.codex-plugin/hooks.json");
 requireText("docs/update-source-registry.md", "docs/plugin-catalog.md");
 requireText("docs/update-source-registry.md", "workflow provenance-only primitive");
 requireText("history/skills.md", "`code-review-graph` plugin reference added");
@@ -312,6 +331,43 @@ if (cavemanClaudePlugin) {
     if (!ok) errors.push(`Unexpected manifest value for ${label}`);
   }
 }
+
+const cavemanCodexPlugin = readJson<CodexPluginManifest>(
+  "plugins/caveman/plugins/caveman/.codex-plugin/plugin.json",
+);
+if (cavemanCodexPlugin) {
+  const expectedCavemanCodexPlugin: Array<[unknown, string]> = [
+    [cavemanCodexPlugin.name === "caveman", "caveman Codex plugin name"],
+    [cavemanCodexPlugin.repository === "https://github.com/JuliusBrussee/caveman", "caveman Codex repository URL"],
+    [cavemanCodexPlugin.hooks === "./.codex-plugin/hooks.json", "caveman Codex hooks manifest path"],
+    [cavemanCodexPlugin.skills === "./skills/", "caveman Codex bundled skills path"],
+    [cavemanCodexPlugin.interface?.displayName === "Caveman", "caveman Codex display name"],
+  ];
+  for (const [ok, label] of expectedCavemanCodexPlugin) {
+    if (!ok) errors.push(`Unexpected manifest value for ${label}`);
+  }
+}
+
+const cavemanCodexHooks = readJson<PluginHooksConfig>(
+  "plugins/caveman/plugins/caveman/.codex-plugin/hooks.json",
+);
+const cavemanSessionStart = cavemanCodexHooks?.hooks?.SessionStart?.[0]?.hooks?.[0];
+if (cavemanSessionStart) {
+  if (cavemanSessionStart.type !== "command") {
+    errors.push("caveman Codex SessionStart hook type must be command");
+  }
+  if (!cavemanSessionStart.command?.includes("${PLUGIN_ROOT}/hooks/codex/sessionstart.mjs")) {
+    errors.push("caveman Codex SessionStart hook must call hooks/codex/sessionstart.mjs");
+  }
+}
+requireText(
+  "plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs",
+  ["skills", "caveman", "SKILL.md"].join("/"),
+);
+requireText(
+  "plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs",
+  "CAVEMAN MODE ACTIVE",
+);
 
 if (errors.length) {
   console.error("plugin validation failed:");
