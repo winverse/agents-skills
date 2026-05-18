@@ -1,0 +1,9 @@
+[submodule "plugins/context-mode"]
+	path = plugins/context-mode
+	url = https://github.com/mksglu/context-mode.git
+[submodule "plugins/code-review-graph"]
+	path = plugins/code-review-graph
+	url = https://github.com/tirth8205/code-review-graph.git
+[submodule "plugins/caveman"]
+	path = plugins/caveman
+	url = https://github.com/JuliusBrussee/caveman.git
