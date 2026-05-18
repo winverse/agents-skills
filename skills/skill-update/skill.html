@@ -529,8 +529,7 @@
         </div>
       </section>
 
-      <div class="two">
-        <section>
+      <section>
           <div class="head">
             <h2>변경 범위 표</h2>
             <p class="note">변경 종류별로 같이 맞춰야 하는 파일군과 추가 행동을 빠르게 고릅니다.</p>
@@ -604,7 +603,6 @@
             </div>
           </div>
         </section>
-      </div>
 
       <section>
         <div class="head">
@@ -612,37 +610,35 @@
           <p class="note">원본 여부를 사용자가 말하지 않아도 먼저 provenance preflight를 실행하고, 원본 delta가 있으면 local repo에 맞는 항목만 반영합니다.</p>
         </div>
         <div class="visual">
-          <svg viewBox="0 0 1120 420" role="img" aria-label="upstream provenance decision tree">
+          <svg viewBox="0 0 1120 500" role="img" aria-label="upstream provenance decision tree">
             <defs>
               <marker id="tree-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
                 <path d="M0,0 L9,3 L0,6 Z" fill="#334155"></path>
               </marker>
             </defs>
-            <rect x="430" y="24" width="260" height="58" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
+            <rect x="400" y="24" width="320" height="62" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
             <text x="560" y="58" text-anchor="middle" font-size="14" font-weight="800" fill="#111827">provenance preflight 결과가 있는가?</text>
 
-            <path d="M560 82 V126" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
-            <rect x="126" y="126" width="290" height="72" rx="8" fill="#dcfce7" stroke="#16835d"></rect>
-            <rect x="704" y="126" width="290" height="72" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
-            <path d="M430 53 H271 V120" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
-            <path d="M690 53 H849 V120" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
-            <text x="271" y="157" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">아니오</text>
-            <text x="271" y="178" text-anchor="middle" font-size="12" fill="#4b5563">no upstream source found 기록 후 최소 수정</text>
-            <text x="849" y="157" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">예</text>
-            <text x="849" y="178" text-anchor="middle" font-size="12" fill="#4b5563">references/history/snippets에서 provenance 탐색</text>
+            <rect x="86" y="152" width="340" height="78" rx="8" fill="#dcfce7" stroke="#16835d"></rect>
+            <rect x="694" y="152" width="340" height="78" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
+            <path d="M560 86 V118 H256 V146" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <path d="M560 118 H864 V146" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <text x="256" y="184" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">아니오</text>
+            <text x="256" y="205" text-anchor="middle" font-size="12" fill="#4b5563">no upstream source found 기록 후 최소 수정</text>
+            <text x="864" y="184" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">예</text>
+            <text x="864" y="205" text-anchor="middle" font-size="12" fill="#4b5563">references/history/snippets에서 provenance 탐색</text>
 
-            <path d="M849 198 V240" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
-            <rect x="704" y="240" width="290" height="72" rx="8" fill="#ede9fe" stroke="#6d28d9"></rect>
-            <text x="849" y="270" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">`web-research`로 공식 source 검증</text>
-            <text x="849" y="292" text-anchor="middle" font-size="12" fill="#4b5563">현재성/비교/후보 탐색은 병렬 fan-out</text>
+            <path d="M864 230 V272" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
+            <rect x="694" y="278" width="340" height="78" rx="8" fill="#ede9fe" stroke="#6d28d9"></rect>
+            <text x="864" y="309" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">`web-research`로 공식 source 검증</text>
+            <text x="864" y="331" text-anchor="middle" font-size="12" fill="#4b5563">현재성/비교/후보 탐색은 병렬 fan-out</text>
 
-            <path d="M849 312 V354" stroke="#334155" stroke-width="2" marker-end="url(#tree-arrow)"></path>
-            <rect x="512" y="354" width="260" height="48" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-            <rect x="808" y="354" width="260" height="48" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
-            <path d="M849 330 H642 V348" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
-            <path d="M849 330 H938 V348" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
-            <text x="642" y="383" text-anchor="middle" font-size="12" font-weight="800" fill="#111827">권한 있음: 원본 변경 먼저</text>
-            <text x="938" y="383" text-anchor="middle" font-size="12" font-weight="800" fill="#111827">권한 없음: ledger와 이유 기록</text>
+            <rect x="432" y="414" width="300" height="54" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <rect x="792" y="414" width="300" height="54" rx="8" fill="#ffffff" stroke="#94a3b8"></rect>
+            <path d="M864 356 V386 H582 V408" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <path d="M864 386 H942 V408" stroke="#334155" stroke-width="2" fill="none" marker-end="url(#tree-arrow)"></path>
+            <text x="582" y="447" text-anchor="middle" font-size="12" font-weight="800" fill="#111827">권한 있음: 원본 변경 먼저</text>
+            <text x="942" y="447" text-anchor="middle" font-size="12" font-weight="800" fill="#111827">권한 없음: ledger와 이유 기록</text>
           </svg>
         </div>
       </section>
@@ -678,6 +674,9 @@ node scripts/validate-skill-html.ts .
 node scripts/validate-plugins.ts .
 node scripts/run-agent-evals.ts
 
+# skill.html이 바뀌었으면:
+# PC viewport에서 wide table, SVG arrow endpoint, overflow, text overlap 확인
+
 # add/remove/rename/archive/restore가 있으면:
 node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills</pre>
       </section>
@@ -694,6 +693,7 @@ node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills</pre>
               <li>plugin update가 명시되면 `.gitmodules` 기반 plugin update lane을 실행합니다.</li>
               <li>`SKILL.md`는 concise하고 trigger-focused로 유지합니다.</li>
               <li>material change면 `skill-to-html`을 실행하고 검증 결과를 보고합니다.</li>
+              <li>`skill.html` 변경은 wide table, SVG arrow endpoint, overflow, text overlap까지 확인합니다.</li>
             </ul>
           </div>
           <div>

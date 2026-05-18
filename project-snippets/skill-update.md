@@ -15,6 +15,7 @@
 - If the original cannot be edited directly, leave the source ledger, checked date, and local delta reason in references or history.
 - Do not update plugin packages, MCP config, or submodules incidentally through `skill-update`; when the user explicitly includes plugin updates, use the plugin update lane and keep `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, validators, and history aligned.
 - Use `skill-to-html` after material skill changes.
+- When `skill.html` changes, verify static HTML validation plus PC viewport rendering for wide tables, SVG arrow endpoints, overflow, and text overlap.
 - Run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills` after skill add, remove, rename, archive, or restore operations.
 - Use `sync-docs` when paths, snippets, README, AGENTS, docs, history, or validation commands may drift.
 - Ask before changing unclear trigger behavior, lifecycle state, rename, split, merge, deprecation, or removal.

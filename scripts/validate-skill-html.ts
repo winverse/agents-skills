@@ -39,6 +39,141 @@ function hasAny(text: string, terms: string[]): boolean {
   return terms.some((term) => text.includes(term));
 }
 
+function parseAttributes(tag: string): Record<string, string> {
+  const attributes: Record<string, string> = {};
+  for (const match of tag.matchAll(/([a-zA-Z_:][-a-zA-Z0-9_:.]*)="([^"]*)"/g)) {
+    attributes[match[1]] = match[2];
+  }
+  return attributes;
+}
+
+function parseNumber(value: string | undefined): number | undefined {
+  const parsed = Number.parseFloat(value ?? "");
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+type Point = {
+  x: number;
+  y: number;
+};
+
+type Rect = Point & {
+  width: number;
+  height: number;
+};
+
+function parsePathEndpoint(d: string): Point | undefined {
+  const tokens = d.match(/[a-zA-Z]|-?\d*\.?\d+(?:e[-+]?\d+)?/g);
+  if (!tokens) return undefined;
+
+  let index = 0;
+  let command = "";
+  let x = 0;
+  let y = 0;
+  let startX = 0;
+  let startY = 0;
+  let last: Point | undefined;
+
+  const isCommand = (value: string | undefined): boolean => Boolean(value && /^[a-zA-Z]$/.test(value));
+  const canRead = (count: number): boolean => index + count <= tokens.length && !isCommand(tokens[index]);
+  const read = (): number => Number.parseFloat(tokens[index++]);
+  const moveTo = (nextX: number, nextY: number, relative: boolean): void => {
+    x = relative ? x + nextX : nextX;
+    y = relative ? y + nextY : nextY;
+    last = { x, y };
+  };
+
+  while (index < tokens.length) {
+    if (isCommand(tokens[index])) command = tokens[index++];
+    if (!command) return undefined;
+
+    const relative = command === command.toLowerCase();
+    const upper = command.toUpperCase();
+
+    if (upper === "M" || upper === "L" || upper === "T") {
+      while (canRead(2)) {
+        moveTo(read(), read(), relative);
+        if (upper === "M") {
+          startX = x;
+          startY = y;
+          command = relative ? "l" : "L";
+        }
+      }
+      continue;
+    }
+
+    if (upper === "H") {
+      while (canRead(1)) {
+        const nextX = read();
+        x = relative ? x + nextX : nextX;
+        last = { x, y };
+      }
+      continue;
+    }
+
+    if (upper === "V") {
+      while (canRead(1)) {
+        const nextY = read();
+        y = relative ? y + nextY : nextY;
+        last = { x, y };
+      }
+      continue;
+    }
+
+    if (upper === "C") {
+      while (canRead(6)) {
+        read();
+        read();
+        read();
+        read();
+        moveTo(read(), read(), relative);
+      }
+      continue;
+    }
+
+    if (upper === "S" || upper === "Q") {
+      while (canRead(4)) {
+        read();
+        read();
+        moveTo(read(), read(), relative);
+      }
+      continue;
+    }
+
+    if (upper === "A") {
+      while (canRead(7)) {
+        read();
+        read();
+        read();
+        read();
+        read();
+        moveTo(read(), read(), relative);
+      }
+      continue;
+    }
+
+    if (upper === "Z") {
+      x = startX;
+      y = startY;
+      last = { x, y };
+      continue;
+    }
+
+    return undefined;
+  }
+
+  return last;
+}
+
+function isNearRect(point: Point, rect: Rect, tolerance: number): boolean {
+  return (
+    point.x >= rect.x - tolerance &&
+    point.x <= rect.x + rect.width + tolerance &&
+    point.y >= rect.y - tolerance &&
+    point.y <= rect.y + rect.height + tolerance
+  );
+}
+
 function stripTags(text: string): string {
   return text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -81,6 +216,49 @@ function validateLocalLinks(skillPath: string, html: string): void {
 
     if (!existsSync(target)) {
       fail(skillPath, `broken local href: ${href}`);
+    }
+  }
+}
+
+function validateWideVisualStructure(skillPath: string, html: string): void {
+  if (/<div[^>]*class="[^"]*\btwo\b[^"]*"[^>]*>[\s\S]{0,4000}<div[^>]*class="[^"]*\bscope\b/.test(html)) {
+    fail(skillPath, "wide scope table should not be nested inside a two-column layout");
+  }
+}
+
+function validateSvgArrowEndpoints(skillPath: string, html: string): void {
+  let svgIndex = 0;
+  for (const svgMatch of html.matchAll(/<svg\b[\s\S]*?<\/svg>/gi)) {
+    svgIndex += 1;
+    const svg = svgMatch[0];
+    const rects: Rect[] = [];
+
+    for (const rectMatch of svg.matchAll(/<rect\b[^>]*>/gi)) {
+      const attributes = parseAttributes(rectMatch[0]);
+      const x = parseNumber(attributes.x);
+      const y = parseNumber(attributes.y);
+      const width = parseNumber(attributes.width);
+      const height = parseNumber(attributes.height);
+      if (x === undefined || y === undefined || width === undefined || height === undefined) continue;
+      rects.push({ x, y, width, height });
+    }
+
+    if (rects.length < 2) continue;
+
+    for (const pathMatch of svg.matchAll(/<path\b(?=[^>]*marker-end=)[^>]*>/gi)) {
+      const attributes = parseAttributes(pathMatch[0]);
+      if (attributes["data-open-arrow"] === "true") continue;
+
+      const endpoint = parsePathEndpoint(attributes.d ?? "");
+      if (!endpoint) continue;
+
+      if (!rects.some((rect) => isNearRect(endpoint, rect, 14))) {
+        fail(
+          skillPath,
+          `svg ${svgIndex} has an arrow endpoint that does not reach a visible node: ${attributes.d}`,
+        );
+        return;
+      }
     }
   }
 }
@@ -149,6 +327,8 @@ function validateSkillHtml(skillPath: string): void {
   }
 
   validateLocalLinks(skillPath, html);
+  validateWideVisualStructure(skillPath, html);
+  validateSvgArrowEndpoints(skillPath, html);
 
   const sectionHeadingCount = countMatches(html, /<h2\b/g);
   if (sectionHeadingCount < 6) {
