@@ -1,0 +1,4 @@
+interface:
+  display_name: "Terminal Session Automation"
+  short_description: "Automate cmux, Warp, and terminal session titles, hooks, statuses, and workflow notes"
+  default_prompt: "Use $terminal-session-automation to design or update cmux, Warp, or generic terminal session automation, including Codex prompt pinning, tab title updates, session status, hook scripts, workflow notes, and safe terminal-specific CLI or escape-sequence workflows."

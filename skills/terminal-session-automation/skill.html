@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>cmux-automation</title>
+  <title>terminal-session-automation</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
@@ -275,15 +275,15 @@
   <main class="shell">
     <header>
       <div>
-        <h1>cmux-automation</h1>
-        <p>cmux CLI, Codex hook, tab title, status, markdown board, feed 흐름을 프로젝트 단위로 연결해 질문 원문 그대로 세션 상태를 빠르게 보이게 하는 자동화 스킬.</p>
+        <h1>terminal-session-automation</h1>
+        <p>cmux, Warp, generic terminal에서 Codex hook, tab title, status, workflow note를 프로젝트 단위로 연결해 질문 원문을 안전하게 세션 표면에 고정하는 자동화 스킬.</p>
       </div>
       <div class="file-pair" aria-label="필수 파일과 보조 리소스">
         <span><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></span>
         <span><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></span>
         <span><strong>hook 레시피</strong><a href="references/hook-recipes.md">references/hook-recipes.md</a></span>
-        <span><strong>pin script</strong><a href="scripts/cmux-pin-prompt.mjs">scripts/cmux-pin-prompt.mjs</a></span>
-        <span><strong>프로젝트 snippet</strong><a href="../../project-snippets/cmux-automation.md">project-snippets/cmux-automation.md</a></span>
+        <span><strong>pin script</strong><a href="scripts/pin-prompt-title.mjs">scripts/pin-prompt-title.mjs</a></span>
+        <span><strong>프로젝트 snippet</strong><a href="../../project-snippets/terminal-session-automation.md">project-snippets/terminal-session-automation.md</a></span>
       </div>
     </header>
 
@@ -292,30 +292,30 @@
       <div class="matrix">
         <div class="cell">
           <span class="tag ok">사용</span>
-          <h3>cmux 자동화</h3>
-          <p>tab, status, markdown board, feed, hook, CLI 기반 세션 흐름을 만들거나 고칠 때.</p>
+          <h3>host별 세션 자동화</h3>
+          <p>cmux tab/status, Warp title, generic shell title, workflow note를 만들거나 고칠 때.</p>
         </div>
         <div class="cell">
           <span class="tag accent">실행까지</span>
           <h3>prompt pinning</h3>
-          <p>사용자가 enable, install, test를 요청하면 recipe만 주지 않고 project-local hook을 실제로 갱신한다.</p>
+          <p>사용자가 enable, install, test를 요청하면 recipe만 주지 않고 project-local hook과 dry-run을 실제로 갱신한다.</p>
         </div>
         <div class="cell">
           <span class="tag warn">먼저 질문</span>
           <h3>강한 권한</h3>
-          <p>global hook, socket auth, 다른 pane 입력, pane/workspace 종료, history 삭제는 승인 후 진행한다.</p>
+          <p>global hook, socket auth, 다른 pane 입력, tab/workspace 종료, history 삭제, Warp/Oz/shell 설정은 승인 후 진행한다.</p>
         </div>
         <div class="cell">
           <span class="tag danger">건너뜀</span>
-          <h3>cmux 밖 작업</h3>
-          <p>ergonomic hook은 cmux가 없거나 env가 없으면 조용히 성공 종료하고 Codex 흐름을 막지 않는다.</p>
+          <h3>표면 없음</h3>
+          <p>cmux env, Warp title output, `/dev/tty`가 없으면 조용히 성공 종료하고 Codex 흐름을 막지 않는다.</p>
         </div>
       </div>
     </section>
 
     <section>
       <h2>자동화 흐름</h2>
-      <svg class="flow" viewBox="0 0 1080 276" role="img" aria-label="cmux 자동화 실행 흐름">
+      <svg class="flow" viewBox="0 0 1080 276" role="img" aria-label="터미널 세션 자동화 실행 흐름">
         <defs>
           <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
             <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
@@ -328,9 +328,9 @@
 
         <line x1="160" y1="114" x2="206" y2="114" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
         <rect x="210" y="72" width="146" height="84" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-        <text x="283" y="102" text-anchor="middle" font-size="14" font-weight="700">local 확인</text>
-        <text x="283" y="124" text-anchor="middle" font-size="12" fill="#6b7280">cmux --help</text>
-        <text x="283" y="143" text-anchor="middle" font-size="12" fill="#6b7280">docs / capabilities</text>
+        <text x="283" y="102" text-anchor="middle" font-size="14" font-weight="700">host 확인</text>
+        <text x="283" y="124" text-anchor="middle" font-size="12" fill="#6b7280">CMUX_* / TERM_PROGRAM</text>
+        <text x="283" y="143" text-anchor="middle" font-size="12" fill="#6b7280">CLI / tty capability</text>
 
         <line x1="356" y1="114" x2="402" y2="114" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
         <rect x="406" y="72" width="152" height="84" rx="8" fill="#fff" stroke="#d1d5db"></rect>
@@ -341,8 +341,8 @@
         <line x1="558" y1="114" x2="604" y2="114" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
         <rect x="608" y="72" width="168" height="84" rx="8" fill="#fff" stroke="#d1d5db"></rect>
         <text x="692" y="102" text-anchor="middle" font-size="14" font-weight="700">작은 자동화</text>
-        <text x="692" y="124" text-anchor="middle" font-size="12" fill="#6b7280">rename-tab</text>
-        <text x="692" y="143" text-anchor="middle" font-size="12" fill="#6b7280">set-status / board</text>
+        <text x="692" y="124" text-anchor="middle" font-size="12" fill="#6b7280">rename-tab / OSC title</text>
+        <text x="692" y="143" text-anchor="middle" font-size="12" fill="#6b7280">status / workflow note</text>
 
         <line x1="776" y1="114" x2="822" y2="114" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
         <rect x="826" y="72" width="230" height="84" rx="8" fill="#fff" stroke="#d1d5db"></rect>
@@ -367,7 +367,7 @@
           <ul>
             <li>Codex `UserPromptSubmit` JSON stdin</li>
             <li>제출된 원문 prompt</li>
-            <li>`CMUX_SURFACE_ID`, `CMUX_WORKSPACE_ID`, `CMUX_TAB_ID`</li>
+            <li>`CMUX_SURFACE_ID`, `CMUX_WORKSPACE_ID`, `TERM_PROGRAM`</li>
           </ul>
         </div>
         <div class="cell">
@@ -375,7 +375,7 @@
           <ul>
             <li>알려진 payload field에서 prompt 추출</li>
             <li>한 줄 whitespace normalization만 적용</li>
-            <li>`CMUX_SURFACE_ID` 직접 targeting 우선</li>
+            <li>cmux surface, Warp `/dev/tty`, generic no-op 순서로 처리</li>
           </ul>
         </div>
         <div class="cell">
@@ -383,6 +383,7 @@
           <ul>
             <li>`cmux rename-tab --surface ... "&lt;original prompt&gt;"`</li>
             <li>`cmux set-status current-question "&lt;original prompt&gt;"`</li>
+            <li>Warp에서는 OSC title sequence만 출력</li>
             <li>필요 시 Codex `/hooks` 승인 안내</li>
           </ul>
         </div>
@@ -397,7 +398,7 @@
         <text x="182" y="70" text-anchor="middle" font-size="15" font-weight="700">hook 단계</text>
         <text x="182" y="98" text-anchor="middle" font-size="13" fill="#111827">UserPromptSubmit</text>
         <text x="182" y="124" text-anchor="middle" font-size="12" fill="#6b7280">agent가 아직 의미를 읽기 전</text>
-        <text x="182" y="148" text-anchor="middle" font-size="12" fill="#6b7280">tab/status = 원문 prompt</text>
+        <text x="182" y="148" text-anchor="middle" font-size="12" fill="#6b7280">title/status = 원문 prompt</text>
 
         <line x1="322" y1="106" x2="455" y2="106" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow2)"></line>
         <defs>
@@ -422,11 +423,11 @@
 
     <section>
       <h2>우선순위 차트</h2>
-      <svg class="bars" viewBox="0 0 1080 220" role="img" aria-label="cmux 자동화에서 우선할 구현 기준">
+      <svg class="bars" viewBox="0 0 1080 220" role="img" aria-label="터미널 세션 자동화에서 우선할 구현 기준">
         <line x1="278" y1="36" x2="278" y2="182" stroke="#d1d5db"></line>
         <line x1="278" y1="182" x2="1018" y2="182" stroke="#d1d5db"></line>
 
-        <text x="36" y="62" font-size="13" font-weight="700">local cmux CLI/docs</text>
+        <text x="36" y="62" font-size="13" font-weight="700">host CLI/docs/env</text>
         <rect x="278" y="44" width="700" height="24" fill="#2563eb"></rect>
         <text x="990" y="62" font-size="12" fill="#111827">먼저</text>
 
@@ -434,21 +435,21 @@
         <rect x="278" y="82" width="636" height="24" fill="#1f7a52"></rect>
         <text x="926" y="100" font-size="12" fill="#111827">기본</text>
 
-        <text x="36" y="138" font-size="13" font-weight="700">workspace scope</text>
+        <text x="36" y="138" font-size="13" font-weight="700">session scope</text>
         <rect x="278" y="120" width="420" height="24" fill="#a16207"></rect>
         <text x="710" y="138" font-size="12" fill="#111827">surface가 갈릴 때</text>
 
-        <text x="36" y="176" font-size="13" font-weight="700">global/socket/destructive</text>
+        <text x="36" y="176" font-size="13" font-weight="700">global/destructive</text>
         <rect x="278" y="158" width="206" height="24" fill="#b42318"></rect>
         <text x="496" y="176" font-size="12" fill="#111827">승인 후</text>
       </svg>
-      <p class="note">`cmux identify`는 fallback이다. 가능한 경우 env로 받은 current surface와 workspace를 직접 사용한다.</p>
+      <p class="note">`cmux identify`는 fallback이다. Warp와 generic terminal은 `/dev/tty`가 쓸 수 있을 때만 OSC title을 보낸다.</p>
     </section>
 
     <section>
       <h2>파일 관계 지도</h2>
       <div class="grid2">
-        <div class="tree">skills/cmux-automation/
+        <div class="tree">skills/terminal-session-automation/
 ├── SKILL.md
 ├── skill.html
 ├── agents/
@@ -456,9 +457,9 @@
 ├── references/
 │   └── hook-recipes.md
 └── scripts/
-    ├── cmux-pin-prompt.mjs
-    └── validate-cmux-automation.ts</div>
-        <svg class="map" viewBox="0 0 520 254" role="img" aria-label="cmux-automation 파일 역할 지도">
+    ├── pin-prompt-title.mjs
+    └── validate-terminal-session-automation.ts</div>
+        <svg class="map" viewBox="0 0 520 254" role="img" aria-label="terminal-session-automation 파일 역할 지도">
           <rect x="28" y="22" width="160" height="50" rx="8" fill="#fff" stroke="#d1d5db"></rect>
           <text x="108" y="52" text-anchor="middle" font-size="13" font-weight="700">SKILL.md</text>
 
@@ -475,7 +476,7 @@
           <text x="405" y="132" text-anchor="middle" font-size="13" font-weight="700">Codex hook config</text>
 
           <rect x="318" y="182" width="174" height="50" rx="8" fill="#fff" stroke="#d1d5db"></rect>
-          <text x="405" y="212" text-anchor="middle" font-size="13" font-weight="700">cmux tab/status</text>
+          <text x="405" y="212" text-anchor="middle" font-size="13" font-weight="700">title/status</text>
 
           <line x1="188" y1="47" x2="318" y2="47" stroke="#2563eb" stroke-width="2"></line>
           <line x1="188" y1="127" x2="318" y2="127" stroke="#2563eb" stroke-width="2"></line>
@@ -493,29 +494,29 @@
           <h3>instruction 링크</h3>
           <p>프로젝트의 `AGENTS.md`, `CLAUDE.md`, 또는 동등한 instruction 파일에서 repo-local `SKILL.md`를 연결한다. 전역 설치나 symlink는 명시 요청이 있을 때만 한다.</p>
         </div>
-        <pre>Use $cmux-automation at &lt;skills-root&gt;/skills/cmux-automation/SKILL.md
-when automating cmux tabs, status, hooks, feeds, browser surfaces,
-workspace labels, or prompt pinning.</pre>
+        <pre>Use $terminal-session-automation at &lt;skills-root&gt;/skills/terminal-session-automation/SKILL.md
+when automating cmux, Warp, or generic terminal session titles,
+status, hooks, workflow notes, or prompt pinning.</pre>
       </div>
     </section>
 
     <section>
       <h2>품질 게이트</h2>
       <div class="grid2">
-        <pre>node scripts/validate-skill.ts skills/cmux-automation
-node skills/cmux-automation/scripts/validate-cmux-automation.ts skills/cmux-automation
+        <pre>node scripts/validate-skill.ts skills/terminal-session-automation
+node skills/terminal-session-automation/scripts/validate-terminal-session-automation.ts skills/terminal-session-automation
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .</pre>
         <pre>printf '{"prompt":"workflow 스킬을 만들어줘"}' \
-  | CMUX_PIN_PROMPT_DRY_RUN=1 \
-    node skills/cmux-automation/scripts/cmux-pin-prompt.mjs</pre>
+  | TERMINAL_SESSION_PROMPT_DRY_RUN=1 \
+    node skills/terminal-session-automation/scripts/pin-prompt-title.mjs</pre>
       </div>
-      <p class="note">실제 hook 작업에서는 dry-run payload, cmux 안 tab/status 변경, foreground wrapper latency를 따로 확인한다.</p>
+      <p class="note">실제 hook 작업에서는 dry-run payload, host별 title/status 변경, foreground wrapper latency를 따로 확인한다.</p>
     </section>
 
     <section>
       <h2>오용 방지</h2>
-      <table aria-label="cmux-automation 허용과 금지">
+      <table aria-label="terminal-session-automation 허용과 금지">
         <thead>
           <tr>
             <th>허용</th>
@@ -530,12 +531,12 @@ node scripts/validate-skill-repo.ts .</pre>
             <td>global hook 설치 또는 제거</td>
           </tr>
           <tr>
-            <td>`rename-tab`, `set-status`, `markdown open`으로 가볍게 시작</td>
+            <td>`rename-tab`, `set-status`, OSC title sequence로 가볍게 시작</td>
             <td>`UserPromptSubmit`에서 validator, `codex exec`, broad repo scan 실행</td>
-            <td>socket auth, global cmux settings 수정</td>
+            <td>socket auth, global cmux/Warp/Oz/shell settings 수정</td>
           </tr>
           <tr>
-            <td>cmux 밖에서는 ergonomic hook을 조용히 no-op 처리</td>
+            <td>지원 표면이 없으면 ergonomic hook을 조용히 no-op 처리</td>
             <td>secret, socket password, token을 script나 log에 저장</td>
             <td>다른 pane 입력, surface 종료, history 삭제</td>
           </tr>

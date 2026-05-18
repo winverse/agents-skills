@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
 import process from "node:process";
 
 async function readStdin() {
@@ -11,7 +12,8 @@ async function readStdin() {
 }
 
 async function readInput() {
-  const encodedPayload = process.env.CMUX_PROMPT_PAYLOAD_B64;
+  const encodedPayload =
+    process.env.TERMINAL_SESSION_PROMPT_PAYLOAD_B64 ?? process.env.CMUX_PROMPT_PAYLOAD_B64;
   if (encodedPayload) {
     try {
       return Buffer.from(encodedPayload, "base64").toString("utf8");
@@ -72,6 +74,29 @@ function inCmux() {
       process.env.CMUX_TAB_ID ||
       process.env.CMUX_SOCKET_PATH,
   );
+}
+
+function inWarp() {
+  return process.env.TERM_PROGRAM === "WarpTerminal";
+}
+
+function dryRunEnabled() {
+  return (
+    process.env.TERMINAL_SESSION_PROMPT_DRY_RUN === "1" ||
+    process.env.CMUX_PIN_PROMPT_DRY_RUN === "1"
+  );
+}
+
+function terminalTitle(value) {
+  return value.replace(/[\x00-\x1f\x7f]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function writeOscTitle(title) {
+  try {
+    writeFileSync("/dev/tty", `\u001b]0;${terminalTitle(title)}\u0007`);
+  } catch {
+    // Keep prompt submission non-blocking when /dev/tty is unavailable.
+  }
 }
 
 function readIdentify() {
@@ -177,15 +202,18 @@ try {
 const prompt = promptFromPayload(payload).replace(/\s+/g, " ").trim();
 if (!prompt) process.exit(0);
 
-const title = prompt;
-const status = prompt;
+const title = terminalTitle(prompt);
+const status = title;
 
-if (process.env.CMUX_PIN_PROMPT_DRY_RUN === "1") {
-  console.log(JSON.stringify({ title, status }));
+if (dryRunEnabled()) {
+  console.log(JSON.stringify({ title, status, host: inCmux() ? "cmux" : inWarp() ? "warp" : "generic" }));
   process.exit(0);
 }
 
-if (!inCmux()) process.exit(0);
+if (!inCmux()) {
+  if (inWarp()) writeOscTitle(title);
+  process.exit(0);
+}
 
 const info = canUseFastEnvTarget() ? {} : readIdentify();
 

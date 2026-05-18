@@ -14,6 +14,6 @@ statusMessage = "Auto-updating skill HTML and validating repo"
 
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/cmux_pin_prompt.mjs"'
+command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/pin_prompt_title.mjs"'
 timeout = 5
-statusMessage = "Pinning prompt to cmux tab"
+statusMessage = "Pinning prompt to terminal session title"

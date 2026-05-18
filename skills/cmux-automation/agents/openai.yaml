@@ -1,4 +1,0 @@
-interface:
-  display_name: "Cmux Automation"
-  short_description: "Automate cmux tabs, statuses, hooks, and agent workflows"
-  default_prompt: "Use $cmux-automation to design or update cmux automation, including Codex prompt pinning, cmux tab/status updates, hook scripts, workspace boards, and safe cmux CLI workflows."

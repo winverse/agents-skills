@@ -23,4 +23,4 @@ if (path.resolve(gitRoot(process.cwd()) || process.cwd()) !== localRepoRoot) {
   process.exit(0);
 }
 
-await import("../../skills/cmux-automation/scripts/cmux-pin-prompt.mjs");
+await import("../../skills/terminal-session-automation/scripts/pin-prompt-title.mjs");

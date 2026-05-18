@@ -66,7 +66,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/spec-workflow.md`: only the Workflow suite implementation half, PRD/issue/spec based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.
-- `project-snippets/cmux-automation.md`: only cmux automation, prompt pinning, tab/status automation, workspace boards, feed workflows, and cmux CLI ergonomics.
+- `project-snippets/terminal-session-automation.md`: only cmux, Warp, and generic terminal session automation, prompt pinning, tab title, status, workspace boards, workflow notes, hook latency, and terminal-specific CLI or escape-sequence ergonomics.
 - `project-snippets/agent-eval-harness.md`: only initial agent eval harness setup, skill routing cases, cross-agent portability checks, guardrail checks, artifact hygiene, local runner wiring, and regression capture.
 
 ## Forking Rule

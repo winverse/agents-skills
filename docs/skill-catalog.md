@@ -17,7 +17,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 기존 스킬을 수정한다 | `skill-update` | `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `sync-docs` |
-| cmux tab/status/hook으로 세션 질문을 기억한다 | `cmux-automation` | `sync-docs`, `browser-qa` |
+| cmux/Warp/terminal tab title, status, hook으로 세션 질문을 기억한다 | `terminal-session-automation` | `sync-docs`, `browser-qa` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
 | 새 프로젝트나 큰 initiative의 초기 셋팅을 잡는다 | `project-workflow` | Workflow suite의 setup 절반. `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
@@ -60,7 +60,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 diagram-rich `skill.html`을 만든다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
 | `skill-update` | 기존 공유 스킬을 수정할 때 source, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
 | `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
-| `cmux-automation` | cmux hooks, Codex prompt pinning, tab/status/markdown board 자동화, cmux CLI 세션 ergonomics를 관리한다. | [SKILL.md](../skills/cmux-automation/SKILL.md) · [skill.html](../skills/cmux-automation/skill.html) |
+| `terminal-session-automation` | cmux, Warp, generic terminal의 prompt pinning, tab title, session status, workflow note, hook latency, 터미널별 CLI/escape-sequence 자동화를 관리한다. | [SKILL.md](../skills/terminal-session-automation/SKILL.md) · [skill.html](../skills/terminal-session-automation/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
 | `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check와 workflow scenario/project setup seed case를 지원한다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
 
