@@ -47,7 +47,7 @@
     "expectedSkills": ["web-research"],
     "forbiddenSkills": ["browser-qa"],
     "agentSurfaces": ["codex"],
-    "assumptionDate": "2026-05-12",
+    "assumptionDate": "2026-05-18",
     "exampleType": "typical",
     "risk": "medium",
     "mode": "blocking",
@@ -70,6 +70,26 @@
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
+        "value": "explicit parallel sub-agent fan-out, delegation, parallel agent work 요청"
+      },
+      {
+        "type": "required_text",
+        "file": "AGENTS.md",
+        "value": "explicit request for parallel sub-agent fan-out, delegation, and parallel agent work"
+      },
+      {
+        "type": "required_text",
+        "file": "project-snippets/base.md",
+        "value": "explicit request for parallel sub-agent fan-out, delegation, and parallel agent work"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/agents/openai.yaml",
+        "value": "explicit request for parallel sub-agent fan-out, delegation, and parallel agent work"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/web-research/SKILL.md",
         "value": "단일 에이전트는 사용자가 명시적으로 요구"
       },
       {
@@ -81,6 +101,66 @@
         "type": "required_text",
         "file": "project-snippets/base.md",
         "value": "aliases for `web-research`"
+      }
+    ]
+  },
+  {
+    "id": "route-upstream-skill-maintenance-to-skill-update-and-web-research",
+    "title": "Upstream-backed skill updates verify original source first",
+    "prompt": "원본 스킬이 있는 shared skill을 업데이트해줘. 원본을 먼저 찾아보고 그 변경을 여기 스킬에 적용해야 해",
+    "scope": "skill_invocation",
+    "expectedSkills": ["skill-update", "web-research"],
+    "forbiddenSkills": ["skill-creator"],
+    "agentSurfaces": ["codex", "claude"],
+    "assumptionDate": "2026-05-18",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "skill-update",
+        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/SKILL.md",
+        "value": "original/upstream provenance preflight"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/SKILL.md",
+        "value": "docs/update-source-registry.md"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/SKILL.md",
+        "value": ".gitmodules"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/SKILL.md",
+        "value": "`adopt`, `adapt`, `reject`, `defer`"
+      },
+      {
+        "type": "required_text",
+        "file": "project-snippets/skill-update.md",
+        "value": "Treat every `skill-update` invocation as an original/upstream provenance preflight"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/references/update-checklist.md",
+        "value": "source URL, checked date, upstream version/commit"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/agents/openai.yaml",
+        "value": "every invocation starts with original/upstream provenance preflight"
+      },
+      {
+        "type": "required_text",
+        "file": "docs/update-source-registry.md",
+        "value": "workflow provenance-only primitive"
       }
     ]
   },

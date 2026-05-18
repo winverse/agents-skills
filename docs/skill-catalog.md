@@ -14,10 +14,10 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 현재 스킬 목록을 보고 싶다 | `show-skills` | `sync-docs` |
 | 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다. `web-search`라고 말해도 이 스킬로 해석한다. | `web-research` | `agent-improvement-loop` |
 | 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | `browser-qa`, `design-review` |
-| 기존 스킬을 수정한다 | `skill-update` | `skill-to-html`, `sync-docs` |
+| 기존 스킬을 수정한다 | `skill-update` | 모든 호출에서 원본 provenance preflight를 먼저 실행하고, 원본 확인이 필요하면 `web-research`, 이후 `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `sync-docs` |
-| cmux/Warp/terminal tab title, status, hook으로 세션 질문을 기억한다 | `terminal-session-automation` | `sync-docs`, `browser-qa` |
+| Warp가 assistant 응답 첫 줄을 visible title로 선택하도록 답변 형식을 맞춘다 | `warp-automation` | `sync-docs` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
 | 새 프로젝트나 큰 initiative의 초기 셋팅을 잡는다 | `project-workflow` | Workflow suite의 setup 절반. 병렬 구현이면 `work-claims.md`를 만든다. `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
@@ -35,7 +35,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | 헷갈리는 묶음 | 먼저 고를 기준 | 같이 쓰는 경우 |
 | --- | --- | --- |
 | `show-skills` / `sync-docs` | `show-skills`는 현재 목록을 읽고 추천할 때, `sync-docs`는 문서끼리 맞지 않는 설명을 고칠 때 쓴다. | 목록을 본 뒤 catalog, README, snippet이 stale인지 확인할 때 둘을 같이 쓴다. |
-| `skill-update` / `skill-to-html` / `sync-docs` | `skill-update`는 기존 스킬 패키지 자체를 바꾸는 작업, `skill-to-html`은 사람용 HTML guide 작업, `sync-docs`는 주변 문서 정합성 작업이다. | 스킬 trigger나 workflow가 바뀌면 세 개가 순서대로 이어질 수 있다. |
+| `skill-update` / `web-research` / `skill-to-html` / `sync-docs` | `skill-update`는 기존 스킬 패키지 자체를 바꾸는 작업이며, 먼저 `docs/update-source-registry.md`에서 `.gitmodules` 기반 vendored source와 workflow primitive source를 분리한다. 원본이 있거나 의심되면 `web-research`로 source와 release/changelog를 확인한다. `skill-to-html`은 사람용 HTML guide 작업, `sync-docs`는 주변 문서 정합성 작업이다. | 원본 delta가 있는 스킬은 `web-research`로 source를 검증하고 `adopt`/`adapt`/`reject`/`defer` 판단을 남긴 뒤 local package, HTML, 주변 문서를 순서대로 맞춘다. |
 | `agent-improvement-loop` / `agent-eval-harness` | `agent-improvement-loop`는 repo 품질 backlog와 Claude Code `/goal` 기준 bounded goal 조건을 고르는 루프, `agent-eval-harness`는 반복 검증 harness와 goal condition quality를 검사하는 스킬이다. | 개선 루프에서 재발 방지가 필요하면 eval harness case를 추가한다. |
 | `project-workflow` / `spec-workflow` | 둘을 합쳐 Workflow suite로 본다. `project-workflow`는 project bootstrap, domain, product, ADR, design, PRD, issue backlog, `workflow-state.md` cache를 잡고, 병렬 구현이면 `work-claims.md`로 lane ownership을 나눈다. `spec-workflow`는 이미 정해진 spec/issue를 TDD, review, QA, docs sync로 구현하고 cache와 claim status를 갱신한다. | `project-workflow`가 spec handoff와 병렬 work claim을 만들고, 이후 반복 개발은 `spec-workflow`가 맡는다. claim overlap이나 gate 누락이 반복되면 `agent-eval-harness` seed를 남긴다. |
 | `project-workflow` / `project-structure` | `project-workflow`는 구조 선택 전 domain과 architecture 질문을 만든다. `project-structure`는 구조 선택이 구체화된 뒤 폴더/env/codegen/db/infra 경계를 잡는다. | `project-workflow`가 architecture handoff 지점에 도달하면 `project-structure`를 호출한다. |
@@ -51,16 +51,16 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `show-skills` | 현재 repo의 스킬을 파일 시스템에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천한다. | [SKILL.md](../skills/show-skills/SKILL.md) · [skill.html](../skills/show-skills/skill.html) |
-| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰며 `web-search` alias와 자동 병렬 sub-agent fan-out을 지원하는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
+| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰며 `web-search` alias 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
 
 ### 스킬 운영
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 diagram-rich `skill.html`을 만든다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
-| `skill-update` | 기존 공유 스킬을 수정할 때 source, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
+| `skill-update` | 기존 공유 스킬을 수정할 때 `docs/update-source-registry.md`와 `.gitmodules`를 먼저 확인하고, 원본/upstream provenance preflight, source/release 비교, `adopt`/`adapt`/`reject`/`defer` 판단, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
 | `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
-| `terminal-session-automation` | cmux, Warp, generic terminal의 prompt pinning, tab title, session status, workflow note, hook latency, 터미널별 CLI/escape-sequence 자동화를 관리한다. | [SKILL.md](../skills/terminal-session-automation/SKILL.md) · [skill.html](../skills/terminal-session-automation/skill.html) |
+| `warp-automation` | Warp response-title fallback용 스킬이다. 답변 첫 줄에 현재 사용자 프롬프트를 32자 이내로 정리하고, 둘째 줄을 비운 뒤 셋째 줄부터 실제 답변을 쓴다. | [SKILL.md](../skills/warp-automation/SKILL.md) · [skill.html](../skills/warp-automation/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
 | `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check와 workflow scenario, `work-claims.md` lane ownership, overlap block seed case를 지원한다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
 

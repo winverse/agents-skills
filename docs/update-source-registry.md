@@ -37,7 +37,7 @@ git config --file .gitmodules --get-regexp '^submodule\\..*\\.(path|url)$'
 
 | Plugin | Submodule path | Upstream URL | Update check files | 별도 update trigger |
 | --- | --- | --- | --- | --- |
-| `context-mode` | `plugins/context-mode` | `https://github.com/mksglu/context-mode.git` | `.codex-plugin/plugin.json`, `.codex-plugin/mcp.json`, `.codex-plugin/hooks.json`, `skills/` | manifest, MCP server, hook, bundled skill, release/tag 변경 |
+| `context-mode` | `plugins/context-mode` | `https://github.com/mksglu/context-mode.git` | `plugins/context-mode/.codex-plugin/plugin.json`, `plugins/context-mode/.codex-plugin/mcp.json`, `plugins/context-mode/.codex-plugin/hooks.json`, `plugins/context-mode/skills/` | manifest, MCP server, hook, bundled skill, release/tag 변경 |
 | `code-review-graph` | `plugins/code-review-graph` | `https://github.com/tirth8205/code-review-graph.git` | `plugins/code-review-graph/pyproject.toml`, `plugins/code-review-graph/.mcp.json`, `plugins/code-review-graph/skills/review-pr/SKILL.md`, `plugins/code-review-graph/skills/review-changes/SKILL.md` | package version, MCP command, bundled review skill, release/tag 변경 |
 | `caveman` | `plugins/caveman` | `https://github.com/JuliusBrussee/caveman.git` | `plugins/caveman/package.json`, `plugins/caveman/.claude-plugin/plugin.json`, `plugins/caveman/commands/`, `plugins/caveman/skills/caveman/SKILL.md`, bundled `plugins/caveman/skills/` | installer metadata, Claude plugin manifest, command, compression skill, release/tag 변경 |
 

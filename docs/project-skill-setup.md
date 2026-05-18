@@ -8,6 +8,8 @@ Each project should explicitly choose the skills it uses. The skills repo stays 
 
 This document is only for connecting existing shared skills to a target project. For creating or materially changing a shared skill, use README's `생성과 검증` section and `docs/skill-inspector.md`.
 
+Plugin setup is separate from skill setup. If a target project needs a plugin or MCP tool package such as `context-mode` or `code-review-graph`, keep it under `plugins/` with its native manifest, package metadata, and MCP config; do not copy plugin-bundled `skills/` into the shared top-level `skills/` tree.
+
 ## Setup Steps
 
 1. Open the target project's agent instruction file, usually `AGENTS.md` for Codex or `CLAUDE.md` for Claude.
@@ -31,6 +33,7 @@ Before calling a project setup complete, verify it from the target project:
 - Project-specific overrides live in the target project instruction file, not in the shared skill, unless the preference should apply everywhere.
 - The linked skill names, trigger names, and paths match `docs/skill-catalog.md`, `project-snippets/base.md`, and `project-snippets/claude-base.md` when those snippets are used.
 - If the setup needs to stay reliable over time, add or update an `agent-eval-harness` case that checks the target instruction file references the expected skills and avoids global install instructions.
+- If selected plugin references are needed, verify `docs/plugin-catalog.md`, the plugin's native manifest or package metadata, and the plugin's MCP entrypoint instead of treating the plugin as a normal shared skill.
 
 Suggested verification report shape:
 
@@ -54,7 +57,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/web-research.md`: only the web research skill.
 - `project-snippets/skill-to-html.md`: only the skill HTML guide workflow.
 - `project-snippets/karpathy-thinkings.md`: only Karpathy-style coding agent discipline.
-- `project-snippets/skill-update.md`: only existing skill maintenance and package sync rules.
+- `project-snippets/skill-update.md`: only existing skill maintenance, original/upstream source checks, and package sync rules.
 - `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.
 - `project-snippets/browser-qa.md`: only browser runtime evidence and Playwright QA.
 - `project-snippets/code-review.md`: only findings-first code review.
@@ -66,7 +69,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/spec-workflow.md`: only the Workflow suite implementation half, PRD/issue/spec based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.
-- `project-snippets/terminal-session-automation.md`: only cmux, Warp, and generic terminal session automation, prompt pinning, tab title, status, workspace boards, workflow notes, hook latency, and terminal-specific CLI or escape-sequence ergonomics.
+- `project-snippets/warp-automation.md`: only Warp response-title fallback, where the assistant response first line summarizes the current user prompt and the real answer starts after a blank second line.
 - `project-snippets/agent-eval-harness.md`: only initial agent eval harness setup, skill routing cases, cross-agent portability checks, guardrail checks, artifact hygiene, local runner wiring, and regression capture.
 
 ## Forking Rule
@@ -92,6 +95,7 @@ The fork should keep the same pair:
 
 When a shared skill changes:
 
+- If the skill has an original or upstream source, verify that source with `web-research` before changing the local shared package.
 - Update `README.md` if the skill's purpose changed.
 - Update `AGENTS.md`, `docs/skill-catalog.md`, `project-snippets/base.md`, and `project-snippets/claude-base.md` when the trigger, path, or project-facing behavior changed.
 - Use `skill-to-html` to update the skill's own `skill.html`.

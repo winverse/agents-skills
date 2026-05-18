@@ -464,7 +464,7 @@
           </div>
           <div class="cell" style="background: var(--red-soft)">
             <strong>다른 스킬</strong>
-            <p>새 스킬 scaffold는 system `skill-creator`, visual guide는 `skill-to-html`, 문서 drift는 `sync-docs`. plugin package, MCP config, submodule update는 `Plugin update list` 확인 후 별도 plugin workflow입니다.</p>
+            <p>새 스킬 scaffold는 system `skill-creator`, visual guide는 `skill-to-html`, 문서 drift는 `sync-docs`. plugin package, MCP config, submodule update는 명시 요청일 때만 plugin update lane으로 처리합니다.</p>
           </div>
         </div>
       </section>
@@ -564,7 +564,12 @@
             <div class="row" role="row">
               <div><strong>upstream delta</strong><span>원본 동기화</span></div>
               <div>provenance preflight, source ledger, release/changelog, local package, history/eval</div>
-              <div>`web-research`와 병렬 후보 비교, adopt/adapt/reject/defer. plugin 자체 update는 `Plugin update list`로 별도 보고</div>
+              <div>`web-research`와 병렬 후보 비교, adopt/adapt/reject/defer. plugin update 명시 시 `.gitmodules` 기반 lane 실행</div>
+            </div>
+            <div class="row" role="row">
+              <div><strong>plugin update</strong><span>명시 요청</span></div>
+              <div>`.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, plugin manifest, validator, history</div>
+              <div>`validate-plugins`가 path/URL drift와 bundled skill 경계 검사</div>
             </div>
           </div>
         </section>
@@ -582,6 +587,7 @@
                 <li>원하는 행동 변화 또는 실패 증거</li>
                 <li>현재 `SKILL.md`, references, snippets, history</li>
                 <li>원본/fork/upstream 가능성</li>
+                <li>plugin update 포함 여부</li>
               </ul>
             </div>
             <div class="arrow">→</div>
@@ -593,6 +599,7 @@
                 <li>source ledger와 checked date</li>
                 <li>adopt/adapt/reject/defer 판단</li>
                 <li>validator 결과와 남은 질문</li>
+                <li>plugin update lane 결과</li>
               </ul>
             </div>
           </div>
@@ -650,6 +657,7 @@
           <a class="file" href="../../docs/update-source-registry.md"><strong>업데이트 원천 레지스트리</strong><span>.gitmodules, Plugin update list, workflow source map을 나누는 단일 진입점</span></a>
           <a class="file" href="references/update-checklist.md"><strong>references/update-checklist.md</strong><span>package completeness, source ledger, history, failure modes</span></a>
           <a class="file" href="scripts/validate-skill-update.ts"><strong>scripts/validate-skill-update.ts</strong><span>스킬별 정적 검사</span></a>
+          <a class="file" href="../../scripts/validate-plugins.ts"><strong>scripts/validate-plugins.ts</strong><span>.gitmodules 기반 plugin path/URL drift 검사</span></a>
           <a class="file" href="agents/openai.yaml"><strong>agents/openai.yaml</strong><span>agent-facing metadata 동기화 대상</span></a>
           <a class="file" href="../skill-to-html/SKILL.md"><strong>skill-to-html</strong><span>material change 후 human visual guide 갱신</span></a>
           <a class="file" href="../web-research/SKILL.md"><strong>web-research</strong><span>공식 source와 upstream 변경 이력 검증</span></a>
@@ -667,6 +675,7 @@
 node skills/&lt;target-skill&gt;/scripts/&lt;skill-validator&gt;.ts
 node scripts/validate-korean-markdown.ts .
 node scripts/validate-skill-html.ts .
+node scripts/validate-plugins.ts .
 node scripts/run-agent-evals.ts
 
 # add/remove/rename/archive/restore가 있으면:
@@ -682,6 +691,7 @@ node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills</pre>
               <li>모든 호출에서 original/upstream provenance preflight를 실행합니다.</li>
               <li>원본이 있거나 의심되면 provenance와 공식 source를 확인합니다.</li>
               <li>plugin-bundled skill은 metadata를 원본 증거로만 읽습니다.</li>
+              <li>plugin update가 명시되면 `.gitmodules` 기반 plugin update lane을 실행합니다.</li>
               <li>`SKILL.md`는 concise하고 trigger-focused로 유지합니다.</li>
               <li>material change면 `skill-to-html`을 실행하고 검증 결과를 보고합니다.</li>
             </ul>
@@ -691,7 +701,7 @@ node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills</pre>
             <ul class="rules">
               <li>요청 없이 기존 유용한 behavior를 제거하지 않습니다.</li>
               <li>원본 전체를 이 repo에 무조건 복사하지 않습니다.</li>
-              <li>plugin package, MCP config, submodule 자체는 `Plugin update list` 확인 후 별도 workflow로 넘깁니다.</li>
+              <li>plugin package, MCP config, submodule 자체를 명시 요청 없이 incidental하게 업데이트하지 않습니다.</li>
               <li>source-of-truth conflict를 추측으로 해결하지 않습니다.</li>
               <li>rename, split, archive, repo-wide preference 변경을 임의로 진행하지 않습니다.</li>
               <li>HTML, snippets, docs, history를 stale 상태로 남기지 않습니다.</li>

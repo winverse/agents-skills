@@ -1,12 +1,12 @@
 # Skills Repo
 
-이 repo는 내가 자주 쓰는 AI 에이전트용 스킬을 모아두는 개인 스킬 카탈로그다.
+이 repo는 내가 자주 쓰는 AI 에이전트용 스킬과 plugin reference를 모아두는 개인 카탈로그다.
 
 핵심 목표는 특정 에이전트 전용 스킬 저장소를 만드는 것이 아니다. 내가 실제로 자주 쓰는 작업 방식을 `SKILL.md`라는 source instruction으로 정리하고, Codex, Claude, 또는 다른 에이전트가 각 프로젝트의 instruction 파일에서 필요한 스킬만 골라 읽도록 만드는 것이다.
 
 ## 핵심 원칙
 
-- 이 repo는 에이전트 공용 스킬의 source of truth다.
+- 이 repo는 에이전트 공용 스킬과 project-selectable plugin reference의 source of truth다.
 - 스킬은 전역 설치보다 프로젝트별 명시 연결을 기본으로 한다.
 - 프로젝트마다 필요한 스킬만 해당 에이전트의 instruction 파일에 연결한다.
   - Codex: 보통 `AGENTS.md`
@@ -15,6 +15,7 @@
 - 이 repo의 커스텀 스킬이 어떤 작업을 커버한다면, 그 작업에서는 각 에이전트의 기본/global 동작보다 이 repo의 스킬을 우선한다.
 - 각 스킬은 작고, 명확하고, 내 취향에 맞게 수정하기 쉬워야 한다.
 - 긴 취향, 세부 규칙, 평가 prompt, 예시는 `SKILL.md`를 부풀리지 말고 `references/`에 둔다.
+- 외부 plugin은 `plugins/` 아래에 upstream 구조를 그대로 보존하고, bundled `skills/`를 이 repo의 최상위 `skills/`로 풀어내지 않는다.
 
 ## 스킬 포맷
 
@@ -29,6 +30,36 @@ skills/skill-name/
 `SKILL.md`는 에이전트가 읽는 source instruction이다. 특정 런타임에 자동 등록되는 파일이라는 뜻이 아니라, 프로젝트 instruction 파일에서 경로와 trigger를 명시해 불러 쓰는 원본 지시문이다.
 
 `skill.html`은 사람이 빠르게 판단하기 위한 시각 가이드다. 스킬을 프로젝트에 붙이기 전에 목적, trigger, workflow, 파일 구조를 한눈에 확인하는 용도다.
+
+## 플러그인 포맷
+
+외부 plugin은 `plugins/<plugin-name>/` 아래에 둔다. upstream 자체가 plugin manifest, MCP config, hooks, bundled skills를 갖는 경우 이 repo에서는 submodule로 고정하고, 전역 설치나 자동 등록은 하지 않는다.
+
+```text
+plugins/context-mode/
+├── .codex-plugin/
+│   ├── plugin.json
+│   ├── mcp.json
+│   └── hooks.json
+├── skills/
+├── start.mjs
+└── README.md
+
+plugins/code-review-graph/
+├── .mcp.json
+├── pyproject.toml
+├── skills/
+└── README.md
+
+plugins/caveman/
+├── .claude-plugin/
+│   └── plugin.json
+├── skills/
+├── package.json
+└── README.md
+```
+
+`.gitmodules`가 실제 vendored plugin/submodule 목록의 canonical source이고, plugin catalog는 `docs/plugin-catalog.md`에 둔다. 업데이트 후보를 찾는 단일 진입점은 `docs/update-source-registry.md`다. 새 clone에서는 submodule도 함께 초기화해야 한다.
 
 ## 생명주기와 History
 
@@ -46,7 +77,7 @@ skills/skill-name/
 - `show-skills`: 현재 repo의 스킬 목록을 파일 시스템과 history에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천하는 탐색 스킬.
   - Source instruction: `skills/show-skills/SKILL.md`
   - Human visual guide: `skills/show-skills/skill.html`
-- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, runtime이 허용하면 자동 병렬 sub-agent fan-out, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
+- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, `web-research` 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 계약, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
 - `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 우선 diagram-rich `skill.html`을 만들거나 고치는 스킬.
@@ -55,7 +86,7 @@ skills/skill-name/
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
   - Source instruction: `skills/karpathy-thinkings/SKILL.md`
   - Human visual guide: `skills/karpathy-thinkings/skill.html`
-- `skill-update`: 기존 공유 스킬을 수정할 때 `SKILL.md`, references, validator, `skill.html`, snippets, docs, history를 함께 맞추는 유지보수 스킬.
+- `skill-update`: 기존 공유 스킬을 수정할 때 `docs/update-source-registry.md`를 먼저 읽어 `.gitmodules` 기반 vendored source와 workflow primitive source를 구분하고, original/upstream provenance preflight와 `adopt`/`adapt`/`reject`/`defer` 판단에 따라 `SKILL.md`, references, validator, `skill.html`, snippets, docs, history를 함께 맞추는 유지보수 스킬. 사용자가 plugin update를 명시하면 plugin update lane으로 `.gitmodules`, plugin catalog, `Plugin update list`, validator, history까지 함께 맞춘다.
   - Source instruction: `skills/skill-update/SKILL.md`
   - Human visual guide: `skills/skill-update/skill.html`
 - `atomic-committer`: dirty git tree를 secret guard로 검사하고 반복적으로 올라가면 안 되는 local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
@@ -79,9 +110,9 @@ skills/skill-name/
 - `transcript-polisher`: 전사본, 강의 대본, 자막, 회의록을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며, source/output 구조와 `polish` 분량 보존을 검증하고 Claude Code `/goal`식 완료 조건과 평가자용 증거로 긴 검토를 반복하는 스킬.
   - Source instruction: `skills/transcript-polisher/SKILL.md`
   - Human visual guide: `skills/transcript-polisher/skill.html`
-- `terminal-session-automation`: cmux, Warp, generic terminal의 prompt pinning, tab title, session status, workflow note, hook latency, 터미널별 CLI/escape-sequence 자동화를 관리하는 스킬.
-  - Source instruction: `skills/terminal-session-automation/SKILL.md`
-  - Human visual guide: `skills/terminal-session-automation/skill.html`
+- `warp-automation`: Warp가 assistant 응답을 visible title로 선택하도록, 답변 첫 줄에 현재 사용자 프롬프트를 32자 이내로 정리하는 스킬.
+  - Source instruction: `skills/warp-automation/SKILL.md`
+  - Human visual guide: `skills/warp-automation/skill.html`
 - `agent-improvement-loop`: 소진형 실행 전 `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`를 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
   - Source instruction: `skills/agent-improvement-loop/SKILL.md`
   - Human visual guide: `skills/agent-improvement-loop/skill.html`
@@ -98,6 +129,21 @@ skills/skill-name/
   - Source instruction: `skills/design-review/SKILL.md`
   - Human visual guide: `skills/design-review/skill.html`
 
+## 현재 플러그인
+
+- `context-mode`: `mksglu/context-mode` upstream을 `plugins/context-mode` submodule로 고정한 MCP plugin reference다. Codex manifest는 `plugins/context-mode/.codex-plugin/plugin.json`이고, bundled plugin skills는 `plugins/context-mode/skills/`에 그대로 둔다.
+  - Version: `v1.0.136`
+  - Source: `https://github.com/mksglu/context-mode`
+  - Catalog: `docs/plugin-catalog.md`
+- `code-review-graph`: `tirth8205/code-review-graph` upstream을 `plugins/code-review-graph` submodule로 고정한 MCP-enabled code review graph reference다. MCP config는 `plugins/code-review-graph/.mcp.json`이고, bundled upstream skills는 `plugins/code-review-graph/skills/`에 그대로 둔다.
+  - Version: `v2.3.3`
+  - Source: `https://github.com/tirth8205/code-review-graph`
+  - Catalog: `docs/plugin-catalog.md`
+- `caveman`: `JuliusBrussee/caveman` upstream을 `plugins/caveman` submodule로 고정한 token-compression skill/plugin reference다. Claude plugin manifest는 `plugins/caveman/.claude-plugin/plugin.json`이고, bundled upstream skills는 `plugins/caveman/skills/`에 그대로 둔다.
+  - Version: `v1.8.2`
+  - Source: `https://github.com/JuliusBrussee/caveman`
+  - Catalog: `docs/plugin-catalog.md`
+
 ## 에이전트 연결 방식
 
 이 repo의 스킬은 각 에이전트의 project instruction 파일에서 연결한다.
@@ -109,7 +155,7 @@ Codex 프로젝트 예시:
 
 - Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 - Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
-- For web-research, automatically use parallel sub-agent fan-out by default when the runtime permits delegation. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
+- Treat any user request that invokes `web-research` or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
 ```
 
 Claude 프로젝트 예시:
@@ -119,7 +165,7 @@ Claude 프로젝트 예시:
 
 - For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
 - Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
-- For web-research, automatically use parallel sub-agent fan-out by default when the runtime permits delegation. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
+- Treat any user request that invokes `web-research` or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
 ```
 
 `<skills-root>`는 이 repo를 clone한 실제 위치로 바꾼다. 컴퓨터를 바꾸면 새 컴퓨터에서 이 repo를 clone한 경로만 다시 지정하면 된다. `<codex-home>`은 보통 `$HOME/.codex`이고, `CODEX_HOME`을 따로 설정했다면 그 값을 쓴다.
@@ -128,6 +174,7 @@ Claude 프로젝트 예시:
 
 ```bash
 cd /path/to/skills
+git submodule update --init --recursive
 export SKILLS_ROOT="$PWD"
 ```
 
@@ -169,7 +216,7 @@ export SKILLS_ROOT="$PWD"
 
 프로젝트에 기존 스킬을 연결하는 절차는 `docs/project-skill-setup.md`를 따른다. 새 스킬을 만들거나 기존 스킬을 크게 바꾸는 검증은 이 섹션과 `docs/skill-inspector.md`를 함께 따른다.
 
-기존 스킬을 업데이트할 때는 `skill-update`를 사용해 source instruction, references, validator, visual guide, snippets, docs, history를 하나의 패키지로 맞춘다.
+기존 스킬을 업데이트할 때는 `skill-update`를 사용한다. 먼저 `docs/update-source-registry.md`를 읽고, vendored plugin/submodule 후보는 `.gitmodules`를 canonical source로 확인하며, workflow primitive는 각 `upstream-dependency-map.md`를 기준으로 분리한다. 원본이 있거나 의심되면 `web-research`로 확인한 뒤 `adopt`, `adapt`, `reject`, `defer` 판단을 남기고 local delta를 반영한다. Plugin update가 명시된 요청이면 plugin update lane으로 처리하고, `scripts/validate-plugins.ts`가 `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`의 path/URL drift를 막아야 한다.
 
 `skills/**/*.md`는 한국어 우선으로 작성한다. `SKILL.md`와 `references/*.md`의 설명, 절차, 표 라벨은 한국어로 쓰고, 코드 식별자, 명령, 파일 경로, 제품명, 프로토콜명, upstream skill 이름처럼 원문 표기가 더 정확한 용어만 영어로 남긴다.
 
@@ -234,7 +281,7 @@ node skills/project-structure/scripts/validate-project-structure.ts skills/proje
 node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow
 node skills/spec-workflow/scripts/validate-spec-workflow.ts skills/spec-workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
-node skills/terminal-session-automation/scripts/validate-terminal-session-automation.ts skills/terminal-session-automation
+node skills/warp-automation/scripts/validate-warp-automation.ts skills/warp-automation
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
 node skills/agent-eval-harness/scripts/validate-agent-eval-harness.ts skills/agent-eval-harness
 node skills/browser-qa/scripts/validate-browser-qa.ts skills/browser-qa
@@ -247,11 +294,12 @@ repo 운영 기준과 문서 정합성도 함께 확인한다.
 ```bash
 node scripts/validate-korean-markdown.ts .
 node scripts/validate-skill-html.ts .
+node scripts/validate-plugins.ts .
 node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `spec-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/spec-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `spec-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/spec-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
 
 Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 
@@ -267,7 +315,7 @@ Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skil
 - 긴 설명, 평가 prompt, source rule, 개인 취향은 `references/`로 분리한다.
 - 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `skill-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
 - 스킬을 추가, 삭제, rename, archive, restore하면 `show-skills`의 HTML catalog를 `update-html-catalog.ts`로 재생성한다.
-- 기존 스킬을 업데이트할 때는 `skill-update`로 관련 references, validator, snippet, docs, history까지 함께 맞춘다.
+- 기존 스킬을 업데이트할 때는 `skill-update`로 `docs/update-source-registry.md`를 먼저 읽고, `.gitmodules`와 workflow source map을 기준으로 original/upstream provenance preflight, source/release 비교, references, validator, snippet, docs, history까지 함께 맞춘다. Plugin update가 포함되면 `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, `scripts/validate-plugins.ts`, history까지 같은 변경 단위로 닫는다.
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
 - 문서 최신화, stale 설명, 문서 간 충돌 검토 요청은 `sync-docs`로 처리한다.
 - repo가 소유하는 validator는 TypeScript로 작성하고 `node <path>.ts`로 실행한다.
