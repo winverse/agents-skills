@@ -13,14 +13,15 @@ description: "현재 사실, 출처 검증, 추천, 시장·제품 비교, 법·
 
 1. 질문의 현재성 위험과 stakes를 판단한다.
 2. official/source-of-record를 먼저 찾는다.
-3. 사용자가 단일 에이전트 조사를 명시하지 않았고 runtime이 delegation을 허용하면, web-research 시작 시 자동으로 parallel sub-agent fan-out을 쓴다.
-4. 단일 에이전트는 사용자가 명시적으로 요구하거나 private data, runtime/tool policy, 아주 작은 quick check 때문에 병렬 위임이 안전하지 않을 때만 쓴다.
-5. 단일 에이전트 예외를 쓰면 시작 업데이트나 최종 답변에 한 문장으로 skip reason을 밝힌다.
-6. 추천, 비교, 구현 계획, skill update, PR, architecture note, product decision의 입력으로 쓰이는 조사는 한 official source가 완전히 끝내지 않는 한 verified search로 분류한다.
-7. main agent는 하위 agent의 source ledger를 합치고, 출처 충돌과 최종 판단을 직접 책임진다.
-8. source ledger에 URL, 날짜, claim, confidence를 기록한다.
-9. 충돌하는 출처가 있으면 conflict를 숨기지 않는다.
-10. 답변에는 필요한 citation을 붙인다.
+3. `web-research` 또는 alias 호출 자체를 research portion에 대한 explicit parallel sub-agent fan-out, delegation, parallel agent work 요청으로 해석한다.
+4. 사용자가 단일 에이전트 조사를 명시하지 않았고 runtime이 delegation을 허용하면, web-research 시작 시 바로 하위 agent를 병렬로 나눈다.
+5. 단일 에이전트는 사용자가 명시적으로 요구하거나 private data, runtime/tool policy, 아주 작은 quick check 때문에 병렬 위임이 안전하지 않을 때만 쓴다.
+6. 단일 에이전트 예외를 쓰면 시작 업데이트나 최종 답변에 한 문장으로 skip reason을 밝힌다.
+7. 추천, 비교, 구현 계획, skill update, PR, architecture note, product decision의 입력으로 쓰이는 조사는 한 official source가 완전히 끝내지 않는 한 verified search로 분류한다.
+8. main agent는 하위 agent의 source ledger를 합치고, 출처 충돌과 최종 판단을 직접 책임진다.
+9. source ledger에 URL, 날짜, claim, confidence를 기록한다.
+10. 충돌하는 출처가 있으면 conflict를 숨기지 않는다.
+11. 답변에는 필요한 citation을 붙인다.
 
 ## output defaults 기준
 

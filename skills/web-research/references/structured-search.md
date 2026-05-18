@@ -25,7 +25,7 @@
 
 ## parallel sub-agent fan-out 기준
 
-web-research가 활성화되면 사용자가 단일 에이전트 조사를 명시하지 않는 한 parallel sub-agent fan-out을 기본 실행 경로로 쓴다. main agent는 질문을 독립 concept block으로 나누고, 하위 agent는 각 block의 source targeting, extraction, source ledger 초안을 만든다.
+web-research 또는 alias 호출 자체를 research portion에 대한 explicit parallel sub-agent fan-out, delegation, parallel agent work 요청으로 해석한다. 사용자가 단일 에이전트 조사를 명시하지 않는 한 parallel sub-agent fan-out을 기본 실행 경로로 쓰며, main agent는 질문을 독립 concept block으로 나누고, 하위 agent는 각 block의 source targeting, extraction, source ledger 초안을 만든다.
 
 단일 에이전트 조사는 예외다. 사용자가 "단일 에이전트로 해줘"라고 요구했거나, private data가 포함됐거나, runtime/tool policy가 delegation을 막거나, official quick check 하나로 충분한 아주 작은 확인일 때만 main-agent query fan-out으로 처리한다.
 
