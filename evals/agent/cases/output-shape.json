@@ -1,5 +1,35 @@
 [
   {
+    "id": "output-course-evaluator-per-student-feedback",
+    "title": "Course evaluation output creates per-student files and individualized comments",
+    "prompt": "과제 답안 CSV를 채점해서 학생별 평가 파일로 만들어줘",
+    "scope": "output_quality",
+    "expectedSkills": ["course-evaluator"],
+    "forbiddenSkills": [],
+    "agentSurfaces": ["codex"],
+    "assumptionDate": "2026-05-15",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/course-evaluator/SKILL.md",
+        "value": "학생별 파일"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/course-evaluator/SKILL.md",
+        "value": "점수는 관대하게"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/course-evaluator/references/scoring-feedback.md",
+        "value": "학생별로 새로 쓴다"
+      }
+    ]
+  },
+  {
     "id": "output-code-review-findings-first",
     "title": "Code review answers lead with findings",
     "prompt": "이 diff를 코드 리뷰해줘",

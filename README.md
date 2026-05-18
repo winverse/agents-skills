@@ -79,6 +79,9 @@ skills/skill-name/
 - `transcript-polisher`: 전사본, 강의 대본, 자막, 회의록을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며, source/output 구조와 `polish` 분량 보존을 검증하고 Claude Code `/goal`식 완료 조건과 평가자용 증거로 긴 검토를 반복하는 스킬.
   - Source instruction: `skills/transcript-polisher/SKILL.md`
   - Human visual guide: `skills/transcript-polisher/skill.html`
+- `course-evaluator`: 학생 답안 CSV, 스프레드시트, 과제 응답을 구조화 파싱하고 루브릭과 사용자 채점 톤에 맞춰 학생별 Markdown 평가 파일과 개별 피드백을 만드는 스킬.
+  - Source instruction: `skills/course-evaluator/SKILL.md`
+  - Human visual guide: `skills/course-evaluator/skill.html`
 - `terminal-session-automation`: cmux, Warp, generic terminal의 prompt pinning, tab title, session status, workflow note, hook latency, 터미널별 CLI/escape-sequence 자동화를 관리하는 스킬.
   - Source instruction: `skills/terminal-session-automation/SKILL.md`
   - Human visual guide: `skills/terminal-session-automation/skill.html`
@@ -234,6 +237,7 @@ node skills/project-structure/scripts/validate-project-structure.ts skills/proje
 node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow
 node skills/spec-workflow/scripts/validate-spec-workflow.ts skills/spec-workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
+node skills/course-evaluator/scripts/validate-course-evaluator.ts skills/course-evaluator
 node skills/terminal-session-automation/scripts/validate-terminal-session-automation.ts skills/terminal-session-automation
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
 node skills/agent-eval-harness/scripts/validate-agent-eval-harness.ts skills/agent-eval-harness

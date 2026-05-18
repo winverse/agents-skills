@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>course-evaluator</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg:#f8fafc; --surface:#fff; --muted-surface:#f1f5f9; --text:#111827; --muted:#6b7280;
+      --border:#d1d5db; --accent:#2563eb; --ok:#1f7a52; --warn:#a16207; --danger:#b42318; --ink:#0f172a;
+      --accent-soft:#eff6ff; --ok-soft:#e7f5ec; --warn-soft:#fef3c7; --danger-soft:#fee4e2;
+    }
+    * { box-sizing:border-box; }
+    html, body { width:100%; min-height:100%; margin:0; background:var(--bg); color:var(--text); font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
+    .shell { width:100%; max-width:1180px; margin:0 auto; padding:32px; }
+    header, section { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:18px; }
+    header { display:grid; grid-template-columns:1fr 320px; gap:18px; align-items:start; }
+    h1, h2, h3, p { margin:0; }
+    h1 { font-size:28px; line-height:1.2; }
+    h2 { margin-bottom:14px; font-size:18px; }
+    h3 { margin-bottom:7px; font-size:15px; }
+    p, li { color:var(--muted); }
+    a { color:var(--accent); overflow-wrap:anywhere; }
+    code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    pre { margin:0; padding:14px; color:#e5e7eb; background:var(--ink); border-radius:8px; overflow-x:auto; white-space:pre; font-size:12px; }
+    ul { margin:8px 0 0; padding-left:18px; }
+    svg { display:block; width:100%; height:auto; }
+    .pair, .cell, .metric { border:1px solid var(--border); border-radius:8px; background:var(--surface); padding:14px; }
+    .pair { background:var(--muted-surface); display:grid; gap:8px; }
+    .pair span { display:flex; justify-content:space-between; gap:14px; color:var(--muted); }
+    .sub { margin-top:8px; max-width:760px; color:var(--muted); }
+    .tag { display:inline-block; margin-bottom:8px; padding:2px 8px; border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .danger { color:var(--danger); } .accent { color:var(--accent); }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .matrix { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .flow { height:240px; border:1px solid var(--border); border-radius:8px; background:var(--muted-surface); }
+    .io { height:280px; border:1px solid var(--border); border-radius:8px; background:#fbfdff; }
+    .map { height:310px; border:1px solid var(--border); border-radius:8px; background:#fbfdff; }
+    .bar { display:grid; gap:10px; }
+    .bar-row { display:grid; grid-template-columns:190px 1fr 74px; gap:12px; align-items:center; }
+    .bar-track { height:18px; border:1px solid var(--border); border-radius:5px; background:var(--muted-surface); overflow:hidden; }
+    .bar-fill { height:100%; border-radius:4px; }
+    .legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; color:var(--muted); font-size:12px; }
+    .sw { width:11px; height:11px; border:1px solid rgba(0,0,0,.12); border-radius:3px; display:inline-block; margin-right:5px; vertical-align:-1px; }
+    .tree { background:var(--ink); color:#e5e7eb; border-radius:8px; padding:14px; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .note { margin-top:8px; font-size:13px; color:var(--muted); }
+    @media (max-width: 760px) {
+      .shell { padding:16px; }
+      header, section { padding:16px; overflow-x:auto; }
+      header, .grid2, .grid3, .grid4, .matrix { grid-template-columns:1fr; }
+      .pair span { display:block; }
+      .flow, .io, .map { min-width:720px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>course-evaluator</h1>
+        <p class="sub">학생 답안 CSV, 스프레드시트, 과제 응답, 루브릭을 읽어 학생별 Markdown 평가 파일을 만든다. 점수 산정과 교육적 코멘트를 분리하고, embedded newline을 보존하며, 반복 코멘트를 막는 채점 스킬이다.</p>
+      </div>
+      <div class="pair" aria-label="스킬 파일 쌍">
+        <span><strong>에이전트 지시</strong><a href="SKILL.md">SKILL.md</a></span>
+        <span><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></span>
+        <span><strong>상세 기준</strong><a href="references/scoring-feedback.md">scoring-feedback.md</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>사용 판단 매트릭스</h2>
+      <div class="matrix">
+        <div class="cell"><span class="tag ok">사용</span><h3>학생별 평가 파일</h3><p>학생 답안을 읽고 <code>평가/학생명.md</code> 형태의 개별 피드백과 점수가 필요할 때.</p></div>
+        <div class="cell"><span class="tag ok">사용</span><h3>CSV 구조 보존</h3><p>답안 cell에 줄바꿈, 쉼표, 따옴표가 있어 line split으로 깨질 위험이 있을 때.</p></div>
+        <div class="cell"><span class="tag accent">함께 사용</span><h3>기존 평가 스타일</h3><p>이전 결과의 형식은 유지하되 문장과 보완 방향은 학생별로 새로 써야 할 때.</p></div>
+        <div class="cell"><span class="tag danger">건너뜀</span><h3>요약만 필요한 작업</h3><p>개별 채점, 루브릭 적용, 개인정보 최소화, 파일 수 검산이 필요 없는 단순 집계.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>채점 흐름</h2>
+      <svg class="flow" viewBox="0 0 1080 240" role="img" aria-label="입력 확인, 구조화 파싱, 정책 고정, 학생별 읽기, 점수와 코멘트 작성, 파일 생성, 검증으로 이어지는 채점 흐름">
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path></marker></defs>
+        <g fill="#fff" stroke="#d1d5db" stroke-width="2">
+          <rect x="24" y="76" width="128" height="74" rx="8"></rect>
+          <rect x="176" y="76" width="132" height="74" rx="8"></rect>
+          <rect x="332" y="76" width="132" height="74" rx="8"></rect>
+          <rect x="488" y="76" width="132" height="74" rx="8"></rect>
+          <rect x="644" y="76" width="132" height="74" rx="8"></rect>
+          <rect x="800" y="76" width="122" height="74" rx="8"></rect>
+          <rect x="946" y="76" width="110" height="74" rx="8"></rect>
+        </g>
+        <g stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)">
+          <line x1="152" y1="113" x2="172" y2="113"></line>
+          <line x1="308" y1="113" x2="328" y2="113"></line>
+          <line x1="464" y1="113" x2="484" y2="113"></line>
+          <line x1="620" y1="113" x2="640" y2="113"></line>
+          <line x1="776" y1="113" x2="796" y2="113"></line>
+          <line x1="922" y1="113" x2="942" y2="113"></line>
+        </g>
+        <g text-anchor="middle" fill="#111827" font-size="14" font-weight="700">
+          <text x="88" y="106">입력 확인</text><text x="242" y="106">구조화 파싱</text><text x="398" y="106">정책 고정</text><text x="554" y="106">학생별 읽기</text><text x="710" y="106">점수+코멘트</text><text x="861" y="106">파일 생성</text><text x="1001" y="106">검증</text>
+        </g>
+        <g text-anchor="middle" fill="#6b7280" font-size="12">
+          <text x="88" y="128">루브릭/배점</text><text x="242" y="128">embedded newline</text><text x="398" y="128">러프/합쇼체</text><text x="554" y="128">맞은 점/누락</text><text x="710" y="128">분리 작성</text><text x="861" y="128">학생명.md</text><text x="1001" y="128">합계/반복</text>
+        </g>
+      </svg>
+    </section>
+
+    <section>
+      <h2>입출력 스키마</h2>
+      <svg class="io" viewBox="0 0 1080 280" role="img" aria-label="CSV, 루브릭, 톤 정책이 파서와 채점기를 거쳐 학생별 Markdown 평가 파일로 나오는 입출력 구조">
+        <defs><marker id="ioArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6b7280"></path></marker></defs>
+        <g fill="#fff" stroke="#d1d5db" stroke-width="2">
+          <rect x="36" y="44" width="190" height="58" rx="8"></rect>
+          <rect x="36" y="112" width="190" height="58" rx="8"></rect>
+          <rect x="36" y="180" width="190" height="58" rx="8"></rect>
+          <rect x="330" y="76" width="170" height="60" rx="8"></rect>
+          <rect x="330" y="154" width="170" height="60" rx="8"></rect>
+          <rect x="604" y="58" width="170" height="60" rx="8"></rect>
+          <rect x="604" y="136" width="170" height="60" rx="8"></rect>
+          <rect x="856" y="92" width="178" height="96" rx="8"></rect>
+        </g>
+        <g stroke="#6b7280" stroke-width="2" marker-end="url(#ioArrow)">
+          <line x1="226" y1="73" x2="326" y2="104"></line>
+          <line x1="226" y1="141" x2="326" y2="176"></line>
+          <line x1="226" y1="209" x2="326" y2="184"></line>
+          <line x1="500" y1="106" x2="600" y2="88"></line>
+          <line x1="500" y1="184" x2="600" y2="166"></line>
+          <line x1="774" y1="88" x2="852" y2="126"></line>
+          <line x1="774" y1="166" x2="852" y2="154"></line>
+        </g>
+        <g text-anchor="middle" fill="#111827" font-size="14" font-weight="700">
+          <text x="131" y="78">답안 CSV</text><text x="131" y="146">루브릭/배점</text><text x="131" y="214">톤 요청</text>
+          <text x="415" y="111">구조화 파서</text><text x="415" y="189">정책 해석</text>
+          <text x="689" y="93">점수 산정</text><text x="689" y="171">개별 코멘트</text>
+          <text x="945" y="130">학생별 Markdown</text><text x="945" y="156">평가/학생명.md</text>
+        </g>
+        <g text-anchor="middle" fill="#6b7280" font-size="12">
+          <text x="131" y="96">줄바꿈 보존</text><text x="131" y="164">만점 기준</text><text x="131" y="232">러프/합쇼체</text>
+          <text x="415" y="129">학생·문항 검산</text><text x="415" y="207">모범 답안 방향</text>
+          <text x="689" y="111">문항별 합계</text><text x="689" y="189">학생 표현 근거</text>
+        </g>
+      </svg>
+    </section>
+
+    <section>
+      <h2>품질 우선순위 차트</h2>
+      <div class="bar" aria-label="course-evaluator 품질 우선순위 막대 차트">
+        <div class="bar-row"><strong>CSV 파싱 무결성</strong><div class="bar-track"><div class="bar-fill" style="width:100%; background:var(--danger);"></div></div><span>필수</span></div>
+        <div class="bar-row"><strong>학생별 근거 코멘트</strong><div class="bar-track"><div class="bar-fill" style="width:96%; background:var(--ok);"></div></div><span>필수</span></div>
+        <div class="bar-row"><strong>점수 합계 검산</strong><div class="bar-track"><div class="bar-fill" style="width:90%; background:var(--accent);"></div></div><span>강함</span></div>
+        <div class="bar-row"><strong>반복 방지</strong><div class="bar-track"><div class="bar-fill" style="width:88%; background:var(--warn);"></div></div><span>강함</span></div>
+        <div class="bar-row"><strong>원본 개인정보 최소 복사</strong><div class="bar-track"><div class="bar-fill" style="width:82%; background:var(--danger);"></div></div><span>강함</span></div>
+      </div>
+      <p class="note">점수는 관대할 수 있지만 코멘트는 얕아지면 안 된다. 같은 감점 사유라도 학생이 실제로 쓴 표현과 빠진 개념을 다르게 반영한다.</p>
+    </section>
+
+    <section>
+      <h2>파일과 리소스 지도</h2>
+      <div class="grid2">
+        <svg class="map" viewBox="0 0 520 310" role="img" aria-label="course-evaluator 스킬 파일 관계도">
+          <defs><marker id="mapArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6b7280"></path></marker></defs>
+          <g fill="#fff" stroke="#d1d5db" stroke-width="2">
+            <rect x="178" y="118" width="164" height="68" rx="8"></rect>
+            <rect x="24" y="34" width="164" height="58" rx="8"></rect>
+            <rect x="24" y="218" width="164" height="58" rx="8"></rect>
+            <rect x="332" y="34" width="164" height="58" rx="8"></rect>
+            <rect x="332" y="218" width="164" height="58" rx="8"></rect>
+          </g>
+          <g stroke="#6b7280" stroke-width="2" marker-end="url(#mapArrow)">
+            <line x1="188" y1="63" x2="250" y2="116"></line>
+            <line x1="188" y1="247" x2="250" y2="188"></line>
+            <line x1="332" y1="63" x2="270" y2="116"></line>
+            <line x1="332" y1="247" x2="270" y2="188"></line>
+          </g>
+          <g text-anchor="middle" fill="#111827" font-size="14" font-weight="700">
+            <text x="260" y="149">course-evaluator</text>
+            <text x="106" y="67">SKILL.md</text>
+            <text x="106" y="251">skill.html</text>
+            <text x="414" y="67">scoring-feedback</text>
+            <text x="414" y="251">validator</text>
+          </g>
+          <g text-anchor="middle" fill="#6b7280" font-size="12">
+            <text x="260" y="168">스킬 폴더</text>
+            <text x="106" y="80">핵심 계약</text>
+            <text x="106" y="264">시각 가이드</text>
+            <text x="414" y="80">채점 톤</text>
+            <text x="414" y="264">정적 검사</text>
+          </g>
+        </svg>
+        <div class="tree">skills/course-evaluator/
+├── SKILL.md
+├── skill.html
+├── agents/openai.yaml
+├── references/
+│   └── scoring-feedback.md
+└── scripts/
+    └── validate-course-evaluator.ts</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>검증 게이트</h2>
+      <div class="grid3">
+        <div class="cell"><span class="tag ok">입력 검산</span><h3>학생 수와 문항 수</h3><p>파싱 후 학생 수, 문항 수, 빈 답안 수를 확인한다.</p></div>
+        <div class="cell"><span class="tag ok">출력 검산</span><h3>파일 수와 총점</h3><p>출력 Markdown 파일 수와 학생 수, 문항별 점수 합계와 총점이 일치해야 한다.</p></div>
+        <div class="cell"><span class="tag warn">문장 검산</span><h3>반복 코멘트</h3><p>비슷한 문장 시작이나 같은 보완 문장이 반복되면 학생 답안 근거를 다시 붙인다.</p></div>
+      </div>
+      <div style="margin-top:12px">
+        <pre>node scripts/validate-skill.ts skills/course-evaluator
+node skills/course-evaluator/scripts/validate-course-evaluator.ts skills/course-evaluator
+node scripts/validate-korean-markdown.ts .
+node scripts/validate-skill-html.ts .
+node scripts/validate-skill-repo.ts .
+node scripts/run-agent-evals.ts</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>오용 방지</h2>
+      <div class="grid2">
+        <div class="cell"><span class="tag ok">허용</span><ul><li>RFC 4180 호환 파서나 구조화 CSV 기능을 사용한다.</li><li>러프한 채점과 깊은 코멘트를 분리한다.</li><li>학생이 맞힌 핵심, 빠진 개념, 고득점 보완 방향을 따로 쓴다.</li><li>원본 답안은 필요한 짧은 근거만 인용하거나 요약한다.</li></ul></div>
+        <div class="cell"><span class="tag danger">금지</span><ul><li>line split으로 embedded newline 답안을 깨지 않는다.</li><li>학생 이름만 바꾼 stock phrase를 반복하지 않는다.</li><li>루브릭 문장을 복사해 코멘트를 대신하지 않는다.</li><li>개인정보나 원본 CSV 전체를 새 artifact에 불필요하게 붙이지 않는다.</li></ul></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

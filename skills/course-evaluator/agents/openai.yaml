@@ -1,0 +1,4 @@
+interface:
+  display_name: "Course Evaluator"
+  short_description: "학생 답안 CSV를 학생별 Markdown 평가와 개별 피드백으로 채점"
+  default_prompt: "$course-evaluator를 사용해서 학생 답안 CSV를 구조화 파싱하고, 루브릭과 채점 톤에 맞춰 학생별 Markdown 평가 파일을 만들고, 반복 코멘트와 점수 합계를 검증해줘."
