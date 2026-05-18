@@ -10,3 +10,6 @@
 !/evals/agent/outputs/README.md
 /evals/agent/artifacts/*
 !/evals/agent/artifacts/README.md
+
+# Local web research snapshots.
+/warp-pricing-snapshot.md
