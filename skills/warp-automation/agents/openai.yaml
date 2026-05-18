@@ -1,4 +1,0 @@
-interface:
-  display_name: "Warp Automation"
-  short_description: "Format replies so Warp can use the assistant response first line as the visible title"
-  default_prompt: "Use $warp-automation when Warp should use the assistant response as the visible title. Put a short summary of the current user prompt on the first line, keep it 32 characters or fewer, do not add Q:, Prompt:, markdown headings, quotes, secrets, private URLs, or full local paths, leave the second line blank, and continue the real answer on the third line. Do not run terminal or config workflows unless the user separately asks for that work."

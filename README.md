@@ -110,9 +110,6 @@ plugins/caveman/
 - `transcript-polisher`: 전사본, 강의 대본, 자막, 회의록을 코드 치환 없이 직접 읽고 문단/구문 단위로 다듬으며, source/output 구조와 `polish` 분량 보존을 검증하고 Claude Code `/goal`식 완료 조건과 평가자용 증거로 긴 검토를 반복하는 스킬.
   - Source instruction: `skills/transcript-polisher/SKILL.md`
   - Human visual guide: `skills/transcript-polisher/skill.html`
-- `warp-automation`: Warp가 assistant 응답을 visible title로 선택하도록, 답변 첫 줄에 현재 사용자 프롬프트를 32자 이내로 정리하는 스킬.
-  - Source instruction: `skills/warp-automation/SKILL.md`
-  - Human visual guide: `skills/warp-automation/skill.html`
 - `agent-improvement-loop`: 소진형 실행 전 `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`를 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
   - Source instruction: `skills/agent-improvement-loop/SKILL.md`
   - Human visual guide: `skills/agent-improvement-loop/skill.html`
@@ -281,7 +278,6 @@ node skills/project-structure/scripts/validate-project-structure.ts skills/proje
 node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow
 node skills/spec-workflow/scripts/validate-spec-workflow.ts skills/spec-workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
-node skills/warp-automation/scripts/validate-warp-automation.ts skills/warp-automation
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
 node skills/agent-eval-harness/scripts/validate-agent-eval-harness.ts skills/agent-eval-harness
 node skills/browser-qa/scripts/validate-browser-qa.ts skills/browser-qa

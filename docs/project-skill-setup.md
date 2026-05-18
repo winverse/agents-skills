@@ -69,7 +69,6 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/spec-workflow.md`: only the Workflow suite implementation half, PRD/issue/spec based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.
-- `project-snippets/warp-automation.md`: only Warp response-title fallback, where the assistant response first line summarizes the current user prompt and the real answer starts after a blank second line.
 - `project-snippets/agent-eval-harness.md`: only initial agent eval harness setup, skill routing cases, cross-agent portability checks, guardrail checks, artifact hygiene, local runner wiring, and regression capture.
 
 ## Forking Rule
