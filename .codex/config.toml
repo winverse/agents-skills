@@ -1,6 +1,15 @@
 [features]
 hooks = true
 
+[[hooks.SessionStart]]
+matcher = "startup|resume"
+
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = "echo 'CAVEMAN MODE ACTIVE. Rules: Drop articles/filler/pleasantries/hedging. Fragments OK. Short synonyms. Pattern: [thing] [action] [reason]. [next step]. Code/commits/security: write normal. User says stop caveman or normal mode to deactivate.'"
+timeout = 5
+statusMessage = "Loading caveman mode"
+
 [[hooks.PostToolUse]]
 matcher = "^apply_patch$|^functions.apply_patch$|^Edit$|^Write$"
 
@@ -9,11 +18,3 @@ type = "command"
 command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/ensure_skill_html.mjs" --auto'
 timeout = 300
 statusMessage = "Auto-updating skill HTML and validating repo"
-
-[[hooks.UserPromptSubmit]]
-
-[[hooks.UserPromptSubmit.hooks]]
-type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/pin_prompt_title.mjs"'
-timeout = 5
-statusMessage = "Pinning prompt to terminal session title"

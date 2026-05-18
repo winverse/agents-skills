@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>warp-automation</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --muted-surface: #eef2f7;
+      --text: #111827;
+      --muted: #64748b;
+      --border: #d1d5db;
+      --accent: #2563eb;
+      --ok: #1f7a52;
+      --warn: #a16207;
+      --danger: #b42318;
+      --ink: #0f172a;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .shell {
+      max-width: 1192px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    header,
+    section {
+      margin-bottom: 18px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin-bottom: 7px;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    code,
+    pre,
+    .tree {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    pre,
+    .tree {
+      margin: 0;
+      padding: 14px;
+      color: #e5e7eb;
+      background: var(--ink);
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .file-pair {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      background: var(--muted-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .file-pair span {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+    }
+
+    .matrix,
+    .grid2,
+    .grid3 {
+      display: grid;
+      gap: 12px;
+    }
+
+    .matrix {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .grid2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cell {
+      min-width: 0;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 2px 8px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+    .accent { color: var(--accent); }
+
+    .flow,
+    .map,
+    .bars {
+      width: 100%;
+      background: var(--muted-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .flow { height: 210px; }
+    .map { height: 220px; }
+    .bars { height: 190px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--muted-surface);
+      font-size: 13px;
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 860px) {
+      .shell { padding: 18px; }
+      header,
+      .matrix,
+      .grid2,
+      .grid3 { grid-template-columns: 1fr; }
+      .flow,
+      .map,
+      .bars { height: auto; min-height: 210px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>warp-automation</h1>
+        <p>Warp가 assistant 응답을 title 후보로 선택하는 상황에서, 답변 첫 줄에 사용자 프롬프트를 짧게 정리하는 응답 형식 스킬.</p>
+      </div>
+      <div class="file-pair" aria-label="필수 파일과 보조 리소스">
+        <span><strong>에이전트 지시문</strong><a href="SKILL.md">SKILL.md</a></span>
+        <span><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></span>
+        <span><strong>작성 규칙</strong><a href="references/response-title-format.md">references/response-title-format.md</a></span>
+        <span><strong>검증기</strong><a href="scripts/validate-warp-automation.ts">scripts/validate-warp-automation.ts</a></span>
+        <span><strong>프로젝트 snippet</strong><a href="../../project-snippets/warp-automation.md">project-snippets/warp-automation.md</a></span>
+      </div>
+    </header>
+
+    <section>
+      <h2>사용 판단 매트릭스</h2>
+      <div class="matrix">
+        <div class="cell">
+          <span class="tag ok">사용</span>
+          <h3>Warp title fallback</h3>
+          <p>Warp UI가 assistant 응답 첫 줄을 title 후보로 잡도록 답변 형식을 맞출 때.</p>
+        </div>
+        <div class="cell">
+          <span class="tag accent">핵심</span>
+          <h3>첫 줄만 선택</h3>
+          <p>사용자 프롬프트를 32자 이내로 정리하고 둘째 줄을 비운 뒤 답변한다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag warn">주의</span>
+          <h3>민감정보 제외</h3>
+          <p>secret, token, private URL, full local path는 title에 넣지 않는다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag danger">건너뜀</span>
+          <h3>자동화 절차</h3>
+          <p>terminal이나 config workflow는 기본 작업이 아니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>응답 흐름</h2>
+      <svg class="flow" viewBox="0 0 900 210" role="img" aria-label="응답 첫 줄 title fallback 흐름">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+          </marker>
+        </defs>
+        <rect x="28" y="64" width="170" height="74" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="113" y="94" text-anchor="middle" font-size="14" font-weight="700">프롬프트 읽기</text>
+        <text x="113" y="118" text-anchor="middle" font-size="12" fill="#64748b">현재 사용자 요청</text>
+        <line x1="198" y1="101" x2="262" y2="101" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="266" y="64" width="170" height="74" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="351" y="94" text-anchor="middle" font-size="14" font-weight="700">짧은 title 선택</text>
+        <text x="351" y="118" text-anchor="middle" font-size="12" fill="#64748b">32자 이내</text>
+        <line x1="436" y1="101" x2="500" y2="101" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="504" y="64" width="170" height="74" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="589" y="94" text-anchor="middle" font-size="14" font-weight="700">첫 줄에 배치</text>
+        <text x="589" y="118" text-anchor="middle" font-size="12" fill="#64748b">접두사 없음</text>
+        <line x1="674" y1="101" x2="738" y2="101" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
+        <rect x="742" y="64" width="130" height="74" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+        <text x="807" y="94" text-anchor="middle" font-size="14" font-weight="700">본문 작성</text>
+        <text x="807" y="118" text-anchor="middle" font-size="12" fill="#64748b">셋째 줄부터</text>
+      </svg>
+    </section>
+
+    <section>
+      <h2>입출력 스키마</h2>
+      <div class="grid2">
+        <div class="cell">
+          <h3>입력</h3>
+          <ul>
+            <li>현재 사용자 프롬프트</li>
+            <li>Warp title fallback이 켜져 있다는 사용자 의도</li>
+            <li>일반 답변을 원하는지 여부</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h3>출력</h3>
+          <pre>사용자 질문 요약
+
+실제 답변 본문</pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>예시 차트</h2>
+      <svg class="bars" viewBox="0 0 900 190" role="img" aria-label="title 작성 규칙 우선순위 차트">
+        <line x1="230" y1="38" x2="230" y2="154" stroke="#d1d5db"></line>
+        <line x1="230" y1="154" x2="840" y2="154" stroke="#d1d5db"></line>
+        <text x="34" y="62" font-size="13" font-weight="700">현재 프롬프트 반영</text>
+        <rect x="230" y="44" width="560" height="22" fill="#2563eb"></rect>
+        <text x="34" y="98" font-size="13" font-weight="700">32자 이내</text>
+        <rect x="230" y="80" width="500" height="22" fill="#1f7a52"></rect>
+        <text x="34" y="134" font-size="13" font-weight="700">민감정보 제외</text>
+        <rect x="230" y="116" width="460" height="22" fill="#a16207"></rect>
+      </svg>
+      <table aria-label="프롬프트와 첫 줄 title 예시">
+        <thead>
+          <tr>
+            <th>사용자 프롬프트</th>
+            <th>첫 줄 title</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>한 번 테스트해보자. 잘 나오는지.</td>
+            <td>한 번 테스트해보자</td>
+          </tr>
+          <tr>
+            <td>스킬이 너무 복잡해. 응답 첫 줄만 쓰면 돼.</td>
+            <td>응답 첫 줄로 단순화</td>
+          </tr>
+          <tr>
+            <td>커밋 푸쉬해줘</td>
+            <td>커밋 푸시 요청</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>파일 관계 지도</h2>
+      <div class="grid2">
+        <div class="tree">skills/warp-automation/
+├── SKILL.md
+├── skill.html
+├── agents/
+│   └── openai.yaml
+├── references/
+│   └── response-title-format.md
+└── scripts/
+    └── validate-warp-automation.ts</div>
+        <svg class="map" viewBox="0 0 520 220" role="img" aria-label="warp-automation 파일 관계 지도">
+          <rect x="28" y="30" width="160" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="108" y="59" text-anchor="middle" font-size="13" font-weight="700">SKILL.md</text>
+          <rect x="28" y="132" width="160" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="108" y="161" text-anchor="middle" font-size="13" font-weight="700">작성 규칙</text>
+          <rect x="318" y="30" width="174" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="405" y="59" text-anchor="middle" font-size="13" font-weight="700">project snippet</text>
+          <rect x="318" y="132" width="174" height="48" rx="8" fill="#fff" stroke="#d1d5db"></rect>
+          <text x="405" y="161" text-anchor="middle" font-size="13" font-weight="700">검증기</text>
+          <line x1="188" y1="54" x2="318" y2="54" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="188" y1="156" x2="318" y2="156" stroke="#2563eb" stroke-width="2"></line>
+          <line x1="108" y1="78" x2="108" y2="132" stroke="#64748b" stroke-width="2"></line>
+          <line x1="405" y1="78" x2="405" y2="132" stroke="#64748b" stroke-width="2"></line>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>품질 게이트</h2>
+      <div class="grid2">
+        <pre>node scripts/validate-skill.ts skills/warp-automation
+node skills/warp-automation/scripts/validate-warp-automation.ts skills/warp-automation
+node scripts/validate-skill-html.ts .
+node scripts/validate-skill-repo.ts .</pre>
+        <pre>응답 첫 줄로 단순화
+
+여기부터 실제 답변이 이어진다.</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>금지와 허용</h2>
+      <table aria-label="warp-automation 허용과 금지">
+        <thead>
+          <tr>
+            <th>허용</th>
+            <th>금지</th>
+            <th>별도 요청 필요</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>첫 줄 title + 빈 둘째 줄 + 셋째 줄 본문</td>
+            <td>`Q:` 또는 `Prompt:` 접두사</td>
+            <td>terminal 또는 config workflow</td>
+          </tr>
+          <tr>
+            <td>프롬프트 의미를 짧게 요약</td>
+            <td>secret, token, private URL 노출</td>
+            <td>Warp 설정 파일 수정</td>
+          </tr>
+          <tr>
+            <td>테스트 요청에 같은 형식으로 답변</td>
+            <td>불필요한 절차 설명</td>
+            <td>새 tab/window 열기</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

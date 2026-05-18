@@ -32,7 +32,7 @@ const summaryBySkill: Record<string, string> = {
   "project-structure": "frontend, backend, monorepo, desktop app, infra-aware 구조 결정",
   "project-workflow": "Workflow suite setup: domain, PRD, issue backlog, workflow-state cache",
   "spec-workflow": "Workflow suite loop: spec/issue를 TDD, QA, docs sync, eval seed로 구현",
-  "terminal-session-automation": "cmux, Warp, terminal title/status 자동화",
+  "warp-automation": "Warp title fallback용 응답 첫 줄 형식",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
   "code-review": "findings-first 코드 리뷰와 회귀/테스트/보안 위험 점검",

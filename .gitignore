@@ -13,3 +13,6 @@
 
 # Local web research snapshots.
 /warp-pricing-snapshot.md
+
+# Local Warp prompt visibility state.
+/.scratch/warp-session/
