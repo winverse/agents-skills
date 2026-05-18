@@ -11,7 +11,8 @@
 3. target spec, issue, bug report, acceptance criteria
 4. `CONTEXT.md`, ADR, PRD
 5. design.md, mock decision, testing docs
-6. current diff와 test output
+6. `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact
+7. current diff와 test output
 
 ## fallback routing 기준
 
@@ -28,10 +29,31 @@
 ## implementation loop 기준
 
 ```text
-spec authority -> plan -> plan review -> RED -> GREEN -> REFACTOR -> review -> QA -> docs sync -> completion
+spec authority -> work claim preflight -> plan -> plan review -> RED -> GREEN -> REFACTOR -> review -> QA -> docs sync -> completion
 ```
 
 `writing-plans`는 작업을 2-5분 단위로 쪼개는 데만 쓴다. product scope를 새로 늘리는 데 쓰지 않는다.
+
+## work claim preflight 기준
+
+`work-claims.md`가 있으면 production edit 전에 현재 lane을 확인한다.
+
+```text
+Work Claim Preflight
+- lane id:
+- owner/session:
+- branch or worktree:
+- intended write set:
+- matching claimed write set:
+- read-only paths:
+- shared/hotspot files:
+- integration owner:
+- overlap result: clear | blocked
+```
+
+`intended write set`이 현재 lane의 `claimed write set` 안에 있으면 진행한다. 다른 active lane과 겹치면 overlap block으로 멈추고, 파일을 수정하지 않은 상태에서 coordination note를 남긴다. `shared/hotspot files`는 integration owner만 직접 수정하며, 다른 lane은 필요한 변경을 dependent patch note나 issue로 남긴다.
+
+claim이 없거나 stale이면 먼저 `work-claims.md`를 갱신한다. scope 자체를 다시 나눠야 하면 `project-workflow`로 병렬 lane 재분해를 넘긴다.
 
 ## local implementation fallback lane 기준
 
@@ -78,6 +100,8 @@ TDD Gate Evidence
 
 큰 구현에서만 `subagent-driven-development`를 선택한다. task는 파일/모듈 ownership이 분리되어야 하고, 각 task는 spec review와 code quality review를 통과해야 한다.
 
+각 subagent task는 claim 가능한 파일/모듈 범위를 가져야 한다. 하나의 shared file을 여러 task가 직접 수정해야 하면 병렬화하지 않고 integration owner lane에서 순차 적용한다. 읽기는 허용하지만 쓰기는 claim이 필요하다.
+
 ## completion/ship 기준
 
 completion은 release publishing이 아니다. commit, push, deploy, tag, GitHub release는 사용자가 명시적으로 요청한 경우에만 `atomic-committer` 또는 별도 release workflow로 넘긴다.
@@ -97,6 +121,18 @@ Workflow State Update
 - QA/runtime evidence:
 - docs sync:
 - next open question:
+```
+
+`work-claims.md`가 있으면 현재 lane의 status도 갱신한다.
+
+```text
+Work Claims Update
+- lane id:
+- status:
+- changed files:
+- validation:
+- evidence:
+- integration notes:
 ```
 
 ## improvement seed 기준

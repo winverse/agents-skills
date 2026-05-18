@@ -40,6 +40,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - `project-structure`는 domain language와 concrete architecture questions가 생긴 뒤 호출한다.
 - substantial UI는 구현 전 `design.md`와 2-3 mock direction 선택을 거친다.
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다.
+- 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
 
 ## mode router 기준
@@ -64,8 +65,9 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 6. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
 7. light spec과 PRD settings 확정
 8. vertical issue backlog 작성
-9. `spec-workflow`가 받을 준비 상태를 점검
-10. document sync와 setup validation을 수행하고 다음 spec을 지정
+9. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
+10. `spec-workflow`가 받을 준비 상태를 점검
+11. document sync와 setup validation을 수행하고 다음 spec을 지정
 
 ## artifact map 기준
 
@@ -79,6 +81,16 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - Agent Tool And Security Risk Gate decision
 - 다음 `spec-workflow` handoff target
 
+병렬 구현을 계획하면 같은 위치에 `work-claims.md`를 둔다. 이 파일은 authority가 아니라 coordination artifact다. 각 lane은 아래 정보를 가진다.
+
+- lane id와 owner/session
+- branch or worktree
+- spec/issue target
+- claimed write set과 read-only paths
+- shared/hotspot files와 integration owner
+- status: `planned`, `active`, `blocked`, `ready-for-integration`, `done`
+- validation command와 evidence path
+
 ## spec-workflow handoff 기준
 
 `spec-workflow`로 넘기기 전에 아래가 있어야 한다.
@@ -89,6 +101,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - tool/API/MCP 작업이면 Agent Tool And Security Risk Gate decision이 있다.
 - 구현 단위가 vertical slice 또는 명시적 enabling task로 나뉘어 있다.
 - `.scratch/<slug>/workflow-state.md` 또는 동등한 state cache에 위 authority와 open questions가 남아 있다.
+- 병렬 구현이면 `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact에 겹치지 않는 claimed write set과 shared/hotspot file의 integration owner가 남아 있다.
 
 ## goal condition 기준
 
@@ -113,6 +126,7 @@ Primitive inventory
 Project setup state
 - <domain/product/architecture/design/PRD/issues readiness>
 - state cache: <workflow-state.md path>
+- work claims: <work-claims.md path or none>
 
 Next workflow step
 - project-workflow: <remaining setup gate>

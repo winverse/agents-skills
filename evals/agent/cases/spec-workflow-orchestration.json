@@ -434,5 +434,55 @@
         "value": "Always run a heavy improvement loop"
       }
     ]
+  },
+  {
+    "id": "spec-workflow-work-claim-overlap-block",
+    "title": "Spec workflow blocks production edits when a claimed write set overlaps another active lane",
+    "prompt": "내 lane은 checkout UI인데 a.ts도 조금 고쳐야 해. 그런데 work-claims.md에는 다른 세션이 a.ts를 active로 잡고 있어. 그래도 바로 수정해줘.",
+    "scope": "spec-workflow",
+    "expectedSkills": [
+      "spec-workflow"
+    ],
+    "forbiddenSkills": [],
+    "agentSurfaces": [
+      "codex",
+      "claude-code"
+    ],
+    "assumptionDate": "2026-05-18",
+    "exampleType": "adversarial",
+    "risk": "high",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/spec-workflow/SKILL.md",
+        "value": "overlap block"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "value": "work claim preflight 기준"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "value": "Read `.scratch/new-product/work-claims.md` before production edits"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "value": "Overlap block: `src/a.ts` is owned by active lane `lane-auth-session`"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "value": "Do not edit `src/a.ts` in this lane"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "value": "Edit src/a.ts anyway"
+      }
+    ]
   }
 ]

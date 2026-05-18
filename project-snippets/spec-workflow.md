@@ -10,6 +10,8 @@
 - Label borrowed primitives with their source package, for example Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, and repo-local custom `code-review`/`browser-qa`/`sync-docs`.
 - Read the target spec, issue, bug report, acceptance criteria, ADR, PRD, `design.md`, testing docs, and current diff before planning implementation.
 - Read `.scratch/<project-or-feature-slug>/workflow-state.md` when present, and update it with reused authority, selected primitives, evidence pointers, skipped/fallback choices, and remaining open questions.
+- Read `.scratch/<project-or-feature-slug>/work-claims.md` when present. Before production edits, confirm the current lane owns the intended write set, respect read-only paths, and stop with an overlap block if another active lane owns the same file or module.
+- Shared/hotspot files should be changed only by the integration owner named in `work-claims.md`; other lanes should leave dependent patch notes or issues instead of editing those files directly.
 - If acceptance criteria are missing, write a light spec or ask a focused question before changing production code.
 - For target code repos, treat TDD as mandatory before production code edits: RED evidence first, characterization evidence second, and an explicit TDD exception record only when neither is practical.
 - Do not install or run TDD hooks from this shared skills repo. If enforcement is needed, wire a project-local hook in the target code repo and keep it scoped to that repo.

@@ -241,7 +241,7 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/agent-eval-handoff-seeds.md",
-        "value": "Seed cases: project-workflow routing, spec-workflow routing, dependency inventory, project-structure timing, PRD settings, mockup selection, workflow-state cache, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, artifact hygiene, improvement seed"
+        "value": "Seed cases: project-workflow routing, spec-workflow routing, dependency inventory, project-structure timing, PRD settings, mockup selection, workflow-state cache, work-claims parallel lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, artifact hygiene, improvement seed"
       },
       {
         "type": "required_text",
@@ -523,6 +523,58 @@
         "type": "forbidden_text",
         "file": "evals/agent/fixtures/project-workflow/workflow-state-cache.md",
         "value": "workflow-state.md is the source of truth"
+      }
+    ]
+  },
+  {
+    "id": "project-workflow-parallel-work-claims",
+    "title": "Project workflow creates work claims before parallel implementation handoff",
+    "prompt": "이 프로젝트는 Codex 두 세션과 Claude 하나가 병렬로 같은 기능을 나눠 구현할 거야. 같은 파일을 동시에 건드리지 않게 workflow를 잡아줘.",
+    "scope": "project-workflow",
+    "expectedSkills": [
+      "project-workflow"
+    ],
+    "forbiddenSkills": [
+      "spec-workflow"
+    ],
+    "agentSurfaces": [
+      "codex",
+      "claude-code"
+    ],
+    "assumptionDate": "2026-05-18",
+    "exampleType": "edge",
+    "risk": "high",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/project-workflow/SKILL.md",
+        "value": "work-claims.md"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "value": "one active owner per claimed write path"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/parallel-work-claims.md",
+        "value": "Path: `.scratch/new-product/work-claims.md`"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/parallel-work-claims.md",
+        "value": "claimed write set"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/parallel-work-claims.md",
+        "value": "integration owner"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/project-workflow/parallel-work-claims.md",
+        "value": "Let every session edit shared files freely"
       }
     ]
   }

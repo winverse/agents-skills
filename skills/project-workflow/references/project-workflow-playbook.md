@@ -44,6 +44,41 @@ Agent Tool And Security Risk Gate를 작성한다. 권한, destructive action, s
 
 Codex, Claude Code, Cursor, Windsurf, Copilot 같은 agent별 instruction surface를 먼저 확인한다. repo skill을 global install하지 않고 project instruction에 필요한 snippet만 연결한다.
 
+### parallel multi-session setup 기준
+
+여러 agent, 여러 session, 여러 worktree가 같은 프로젝트에서 병렬 구현을 할 수 있으면 setup 단계에서 lane을 먼저 나눈다. 목표는 모든 파일을 lock하는 것이 아니라, 쓰기 책임을 명확히 해서 같은 파일을 두 session이 동시에 patch하지 않게 하는 것이다.
+
+`project-workflow`는 `.scratch/<slug>/work-claims.md`를 생성하거나 갱신한다. 이 파일은 coordination artifact이며 authority가 아니다. authority는 `CONTEXT.md`, ADR, PRD, issue, `design.md`에 둔다.
+
+```text
+Work Claims
+- coordination file: .scratch/<slug>/work-claims.md
+- owner policy: one active owner per claimed write path
+- read policy: read is allowed, write requires claim
+
+Lane
+- lane id:
+- owner/session:
+- branch or worktree:
+- spec/issue:
+- claimed write set:
+- read-only paths:
+- shared/hotspot files:
+- integration owner:
+- status: planned | active | blocked | ready-for-integration | done
+- validation command:
+- evidence path:
+```
+
+`claimed write set`은 파일, 디렉터리, 모듈 단위로 쓰되 너무 넓게 잡지 않는다. `shared/hotspot files`에는 route registry, schema, generated type entrypoint, central config, lockfile, migration index, public API barrel처럼 여러 lane이 건드리기 쉬운 파일을 적는다. 이런 파일은 한 lane의 integration owner가 맡고, 다른 lane은 dependent patch, note, issue, 또는 integration request로 남긴다.
+
+겹치는 파일을 발견하면 setup 단계에서 아래 중 하나로 재분해한다.
+
+- lane scope를 더 좁혀 claimed write set을 분리한다.
+- shared/hotspot file을 integration owner lane으로 모은다.
+- 한 lane을 `blocked` 또는 `planned`로 낮추고 선행 lane이 끝난 뒤 재개한다.
+- 충돌이 architecture decision이면 ADR이나 issue를 먼저 갱신하고 구현을 미룬다.
+
 ## project-structure handoff 기준
 
 folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다.
@@ -75,6 +110,7 @@ Spec handoff
 - tool/security gate:
 - validation command:
 - state cache:
+- work claims:
 ```
 
 ## workflow-state cache 기준
@@ -93,6 +129,10 @@ Workflow State
 ```
 
 캐시는 source of truth를 대체하지 않는다. `CONTEXT.md`, ADR, PRD, `design.md`, issue가 authority이고, `workflow-state.md`는 다음 agent가 빠르게 찾는 색인이다.
+
+## work-claims coordination 기준
+
+`work-claims.md`는 병렬 session의 쓰기 충돌을 줄이는 장부다. source of truth는 아니므로 spec 내용, architecture decision, product scope는 이 파일에만 두지 않는다. `spec-workflow`는 이 파일을 읽고 현재 lane의 claimed write set 밖 production file을 수정하지 않아야 한다.
 
 ## workflow log 기준
 

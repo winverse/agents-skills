@@ -20,8 +20,8 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | cmux/Warp/terminal tab title, status, hook으로 세션 질문을 기억한다 | `terminal-session-automation` | `sync-docs`, `browser-qa` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
-| 새 프로젝트나 큰 initiative의 초기 셋팅을 잡는다 | `project-workflow` | Workflow suite의 setup 절반. `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
-| 기존 spec, issue, bug를 구현한다 | `spec-workflow` | Workflow suite의 implementation 절반. `code-review`, `browser-qa`, `sync-docs` |
+| 새 프로젝트나 큰 initiative의 초기 셋팅을 잡는다 | `project-workflow` | Workflow suite의 setup 절반. 병렬 구현이면 `work-claims.md`를 만든다. `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
+| 기존 spec, issue, bug를 구현한다 | `spec-workflow` | Workflow suite의 implementation 절반. `work-claims.md`가 있으면 overlap block을 먼저 확인한다. `code-review`, `browser-qa`, `sync-docs` |
 | 구현, 디버깅, 리팩터링을 신중하게 한다 | `karpathy-thinkings` | `code-review` |
 | 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
 | 커밋을 논리 단위로 나누고 push한다 | `atomic-committer` | `code-review` |
@@ -37,7 +37,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | `show-skills` / `sync-docs` | `show-skills`는 현재 목록을 읽고 추천할 때, `sync-docs`는 문서끼리 맞지 않는 설명을 고칠 때 쓴다. | 목록을 본 뒤 catalog, README, snippet이 stale인지 확인할 때 둘을 같이 쓴다. |
 | `skill-update` / `skill-to-html` / `sync-docs` | `skill-update`는 기존 스킬 패키지 자체를 바꾸는 작업, `skill-to-html`은 사람용 HTML guide 작업, `sync-docs`는 주변 문서 정합성 작업이다. | 스킬 trigger나 workflow가 바뀌면 세 개가 순서대로 이어질 수 있다. |
 | `agent-improvement-loop` / `agent-eval-harness` | `agent-improvement-loop`는 repo 품질 backlog와 Claude Code `/goal` 기준 bounded goal 조건을 고르는 루프, `agent-eval-harness`는 반복 검증 harness와 goal condition quality를 검사하는 스킬이다. | 개선 루프에서 재발 방지가 필요하면 eval harness case를 추가한다. |
-| `project-workflow` / `spec-workflow` | 둘을 합쳐 Workflow suite로 본다. `project-workflow`는 project bootstrap, domain, product, ADR, design, PRD, issue backlog, `workflow-state.md` cache를 잡는다. `spec-workflow`는 이미 정해진 spec/issue를 TDD, review, QA, docs sync로 구현하고 cache를 갱신한다. | `project-workflow`가 spec handoff를 만들고, 이후 반복 개발은 `spec-workflow`가 맡는다. 누락이 반복되면 `agent-eval-harness` seed를 남긴다. |
+| `project-workflow` / `spec-workflow` | 둘을 합쳐 Workflow suite로 본다. `project-workflow`는 project bootstrap, domain, product, ADR, design, PRD, issue backlog, `workflow-state.md` cache를 잡고, 병렬 구현이면 `work-claims.md`로 lane ownership을 나눈다. `spec-workflow`는 이미 정해진 spec/issue를 TDD, review, QA, docs sync로 구현하고 cache와 claim status를 갱신한다. | `project-workflow`가 spec handoff와 병렬 work claim을 만들고, 이후 반복 개발은 `spec-workflow`가 맡는다. claim overlap이나 gate 누락이 반복되면 `agent-eval-harness` seed를 남긴다. |
 | `project-workflow` / `project-structure` | `project-workflow`는 구조 선택 전 domain과 architecture 질문을 만든다. `project-structure`는 구조 선택이 구체화된 뒤 폴더/env/codegen/db/infra 경계를 잡는다. | `project-workflow`가 architecture handoff 지점에 도달하면 `project-structure`를 호출한다. |
 | `browser-qa` / `design-review` / `code-review` | `browser-qa`는 실제 렌더링과 console/network 증거, `design-review`는 UI 위계와 시각 판단, `code-review`는 구현 위험과 테스트 누락을 본다. | UI 변경 검토는 browser-qa로 사실을 확인하고 design-review로 판단을 보강한다. |
 | `web-research` / `sync-docs` | `web-research`는 외부 최신 사실과 출처 검증, `sync-docs`는 repo 안의 현재 문서와 파일 대조다. | 문서가 외부 최신 사실을 포함하면 web-research로 근거를 확인한 뒤 sync-docs로 반영한다. |
@@ -62,7 +62,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
 | `terminal-session-automation` | cmux, Warp, generic terminal의 prompt pinning, tab title, session status, workflow note, hook latency, 터미널별 CLI/escape-sequence 자동화를 관리한다. | [SKILL.md](../skills/terminal-session-automation/SKILL.md) · [skill.html](../skills/terminal-session-automation/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
-| `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check와 workflow scenario/project setup seed case를 지원한다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
+| `agent-eval-harness` | agent skill routing, cross-agent portability, safety, artifact hygiene, output quality를 회귀 테스트하는 초기 eval harness를 세팅한다. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check와 workflow scenario, `work-claims.md` lane ownership, overlap block seed case를 지원한다. | [SKILL.md](../skills/agent-eval-harness/SKILL.md) · [skill.html](../skills/agent-eval-harness/skill.html) |
 
 ### 구현과 구조
 
@@ -70,8 +70,8 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | `karpathy-thinkings` | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄인다. | [SKILL.md](../skills/karpathy-thinkings/SKILL.md) · [skill.html](../skills/karpathy-thinkings/skill.html) |
 | `project-structure` | frontend, backend, full-stack monorepo, desktop app과 folder-local AGENTS.md 목차, 선택형 DB/infra 구조, 기본 stack/env/codegen/test/security/tool-boundary 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
-| `project-workflow` | Workflow suite의 setup 절반. 새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs, product challenge, ADR, `design.md`, PRD, issue backlog, setup verification, `workflow-state.md`, `spec-workflow` handoff까지 정리한다. | [SKILL.md](../skills/project-workflow/SKILL.md) · [skill.html](../skills/project-workflow/skill.html) |
-| `spec-workflow` | Workflow suite의 implementation 절반. 기존 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`, `workflow-state.md`를 기준으로 TDD, implementation plan, review, QA/runtime evidence, document sync, completion reporting을 반복한다. 대상 코드 repo에서는 RED evidence를 강제하고, 이 shared skills repo에는 TDD hook을 설치하지 않는다. | [SKILL.md](../skills/spec-workflow/SKILL.md) · [skill.html](../skills/spec-workflow/skill.html) |
+| `project-workflow` | Workflow suite의 setup 절반. 새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs, product challenge, ADR, `design.md`, PRD, issue backlog, setup verification, `workflow-state.md`, 병렬 `work-claims.md`, `spec-workflow` handoff까지 정리한다. | [SKILL.md](../skills/project-workflow/SKILL.md) · [skill.html](../skills/project-workflow/skill.html) |
+| `spec-workflow` | Workflow suite의 implementation 절반. 기존 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`, `workflow-state.md`, `work-claims.md`를 기준으로 TDD, implementation plan, review, QA/runtime evidence, document sync, completion reporting을 반복한다. 대상 코드 repo에서는 RED evidence를 강제하고, 이 shared skills repo에는 TDD hook을 설치하지 않는다. | [SKILL.md](../skills/spec-workflow/SKILL.md) · [skill.html](../skills/spec-workflow/skill.html) |
 
 ### 문서와 커밋
 

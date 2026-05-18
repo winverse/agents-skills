@@ -238,6 +238,30 @@
       color: var(--text);
       font-weight: 700;
     }
+
+    @media (max-width: 900px) {
+      body { padding: 18px 0 32px; }
+      .shell { padding: 0 16px; }
+      header,
+      .grid2,
+      .grid3 { grid-template-columns: 1fr; }
+      .matrix { grid-template-columns: 1fr 1fr; }
+      .flow { height: 520px; }
+      .chart,
+      .schema,
+      .map { height: auto; min-height: 260px; }
+      svg text { font-size: 11px; }
+    }
+
+    @media (max-width: 560px) {
+      h1 { font-size: 24px; }
+      header,
+      section { padding: 16px; }
+      .matrix { grid-template-columns: 1fr; }
+      .pair-row { grid-template-columns: 1fr; gap: 2px; }
+      th,
+      td { padding: 8px; }
+    }
   </style>
 </head>
 <body>
@@ -252,6 +276,7 @@
         <div class="pair-row"><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></div>
         <div class="pair-row"><strong>기본 산출물</strong><span>.scratch/&lt;feature-slug&gt;/</span></div>
         <div class="pair-row"><strong>상태 캐시</strong><span>workflow-state.md</span></div>
+        <div class="pair-row"><strong>작업 claim</strong><span>work-claims.md</span></div>
       </div>
     </header>
 
@@ -277,6 +302,11 @@
           <span class="tag warn">hook은 대상 repo</span>
           <h3>TDD gate 문서 계약</h3>
           <p>이 repo에서는 hook을 실행하지 않는다. production code가 있는 target repo에서만 project-local hook으로 RED evidence를 강제한다.</p>
+        </div>
+        <div class="cell">
+          <span class="tag warn">겹침 차단</span>
+          <h3>동시 작업 claim</h3>
+          <p><code>work-claims.md</code>가 있으면 production edit 전에 claimed write set, read-only paths, shared/hotspot owner를 확인한다.</p>
         </div>
         <div class="cell">
           <span class="tag danger">넘김</span>
@@ -348,6 +378,42 @@
     </section>
 
     <section>
+      <h2>동시 작업 gate: production edit 전에 claim을 대조한다</h2>
+      <svg class="diagram schema" viewBox="0 0 1120 260" role="img" aria-label="work claims overlap gate">
+        <defs>
+          <marker id="claimArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
+          </marker>
+        </defs>
+        <rect x="34" y="44" width="206" height="68" rx="8" fill="#fff" stroke="#2563eb"></rect>
+        <text x="137" y="74" text-anchor="middle" font-size="14" font-weight="700">현재 lane</text>
+        <text x="137" y="96" text-anchor="middle" font-size="12" fill="#6b7280">intended write set</text>
+
+        <line x1="240" y1="78" x2="322" y2="78" stroke="#2563eb" stroke-width="2" marker-end="url(#claimArrow)"></line>
+        <rect x="326" y="44" width="220" height="68" rx="8" fill="#fff" stroke="#a16207"></rect>
+        <text x="436" y="74" text-anchor="middle" font-size="14" font-weight="700">work-claims.md</text>
+        <text x="436" y="96" text-anchor="middle" font-size="12" fill="#6b7280">active lane / read-only / hotspot</text>
+
+        <line x1="546" y1="78" x2="628" y2="78" stroke="#2563eb" stroke-width="2" marker-end="url(#claimArrow)"></line>
+        <rect x="632" y="44" width="210" height="68" rx="8" fill="#fff" stroke="#1f7a52"></rect>
+        <text x="737" y="74" text-anchor="middle" font-size="14" font-weight="700">겹침 없음</text>
+        <text x="737" y="96" text-anchor="middle" font-size="12" fill="#6b7280">RED 후 production edit</text>
+
+        <path d="M436 112 V170 H632" fill="none" stroke="#b42318" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#claimArrow)"></path>
+        <rect x="632" y="142" width="210" height="68" rx="8" fill="#fff" stroke="#b42318"></rect>
+        <text x="737" y="172" text-anchor="middle" font-size="14" font-weight="700">겹침 있음</text>
+        <text x="737" y="194" text-anchor="middle" font-size="12" fill="#6b7280">overlap block으로 멈춤</text>
+
+        <line x1="842" y1="176" x2="922" y2="176" stroke="#b42318" stroke-width="2" marker-end="url(#claimArrow)"></line>
+        <rect x="926" y="142" width="160" height="68" rx="8" fill="#fff" stroke="#8b98aa"></rect>
+        <text x="1006" y="172" text-anchor="middle" font-size="14" font-weight="700">조정 요청</text>
+        <text x="1006" y="194" text-anchor="middle" font-size="12" fill="#6b7280">integration owner / user</text>
+
+        <text x="34" y="232" font-size="12" fill="#6b7280">claim이 없거나 오래된 상태면 먼저 갱신한다. <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">work-claims.md</tspan>는 source of truth가 아니라 coordination artifact다.</text>
+      </svg>
+    </section>
+
+    <section>
       <h2>primitive 선택 우선순위: 전체 패키지가 아니라 필요한 역할만 고른다</h2>
       <svg class="diagram chart" viewBox="0 0 1120 260" role="img" aria-label="primitive source priority chart">
         <line x1="190" y1="214" x2="1050" y2="214" stroke="#8b98aa"></line>
@@ -387,7 +453,7 @@
         <text x="62" y="102" font-size="13" fill="#6b7280">- spec / issue / bug repro</text>
         <text x="62" y="128" font-size="13" fill="#6b7280">- acceptance criteria</text>
         <text x="62" y="154" font-size="13" fill="#6b7280">- ADR / PRD / design.md</text>
-        <text x="62" y="180" font-size="13" fill="#6b7280">- workflow-state.md + local instructions</text>
+        <text x="62" y="180" font-size="13" fill="#6b7280">- workflow-state.md + work-claims.md</text>
 
         <line x1="306" y1="127" x2="420" y2="127" stroke="#2563eb" stroke-width="2" marker-end="url(#schemaArrow)"></line>
         <rect x="424" y="38" width="272" height="178" rx="8" fill="#fff" stroke="#d1d5db"></rect>
@@ -395,15 +461,15 @@
         <text x="450" y="102" font-size="13" fill="#6b7280">- primitive inventory</text>
         <text x="450" y="128" font-size="13" fill="#6b7280">- RED / GREEN / REFACTOR</text>
         <text x="450" y="154" font-size="13" fill="#6b7280">- review findings</text>
-        <text x="450" y="180" font-size="13" fill="#6b7280">- QA / docs sync / state update</text>
+        <text x="450" y="180" font-size="13" fill="#6b7280">- QA / docs sync / claim update</text>
 
         <line x1="696" y1="127" x2="810" y2="127" stroke="#2563eb" stroke-width="2" marker-end="url(#schemaArrow)"></line>
         <rect x="814" y="38" width="270" height="178" rx="8" fill="#fff" stroke="#d1d5db"></rect>
         <text x="949" y="68" text-anchor="middle" font-size="15" font-weight="700">출력</text>
         <text x="840" y="102" font-size="13" fill="#6b7280">- Runtime adapter</text>
         <text x="840" y="128" font-size="13" fill="#6b7280">- Spec authority</text>
-        <text x="840" y="154" font-size="13" fill="#6b7280">- Implementation loop</text>
-        <text x="840" y="180" font-size="13" fill="#6b7280">- done / deferred / improvement seed</text>
+        <text x="840" y="154" font-size="13" fill="#6b7280">- work claim + overlap result</text>
+        <text x="840" y="180" font-size="13" fill="#6b7280">- Implementation loop + completion</text>
       </svg>
     </section>
 
@@ -446,14 +512,41 @@ runtime artifact target:
 ├── spec-notes.md
 ├── implementation-plan.md
 ├── test-evidence.md
+├── tdd-exception.md
 ├── qa-evidence.md
 ├── review-notes.md
 ├── docs-sync.md
+├── work-claims.md
 ├── workflow-state.md
 ├── workflow-log.md
 └── eval-candidates/</div>
       </div>
-      <div class="note"><code>workflow-state.md</code>는 source of truth가 아니라 반복 질문을 줄이는 cache입니다. authority는 <code>CONTEXT.md</code>, ADR, PRD, issue, <code>design.md</code>에 둡니다.</div>
+      <div class="note"><code>workflow-state.md</code>는 반복 질문을 줄이는 cache이고, <code>work-claims.md</code>는 같은 파일을 동시에 수정하지 않게 하는 coordination artifact입니다. authority는 <code>CONTEXT.md</code>, ADR, PRD, issue, <code>design.md</code>에 둡니다.</div>
+    </section>
+
+    <section>
+      <h2>완료 출력 형태</h2>
+      <pre>Runtime adapter
+- &lt;active instruction surface&gt;
+
+Spec authority
+- &lt;spec/issue/PRD/ADR/design source&gt;
+- state cache: &lt;workflow-state.md path or none&gt;
+- work claim: &lt;lane id, claimed write set, overlap block result&gt;
+
+Primitive inventory
+- &lt;source package&gt;: &lt;exact name&gt; -&gt; selected | skipped | fallback
+
+Implementation loop
+- RED:
+- GREEN:
+- REFACTOR:
+- QA:
+- docs sync:
+
+Completion
+- &lt;done/deferred/blocker&gt;
+- improvement seed: &lt;none or eval candidate&gt;</pre>
     </section>
 
     <section>
@@ -501,6 +594,7 @@ runtime artifact target:
           <ul>
             <li>local instructions와 spec authority를 먼저 읽는다.</li>
             <li>primitive마다 출처와 <code>selected | skipped | fallback</code> 상태를 표시한다.</li>
+            <li><code>work-claims.md</code>가 있으면 write set 겹침을 먼저 확인한다.</li>
             <li>가능하면 production change 전에 RED evidence를 남긴다.</li>
             <li>target code repo에서는 RED, characterization, TDD exception 중 하나 없이는 production edit을 통과시키지 않는다.</li>
             <li>큰 spec에서만 disjoint write set으로 subagent fan-out을 쓴다.</li>
@@ -511,6 +605,7 @@ runtime artifact target:
           <ul>
             <li>raw idea를 이 skill로 바로 구현하지 않는다.</li>
             <li>외부 plugin 내용을 통째로 복사하지 않는다.</li>
+            <li>다른 active lane의 claimed write set과 겹치면 patch를 만들지 않는다.</li>
             <li>바로 다음 작업을 막는 일을 subagent에게 넘기지 않는다.</li>
             <li>사용자 요청 없이 commit, push, ship을 실행하지 않는다.</li>
             <li>이 shared skills repo에 TDD hook을 설치하거나 실행하지 않는다.</li>

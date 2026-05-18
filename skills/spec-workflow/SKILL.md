@@ -37,6 +37,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - spec, issue, acceptance criteria, bug repro, or user-provided task가 있는지 확인한다.
 - `CONTEXT.md`, ADR, PRD, design.md가 있으면 현재 spec 해석의 authority로 사용한다.
 - `.scratch/<slug>/workflow-state.md` 또는 동등한 state cache가 있으면 selected primitives, skipped questions, gate decision, prior answers를 먼저 읽는다.
+- `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact가 있으면 현재 lane의 claimed write set, read-only paths, shared/hotspot files, integration owner를 production edit 전에 확인한다.
 - raw idea, product discovery, project structure 선택, design system 초기화가 부족하면 `project-workflow`로 넘긴다.
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 확인하거나 작성한다.
 
@@ -57,15 +58,16 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 1. current spec, issue, PRD, ADR, design.md, local instructions 읽기
 2. source-labeled primitive inventory
 3. acceptance criteria와 out-of-scope 확인
-4. Superpowers plugin `brainstorming` 또는 fallback으로 implementation approach 정리
-5. Superpowers plugin `writing-plans` 또는 fallback으로 2-5분 단위 plan과 검증 명령 작성
-6. GStack plugin `plan-eng-review` 또는 repo-local reviewer로 plan review
-7. UI면 `plan-design-review`, `design-review`, selected mock direction 확인
-8. TDD 또는 characterization test로 RED 상태 기록
-9. 구현 후 GREEN, 필요한 경우 REFACTOR
-10. 큰 구현이면 Superpowers plugin `subagent-driven-development`로 task fan-out과 review를 수행
-11. `code-review` 또는 `codex:review`, `browser-qa` 또는 non-browser runtime evidence, `diagnose` 필요 여부 확인
-12. `sync-docs`로 docs drift를 정리하고 completion/commit handoff를 남김
+4. 현재 lane의 intended write set을 `work-claims.md`와 대조하고, active claim과 겹치면 overlap block으로 멈춤
+5. Superpowers plugin `brainstorming` 또는 fallback으로 implementation approach 정리
+6. Superpowers plugin `writing-plans` 또는 fallback으로 2-5분 단위 plan과 검증 명령 작성
+7. GStack plugin `plan-eng-review` 또는 repo-local reviewer로 plan review
+8. UI면 `plan-design-review`, `design-review`, selected mock direction 확인
+9. TDD 또는 characterization test로 RED 상태 기록
+10. 구현 후 GREEN, 필요한 경우 REFACTOR
+11. 큰 구현이면 Superpowers plugin `subagent-driven-development`로 task fan-out과 review를 수행
+12. `code-review` 또는 `codex:review`, `browser-qa` 또는 non-browser runtime evidence, `diagnose` 필요 여부 확인
+13. `sync-docs`로 docs drift를 정리하고 completion/commit handoff를 남김
 
 ## artifact map 기준
 
@@ -77,6 +79,8 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - selected primitives: 이번 loop에서 선택/생략/fallback 처리한 primitive
 - evidence pointers: RED/GREEN/REFACTOR, QA, docs sync 경로
 - open follow-up: 다음 spec에서 다시 물어보지 말아야 할 답변과 아직 막힌 질문
+
+`work-claims.md`가 있으면 현재 lane의 status와 evidence도 갱신한다. 이 파일은 source of truth가 아니라 동시에 일하는 session이 같은 파일을 쓰지 않게 하는 coordination artifact다.
 
 ## TDD contract 기준
 
@@ -91,6 +95,14 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 ## subagent boundary 기준
 
 `subagent-driven-development`는 큰 spec에서만 쓴다. 바로 다음 작업이 그 결과에 막혀 있으면 main agent가 직접 처리한다. subagent를 쓸 때는 disjoint write set, task ledger, spec review, code quality review를 남긴다.
+
+여러 agent/session/worktree가 동시에 움직이면 아래 규칙을 production edit 전 gate로 둔다.
+
+- 쓰려는 파일은 현재 lane의 claimed write set에 있어야 한다.
+- 다른 active lane의 claimed write set과 겹치면 overlap block으로 멈추고, integration owner나 사용자에게 조정 요청을 남긴다.
+- shared/hotspot files는 integration owner만 직접 수정한다.
+- read-only paths는 조사와 참고만 허용하고 patch를 만들지 않는다.
+- claim이 없거나 오래된 상태면 먼저 `work-claims.md`를 갱신하거나 `project-workflow`로 병렬 lane 재분해를 넘긴다.
 
 ## completion 기준
 
@@ -113,6 +125,7 @@ Runtime adapter
 Spec authority
 - <spec/issue/PRD/ADR/design source>
 - state cache: <workflow-state.md path or none>
+- work claim: <lane id, claimed write set, overlap block result>
 
 Primitive inventory
 - <source package>: <exact name> -> selected | skipped | fallback
