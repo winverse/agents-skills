@@ -16,3 +16,6 @@
 
 # Local Warp prompt visibility state.
 /.scratch/warp-session/
+
+# Local per-skill editor settings.
+/skills/*/.vscode/

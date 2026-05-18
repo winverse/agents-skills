@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill To HTML"
   short_description: "Turn skills into visual HTML guides"
-  default_prompt: "Use $skill-to-html to create a diagram-rich skill.html for this skill."
+  default_prompt: "Use $skill-to-html to create a diagram-rich skill.html for this skill. Optimize and verify only for PC desktop viewport; mobile/tablet layout, responsive breakpoint tuning, and touch interaction are out of scope. Keep wide scope tables out of narrow two-column layouts, make SVG arrows terminate at visible nodes, avoid overflow and text overlap, and run the HTML validator plus PC desktop viewport checks when the layout materially changes."

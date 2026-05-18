@@ -10,4 +10,7 @@
 - Keep skill explanations consistent across skills: purpose, use/skip, workflow, inputs/outputs, resources, validation, and misuse guardrails.
 - Use Korean-first visible labels in `skill.html`; keep English only for normal coding terms, exact file names, commands, products, protocols, libraries, or copyable instruction snippets.
 - Follow the shared quiet operational visual rules: shallow borders, restrained color, stable dimensions, no decorative hero treatment, and dark surfaces only for code or terminal snippets.
-- Verify the HTML visually in a PC desktop viewport when practical.
+- Design and verify only for PC desktop viewport; mobile/tablet layout, responsive breakpoint tuning, and touch interaction are out of scope for this skill.
+- Keep wide scope tables, matrices, and checklist tables in full-width sections rather than narrow two-column layouts.
+- Make SVG arrows terminate at visible nodes, boxes, or lanes; do not leave dangling arrowheads in empty space.
+- Verify the HTML visually in a PC desktop viewport when practical, especially arrow endpoints, table width, overflow, and text overlap.

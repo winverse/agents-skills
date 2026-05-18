@@ -13,13 +13,13 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | 현재 스킬 목록을 보고 싶다 | `show-skills` | `sync-docs` |
 | 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다. `web-search`라고 말해도 이 스킬로 해석한다. | `web-research` | `agent-improvement-loop` |
-| 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | `browser-qa`, `design-review` |
+| 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | PC desktop 기준만 본다. mobile/tablet layout은 비대상이다. `browser-qa`, `design-review` |
 | 기존 스킬을 수정한다 | `skill-update` | 모든 호출에서 원본 provenance preflight를 먼저 실행하고, 원본 확인이 필요하면 `web-research`, 이후 `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `sync-docs` |
 | 남는 토큰이나 긴 컨텍스트로 repo 품질을 올린다 | `agent-improvement-loop` | `code-review`, `browser-qa`, `sync-docs` |
 | 에이전트 스킬/프롬프트 하네스를 처음 세팅한다 | `agent-eval-harness` | `agent-improvement-loop`, `sync-docs` |
-| 새 프로젝트나 큰 initiative의 초기 셋팅을 잡는다 | `project-workflow` | Workflow suite의 setup 절반. 병렬 구현이면 `work-claims.md`를 만든다. `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
+| 새 프로젝트나 큰 initiative의 초기 셋팅을 잡는다 | `project-workflow` | Workflow suite의 setup 절반. 초기 셋팅 문서는 별도 언어 지정이 없으면 한국어 우선이며, 병렬 구현이면 `work-claims.md`를 만든다. `project-structure`는 domain/architecture 질문 이후, `sync-docs` |
 | 기존 spec, issue, bug를 구현한다 | `spec-workflow` | Workflow suite의 implementation 절반. `work-claims.md`가 있으면 overlap block을 먼저 확인한다. `code-review`, `browser-qa`, `sync-docs` |
 | 구현, 디버깅, 리팩터링을 신중하게 한다 | `karpathy-thinkings` | `code-review` |
 | 새 프로젝트 구조를 잡는다 | `project-structure` | `karpathy-thinkings` |
@@ -56,7 +56,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
-| `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 diagram-rich `skill.html`을 만든다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
+| `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 PC desktop 기준 diagram-rich `skill.html`을 만든다. mobile/tablet layout과 responsive breakpoint는 비대상이다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
 | `skill-update` | 기존 공유 스킬을 수정할 때 `docs/update-source-registry.md`와 `.gitmodules`를 먼저 확인하고, 원본/upstream provenance preflight, source/release 비교, `adopt`/`adapt`/`reject`/`defer` 판단, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
 | `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
@@ -68,7 +68,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | `karpathy-thinkings` | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄인다. | [SKILL.md](../skills/karpathy-thinkings/SKILL.md) · [skill.html](../skills/karpathy-thinkings/skill.html) |
 | `project-structure` | frontend, backend, full-stack monorepo, desktop app과 folder-local AGENTS.md 목차, 선택형 DB/infra 구조, 기본 stack/env/codegen/test/security/tool-boundary 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
-| `project-workflow` | Workflow suite의 setup 절반. 새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs, product challenge, ADR, `design.md`, PRD, issue backlog, setup verification, `workflow-state.md`, 병렬 `work-claims.md`, `spec-workflow` handoff까지 정리한다. | [SKILL.md](../skills/project-workflow/SKILL.md) · [skill.html](../skills/project-workflow/skill.html) |
+| `project-workflow` | Workflow suite의 setup 절반. 새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs, product challenge, ADR, `design.md`, PRD, issue backlog, setup verification, `workflow-state.md`, 병렬 `work-claims.md`, `spec-workflow` handoff까지 정리하며, 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. | [SKILL.md](../skills/project-workflow/SKILL.md) · [skill.html](../skills/project-workflow/skill.html) |
 | `spec-workflow` | Workflow suite의 implementation 절반. 기존 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`, `workflow-state.md`, `work-claims.md`를 기준으로 TDD, implementation plan, review, QA/runtime evidence, document sync, completion reporting을 반복한다. 대상 코드 repo에서는 RED evidence를 강제하고, 이 shared skills repo에는 TDD hook을 설치하지 않는다. | [SKILL.md](../skills/spec-workflow/SKILL.md) · [skill.html](../skills/spec-workflow/skill.html) |
 
 ### 문서와 커밋
